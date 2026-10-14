@@ -395,3 +395,6 @@ html, body { overflow-x: hidden; }
 .soc-tools { display: flex; justify-content: center; gap: 0.5rem; }
 .soc-tools .icon-btn { width: 2.3rem; height: 2.3rem; }
 #socAdd { margin-bottom: 0.4rem; }
+
+/* Pesan multi-baris (hasil periksa / kesalahan impor) */
+#bulkMsg { white-space: pre-line; }

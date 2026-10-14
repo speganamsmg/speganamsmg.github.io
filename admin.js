@@ -747,6 +747,29 @@
   $('addDash').addEventListener('click', function () { openItemDialog('dashboard', null); });
   $('addForm').addEventListener('click', function () { openItemDialog('form', null); });
 
+  // ── Tempel daftar ──
+  $('addBulk').addEventListener('click', function () {
+    $('bulkText').value = ''; $('bulkMsg').textContent = '';
+    $('bulkDialog').showModal(); $('bulkText').focus();
+  });
+  $('bulkCancel').addEventListener('click', function () { $('bulkDialog').close(); });
+  async function runBulk(dry) {
+    const btn = dry ? $('bulkCheck') : $('bulkSave');
+    setBusy(btn, true); $('bulkMsg').textContent = '';
+    try {
+      const d = await call('admin.importItems', { text: $('bulkText').value, dry: dry });
+      const info = d.dibuat + ' item baru (' + d.folder + ' folder), ' + d.dilewati + ' dilewati karena sudah ada.';
+      if (dry) { $('bulkMsg').textContent = 'Siap: ' + info; return; }
+      state.items = d.items; renderTree();
+      $('bulkDialog').close(); toast(info);
+    } catch (err) {
+      if (err.code === 'AUTH') $('bulkDialog').close();
+      else $('bulkMsg').textContent = err.message;
+    } finally { setBusy(btn, false); }
+  }
+  $('bulkCheck').addEventListener('click', function () { runBulk(true); });
+  $('bulkForm').addEventListener('submit', function (e) { e.preventDefault(); runBulk(false); });
+
   $('itemForm').addEventListener('submit', submitItem);
   $('dlgCancel').addEventListener('click', function () { $('itemDialog').close(); });
   $('itemDialog').addEventListener('click', function (e) {
