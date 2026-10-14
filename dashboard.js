@@ -85,7 +85,16 @@
       d.blocks.forEach(function (b) {
         const sec = el('section', 'card dsec');
         const label = word + ' ' + b.no;
-        sec.append(el('h2', '', b.judul ? label + ' · ' + b.judul : label));
+        const title = b.judul ? label + ' · ' + b.judul : label;
+        if (b.teks) {
+          const head = el('div', 'dsec-head');
+          const rb = el('button', 'read-btn'); rb.type = 'button';
+          rb.setAttribute('aria-label', 'Baca ketentuan: ' + title); rb.title = 'Baca ketentuan';
+          rb.append(App.svg('book'), el('span', '', 'Baca'));
+          rb.addEventListener('click', function () { App.readDialog({ title: title, text: b.teks }); });
+          head.append(el('h2', '', title), rb);
+          sec.append(head);
+        } else sec.append(el('h2', '', title));
         b.questions.forEach(function (q) { sec.append(C.question(q, false)); });
         frag.append(sec);
       });

@@ -51,3 +51,13 @@
 .kpi { justify-items: start; align-content: center; min-height: 5.2rem; margin: 0; }
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 0.6rem; align-items: stretch; }
 .kpis .kpi { min-width: 0; }
+
+/* Tombol baca teks bacaan + popup */
+.dsec-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.5rem; }
+.dsec-head h2 { margin: 0; flex: 1; min-width: 0; }
+.read-btn { flex: none; display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; border: 1px solid var(--line); border-radius: 99px; background: var(--tint); color: var(--ink); font: inherit; font-size: 0.82rem; font-weight: 650; cursor: pointer; transition: transform 0.15s, border-color 0.15s; }
+.read-btn:hover { border-color: var(--ink); }
+.read-btn:active { transform: scale(0.96); }
+.read-btn .i { width: 1rem; height: 1rem; }
+.read-dlg { width: min(30rem, calc(100vw - 2rem)); }
+.read-body { max-height: min(60vh, 26rem); overflow: auto; margin-bottom: 1rem; font-size: 0.97rem; line-height: 1.65; overflow-wrap: anywhere; }

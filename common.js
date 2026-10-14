@@ -45,6 +45,7 @@
     users: '<circle cx="9" cy="8" r="3.500"/><path d="M2 20a7 7 0 0 1 14 0M16 4.500a3.500 3.500 0 0 1 0 7M18 14.500a7 7 0 0 1 4 5.500"/>',
     list: '<path d="M8 6h13M8 12h13M8 18h13M3.500 6h.01M3.500 12h.01M3.500 18h.01"/>',
     refresh: '<path d="M20 11a8 8 0 1 0-2.300 5.700M20 4v7h-7"/>',
+    book: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M9 8h6M9 12h6"/>',
     sheet: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/>'
   };
 
@@ -402,6 +403,22 @@
   }
 
   // Dialog konfirmasi. Mengembalikan Promise<boolean>. lines: teks biasa (bukan HTML).
+  // Jendela baca (popup) untuk teks panjang, mis. teks bacaan sebuah blok.
+  App.readDialog = function (o) {
+    const d = document.createElement('dialog');
+    d.className = 'install-dlg read-dlg';
+    const box = document.createElement('div'); box.className = 'in';
+    const h = document.createElement('h2'); h.textContent = o.title; box.append(h);
+    const body = document.createElement('div'); body.className = 'rich read-body'; body.append(App.rich(o.text)); box.append(body);
+    const row = document.createElement('div'); row.className = 'dlg-actions';
+    const ok = document.createElement('button'); ok.type = 'button'; ok.className = 'btn btn-primary'; ok.textContent = o.close || 'Tutup';
+    ok.addEventListener('click', function () { d.close(); });
+    row.append(ok); box.append(row); d.append(box);
+    d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
+    d.addEventListener('close', function () { d.remove(); });
+    document.body.append(d); d.showModal(); ok.focus();
+  };
+
   App.confirm = function (o) {
     return new Promise(function (resolve) {
       const d = document.createElement('dialog');
