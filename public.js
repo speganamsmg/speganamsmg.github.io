@@ -31,13 +31,57 @@
 
   let qrOn = true;
 
-  // Pengelompokan menurut audiens, dari atas ke bawah. Item "Semua" tampil lebih dulu tanpa judul.
+  // Tab audiens. "ada" = audiens item yang membuat tab itu layak tampil (tab tanpa item sendiri disembunyikan).
   const GRUP = [
     { id: 'gtk', nama: 'Guru dan Tendik' },
     { id: 'guru', nama: 'Guru' },
     { id: 'tendik', nama: 'Tendik' },
     { id: 'murid', nama: 'Murid' }
   ];
+  const TABS = [
+    { id: 'semua', nama: 'Semua', ok: null, ada: null, qr: true },
+    { id: 'gtk', nama: 'Guru & Tendik', ok: ['', 'gtk', 'guru', 'tendik'], ada: ['gtk', 'guru', 'tendik'], qr: true },
+    { id: 'guru', nama: 'Guru', ok: ['', 'gtk', 'guru'], ada: ['gtk', 'guru'], qr: true },
+    { id: 'tendik', nama: 'Tendik', ok: ['', 'gtk', 'tendik'], ada: ['gtk', 'tendik'], qr: true },
+    { id: 'murid', nama: 'Murid', ok: ['', 'murid'], ada: ['murid'], qr: false }
+  ];
+  const TAB_KEY = 'pub_tab_v2';
+  let tab = 'semua';
+  try { const t = localStorage.getItem(TAB_KEY); if (TABS.some(function (x) { return x.id === t; })) tab = t; } catch (e) { /* abaikan */ }
+
+  function drawTabs(items, folder, onQr) {
+    const box = $('audience');
+    const marked = items.some(function (i) { return i.parent_id === '' && i.untuk; });
+    const visible = TABS.filter(function (t) {
+      if (!t.ada) return true;
+      return items.some(function (i) { return i.parent_id === '' && t.ada.indexOf(i.untuk) >= 0; });
+    });
+    if (visible.length && !visible.some(function (t) { return t.id === tab; })) tab = visible[0].id;
+    if (!marked) tab = 'semua'; // tidak ada item berlabel audiens: tanpa tab
+    box.hidden = !marked || !!folder || onQr;
+    if (box.hidden) return;
+    box.replaceChildren.apply(box, visible.map(function (t) {
+      const b = el('button', 'aud-btn', t.nama); b.type = 'button';
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', String(t.id === tab));
+      b.addEventListener('click', function () {
+        tab = t.id;
+        try { localStorage.setItem(TAB_KEY, tab); } catch (e) { /* abaikan */ }
+        render();
+      });
+      return b;
+    }));
+  }
+
+  function qrTile() {
+    const a = el('a', 'tile tile-folder');
+    a.href = '#/qr';
+    a.append(App.icon({ tipe: 'folder', ikon_jenis: 'bawaan', ikon_isi: 'qr' }),
+      el('span', 'label', (data && data.settings && data.settings.qr_judul) || 'Pembuat QR Code'),
+      App.svg('chevron', 'trail'));
+    const li = el('li'); li.append(a);
+    return li;
+  }
 
   function applySettings(s) {
     qrOn = s.qr_aktif !== 'tidak';
@@ -157,23 +201,33 @@
       return;
     }
 
+    const onQr = location.hash === '#/qr' && qrOn;
+    if (location.hash === '#/qr' && !qrOn) { location.hash = '#/'; return; }
     const crumb = $('crumb');
-    crumb.hidden = !folder;
-    if ($('qrTool')) $('qrTool').hidden = !!folder || !qrOn; // alat QR hanya di halaman utama, dan bila diaktifkan admin
-    if (folder) {
-      $('crumbTitle').textContent = folder.judul;
+    crumb.hidden = !folder && !onQr;
+    // Alat QR dibuka lewat tombol "folder" di halaman utama (#/qr), dan hanya bila diaktifkan admin.
+    if ($('qrTool')) $('qrTool').hidden = !onQr;
+    $('list').hidden = onQr;
+    if (folder || onQr) {
+      $('crumbTitle').textContent = onQr ? ((data.settings && data.settings.qr_judul) || 'Pembuat QR Code') : folder.judul;
       const back = $('back');
-      back.href = folder.parent_id ? '#/f/' + folder.parent_id : '#/';
+      back.href = onQr ? '#/' : (folder.parent_id ? '#/f/' + folder.parent_id : '#/');
       back.replaceChildren(App.svg('back'), document.createTextNode('Kembali'));
     }
-    document.title = (folder ? folder.judul + ' — ' : '') + data.settings.judul;
+    document.title = (onQr ? 'QR Code — ' : folder ? folder.judul + ' — ' : '') + data.settings.judul;
+    drawTabs(items, folder, onQr);
+    if (onQr) { clearState(); return; }
 
     const counts = {};
     items.forEach(function (i) { counts[i.parent_id] = (counts[i.parent_id] || 0) + 1; });
 
-    const here = items.filter(function (i) { return i.parent_id === folderId; });
-    const grouped = here.some(function (i) { return i.untuk; });
+    const cur = TABS.filter(function (t) { return t.id === tab; })[0] || TABS[0];
+    const here = items.filter(function (i) {
+      return i.parent_id === folderId && (!cur.ok || cur.ok.indexOf(i.untuk || '') >= 0);
+    });
+    const grouped = cur.id === 'semua' && here.some(function (i) { return i.untuk; });
     let nodes = [];
+    let qrDone = false;
     if (!grouped) {
       nodes = here.map(function (i) { return tile(i, counts[i.id] || 0); }).filter(Boolean);
     } else {
@@ -184,8 +238,10 @@
         nodes = nodes.concat(ts);
       };
       add(here.filter(function (i) { return !i.untuk; }), '');
+      if (!folder && qrOn && cur.qr) { nodes.push(qrTile()); qrDone = true; } // tepat di bawah item umum, sebelum judul kelompok
       GRUP.forEach(function (g) { add(here.filter(function (i) { return i.untuk === g.id; }), g.nama); });
     }
+    if (!folder && qrOn && cur.qr && !qrDone) nodes.push(qrTile());
 
     $('list').replaceChildren.apply($('list'), nodes);
     if (nodes.length) {

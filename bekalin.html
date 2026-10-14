@@ -32,7 +32,6 @@
   <header class="bar">
     <a href="./" id="back" aria-label="Kembali ke beranda">&#8249; Beranda</a>
     <b>BEKALIN</b>
-    <a href="#" id="newtab" target="_blank" rel="noopener" aria-label="Buka di tab baru">Tab baru &#8599;</a>
   </header>
   <main class="frame">
     <div class="load" id="load">Memuat BEKALIN…</div>
@@ -60,7 +59,6 @@
       var f = document.getElementById('app');
       f.addEventListener('load', function () { document.getElementById('load').classList.add('done'); });
       f.src = src;
-      document.getElementById('newtab').href = src;
     })();
   </script>
 </body>
