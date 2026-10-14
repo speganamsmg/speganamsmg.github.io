@@ -519,7 +519,31 @@
     const tw = field('Teks bacaan (opsional)', ta, 'Contoh: kutipan pasal atau penjelasan yang dibaca dulu sebelum menjawab.');
     tw.insertBefore(richBar(ta), ta);
     card.append(tw);
-    card.append(field('Gambar (opsional, alamat https)', input(b, 'gambar', { type: 'url', max: 500, ph: 'https://… atau link Google Drive' })));
+    const gi = input(b, 'gambar', { type: 'url', max: 500, ph: 'https://… atau link Google Drive' });
+    const gf = field('Gambar (opsional, alamat https)', gi, 'Link Google Drive: Bagikan → "Siapa saja yang memiliki link". Pembaca bisa mengetuk gambar untuk memperbesarnya.');
+    const gp = mk('div', 'img-prev');
+    gf.append(gp);
+    let gTok = 0;
+    let gTimer;
+    function gPreview() {
+      const tok = ++gTok;
+      const v = gi.value.trim();
+      gp.replaceChildren();
+      if (!v) return;
+      if (!/^https:\/\//i.test(v)) { gp.append(mk('span', 'help ip-state bad', '✗ Alamat harus diawali https://')); return; }
+      gp.append(mk('span', 'help ip-state', 'Memuat gambar…'));
+      const im = App.loadImage(v, function () {
+        if (tok !== gTok) return;
+        im.className = 'img-prev-im';
+        gp.replaceChildren(im, mk('span', 'help ip-state ok', '✓ Gambar berhasil dimuat'));
+      }, function () {
+        if (tok !== gTok) return;
+        gp.replaceChildren(mk('span', 'help ip-state bad', '✗ Gambar tidak bisa dimuat. Pastikan akses Drive "Siapa saja yang memiliki link" (Pelihat) atau alamat gambar langsung.'));
+      });
+    }
+    gi.addEventListener('input', function () { clearTimeout(gTimer); gTimer = setTimeout(gPreview, 400); });
+    gPreview();
+    card.append(gf);
 
     const qh = mk('div', 'qs');
     b.questions.forEach(function (q, qi) { qh.append(renderQuestion(b, q, qi)); });

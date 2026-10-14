@@ -99,6 +99,7 @@
     return Object.assign({
       id: it.id, tipe: it.tipe, judul: it.judul, url: it.url, form_id: it.form_id || '',
       ikon_jenis: it.ikon_jenis, ikon_isi: it.ikon_isi,
+      ikon_warna: it.ikon_warna || '', ikon_bentuk: it.ikon_bentuk || '',
       parent_id: it.parent_id, tampil: it.tampil, segera: it.segera === true
     }, over || {});
   }
@@ -303,27 +304,105 @@
 
   // ── Dialog tambah / edit ──
   const ICON_HINTS = {
-    emoji: { ph: '😀', help: 'Ketik atau tempel satu emoji.' },
-    gambar: { ph: 'https://…/logo.png', help: 'Alamat gambar (harus https). Gambar persegi paling rapi.' },
+    emoji: { ph: '😀', help: 'Pilih di bawah, atau ketik / tempel emoji apa saja.' },
+    gambar: { ph: 'https://… atau link Google Drive', help: 'Bisa link gambar https atau link berbagi Google Drive (atur akses "Siapa saja yang memiliki link"). Gambar persegi paling rapi.' },
     pustaka: { ph: 'instagram', help: null }
   };
+  const EMOJIS = ['📌', '📢', '📝', '📄', '📚', '🎓', '🏫', '🧑‍🏫', '👥', '🤝', '💰', '🧾', '📅', '⏰', '📷', '🎥', '🏆', '⭐', '❤️', '✅', '📞', '✉️', '🌐', '🔒', '🛠️', '🎉', '🕌', '🚀'];
+  const BRANDS = ['instagram', 'whatsapp', 'youtube', 'tiktok', 'facebook', 'x', 'telegram', 'github', 'linkedin', 'google', 'googledrive', 'googleforms', 'googlesheets', 'googlemeet', 'gmail', 'zoom', 'spotify', 'discord', 'canva', 'notion', 'figma', 'shopee', 'tokopedia', 'threads'];
+  const COLORS = ['#f4b942', '#ef4444', '#f97316', '#22c55e', '#14b8a6', '#3b82f6', '#6366f1', '#a855f7', '#ec4899', '#0f172a', '#ffffff'];
+  const SHAPES = [['', 'Membulat'], ['bulat', 'Bulat'], ['kotak', 'Kotak']];
+  const iconStyle = { warna: '', bentuk: '' };
+  let previewToken = 0;
+
+  function pressedSync() {
+    const v = $('fIconValue').value.trim().toLowerCase();
+    const raw = $('fIconValue').value.trim();
+    $('iconGrid').querySelectorAll('.ip-btn').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.v === v || b.dataset.v === raw));
+    });
+  }
+
+  function renderGrid(jenis) {
+    const g = $('iconGrid');
+    g.replaceChildren();
+    let list = null;
+    if (jenis === 'bawaan') list = App.ICON_CHOICES;
+    else if (jenis === 'emoji') list = EMOJIS;
+    else if (jenis === 'pustaka') list = BRANDS;
+    g.hidden = !list;
+    if (!list) return;
+    list.forEach(function (v) {
+      const b = el('button', 'ip-btn');
+      b.type = 'button';
+      b.dataset.v = v;
+      b.title = v;
+      b.setAttribute('aria-label', v);
+      if (jenis === 'bawaan') b.append(App.svg(v));
+      else if (jenis === 'emoji') b.textContent = v;
+      else { b.classList.add('brand'); b.append(App.icon({ ikon_jenis: 'pustaka', ikon_isi: v }).firstChild || '', el('small', '', v)); }
+      b.addEventListener('click', function () {
+        $('fIconValue').value = v;
+        pressedSync();
+        refreshPreview();
+      });
+      g.append(b);
+    });
+    pressedSync();
+  }
+
+  function renderStyleControls() {
+    const c = $('iconColors');
+    c.replaceChildren();
+    function sw(color, label) {
+      const b = el('button', 'ip-sw' + (color ? '' : ' auto'));
+      b.type = 'button';
+      b.title = label;
+      b.setAttribute('aria-label', label);
+      b.setAttribute('aria-pressed', String(iconStyle.warna === color));
+      if (color) b.style.background = color;
+      b.addEventListener('click', function () { iconStyle.warna = color; renderStyleControls(); refreshPreview(); });
+      return b;
+    }
+    c.append(sw('', 'Warna otomatis'));
+    COLORS.forEach(function (k) { c.append(sw(k, k)); });
+    const custom = el('input', 'ip-custom');
+    custom.type = 'color';
+    custom.setAttribute('aria-label', 'Warna lain');
+    custom.title = 'Warna lain';
+    custom.value = iconStyle.warna || '#f4b942';
+    custom.addEventListener('input', function () { iconStyle.warna = custom.value; refreshPreview(); c.querySelectorAll('.ip-sw').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); }); });
+    c.append(custom);
+
+    const sh = $('iconShapes');
+    sh.replaceChildren();
+    SHAPES.forEach(function (x) {
+      const b = el('button', 'seg-btn', x[1]);
+      b.type = 'button';
+      b.setAttribute('aria-pressed', String(iconStyle.bentuk === x[0]));
+      b.addEventListener('click', function () { iconStyle.bentuk = x[0]; renderStyleControls(); refreshPreview(); });
+      sh.append(b);
+    });
+  }
 
   function updateIconFields() {
     const jenis = $('fIconType').value;
     const input = $('fIconValue');
     const help = $('iconHelp');
-    input.hidden = jenis === 'none';
-    help.hidden = jenis === 'none';
-    if (jenis === 'none') {
-      input.value = '';
-    } else {
+    const showInput = jenis === 'emoji' || jenis === 'gambar' || jenis === 'pustaka';
+    input.hidden = !showInput;
+    help.hidden = !showInput;
+    if (jenis === 'none' || jenis === 'bawaan') {
+      if (jenis === 'none') input.value = '';
+    }
+    if (showInput) {
       const h = ICON_HINTS[jenis];
       input.placeholder = h.ph;
       help.replaceChildren();
       if (h.help) {
         help.textContent = h.help;
       } else {
-        help.append(document.createTextNode('Nama ikon huruf kecil, misalnya instagram, whatsapp, youtube, tiktok. Daftar nama: '));
+        help.append(document.createTextNode('Pilih di bawah, atau ketik nama ikon huruf kecil (misalnya instagram). Daftar lengkap: '));
         const a = el('a', '', 'simpleicons.org');
         a.href = 'https://simpleicons.org/';
         a.target = '_blank';
@@ -331,6 +410,8 @@
         help.append(a);
       }
     }
+    renderGrid(jenis);
+    renderStyleControls();
     refreshPreview();
   }
 
@@ -338,10 +419,33 @@
     const probe = {
       tipe: state.editingTipe,
       ikon_jenis: $('fIconType').value,
-      ikon_isi: $('fIconValue').value.trim()
+      ikon_isi: $('fIconValue').value.trim(),
+      ikon_warna: iconStyle.warna,
+      ikon_bentuk: iconStyle.bentuk
     };
     if (probe.ikon_jenis === 'pustaka') probe.ikon_isi = probe.ikon_isi.toLowerCase();
     $('iconPreview').replaceChildren(App.icon(probe));
+    pressedSync();
+
+    // Keterangan hasil memuat gambar, supaya jelas kalau link Drive belum dibagikan.
+    const st = $('iconState');
+    const token = ++previewToken;
+    if (probe.ikon_jenis === 'gambar' && probe.ikon_isi) {
+      st.hidden = false;
+      st.className = 'help ip-state';
+      st.textContent = 'Memuat gambar…';
+      App.loadImage(probe.ikon_isi, function () {
+        if (token !== previewToken) return;
+        st.className = 'help ip-state ok';
+        st.textContent = '✓ Gambar berhasil dimuat.';
+      }, function () {
+        if (token !== previewToken) return;
+        st.className = 'help ip-state bad';
+        st.textContent = '✗ Gambar tidak bisa dimuat. Untuk Google Drive: Bagikan → Akses umum → "Siapa saja yang memiliki link" (Pelihat).';
+      });
+    } else {
+      st.hidden = true;
+    }
   }
 
   function fillParentOptions(item, tipe, preselect) {
@@ -392,6 +496,8 @@
     $('fUrl').required = tipe === 'link';
     $('fIconType').value = item ? item.ikon_jenis : 'none';
     $('fIconValue').value = item ? item.ikon_isi : '';
+    iconStyle.warna = item ? (item.ikon_warna || '') : '';
+    iconStyle.bentuk = item ? (item.ikon_bentuk || '') : '';
     $('fVisible').checked = item ? item.tampil : true;
     $('fSoon').checked = item ? item.segera === true : false;
     $('dlgMsg').textContent = '';
@@ -412,6 +518,8 @@
       form_id: (tipe === 'form' || tipe === 'dashboard') ? $('fForm').value : '',
       ikon_jenis: $('fIconType').value,
       ikon_isi: $('fIconValue').value,
+      ikon_warna: iconStyle.warna,
+      ikon_bentuk: iconStyle.bentuk,
       parent_id: $('fParent').value,
       tampil: $('fVisible').checked,
       segera: $('fSoon').checked

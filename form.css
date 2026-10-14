@@ -167,3 +167,9 @@ textarea.field { min-height: 6.5rem; resize: vertical; }
 }
 .name-btn[aria-pressed="true"]::after { content: "✓"; color: var(--accent); font-weight: 800; animation: pickIn 0.25s cubic-bezier(.3,1.6,.5,1); }
 @media (prefers-reduced-motion: reduce) { .opt:has(input:checked), .name-btn[aria-pressed="true"], .scale input:checked + span, .opt input:checked { animation: none; } }
+
+/* Rata tengah */
+.done { text-align: center; }
+.done .check { margin-left: auto; margin-right: auto; }
+.done .actions { justify-content: center; }
+.done .actions .btn { flex: 1 1 10rem; max-width: 14rem; }

@@ -47,8 +47,46 @@
     refresh: '<path d="M20 11a8 8 0 1 0-2.300 5.700M20 4v7h-7"/>',
     book: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M9 8h6M9 12h6"/>',
     wrench: '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7 6.3 21l6.3-6.3a4 4 0 0 0 5.1-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/>',
-    sheet: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/>'
+    sheet: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/>',
+    home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
+    star: '<polygon points="12 2 15.1 8.3 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 8.9 8.3 12 2"/>',
+    heart: '<path d="M20.8 4.6a5.5 5.500 0 0 0-7.800 0L12 5.700l-1-1.100a5.500 5.500 0 0 0-7.800 7.800l1 1.100L12 21.200l7.800-7.800 1-1.100a5.500 5.500 0 0 0 0-7.800z"/>',
+    bell: '<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.700 21a2 2 0 0 1-3.400 0"/>',
+    calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+    clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+    mail: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/>',
+    phone: '<path d="M22 16.900v3a2 2 0 0 1-2.200 2 19.800 19.800 0 0 1-8.600-3.100 19.500 19.500 0 0 1-6-6A19.800 19.800 0 0 1 2.100 4.200 2 2 0 0 1 4.100 2h3a2 2 0 0 1 2 1.700c.1 1 .4 1.900.7 2.800a2 2 0 0 1-.5 2.100L8.100 9.900a16 16 0 0 0 6 6l1.300-1.300a2 2 0 0 1 2.100-.4c.9.300 1.800.6 2.800.7a2 2 0 0 1 1.700 2z"/>',
+    chat: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+    send: '<path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/>',
+    megaphone: '<path d="M3 11v2a1 1 0 0 0 1 1h3l8 5V5L7 10H4a1 1 0 0 0-1 1z"/><path d="M19 9a4 4 0 0 1 0 6"/>',
+    globe: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/>',
+    search: '<circle cx="11" cy="11" r="8"/><path d="M21 21l-4.300-4.300"/>',
+    pin: '<path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+    camera: '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',
+    image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.500" cy="8.500" r="1.500"/><path d="M21 15l-5-5L5 21"/>',
+    video: '<rect x="2" y="5" width="14" height="14" rx="2"/><path d="M22 8l-6 4 6 4z"/>',
+    music: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+    cart: '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.700 13.400a2 2 0 0 0 2 1.600h9.700a2 2 0 0 0 2-1.600L23 6H6"/>',
+    gift: '<path d="M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.500a2.500 2.500 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.500a2.500 2.500 0 0 0 0-5C13 2 12 7 12 7z"/>',
+    award: '<circle cx="12" cy="8" r="7"/><path d="M8.200 13.900L7 23l5-3 5 3-1.200-9.100"/>',
+    shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+    lock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+    flag: '<path d="M4 22V4M4 4h14l-2 4 2 4H4"/>',
+    bookmark: '<path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>',
+    bulb: '<path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.700c.6.500 1 1.200 1 2.300h6c0-1.100.4-1.800 1-2.300A7 7 0 0 0 12 2z"/>',
+    coffee: '<path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/><path d="M6 1v3M10 1v3M14 1v3"/>',
+    graduation: '<path d="M22 10L12 5 2 10l10 5z"/><path d="M6 12v5c3 2 9 2 12 0v-5M22 10v6"/>',
+    clipboard: '<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/>',
+    file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/>',
+    uang: '<circle cx="12" cy="12" r="10"/><path d="M15 9.500c-.5-1-1.500-1.500-3-1.500-1.800 0-3 .9-3 2.200 0 3 6 1.500 6 4.300 0 1.300-1.200 2.200-3 2.200-1.500 0-2.500-.5-3-1.500M12 6v2M12 16v2"/>',
+    bolt: '<path d="M13 2L3 14h9l-1 8 10-12h-9z"/>'
   };
+
+  // Galeri ikon yang bisa dipilih admin (nama harus ada di PATHS).
+  App.ICON_CHOICES = ['link', 'folder', 'form', 'chart', 'book', 'sheet', 'file', 'clipboard', 'list', 'users', 'user',
+    'home', 'star', 'heart', 'bell', 'calendar', 'clock', 'mail', 'phone', 'chat', 'send', 'megaphone', 'globe', 'search',
+    'pin', 'camera', 'image', 'video', 'music', 'cart', 'gift', 'award', 'shield', 'lock', 'flag', 'bookmark', 'bulb',
+    'coffee', 'graduation', 'uang', 'bolt', 'wrench', 'settings', 'eye'];
 
   App.svg = function (name, cls) {
     const t = document.createElement('template');
@@ -60,10 +98,57 @@
 
   // ── Alamat ──
   // Tautan Google Drive (…/file/d/ID/view, open?id=ID, uc?id=ID) diubah jadi alamat gambar langsung.
+  function driveId(u) {
+    const m = String(u || '').trim().match(/^https:\/\/(?:drive|docs)\.google\.com\/(?:file\/d\/|open\?(?:[^#]*&)?id=|uc\?(?:[^#]*&)?id=|drive\/folders\/)([\w-]{10,})/);
+    return m ? m[1] : '';
+  }
   App.imgUrl = function (u) {
     u = String(u || '').trim();
-    const m = u.match(/^https:\/\/(?:drive|docs)\.google\.com\/(?:file\/d\/|open\?(?:[^#]*&)?id=|uc\?(?:[^#]*&)?id=)([\w-]{10,})/);
-    return m ? 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w1600' : u;
+    const id = driveId(u);
+    return id ? 'https://drive.google.com/thumbnail?id=' + id + '&sz=w1600' : u;
+  };
+  // Daftar alamat yang dicoba berurutan sampai gambar berhasil dimuat.
+  App.imgCandidates = function (u) {
+    u = String(u || '').trim();
+    const id = driveId(u);
+    if (!id) return [u];
+    return [
+      'https://drive.google.com/thumbnail?id=' + id + '&sz=w1600',
+      'https://lh3.googleusercontent.com/d/' + id + '=w1600',
+      'https://drive.google.com/uc?export=view&id=' + id
+    ];
+  };
+  // Membuat <img> yang mencoba semua alamat cadangan. onFail dipanggil bila semuanya gagal.
+  App.loadImage = function (u, onOk, onFail) {
+    const list = App.imgCandidates(u).map(safeHttps).filter(Boolean);
+    const im = new Image();
+    im.alt = '';
+    im.referrerPolicy = 'no-referrer';
+    let n = 0;
+    function next() {
+      if (n >= list.length) { if (onFail) onFail(); return; }
+      im.src = list[n++];
+    }
+    im.addEventListener('load', function () { if (im.naturalWidth > 1 && onOk) onOk(im); else if (im.naturalWidth <= 1) next(); });
+    im.addEventListener('error', next);
+    next();
+    return im;
+  };
+  // Gambar diperbesar dalam popup; ketuk di mana saja atau tombol tutup untuk keluar.
+  App.lightbox = function (src) {
+    const d = document.createElement('dialog');
+    d.className = 'lb';
+    const im = new Image();
+    im.src = src; im.alt = ''; im.referrerPolicy = 'no-referrer';
+    const x = document.createElement('button');
+    x.type = 'button'; x.className = 'lb-x'; x.setAttribute('aria-label', 'Tutup');
+    x.append(App.svg('plus'));
+    x.addEventListener('click', function () { d.close(); });
+    d.append(im, x);
+    d.addEventListener('click', function () { d.close(); });
+    d.addEventListener('close', function () { d.remove(); });
+    document.body.append(d);
+    d.showModal();
   };
   App.safeUrl = function (u) {
     try {
@@ -84,32 +169,43 @@
   }
 
   // ── Ikon item: bawaan, emoji, gambar, atau pustaka ikon ──
+  function contrast(hex) {
+    const n = parseInt(hex.slice(1), 16);
+    const r = n >> 16, g = (n >> 8) & 255, bl = n & 255;
+    return (0.299 * r + 0.587 * g + 0.114 * bl) > 160 ? '#10162b' : '#ffffff';
+  }
+
   App.icon = function (item) {
     const box = App.el('span', 'icon');
     box.setAttribute('aria-hidden', 'true');
     const jenis = item.ikon_jenis;
     const isi = String(item.ikon_isi || '');
+    const fallback = App.svg(item.tipe === 'folder' ? 'folder' : item.tipe === 'form' ? 'form' : item.tipe === 'dashboard' ? 'chart' : 'link');
 
     if (jenis === 'emoji' && isi) {
       box.classList.add('icon-emoji');
       box.textContent = isi;
+    } else if (jenis === 'bawaan' && PATHS[isi]) {
+      box.append(App.svg(isi));
     } else if (jenis === 'gambar' && isi) {
-      const src = safeHttps(App.imgUrl(isi));
-      if (src) {
-        const img = new Image();
-        img.alt = '';
-        img.loading = 'lazy';
-        img.referrerPolicy = 'no-referrer';
-        img.src = src;
-        box.append(img);
-      }
+      const im = App.loadImage(isi, null, function () { im.remove(); box.append(fallback); });
+      im.loading = 'lazy';
+      box.append(im);
     } else if (jenis === 'pustaka' && /^[a-z0-9]{1,50}$/.test(isi)) {
       const g = App.el('span', 'glyph');
       g.style.setProperty('--icon-url', 'url("' + (CFG.ICON_CDN || '') + isi + '.svg")');
       box.append(g);
     } else {
-      box.append(App.svg(item.tipe === 'folder' ? 'folder' : item.tipe === 'form' ? 'form' : item.tipe === 'dashboard' ? 'chart' : 'link'));
+      box.append(fallback);
     }
+
+    // Kebebasan tampilan: warna latar dan bentuk (nilai sudah divalidasi backend, divalidasi lagi di sini).
+    if (/^#[0-9a-fA-F]{6}$/.test(item.ikon_warna || '')) {
+      box.style.background = item.ikon_warna;
+      box.style.color = contrast(item.ikon_warna);
+    }
+    if (item.ikon_bentuk === 'bulat') box.style.borderRadius = '50%';
+    else if (item.ikon_bentuk === 'kotak') box.style.borderRadius = '0.3rem';
     return box;
   };
 

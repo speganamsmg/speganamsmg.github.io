@@ -207,12 +207,21 @@
   function buildBlock(b, heading) {
     const sec = el('section', 'card');
     if (heading) sec.append(el('h2', 'block-title', heading));
-    const img = App.safeUrl(App.imgUrl(b.gambar));
-    if (img && /^https:/.test(img)) {
-      const im = new Image();
-      im.className = 'block-img'; im.alt = ''; im.loading = 'lazy'; im.referrerPolicy = 'no-referrer'; im.onerror = function () { im.remove(); };
-      im.src = img;
-      sec.append(im);
+    if (b.gambar && /^https:/i.test(String(b.gambar).trim())) {
+      const fig = el('button', 'block-fig');
+      fig.type = 'button';
+      fig.setAttribute('aria-label', 'Perbesar gambar');
+      fig.append(el('span', 'block-fig-load'));
+      const im = App.loadImage(b.gambar, function (ok) {
+        im.className = 'block-img';
+        fig.replaceChildren(im, el('span', 'block-fig-zoom', 'Ketuk untuk memperbesar'));
+        fig.addEventListener('click', function () { App.lightbox(ok.currentSrc || ok.src); });
+      }, function () {
+        const a = el('a', 'block-fig-fail', 'Gambar tidak dapat dimuat. Ketuk untuk membukanya di tab baru.');
+        a.href = App.safeUrl(b.gambar); a.target = '_blank'; a.rel = 'noopener noreferrer';
+        fig.replaceWith(a);
+      });
+      sec.append(fig);
     }
     if (b.teks) {
       const r = el('div', 'rich reading');

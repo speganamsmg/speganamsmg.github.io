@@ -28,9 +28,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&display=swap">
-  <link rel="stylesheet" href="style.css?v=23">
-  <link rel="stylesheet" href="charts.css?v=23">
-  <link rel="stylesheet" href="admin.css?v=23">
+  <link rel="stylesheet" href="style.css?v=24">
+  <link rel="stylesheet" href="charts.css?v=24">
+  <link rel="stylesheet" href="admin.css?v=24">
 </head>
 <body>
   <div class="splash" id="splash" role="status" aria-label="Memuat">
@@ -194,14 +194,27 @@
         <div class="icon-row">
           <span id="iconPreview"></span>
           <select class="input" id="fIconType">
-            <option value="none">Bawaan</option>
+            <option value="none">Otomatis (sesuai jenis)</option>
+            <option value="bawaan">Galeri ikon</option>
             <option value="emoji">Emoji</option>
-            <option value="gambar">Gambar dari alamat URL</option>
-            <option value="pustaka">Ikon dari pustaka</option>
+            <option value="gambar">Gambar (link atau Google Drive)</option>
+            <option value="pustaka">Logo merek (Instagram, WhatsApp, dll.)</option>
           </select>
         </div>
+        <div class="ip-grid" id="iconGrid" role="group" aria-label="Pilih ikon" hidden></div>
         <input class="input" id="fIconValue" aria-label="Isi ikon" autocapitalize="off" spellcheck="false" hidden>
         <span class="help" id="iconHelp" hidden></span>
+        <span class="help ip-state" id="iconState" role="status" hidden></span>
+      </div>
+
+      <div class="field">
+        <label id="lblColor">Warna ikon</label>
+        <div class="ip-colors" id="iconColors" role="group" aria-labelledby="lblColor"></div>
+      </div>
+
+      <div class="field">
+        <label id="lblShape">Bentuk ikon</label>
+        <div class="seg" id="iconShapes" role="group" aria-labelledby="lblShape"></div>
       </div>
 
       <div class="field">
@@ -229,12 +242,12 @@
   <div id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15/Sortable.min.js"></script>
-  <script src="config.js?v=23"></script>
-  <script src="common.js?v=23"></script>
-  <script src="charts.js?v=23"></script>
-  <script src="admin.js?v=23"></script>
-  <script src="admin-forms.js?v=23"></script>
-  <script src="admin-names.js?v=23"></script>
-  <script src="admin-results.js?v=23"></script>
+  <script src="config.js?v=24"></script>
+  <script src="common.js?v=24"></script>
+  <script src="charts.js?v=24"></script>
+  <script src="admin.js?v=24"></script>
+  <script src="admin-forms.js?v=24"></script>
+  <script src="admin-names.js?v=24"></script>
+  <script src="admin-results.js?v=24"></script>
 </body>
 </html>
