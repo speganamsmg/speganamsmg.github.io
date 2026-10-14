@@ -40,9 +40,9 @@
   ];
   const TABS = [
     { id: 'semua', nama: 'Semua', ok: null, ada: null, qr: true },
-    { id: 'gtk', nama: 'Guru & Tendik', ok: ['', 'gtk', 'guru', 'tendik'], ada: ['gtk', 'guru', 'tendik'], qr: false },
-    { id: 'guru', nama: 'Guru', ok: ['', 'gtk', 'guru'], ada: ['gtk', 'guru'], qr: false },
-    { id: 'tendik', nama: 'Tendik', ok: ['', 'gtk', 'tendik'], ada: ['gtk', 'tendik'], qr: false },
+    { id: 'gtk', nama: 'Guru & Tendik', ok: ['', 'gtk'], ada: ['gtk'], qr: false },
+    { id: 'guru', nama: 'Guru', ok: ['', 'guru'], ada: ['guru'], qr: false },
+    { id: 'tendik', nama: 'Tendik', ok: ['', 'tendik'], ada: ['tendik'], qr: false },
     { id: 'murid', nama: 'Murid', ok: ['', 'murid'], ada: ['murid'], qr: false }
   ];
   const TAB_KEY = 'pub_tab_v2';
