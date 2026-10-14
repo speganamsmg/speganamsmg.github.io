@@ -1,6 +1,6 @@
 {
-  "name": "SMP Negeri 36 Semarang",
-  "short_name": "Spegana",
+  "name": "36 System",
+  "short_name": "36 System",
   "description": "Portal internal guru dan karyawan SMP Negeri 36 Semarang: tautan, formulir, dan hasilnya.",
   "start_url": "./",
   "scope": "./",

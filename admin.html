@@ -28,9 +28,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&display=swap">
-  <link rel="stylesheet" href="style.css?v=33">
-  <link rel="stylesheet" href="charts.css?v=33">
-  <link rel="stylesheet" href="admin.css?v=33">
+  <link rel="stylesheet" href="style.css?v=37">
+  <link rel="stylesheet" href="charts.css?v=37">
+  <link rel="stylesheet" href="admin.css?v=37">
 </head>
 <body>
   <div class="splash" id="splash" role="status" aria-label="Memuat">
@@ -157,6 +157,10 @@
             <input class="input" id="sQrDesc" maxlength="160" placeholder="Tempel link, lalu unduh QR-nya.">
             <span class="help">Dikosongkan = tanpa keterangan.</span>
           </div>
+          <h3 class="sub-h">Tab halaman utama</h3>
+          <div class="soc-list" id="grupList"></div>
+          <button class="btn sm" id="grupAdd" type="button">Tambah tab</button>
+          <span class="help">"Semua" selalu ada di depan. Tab lain muncul di halaman utama hanya bila ada item yang memilihnya di kolom "Untuk siapa". Urutan di sini = urutan tab. Tab yang masih dipakai item tidak bisa dihapus. Maksimal 8.</span>
           <h3 class="sub-h">Media sosial &amp; website (halaman utama)</h3>
           <div class="soc-list" id="socList"></div>
           <button class="btn sm" id="socAdd" type="button">Tambah link</button>
@@ -191,7 +195,7 @@
   <dialog id="bulkDialog" aria-labelledby="bulkTitle">
     <form id="bulkForm">
       <h2 id="bulkTitle">Tempel daftar</h2>
-      <p class="hint">Satu baris satu item. Folder ditulis <code>[Nama Folder] | untuk</code>, link ditulis <code>Judul | alamat | untuk</code> dan masuk ke folder di atasnya. "Untuk" boleh Semua, Guru dan Tendik, Guru, Tendik, atau Murid. Baris berawalan # diabaikan. Item yang sama yang sudah ada dilewati.</p>
+      <p class="hint">Satu baris satu item. Folder ditulis <code>[Nama Folder] | untuk</code>, link ditulis <code>Judul | alamat | untuk</code> dan masuk ke folder di atasnya. "Untuk" diisi nama tab (mis. Guru, Murid) atau Semua. Baris berawalan # diabaikan. Item yang sama yang sudah ada dilewati.</p>
       <div class="field">
         <textarea class="input names-ta" id="bulkText" rows="12" spellcheck="false" placeholder="[7 Kebiasaan (G7KAIH)] | Semua&#10;Refleksi Kebiasaan | https://contoh.com/menu1 | Murid"></textarea>
       </div>
@@ -255,14 +259,8 @@
 
       <div class="field">
         <label for="fUntuk">Untuk siapa</label>
-        <select class="input" id="fUntuk">
-          <option value="">Semua (paling atas, tanpa judul)</option>
-          <option value="gtk">Guru dan Tendik</option>
-          <option value="guru">Guru</option>
-          <option value="tendik">Tendik</option>
-          <option value="murid">Murid</option>
-        </select>
-        <span class="help">Item dikelompokkan di halaman utama berurutan: Guru dan Tendik, Guru, Tendik, Murid. "Semua" tampil paling atas tanpa judul.</span>
+        <select class="input" id="fUntuk"></select>
+        <span class="help">Pilihan mengikuti Pengaturan → Tab halaman utama. Di tab "Semua", item dikelompokkan sesuai urutan tab; "Semua" tampil paling atas tanpa judul.</span>
       </div>
 
       <div class="field">
@@ -290,12 +288,12 @@
   <div id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15/Sortable.min.js"></script>
-  <script src="config.js?v=33"></script>
-  <script src="common.js?v=33"></script>
-  <script src="charts.js?v=33"></script>
-  <script src="admin.js?v=33"></script>
-  <script src="admin-forms.js?v=33"></script>
-  <script src="admin-names.js?v=33"></script>
-  <script src="admin-results.js?v=33"></script>
+  <script src="config.js?v=37"></script>
+  <script src="common.js?v=37"></script>
+  <script src="charts.js?v=37"></script>
+  <script src="admin.js?v=37"></script>
+  <script src="admin-forms.js?v=37"></script>
+  <script src="admin-names.js?v=37"></script>
+  <script src="admin-results.js?v=37"></script>
 </body>
 </html>

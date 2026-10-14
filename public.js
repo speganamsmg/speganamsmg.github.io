@@ -31,28 +31,29 @@
 
   let qrOn = true;
 
-  // Tab audiens. "ada" = audiens item yang membuat tab itu layak tampil (tab tanpa item sendiri disembunyikan).
-  const GRUP = [
-    { id: 'gtk', nama: 'Guru dan Tendik' },
-    { id: 'guru', nama: 'Guru' },
-    { id: 'tendik', nama: 'Tendik' },
-    { id: 'murid', nama: 'Murid' }
+  // Tab audiens diatur admin (Pengaturan → Tab halaman utama). "Semua" selalu ada di depan.
+  // Tab yang tidak punya item sendiri disembunyikan.
+  const GRUP_BAWAAN = [
+    { id: 'gtk', nama: 'Guru dan Tendik' }, { id: 'guru', nama: 'Guru' },
+    { id: 'tendik', nama: 'Tendik' }, { id: 'murid', nama: 'Murid' }
   ];
-  const TABS = [
-    { id: 'semua', nama: 'Semua', ok: null, ada: null, qr: true },
-    { id: 'gtk', nama: 'Guru & Tendik', ok: ['', 'gtk'], ada: ['gtk'], qr: false },
-    { id: 'guru', nama: 'Guru', ok: ['', 'guru'], ada: ['guru'], qr: false },
-    { id: 'tendik', nama: 'Tendik', ok: ['', 'tendik'], ada: ['tendik'], qr: false },
-    { id: 'murid', nama: 'Murid', ok: ['', 'murid'], ada: ['murid'], qr: false }
-  ];
+  function grupList() {
+    const g = data && data.settings && data.settings.grup;
+    return Array.isArray(g) ? g : GRUP_BAWAAN;
+  }
+  function tabList() {
+    return [{ id: 'semua', nama: 'Semua', ok: null, ada: null, qr: true }].concat(grupList().map(function (g) {
+      return { id: g.id, nama: g.nama, ok: ['', g.id], ada: [g.id], qr: false };
+    }));
+  }
   const TAB_KEY = 'pub_tab_v2';
   let tab = 'semua';
-  try { const t = localStorage.getItem(TAB_KEY); if (TABS.some(function (x) { return x.id === t; })) tab = t; } catch (e) { /* abaikan */ }
+  try { tab = localStorage.getItem(TAB_KEY) || 'semua'; } catch (e) { /* abaikan */ }
 
   function drawTabs(items, folder, onQr) {
     const box = $('audience');
     const marked = items.some(function (i) { return i.parent_id === '' && i.untuk; });
-    const visible = TABS.filter(function (t) {
+    const visible = tabList().filter(function (t) {
       if (!t.ada) return true;
       return items.some(function (i) { return i.parent_id === '' && t.ada.indexOf(i.untuk) >= 0; });
     });
@@ -221,7 +222,8 @@
     const counts = {};
     items.forEach(function (i) { counts[i.parent_id] = (counts[i.parent_id] || 0) + 1; });
 
-    const cur = TABS.filter(function (t) { return t.id === tab; })[0] || TABS[0];
+    const tabs = tabList();
+    const cur = tabs.filter(function (t) { return t.id === tab; })[0] || tabs[0];
     const here = items.filter(function (i) {
       return i.parent_id === folderId && (!cur.ok || cur.ok.indexOf(i.untuk || '') >= 0);
     });
@@ -237,7 +239,7 @@
         nodes = nodes.concat(ts);
       };
       add(here.filter(function (i) { return !i.untuk; }), '');
-      GRUP.forEach(function (g) { add(here.filter(function (i) { return i.untuk === g.id; }), g.nama); });
+      grupList().forEach(function (g) { add(here.filter(function (i) { return i.untuk === g.id; }), g.nama); });
     }
     if (!folder && qrOn && cur.qr) { // hanya di tab Semua, paling bawah, dengan judul sendiri bila item dikelompokkan
       if (grouped) { const h = el('li', 'grp-head'); h.append(el('h3', '', 'Fitur Lain')); nodes.push(h); }

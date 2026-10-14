@@ -95,7 +95,10 @@
     return out;
   }
 
-  const UNTUK_NAMA = { gtk: 'Guru & Tendik', guru: 'Guru', tendik: 'Tendik', murid: 'Murid' };
+  function untukNama(id) {
+    const g = (state.settings.grup || []).filter(function (x) { return x.id === id; })[0];
+    return g ? g.nama : id;
+  }
 
   function payload(it, over) {
     return Object.assign({
@@ -152,7 +155,7 @@
     const title = el('div', 'row-title');
     title.append(el('span', '', it.judul));
     if (!it.tampil) title.append(el('span', 'badge', 'Disembunyikan'));
-    if (it.untuk) title.append(el('span', 'badge', UNTUK_NAMA[it.untuk]));
+    if (it.untuk) title.append(el('span', 'badge', untukNama(it.untuk)));
     if (it.segera) title.append(el('span', 'badge soon', 'Segera hadir'));
     const main = el('div', 'row-main');
     main.append(title, el('div', 'row-meta', metaText(it, map)));
@@ -502,7 +505,7 @@
     iconStyle.warna = item ? (item.ikon_warna || '') : '';
     iconStyle.bentuk = item ? (item.ikon_bentuk || '') : '';
     $('fVisible').checked = item ? item.tampil : true;
-    $('fUntuk').value = item ? (item.untuk || '') : '';
+    fillUntuk(item ? (item.untuk || '') : '');
     $('fSoon').checked = item ? item.segera === true : false;
     $('dlgMsg').textContent = '';
     fillParentOptions(item, tipe, '');
@@ -546,6 +549,51 @@
       setBusy(btn, false);
     }
   }
+
+  // ── Tab halaman utama ("Untuk siapa") ──
+  let grupRows = [];
+
+  function fillUntuk(val) {
+    const sel = $('fUntuk');
+    sel.replaceChildren(new Option('Semua (paling atas, tanpa judul)', ''));
+    (state.settings.grup || []).forEach(function (g) { sel.append(new Option(g.nama, g.id)); });
+    sel.value = val;
+    if (sel.value !== val) sel.value = '';
+  }
+
+  function renderGrupRows() {
+    const box = $('grupList');
+    box.replaceChildren();
+    if (!grupRows.length) box.append(el('p', 'help', 'Belum ada tab selain "Semua".'));
+    grupRows.forEach(function (r, i) {
+      const row = el('div', 'soc-row');
+      const inp = el('input', 'input');
+      inp.setAttribute('aria-label', 'Nama tab'); inp.maxLength = 30; inp.placeholder = 'Nama tab, mis. Orang Tua';
+      inp.value = r.nama;
+      inp.addEventListener('input', function () { r.nama = inp.value; });
+      function mini(icon, label, fn) {
+        const b = el('button', 'icon-btn'); b.type = 'button'; b.title = label; b.setAttribute('aria-label', label);
+        b.append(App.svg(icon)); b.addEventListener('click', fn); return b;
+      }
+      const tools = el('div', 'soc-tools');
+      tools.append(
+        mini('up', 'Naikkan', function () { if (i > 0) { grupRows.splice(i - 1, 0, grupRows.splice(i, 1)[0]); renderGrupRows(); } }),
+        mini('down', 'Turunkan', function () { if (i < grupRows.length - 1) { grupRows.splice(i + 1, 0, grupRows.splice(i, 1)[0]); renderGrupRows(); } }),
+        mini('trash', 'Hapus', function () { grupRows.splice(i, 1); renderGrupRows(); })
+      );
+      row.append(inp, tools);
+      box.append(row);
+    });
+    $('grupAdd').disabled = grupRows.length >= 8;
+  }
+
+  $('grupAdd').addEventListener('click', function () {
+    if (grupRows.length >= 8) return;
+    grupRows.push({ id: '', nama: '' });
+    renderGrupRows();
+    const ins = $('grupList').querySelectorAll('input.input');
+    if (ins.length) ins[ins.length - 1].focus();
+  });
 
   // ── Media sosial & website ──
   let socRows = [];
@@ -615,6 +663,8 @@
   function renderSettings() {
     socRows = (state.settings.sosmed || []).map(function (x) { return { tipe: x.tipe, url: x.url }; });
     renderSocRows();
+    grupRows = (state.settings.grup || []).map(function (g) { return { id: g.id, nama: g.nama }; });
+    renderGrupRows();
     $('sTitle').value = state.settings.judul || '';
     $('sSub').value = state.settings.subjudul || '';
     $('sDesc').value = state.settings.deskripsi || '';
@@ -639,6 +689,7 @@
       const d = await call('admin.saveSettings', {
         settings: { judul: $('sTitle').value, subjudul: $('sSub').value, deskripsi: $('sDesc').value, tema: $('sTheme').value,
           qr_aktif: $('sQrOn').checked, qr_judul: $('sQrTitle').value, qr_keterangan: $('sQrDesc').value,
+          grup: grupRows.map(function (g) { return { id: g.id, nama: g.nama }; }),
           sosmed: socRows.filter(function (r) { return r.tipe || r.url.trim(); }).map(function (r) { return { tipe: r.tipe, url: r.url }; }) }
       });
       state.settings = d.settings;
