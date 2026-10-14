@@ -336,3 +336,5 @@ html, body { overflow-x: hidden; }
   #toast { bottom: 5.6rem; }
   .save-bar { bottom: 4.8rem; border-radius: var(--r-md); margin-bottom: 0.5rem; }
 }
+
+.badge.soon { border-color: var(--accent); color: var(--ink); background: color-mix(in srgb, var(--accent) 16%, transparent); }

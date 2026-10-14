@@ -461,3 +461,26 @@ svg.i { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round
   box-shadow: 0 10px 30px -8px rgba(0,0,0,0.45), 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent), inset 0 1px 0 rgba(255,255,255,0.06) !important;
 }
 @media (min-width: 601px) { .topbar { background: none !important; border-color: transparent !important; box-shadow: none !important; } }
+
+/* Item "Segera hadir" */
+.tile.is-soon { opacity: 0.92; }
+.soon-badge { flex: none; display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.25rem 0.65rem; border: 1px dashed color-mix(in srgb, var(--accent) 70%, var(--line)); border-radius: 99px; background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--ink); font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
+.soon-badge .i { width: 0.95rem; height: 0.95rem; color: var(--accent); transform-origin: 70% 70%; animation: wrench 1.6s ease-in-out infinite; }
+.tile.is-soon:hover .soon-badge { color: inherit; }
+@keyframes wrench { 0%, 100% { transform: rotate(-18deg); } 50% { transform: rotate(22deg); } }
+.soon-dlg .in { text-align: center; }
+.soon-art { display: grid; place-items: center; margin: 0.2rem 0 0.8rem; }
+.soon-svg { width: 11rem; height: auto; overflow: visible; }
+.soon-svg .soon-ground { stroke: var(--line); stroke-width: 3; stroke-linecap: round; fill: none; }
+.soon-svg g > path, .soon-svg g > circle, .soon-svg g > rect { fill: var(--ink); }
+.soon-svg .soon-gear-big > circle, .soon-svg .soon-gear-small > circle { fill: var(--surface); }
+.soon-svg .soon-gear-small > path { fill: var(--accent); }
+.soon-svg .soon-gear-big { transform-origin: 54px 58px; animation: spin 7s linear infinite; }
+.soon-svg .soon-gear-small { transform-origin: 92px 40px; animation: spin 4.6s linear infinite reverse; }
+.soon-svg .soon-hammer { transform-origin: 22px 96px; animation: hammer 1.1s ease-in-out infinite; }
+.soon-svg .soon-spark path { stroke: var(--accent); stroke-width: 3; stroke-linecap: round; fill: none; animation: spark 1.1s ease-out infinite; }
+@keyframes hammer { 0%, 100% { transform: rotate(-30deg); } 45% { transform: rotate(18deg); } 55% { transform: rotate(18deg); } }
+@keyframes spark { 0%, 40% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+.soon-dlg h2 { margin-bottom: 0.5rem; }
+@media (prefers-reduced-motion: reduce) { .soon-badge .i, .soon-svg g { animation: none !important; } }
+.soon-dlg .dlg-actions { justify-content: center; }

@@ -46,6 +46,7 @@
     list: '<path d="M8 6h13M8 12h13M8 18h13M3.500 6h.01M3.500 12h.01M3.500 18h.01"/>',
     refresh: '<path d="M20 11a8 8 0 1 0-2.300 5.700M20 4v7h-7"/>',
     book: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M9 8h6M9 12h6"/>',
+    wrench: '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7 6.3 21l6.3-6.3a4 4 0 0 0 5.1-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/>',
     sheet: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/>'
   };
 
@@ -414,6 +415,30 @@
     const ok = document.createElement('button'); ok.type = 'button'; ok.className = 'btn btn-primary'; ok.textContent = o.close || 'Tutup';
     ok.addEventListener('click', function () { d.close(); });
     row.append(ok); box.append(row); d.append(box);
+    d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
+    d.addEventListener('close', function () { d.remove(); });
+    document.body.append(d); d.showModal(); ok.focus();
+  };
+
+  // Pemberitahuan "segera hadir": ikon renovasi bergerak (roda gigi berputar + palu mengetuk).
+  App.soon = function (title) {
+    const NS = 'http://www.w3.org/2000/svg';
+    const d = document.createElement('dialog'); d.className = 'install-dlg soon-dlg';
+    const box = document.createElement('div'); box.className = 'in';
+    const art = document.createElement('div'); art.className = 'soon-art'; art.setAttribute('aria-hidden', 'true');
+    art.innerHTML = '<svg viewBox="0 0 120 100" class="soon-svg">' +
+      '<path class="soon-ground" d="M10 90h100"/>' +
+      '<g class="soon-gear-big"><path d="M60 26l5 0 2 7 6 3 7-3 4 4-3 7 3 6 7 2v6l-7 2-3 6 3 7-4 4-7-3-6 3-2 7h-5l-2-7-6-3-7 3-4-4 3-7-3-6-7-2v-6l7-2 3-6-3-7 4-4 7 3 6-3z" transform="translate(-6 -2)"/><circle cx="54" cy="58" r="9"/></g>' +
+      '<g class="soon-gear-small"><path d="M92 20l3 0 1 4 4 2 4-2 2 2-2 4 2 4 4 1v3l-4 1-2 4 2 4-2 2-4-2-4 2-1 4h-3l-1-4-4-2-4 2-2-2 2-4-2-4-4-1v-3l4-1 2-4-2-4 2-2 4 2 4-2z" transform="translate(-8 4) scale(.9)"/><circle cx="92" cy="40" r="5"/></g>' +
+      '<g class="soon-hammer"><rect x="20" y="70" width="5" height="26" rx="2"/><rect x="11" y="63" width="23" height="11" rx="3"/></g>' +
+      '<g class="soon-spark"><path d="M30 58l-6-6M36 54l-1-8M26 64l-8-2"/></g></svg>';
+    const h = document.createElement('h2'); h.textContent = 'Sistem dalam pengembangan';
+    const p1 = document.createElement('p'); p1.className = 'dlg-line'; p1.textContent = title + ' belum bisa dibuka karena sedang kami siapkan.';
+    const p2 = document.createElement('p'); p2.className = 'dlg-line'; p2.textContent = 'Silakan kembali lagi nanti.';
+    const row = document.createElement('div'); row.className = 'dlg-actions';
+    const ok = document.createElement('button'); ok.type = 'button'; ok.className = 'btn btn-primary'; ok.textContent = 'Mengerti';
+    ok.addEventListener('click', function () { d.close(); });
+    row.append(ok); box.append(art, h, p1, p2, row); d.append(box);
     d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
     d.addEventListener('close', function () { d.remove(); });
     document.body.append(d); d.showModal(); ok.focus();

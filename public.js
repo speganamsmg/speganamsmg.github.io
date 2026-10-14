@@ -41,9 +41,12 @@
   }
 
   function tile(item, count) {
-    const a = el('a', 'tile tile-' + item.tipe);
+    const a = el('a', 'tile tile-' + item.tipe + (item.segera ? ' is-soon' : ''));
     let closed = false;
-    if (item.tipe === 'folder') {
+    if (item.segera) {
+      a.href = '#'; a.setAttribute('role', 'button');
+      a.addEventListener('click', function (e) { e.preventDefault(); App.soon(item.judul); });
+    } else if (item.tipe === 'folder') {
       a.href = '#/f/' + item.id;
     } else if (item.tipe === 'dashboard') {
       if (!item.form || !item.form.slug) return null;
@@ -63,10 +66,13 @@
         a.rel = 'noopener noreferrer';
       }
     }
-    a.addEventListener('click', function () { App.ping(item.id); });
+    if (!item.segera) a.addEventListener('click', function () { App.ping(item.id); });
 
     a.append(App.icon(item), el('span', 'label', item.judul));
-    if (item.tipe === 'folder') {
+    if (item.segera) {
+      const soon = el('span', 'soon-badge'); soon.append(App.svg('wrench'), document.createTextNode('Segera'));
+      a.append(soon);
+    } else if (item.tipe === 'folder') {
       a.append(el('span', 'count', count + ' item'), App.svg('chevron', 'trail'));
     } else if (item.tipe === 'dashboard') {
       a.append(App.svg('chevron', 'trail'));

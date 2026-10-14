@@ -99,7 +99,7 @@
     return Object.assign({
       id: it.id, tipe: it.tipe, judul: it.judul, url: it.url, form_id: it.form_id || '',
       ikon_jenis: it.ikon_jenis, ikon_isi: it.ikon_isi,
-      parent_id: it.parent_id, tampil: it.tampil
+      parent_id: it.parent_id, tampil: it.tampil, segera: it.segera === true
     }, over || {});
   }
 
@@ -149,6 +149,7 @@
     const title = el('div', 'row-title');
     title.append(el('span', '', it.judul));
     if (!it.tampil) title.append(el('span', 'badge', 'Disembunyikan'));
+    if (it.segera) title.append(el('span', 'badge soon', 'Segera hadir'));
     const main = el('div', 'row-main');
     main.append(title, el('div', 'row-meta', metaText(it, map)));
 
@@ -392,6 +393,7 @@
     $('fIconType').value = item ? item.ikon_jenis : 'none';
     $('fIconValue').value = item ? item.ikon_isi : '';
     $('fVisible').checked = item ? item.tampil : true;
+    $('fSoon').checked = item ? item.segera === true : false;
     $('dlgMsg').textContent = '';
     fillParentOptions(item, tipe, '');
     updateIconFields();
@@ -411,7 +413,8 @@
       ikon_jenis: $('fIconType').value,
       ikon_isi: $('fIconValue').value,
       parent_id: $('fParent').value,
-      tampil: $('fVisible').checked
+      tampil: $('fVisible').checked,
+      segera: $('fSoon').checked
     };
     if (state.editingId) item.id = state.editingId;
 
