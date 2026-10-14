@@ -95,12 +95,14 @@
     return out;
   }
 
+  const UNTUK_NAMA = { gtk: 'Guru & Tendik', guru: 'Guru', tendik: 'Tendik', murid: 'Murid' };
+
   function payload(it, over) {
     return Object.assign({
       id: it.id, tipe: it.tipe, judul: it.judul, url: it.url, form_id: it.form_id || '',
       ikon_jenis: it.ikon_jenis, ikon_isi: it.ikon_isi,
       ikon_warna: it.ikon_warna || '', ikon_bentuk: it.ikon_bentuk || '',
-      parent_id: it.parent_id, tampil: it.tampil, segera: it.segera === true
+      parent_id: it.parent_id, tampil: it.tampil, segera: it.segera === true, untuk: it.untuk || ''
     }, over || {});
   }
 
@@ -150,6 +152,7 @@
     const title = el('div', 'row-title');
     title.append(el('span', '', it.judul));
     if (!it.tampil) title.append(el('span', 'badge', 'Disembunyikan'));
+    if (it.untuk) title.append(el('span', 'badge', UNTUK_NAMA[it.untuk]));
     if (it.segera) title.append(el('span', 'badge soon', 'Segera hadir'));
     const main = el('div', 'row-main');
     main.append(title, el('div', 'row-meta', metaText(it, map)));
@@ -499,6 +502,7 @@
     iconStyle.warna = item ? (item.ikon_warna || '') : '';
     iconStyle.bentuk = item ? (item.ikon_bentuk || '') : '';
     $('fVisible').checked = item ? item.tampil : true;
+    $('fUntuk').value = item ? (item.untuk || '') : '';
     $('fSoon').checked = item ? item.segera === true : false;
     $('dlgMsg').textContent = '';
     fillParentOptions(item, tipe, '');
@@ -522,7 +526,8 @@
       ikon_bentuk: iconStyle.bentuk,
       parent_id: $('fParent').value,
       tampil: $('fVisible').checked,
-      segera: $('fSoon').checked
+      segera: $('fSoon').checked,
+      untuk: $('fUntuk').value
     };
     if (state.editingId) item.id = state.editingId;
 

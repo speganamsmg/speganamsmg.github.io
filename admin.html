@@ -28,9 +28,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&display=swap">
-  <link rel="stylesheet" href="style.css?v=29">
-  <link rel="stylesheet" href="charts.css?v=29">
-  <link rel="stylesheet" href="admin.css?v=29">
+  <link rel="stylesheet" href="style.css?v=30">
+  <link rel="stylesheet" href="charts.css?v=30">
+  <link rel="stylesheet" href="admin.css?v=30">
 </head>
 <body>
   <div class="splash" id="splash" role="status" aria-label="Memuat">
@@ -236,6 +236,18 @@
       </div>
 
       <div class="field">
+        <label for="fUntuk">Untuk siapa</label>
+        <select class="input" id="fUntuk">
+          <option value="">Semua (paling atas, tanpa judul)</option>
+          <option value="gtk">Guru dan Tendik</option>
+          <option value="guru">Guru</option>
+          <option value="tendik">Tendik</option>
+          <option value="murid">Murid</option>
+        </select>
+        <span class="help">Item dikelompokkan di halaman utama berurutan: Guru dan Tendik, Guru, Tendik, Murid. "Semua" tampil paling atas tanpa judul.</span>
+      </div>
+
+      <div class="field">
         <label for="fParent">Letakkan di</label>
         <select class="input" id="fParent"></select>
       </div>
@@ -260,12 +272,12 @@
   <div id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15/Sortable.min.js"></script>
-  <script src="config.js?v=29"></script>
-  <script src="common.js?v=29"></script>
-  <script src="charts.js?v=29"></script>
-  <script src="admin.js?v=29"></script>
-  <script src="admin-forms.js?v=29"></script>
-  <script src="admin-names.js?v=29"></script>
-  <script src="admin-results.js?v=29"></script>
+  <script src="config.js?v=30"></script>
+  <script src="common.js?v=30"></script>
+  <script src="charts.js?v=30"></script>
+  <script src="admin.js?v=30"></script>
+  <script src="admin-forms.js?v=30"></script>
+  <script src="admin-names.js?v=30"></script>
+  <script src="admin-results.js?v=30"></script>
 </body>
 </html>

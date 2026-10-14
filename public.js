@@ -31,6 +31,14 @@
 
   let qrOn = true;
 
+  // Pengelompokan menurut audiens, dari atas ke bawah. Item "Semua" tampil lebih dulu tanpa judul.
+  const GRUP = [
+    { id: 'gtk', nama: 'Guru dan Tendik' },
+    { id: 'guru', nama: 'Guru' },
+    { id: 'tendik', nama: 'Tendik' },
+    { id: 'murid', nama: 'Murid' }
+  ];
+
   function applySettings(s) {
     qrOn = s.qr_aktif !== 'tidak';
     if ($('qrTitle')) $('qrTitle').textContent = s.qr_judul || 'Pembuat QR Code';
@@ -163,10 +171,21 @@
     const counts = {};
     items.forEach(function (i) { counts[i.parent_id] = (counts[i.parent_id] || 0) + 1; });
 
-    const nodes = items
-      .filter(function (i) { return i.parent_id === folderId; })
-      .map(function (i) { return tile(i, counts[i.id] || 0); })
-      .filter(Boolean);
+    const here = items.filter(function (i) { return i.parent_id === folderId; });
+    const grouped = here.some(function (i) { return i.untuk; });
+    let nodes = [];
+    if (!grouped) {
+      nodes = here.map(function (i) { return tile(i, counts[i.id] || 0); }).filter(Boolean);
+    } else {
+      const add = function (list, nama) {
+        const ts = list.map(function (i) { return tile(i, counts[i.id] || 0); }).filter(Boolean);
+        if (!ts.length) return;
+        if (nama) { const h = el('li', 'grp-head'); h.append(el('h3', '', nama)); nodes.push(h); }
+        nodes = nodes.concat(ts);
+      };
+      add(here.filter(function (i) { return !i.untuk; }), '');
+      GRUP.forEach(function (g) { add(here.filter(function (i) { return i.untuk === g.id; }), g.nama); });
+    }
 
     $('list').replaceChildren.apply($('list'), nodes);
     if (nodes.length) {
