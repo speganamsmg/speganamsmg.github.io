@@ -40,9 +40,9 @@
   ];
   const TABS = [
     { id: 'semua', nama: 'Semua', ok: null, ada: null, qr: true },
-    { id: 'gtk', nama: 'Guru & Tendik', ok: ['', 'gtk', 'guru', 'tendik'], ada: ['gtk', 'guru', 'tendik'], qr: true },
-    { id: 'guru', nama: 'Guru', ok: ['', 'gtk', 'guru'], ada: ['gtk', 'guru'], qr: true },
-    { id: 'tendik', nama: 'Tendik', ok: ['', 'gtk', 'tendik'], ada: ['gtk', 'tendik'], qr: true },
+    { id: 'gtk', nama: 'Guru & Tendik', ok: ['', 'gtk', 'guru', 'tendik'], ada: ['gtk', 'guru', 'tendik'], qr: false },
+    { id: 'guru', nama: 'Guru', ok: ['', 'gtk', 'guru'], ada: ['gtk', 'guru'], qr: false },
+    { id: 'tendik', nama: 'Tendik', ok: ['', 'gtk', 'tendik'], ada: ['gtk', 'tendik'], qr: false },
     { id: 'murid', nama: 'Murid', ok: ['', 'murid'], ada: ['murid'], qr: false }
   ];
   const TAB_KEY = 'pub_tab_v2';
@@ -227,7 +227,6 @@
     });
     const grouped = cur.id === 'semua' && here.some(function (i) { return i.untuk; });
     let nodes = [];
-    let qrDone = false;
     if (!grouped) {
       nodes = here.map(function (i) { return tile(i, counts[i.id] || 0); }).filter(Boolean);
     } else {
@@ -238,10 +237,9 @@
         nodes = nodes.concat(ts);
       };
       add(here.filter(function (i) { return !i.untuk; }), '');
-      if (!folder && qrOn && cur.qr) { nodes.push(qrTile()); qrDone = true; } // tepat di bawah item umum, sebelum judul kelompok
       GRUP.forEach(function (g) { add(here.filter(function (i) { return i.untuk === g.id; }), g.nama); });
     }
-    if (!folder && qrOn && cur.qr && !qrDone) nodes.push(qrTile());
+    if (!folder && qrOn && cur.qr) nodes.push(qrTile()); // hanya di tab Semua, paling bawah
 
     $('list').replaceChildren.apply($('list'), nodes);
     if (nodes.length) {
