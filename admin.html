@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Panel admin</title>
+  <script>
+    (function () {
+      try {
+        var p = localStorage.getItem('tema') || localStorage.getItem('tema_def') || 'auto';
+        var dark = p === 'dark' || (p === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" href="assets/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <meta name="theme-color" content="#121a33">
+  <link rel="preconnect" href="https://script.google.com">
+  <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&display=swap">
+  <link rel="stylesheet" href="style.css?v=21">
+  <link rel="stylesheet" href="charts.css?v=21">
+  <link rel="stylesheet" href="admin.css?v=21">
+</head>
+<body>
+  <div class="splash" id="splash" role="status" aria-label="Memuat">
+    <div class="loader" aria-hidden="true"><span class="ln"></span><span class="sweep"></span></div>
+  </div>
+  <div class="shell">
+
+    <!-- Masuk -->
+    <section class="card login" id="loginView" hidden>
+      <img class="login-logo" src="assets/logo-disc.png" alt="" width="72" height="72">
+      <h1>Masuk admin</h1>
+      <form id="loginForm">
+        <div class="field">
+          <label for="pw">Password</label>
+          <input class="input" id="pw" type="password" autocomplete="current-password" required>
+        </div>
+        <p class="msg" id="loginMsg" role="alert"></p>
+        <button class="btn btn-primary" id="loginBtn" type="submit">Masuk</button>
+      </form>
+    </section>
+
+    <!-- Panel -->
+    <section id="appView" hidden>
+      <header class="bar">
+        <div class="brand"><img src="assets/logo-disc.png" alt="" width="40" height="40"><h1 class="sr">Panel admin</h1></div>
+        <div class="bar-actions">
+          <a class="icon-btn" id="viewBtn" href="./" target="_blank" rel="noopener" aria-label="Lihat halaman" title="Lihat halaman"></a>
+          <button class="icon-btn theme-btn" id="themeBtn" type="button" aria-label="Ganti tema terang atau gelap" title="Ganti tema"></button>
+          <button class="icon-btn" id="logoutBtn" type="button" aria-label="Keluar" title="Keluar"></button>
+        </div>
+      </header>
+
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" id="tabItems" data-tab="items" aria-selected="true" aria-controls="panelItems" type="button" title="Item" aria-label="Item"><span class="tic" data-i="list"></span><span class="lbl">Item</span></button>
+        <button class="tab" role="tab" id="tabForms" data-tab="forms" aria-selected="false" aria-controls="panelForms" type="button" title="Form" aria-label="Form"><span class="tic" data-i="form"></span><span class="lbl">Form</span></button>
+        <button class="tab" role="tab" id="tabResults" data-tab="results" aria-selected="false" aria-controls="panelResults" type="button" title="Hasil" aria-label="Hasil"><span class="tic" data-i="chart"></span><span class="lbl">Hasil</span></button>
+        <button class="tab" role="tab" id="tabNames" data-tab="names" aria-selected="false" aria-controls="panelNames" type="button" title="Daftar nama" aria-label="Daftar nama"><span class="tic" data-i="users"></span><span class="lbl">Nama</span></button>
+        <button class="tab" role="tab" id="tabSettings" data-tab="settings" aria-selected="false" aria-controls="panelSettings" type="button" title="Pengaturan" aria-label="Pengaturan"><span class="tic" data-i="settings"></span><span class="lbl">Pengaturan</span></button>
+      </div>
+
+      <div id="panelItems" role="tabpanel" aria-labelledby="tabItems">
+        <div class="toolbar">
+          <button class="btn tool btn-primary" id="addLink" type="button" title="Tambah link" aria-label="Tambah link"><span class="tic" data-i="link"></span><span>Link</span></button>
+          <button class="btn tool" id="addFolder" type="button" title="Tambah folder" aria-label="Tambah folder"><span class="tic" data-i="folder"></span><span>Folder</span></button>
+          <button class="btn tool" id="addForm" type="button" title="Tambah form" aria-label="Tambah form"><span class="tic" data-i="form"></span><span>Form</span></button>
+          <button class="btn tool" id="addDash" type="button" title="Tambah dashboard" aria-label="Tambah dashboard"><span class="tic" data-i="chart"></span><span>Dashboard</span></button>
+        </div>
+        <div id="tree"></div>
+        <p class="hint" id="treeHint">Tahan dan seret pegangan di sisi kiri untuk mengubah urutan atau memindahkan item ke dalam folder. Saklar mengatur tampil di halaman publik.</p>
+      </div>
+
+      <div id="panelForms" role="tabpanel" aria-labelledby="tabForms" hidden>
+        <div id="formsListView">
+          <div class="toolbar"><button class="btn btn-primary" id="newForm" type="button">Buat form</button></div>
+          <div id="formsList"></div>
+          <p class="hint">Form baru tampil di halaman utama setelah dipasang lewat tombol "Pasang di beranda" (atau tab Item, Tambah form).</p>
+        </div>
+        <div id="formEditor" hidden></div>
+      </div>
+
+      <div id="panelResults" role="tabpanel" aria-labelledby="tabResults" hidden>
+        <div class="card res-bar">
+          <div class="field">
+            <label for="resForm">Form</label>
+            <select class="input" id="resForm"></select>
+          </div>
+          <div class="field">
+            <label for="resFilter">Tampilkan</label>
+            <select class="input" id="resFilter">
+              <option value="aktif">Jawaban aktif (terakhir tiap responden)</option>
+              <option value="semua">Semua pengiriman, termasuk yang digantikan</option>
+            </select>
+          </div>
+          <div class="res-actions" id="resActions"></div>
+        </div>
+        <div id="resBody"></div>
+      </div>
+
+      <div id="panelNames" role="tabpanel" aria-labelledby="tabNames" hidden>
+        <div id="namesListView">
+          <div class="toolbar"><button class="btn btn-primary" id="newList" type="button">Buat daftar</button></div>
+          <div id="namesLists"></div>
+          <p class="hint">Daftar nama dipakai form yang meminta responden memilih nama. Nama yang ditambahkan responden sendiri ikut masuk ke sini.</p>
+        </div>
+        <div id="namesEditor" hidden></div>
+      </div>
+
+      <div id="panelSettings" role="tabpanel" aria-labelledby="tabSettings" hidden>
+        <form class="card" id="settingsForm">
+          <h2>Tampilan halaman</h2>
+          <div class="field">
+            <label for="sTitle">Judul</label>
+            <input class="input" id="sTitle" maxlength="100" required>
+          </div>
+          <div class="field">
+            <label for="sSub">Subjudul</label>
+            <input class="input" id="sSub" maxlength="140">
+          </div>
+          <div class="field">
+            <label for="sDesc">Deskripsi</label>
+            <textarea class="input" id="sDesc" rows="4" maxlength="600" placeholder="Opsional. Tampil di bawah subjudul."></textarea>
+          </div>
+          <div class="field">
+            <label for="sTheme">Tema bawaan</label>
+            <select class="input" id="sTheme">
+              <option value="auto">Ikuti pengaturan perangkat</option>
+              <option value="light">Terang</option>
+              <option value="dark">Gelap</option>
+            </select>
+            <span class="help">Pengunjung tetap bisa menggantinya dengan tombol tema.</span>
+          </div>
+          <p class="msg" id="settingsMsg" role="alert"></p>
+          <button class="btn btn-primary" type="submit">Simpan pengaturan</button>
+        </form>
+
+        <form class="card" id="passwordForm" autocomplete="off">
+          <h2>Ganti password</h2>
+          <div class="field">
+            <label for="pOld">Password lama</label>
+            <input class="input" id="pOld" type="password" autocomplete="current-password" required>
+          </div>
+          <div class="field">
+            <label for="pNew">Password baru</label>
+            <input class="input" id="pNew" type="password" autocomplete="new-password" minlength="8" required>
+            <span class="help">Minimal 8 karakter. Semua sesi login lain akan keluar.</span>
+          </div>
+          <div class="field">
+            <label for="pNew2">Ulangi password baru</label>
+            <input class="input" id="pNew2" type="password" autocomplete="new-password" minlength="8" required>
+          </div>
+          <p class="msg" id="passwordMsg" role="alert"></p>
+          <button class="btn btn-primary" type="submit">Ganti password</button>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <!-- Tambah / edit item -->
+  <dialog id="itemDialog" aria-labelledby="dlgTitle">
+    <form id="itemForm">
+      <h2 id="dlgTitle">Tambah link</h2>
+
+      <div class="field">
+        <label for="fTitle">Judul</label>
+        <input class="input" id="fTitle" maxlength="100" required>
+      </div>
+
+      <div class="field" id="fFormWrap" hidden>
+        <label for="fForm">Form</label>
+        <select class="input" id="fForm"></select>
+        <span class="help">Buat form dulu di tab Form. Judul tombol bebas, tidak harus sama dengan judul form.</span>
+      </div>
+
+      <div class="field" id="fUrlWrap">
+        <label for="fUrl">Alamat link</label>
+        <input class="input" id="fUrl" inputmode="url" autocapitalize="off" spellcheck="false" placeholder="https://contoh.com atau wa.me/628…">
+      </div>
+
+      <div class="field">
+        <label for="fIconType">Ikon</label>
+        <div class="icon-row">
+          <span id="iconPreview"></span>
+          <select class="input" id="fIconType">
+            <option value="none">Bawaan</option>
+            <option value="emoji">Emoji</option>
+            <option value="gambar">Gambar dari alamat URL</option>
+            <option value="pustaka">Ikon dari pustaka</option>
+          </select>
+        </div>
+        <input class="input" id="fIconValue" aria-label="Isi ikon" autocapitalize="off" spellcheck="false" hidden>
+        <span class="help" id="iconHelp" hidden></span>
+      </div>
+
+      <div class="field">
+        <label for="fParent">Letakkan di</label>
+        <select class="input" id="fParent"></select>
+      </div>
+
+      <label class="check">
+        <input type="checkbox" id="fVisible" checked>
+        <span>Tampilkan di halaman publik</span>
+      </label>
+
+      <p class="msg" id="dlgMsg" role="alert"></p>
+      <div class="dlg-actions">
+        <button class="btn" id="dlgCancel" type="button">Batal</button>
+        <button class="btn btn-primary" id="dlgSave" type="submit">Simpan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15/Sortable.min.js"></script>
+  <script src="config.js?v=21"></script>
+  <script src="common.js?v=21"></script>
+  <script src="charts.js?v=21"></script>
+  <script src="admin.js?v=21"></script>
+  <script src="admin-forms.js?v=21"></script>
+  <script src="admin-names.js?v=21"></script>
+  <script src="admin-results.js?v=21"></script>
+</body>
+</html>

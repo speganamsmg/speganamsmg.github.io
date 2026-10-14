@@ -1,0 +1,463 @@
+/* SPEGANA — gaya bersama (halaman publik, form, dan admin) */
+
+:root {
+  --bg: #f3f6fd;
+  --surface: #ffffff;
+  --ink: #121a33;
+  --muted: #5a6683;
+  --line: #dce2ee;
+  --tint: #e8ecf6;
+  --accent: #f5a800;
+  --on-accent: #231800;
+  --danger: #b3261e;
+  --glow: rgba(245, 168, 0, 0.2);
+  --mesh:
+    radial-gradient(52rem 40rem at 6% 28%, rgba(112, 156, 255, 0.46), transparent 62%),
+    radial-gradient(44rem 34rem at 96% 8%, rgba(96, 214, 205, 0.34), transparent 62%),
+    radial-gradient(48rem 36rem at 92% 92%, rgba(255, 184, 112, 0.46), transparent 62%),
+    radial-gradient(40rem 26rem at 38% 104%, rgba(255, 220, 120, 0.28), transparent 62%);
+  --shadow: 0 1px 2px rgba(18, 26, 51, 0.05), 0 10px 24px -14px rgba(18, 26, 51, 0.28);
+  --shadow-up: 0 2px 4px rgba(18, 26, 51, 0.06), 0 16px 30px -14px rgba(18, 26, 51, 0.38);
+  --logo-url: url(assets/logo-line_light.png);
+  --r-sm: 0.625rem;
+  --r-md: 0.875rem;
+  --r-lg: 1.25rem;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #080e1d;
+  --surface: #131b33;
+  --ink: #eef1f9;
+  --muted: #98a4bf;
+  --line: #263050;
+  --tint: #1b2543;
+  --accent: #ffc233;
+  --on-accent: #1d1400;
+  --danger: #ff8a80;
+  --logo-url: url(assets/logo-lines.png);
+  --glow: rgba(255, 194, 51, 0.13);
+  --mesh:
+    radial-gradient(52rem 40rem at 6% 28%, rgba(52, 96, 232, 0.42), transparent 62%),
+    radial-gradient(44rem 34rem at 96% 8%, rgba(24, 170, 168, 0.26), transparent 62%),
+    radial-gradient(48rem 36rem at 92% 92%, rgba(255, 160, 56, 0.2), transparent 62%),
+    radial-gradient(40rem 26rem at 38% 104%, rgba(255, 200, 80, 0.12), transparent 62%);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 24px -14px rgba(0, 0, 0, 0.7);
+  --shadow-up: 0 2px 4px rgba(0, 0, 0, 0.35), 0 16px 30px -14px rgba(0, 0, 0, 0.85);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #080e1d; --surface: #131b33; --ink: #eef1f9; --muted: #98a4bf; --line: #263050; --tint: #1b2543;
+    --accent: #ffc233; --on-accent: #1d1400; --danger: #ff8a80; --logo-url: url(assets/logo-lines.png);
+    --glow: rgba(255, 194, 51, 0.13);
+    --mesh:
+      radial-gradient(52rem 40rem at 6% 28%, rgba(52, 96, 232, 0.42), transparent 62%),
+      radial-gradient(44rem 34rem at 96% 8%, rgba(24, 170, 168, 0.26), transparent 62%),
+      radial-gradient(48rem 36rem at 92% 92%, rgba(255, 160, 56, 0.2), transparent 62%),
+      radial-gradient(40rem 26rem at 38% 104%, rgba(255, 200, 80, 0.12), transparent 62%);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 24px -14px rgba(0, 0, 0, 0.7);
+    --shadow-up: 0 2px 4px rgba(0, 0, 0, 0.35), 0 16px 30px -14px rgba(0, 0, 0, 0.85);
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  color: var(--ink);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-optical-sizing: auto;
+  background: var(--bg);
+  isolation: isolate;
+}
+
+/* Latar gradasi lembut: gumpalan warna kabur yang bergeser sangat pelan. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -10%;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--mesh);
+  animation: drift 28s ease-in-out infinite alternate;
+}
+@keyframes drift { from { transform: translate3d(-2%, -1%, 0) scale(1); } to { transform: translate3d(2%, 2%, 0) scale(1.06); } }
+
+/* ── Tombol ── */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.65rem;
+  padding: 0.45rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(18, 26, 51, 0.05);
+  transition: border-color 0.15s, background-color 0.15s, transform 0.15s var(--ease), box-shadow 0.15s;
+}
+.btn:hover { border-color: var(--ink); }
+.btn:active { transform: scale(0.97); }
+.btn:focus-visible, .icon-btn:focus-visible, .input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn[disabled] { opacity: 0.55; cursor: not-allowed; transform: none; }
+.btn-primary { background: var(--ink); color: var(--bg); border-color: var(--ink); box-shadow: 0 6px 16px -8px var(--ink); }
+.btn-primary:hover { border-color: var(--ink); box-shadow: 0 8px 20px -8px var(--ink), inset 0 -3px 0 var(--accent); }
+.btn-danger { color: var(--danger); }
+.btn svg { width: 1rem; height: 1rem; flex: none; }
+
+/* Tombol sibuk: lingkaran kecil berputar. */
+.btn.is-busy { color: transparent !important; pointer-events: none; }
+.btn.is-busy::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  border-top-color: var(--accent);
+  animation: spin 0.7s linear infinite;
+}
+.btn-primary.is-busy::after { border-color: rgba(255, 255, 255, 0.25); border-top-color: var(--accent); }
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 2.65rem;
+  height: 2.65rem;
+  flex: none;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(18, 26, 51, 0.05);
+  transition: border-color 0.15s, transform 0.15s var(--ease);
+}
+.icon-btn:hover { border-color: var(--ink); }
+.icon-btn:active { transform: scale(0.94); }
+.icon-btn svg { width: 1.15rem; height: 1.15rem; }
+
+.theme-btn .sun { display: none; }
+:root[data-theme="dark"] .theme-btn .sun { display: block; }
+:root[data-theme="dark"] .theme-btn .moon { display: none; }
+
+/* ── Ikon item ── */
+.icon {
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.8rem;
+  background: var(--tint);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.icon svg { width: 1.3rem; height: 1.3rem; }
+.icon-emoji { font-size: 1.45rem; line-height: 1; }
+.icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.icon .glyph {
+  width: 1.45rem;
+  height: 1.45rem;
+  background-color: currentColor;
+  -webkit-mask: var(--icon-url) center / contain no-repeat;
+  mask: var(--icon-url) center / contain no-repeat;
+}
+
+svg.i { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Halaman pembuka (logo) ── */
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: var(--mesh), var(--bg);
+  transition: opacity 0.5s ease, visibility 0.5s;
+}
+.splash.out { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.loader {
+  position: relative;
+  width: min(52vw, 11.5rem);
+  aspect-ratio: 1;
+  animation: breathe 2.4s ease-in-out infinite;
+}
+.loader .ln,
+.loader .sweep {
+  position: absolute;
+  inset: 0;
+  -webkit-mask: var(--logo-url) center / 121% 121% no-repeat;
+  mask: var(--logo-url) center / 121% 121% no-repeat;
+}
+.loader .ln { background-color: var(--ink); opacity: 0.13; }
+.loader .sweep {
+  background: linear-gradient(110deg, transparent 32%, var(--ink) 44%, var(--accent) 50%, var(--ink) 56%, transparent 68%) 130% 0 / 260% 100% no-repeat;
+  animation: sweep 1.9s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+}
+.splash-note {
+  position: absolute;
+  bottom: max(2.5rem, 8vh);
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* Popup loading: lingkaran putar dengan logo kecil di tengah, muncul saat ada proses. */
+.busy-layer {
+  position: fixed; inset: 0; z-index: 90; display: grid; place-items: center;
+  background: rgba(8, 14, 29, 0.34);
+  -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
+  opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s;
+}
+.busy-layer.on { opacity: 1; visibility: visible; }
+.busy-pop {
+  position: relative; display: grid; place-items: center;
+  width: 4.4rem; height: 4.4rem; border-radius: 50%; overflow: hidden;
+  background: var(--surface); box-shadow: var(--shadow-up);
+  transform: scale(0.9); transition: transform 0.25s var(--ease);
+}
+.busy-layer.on .busy-pop { transform: none; }
+.busy-pop::before {
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
+  border: 3px solid transparent; z-index: 1; border-top-color: var(--accent); border-right-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  animation: spin 0.9s linear infinite;
+}
+.busy-logo {
+  position: absolute; inset: 5px; background-color: var(--ink);
+  -webkit-mask: var(--logo-url) center / 121% 121% no-repeat; mask: var(--logo-url) center / 121% 121% no-repeat;
+  animation: breathe 1.8s ease-in-out infinite;
+}
+
+/* Petunjuk pasang ke layar utama */
+.install-dlg { width: min(24rem, calc(100vw - 2rem)); padding: 0; border: 1px solid var(--line); border-radius: 1.4rem; background: var(--surface); color: var(--ink); box-shadow: 0 30px 80px -20px rgba(0,0,0,0.5); }
+.install-dlg::backdrop { background: rgba(8, 14, 29, 0.5); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
+.install-dlg .in { padding: 1.4rem; }
+.install-dlg h2 { margin: 0 0 0.75rem; font-size: 1.2rem; letter-spacing: -0.02em; }
+.install-dlg ol { margin: 0 0 1.1rem; padding-left: 1.2rem; display: grid; gap: 0.45rem; color: var(--muted); }
+.install-dlg ol b { color: var(--ink); }
+.install-dlg .btn { width: 100%; }
+
+/* Penanda muat kecil di dalam panel. */
+.spin {
+  display: inline-block;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  border: 2.5px solid var(--line);
+  border-top-color: var(--accent);
+  animation: spin 0.75s linear infinite;
+  vertical-align: middle;
+}
+.loading-box { display: grid; justify-items: center; gap: 0.75rem; padding: 2.5rem 1rem; color: var(--muted); }
+
+/* ── Halaman publik ── */
+.wrap { max-width: 30rem; margin: 0 auto; padding: clamp(2rem, 7vh, 3.5rem) 1.25rem 6rem; }
+
+.hero { position: relative; display: grid; justify-items: center; text-align: center; margin-bottom: 2rem; }
+/* Pintasan di bawah tengah */
+.dock { position: fixed; left: 50%; bottom: max(0.9rem, env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 30;
+  display: flex; gap: 0.35rem; padding: 0.35rem; border: 1px solid var(--line); border-radius: 99px;
+  background: color-mix(in srgb, var(--surface) 78%, transparent); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); box-shadow: var(--shadow-up); }
+.dock .icon-btn { border: 0; background: transparent; box-shadow: none; }
+.dock .icon-btn:hover { background: var(--tint); }
+.avatar {
+  position: relative;
+  width: 6.75rem;
+  height: 6.75rem;
+  margin-bottom: 1.15rem;
+  border-radius: 50%;
+  animation: pop 0.7s var(--ease) both;
+}
+.avatar::before { /* cincin kuning tipis di luar logo */
+  content: '';
+  position: absolute;
+  inset: -0.45rem;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  opacity: 0.9;
+}
+.avatar img { display: block; width: 100%; height: 100%; border-radius: 50%; background: #111a33; box-shadow: var(--shadow-up); }
+.hero h1 {
+  margin: 0;
+  max-width: 100%;
+  font-size: clamp(1.55rem, 6.8vw, 2.4rem);
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.hero p { margin: 0.5rem 0 0; color: var(--muted); font-weight: 500; }
+.hero .desc { max-width: 24rem; margin-top: 0.7rem; font-size: 0.92rem; line-height: 1.5; }
+.hero .desc p { margin: 0 0 0.4rem; font-weight: 400; }
+.hero .desc p:last-child { margin: 0; }
+
+.crumb { display: flex; align-items: center; gap: 0.75rem; margin: 0 0 1.1rem; }
+.crumb a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.4rem 0.9rem 0.4rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+}
+.crumb a:hover { border-color: var(--ink); }
+.crumb a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.crumb a svg { width: 1.1rem; height: 1.1rem; }
+.crumb h2 { margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+
+.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.8rem; animation: rise 0.55s var(--ease) 0.1s both; }
+
+.tile {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-height: 4.1rem;
+  padding: 0.65rem 0.8rem 0.65rem 0.65rem;
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  backdrop-filter: blur(14px) saturate(1.3);
+  border: 1px solid color-mix(in srgb, var(--line) 70%, #fff);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform 0.25s var(--ease), box-shadow 0.25s, color 0.25s, border-color 0.25s;
+}
+.tile::before { /* lapisan tinta yang menyapu dari kiri saat disorot */
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease);
+}
+.tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.tile:active { transform: scale(0.985); }
+@media (hover: hover) {
+  .tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-up); color: var(--bg); border-color: var(--ink); }
+  .tile:hover::before { transform: scaleX(1); }
+  .tile:hover .count { color: inherit; opacity: 0.75; }
+  .tile:hover .trail { background: var(--accent); color: var(--on-accent); transform: translateX(2px); }
+}
+
+.tile .label { flex: 1; min-width: 0; font-size: 1.06rem; font-weight: 650; line-height: 1.25; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.tile .count { color: var(--muted); font-size: 0.85rem; white-space: nowrap; transition: color 0.25s; }
+.tile .trail {
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  padding: 0.45rem;
+  border-radius: 50%;
+  background: var(--tint);
+  color: var(--ink);
+  transition: background-color 0.25s, color 0.25s, transform 0.25s var(--ease);
+}
+
+/* Tiap jenis item punya ciri sendiri: folder bertumpuk, form berikon kuning. */
+.tile-folder { box-shadow: 0 0.3rem 0 -1px var(--surface), 0 0.3rem 0 0 var(--line), 0 0.62rem 0 -3px var(--surface), 0 0.62rem 0 -2px var(--line), var(--shadow); margin-bottom: 0.45rem; }
+.tile-folder .icon { background: color-mix(in srgb, var(--accent) 28%, var(--surface)); }
+.tile-form .icon { background: var(--accent); color: var(--on-accent); }
+
+.skel {
+  height: 4.1rem;
+  border-radius: var(--r-lg);
+  background: linear-gradient(90deg, var(--tint), var(--line), var(--tint));
+  background-size: 200% 100%;
+  animation: shimmer 1.3s linear infinite;
+}
+
+.state { padding: 1.5rem 0; color: var(--muted); text-align: center; }
+.state strong { display: block; margin-bottom: 0.25rem; color: var(--ink); font-size: 1.0625rem; }
+.state .btn { margin-top: 0.875rem; }
+
+/* Layar ponsel (patokan iPhone 16, lebar 393): semua ukuran berbasis rem diperkecil. */
+@media (max-width: 480px) {
+  /* 13px pada lebar 440 (iPhone 16 Pro Max); mengecil proporsional, jadi di 393 (iPhone 16) jarak & rasio sama persis */
+  html { font-size: clamp(11px, 2.9545vw, 13px); }
+  .wrap { padding: 1.6rem 1.1rem 5.5rem; }
+  .avatar { width: 5.2rem; height: 5.2rem; margin-bottom: 0.95rem; }
+  .avatar::before { inset: -0.38rem; }
+  .hero { margin-bottom: 1.5rem; }
+  .dock .icon-btn { width: 2.5rem; height: 2.5rem; }
+  .list { gap: 0.65rem; }
+  .tile { min-height: 3.7rem; gap: 0.75rem; }
+  .tile-folder { margin-bottom: 0.4rem; }
+}
+
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes pop { from { opacity: 0; transform: scale(0.82); } to { opacity: 1; transform: none; } }
+@keyframes shimmer { to { background-position: -200% 0; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes sweep { from { background-position: 130% 0; } to { background-position: -30% 0; } }
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.035); } }
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none !important; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .loader .sweep { background-position: 50% 0; }
+}
+
+.dlg-line { margin: 0 0 0.6rem; color: var(--muted); }
+.dlg-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem; }
+.install-dlg .dlg-actions .btn { width: 100%; }
+
+/* Bilah navigasi di bawah (mudah dijangkau ibu jari) — form & dashboard */
+@media (max-width: 600px) {
+  .topbar {
+    position: fixed; z-index: 30; left: 50%; transform: translateX(-50%);
+    bottom: max(0.9rem, env(safe-area-inset-bottom));
+    width: min(calc(100% - 2.2rem), 28rem); margin: 0 !important; padding: 0.35rem;
+    border: 1px solid var(--line); border-radius: 99px;
+    background: color-mix(in srgb, var(--surface) 78%, transparent);
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); box-shadow: var(--shadow-up);
+  }
+  .topbar .btn-back { border-color: transparent !important; background: transparent !important; }
+  .topbar .icon-btn { border: 0; background: transparent; box-shadow: none; }
+  .wrap { padding-bottom: 7rem; }
+}
+
+/* Bilah navigasi: warna beda dari latar agar jelas terpisah */
+:root { --navbg: color-mix(in srgb, var(--ink) 9%, var(--surface)); }
+.dock, .topbar, .tabs {
+  background: var(--navbg) !important;
+  border-color: color-mix(in srgb, var(--ink) 20%, var(--line)) !important;
+  box-shadow: 0 10px 30px -8px rgba(0,0,0,0.45), 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent), inset 0 1px 0 rgba(255,255,255,0.06) !important;
+}
+@media (min-width: 601px) { .topbar { background: none !important; border-color: transparent !important; box-shadow: none !important; } }

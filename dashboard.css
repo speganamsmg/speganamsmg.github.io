@@ -1,0 +1,53 @@
+/* SPEGANA — dashboard publik */
+.topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+.btn-back {
+  display: inline-flex; align-items: center; gap: 0.2rem; padding: 0.4rem 0.9rem 0.4rem 0.5rem;
+  border: 1px solid var(--line); border-radius: 99px; background: var(--surface); color: var(--ink);
+  font-size: 0.9rem; font-weight: 600; text-decoration: none; box-shadow: var(--shadow);
+}
+.btn-back:hover { border-color: var(--ink); }
+.btn-back:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn-back svg { width: 1.1rem; height: 1.1rem; }
+
+.dhead { display: grid; gap: 0.1rem; margin-bottom: 1.25rem; }
+.dhead::before { content: ''; width: 2.75rem; height: 0.3rem; border-radius: 99px; background: var(--accent); margin-bottom: 0.9rem; }
+.dhead h1 { margin: 0; font-size: clamp(1.7rem, 7.5vw, 2.3rem); line-height: 1.1; font-weight: 800; letter-spacing: -0.03em; overflow-wrap: anywhere; text-wrap: balance; }
+.dhead .rich { margin-top: 0.5rem; color: var(--muted); }
+.rich p { margin: 0 0 0.6rem; } .rich p:last-child { margin: 0; }
+.rich ol, .rich ul { margin: 0 0 0.6rem; padding-left: 1.4rem; }
+
+.card { background: color-mix(in srgb, var(--surface) 82%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  border: 1px solid color-mix(in srgb, var(--line) 70%, #fff); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 1.25rem; margin-bottom: 0.9rem; }
+.card h2 { margin: 0 0 0.9rem; font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.card p.hint { color: var(--muted); margin: 0 0 0.75rem; }
+
+.stat { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; animation: rise 0.5s var(--ease) both; }
+.stat .num { display: grid; }
+.stat .num strong { font-size: 3rem; line-height: 1; font-weight: 800; letter-spacing: -0.04em; }
+.stat .num span { color: var(--muted); font-size: 0.9rem; font-weight: 500; }
+.stat .upd { color: var(--muted); font-size: 0.82rem; text-align: right; }
+.stat .btn { min-height: 2.25rem; padding: 0.25rem 0.8rem; font-size: 0.85rem; margin-top: 0.4rem; }
+
+.dsec { animation: rise 0.5s var(--ease) both; }
+
+/* Angka utama */
+.kpis { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 0.6rem; margin-bottom: 0.9rem; }
+.kpis .kpi:only-child { grid-column: 1 / -1; }
+.kpi { display: grid; align-content: center; gap: 0.15rem; padding: 0.9rem 1rem; border: 1px solid color-mix(in srgb, var(--line) 70%, #fff); border-radius: var(--r-lg); background: color-mix(in srgb, var(--surface) 82%, transparent); box-shadow: var(--shadow); animation: rise 0.5s var(--ease) both; }
+.kpi strong { font-size: 1.7rem; line-height: 1; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.kpi span { color: var(--muted); font-size: 0.78rem; font-weight: 600; }
+.kpi.main { background: var(--ink); color: var(--bg); border-color: transparent; }
+
+.kpi.main span { color: color-mix(in srgb, var(--bg) 70%, transparent); }
+.trendcard { padding: 0.9rem 1.1rem 1rem; }
+.trendtop { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
+.stamp { color: var(--muted); font-size: 0.78rem; font-weight: 600; }
+.icon-btn.sm { width: 2rem; height: 2rem; }
+.icon-btn.sm .i { width: 1rem; height: 1rem; }
+.icon-btn.is-busy .i { animation: spin 0.8s linear infinite; }
+.card h2 { font-size: 1.02rem; }
+.refresh-solo { margin: -0.3rem 0 0.8rem auto; display: grid; }
+/* Semua tile sama ukuran dan sejajar */
+.kpi { justify-items: start; align-content: center; min-height: 5.2rem; margin: 0; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 0.6rem; align-items: stretch; }
+.kpis .kpi { min-width: 0; }

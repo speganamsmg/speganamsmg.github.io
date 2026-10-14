@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hasil form</title>
+  <meta name="robots" content="noindex">
+  <script>
+    (function () {
+      try {
+        var p = localStorage.getItem('tema') || localStorage.getItem('tema_def') || 'auto';
+        var dark = p === 'dark' || (p === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" href="assets/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <meta name="theme-color" content="#121a33">
+  <link rel="preconnect" href="https://script.google.com">
+  <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&display=swap">
+  <link rel="stylesheet" href="style.css?v=21">
+  <link rel="stylesheet" href="charts.css?v=21">
+  <link rel="stylesheet" href="dashboard.css?v=21">
+</head>
+<body>
+  <div class="splash" id="splash" role="status" aria-label="Memuat">
+    <div class="loader" aria-hidden="true"><span class="ln"></span><span class="sweep"></span></div>
+  </div>
+  <main class="wrap">
+    <div class="topbar">
+      <a class="btn-back" href="./" id="home"></a>
+      <button class="icon-btn theme-btn" id="themeBtn" type="button" aria-label="Ganti tema terang atau gelap"></button>
+    </div>
+    <header class="dhead" id="dhead" hidden>
+      <h1 id="dtitle"></h1>
+      <div class="rich" id="ddesc"></div>
+    </header>
+    <div id="stage" aria-live="polite"></div>
+    <noscript><p class="state"><strong>JavaScript dimatikan.</strong>Aktifkan JavaScript untuk melihat hasil.</p></noscript>
+  </main>
+  <script src="config.js?v=21"></script>
+  <script src="common.js?v=21"></script>
+  <script src="charts.js?v=21"></script>
+  <script src="dashboard.js?v=21"></script>
+</body>
+</html>
