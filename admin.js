@@ -312,8 +312,68 @@
   const ICON_HINTS = {
     emoji: { ph: '😀', help: 'Pilih di bawah, atau ketik / tempel emoji apa saja.' },
     gambar: { ph: 'https://… atau link Google Drive', help: 'Bisa link gambar https atau link berbagi Google Drive (atur akses "Siapa saja yang memiliki link"). Gambar persegi paling rapi.' },
-    pustaka: { ph: 'instagram', help: null }
+    pustaka: { ph: 'instagram', help: null },
+    lucide: { ph: 'book-open', help: 'Cari di kolom pencarian lalu pilih. Atau ketik nama ikon Lucide (huruf kecil, pakai tanda hubung, mis. book-open). Daftar: lucide.dev/icons.' }
   };
+
+  // ── Galeri besar (Lucide): katalog nama + kata kunci dimuat sekali dari CDN ──
+  let lucideCat = null, lucideLoading = null, lucideLimit = 90, lucideQuery = '';
+  const ID_EN = { sekolah: 'school', buku: 'book', guru: 'teacher', murid: 'student', siswa: 'student', uang: 'money', bayar: 'payment', pembayaran: 'payment',
+    kalender: 'calendar', jadwal: 'schedule', surat: 'mail', pesan: 'message', telepon: 'phone', kamera: 'camera', foto: 'photo', video: 'video', musik: 'music',
+    rumah: 'home', kunci: 'lock', aman: 'shield', keamanan: 'security', bintang: 'star', hati: 'heart', cinta: 'heart', lonceng: 'bell', pengumuman: 'megaphone',
+    dokumen: 'document', berkas: 'file', folder: 'folder', catatan: 'note', tugas: 'task', daftar: 'list', nilai: 'grade', ujian: 'exam', laporan: 'report',
+    grafik: 'chart', data: 'data', orang: 'user', pengguna: 'user', kelompok: 'users', tim: 'team', waktu: 'time', jam: 'clock', lokasi: 'map', peta: 'map',
+    unduh: 'download', unggah: 'upload', cari: 'search', pengaturan: 'settings', bantuan: 'help', info: 'info', peringatan: 'alert', hadiah: 'gift', piala: 'trophy',
+    makanan: 'food', kopi: 'coffee', mobil: 'car', bus: 'bus', sepeda: 'bike', kesehatan: 'health', obat: 'pill', dokter: 'stethoscope', komputer: 'computer',
+    laptop: 'laptop', internet: 'wifi', ponsel: 'smartphone', printer: 'printer', gunting: 'scissors', pensil: 'pencil', tulis: 'pen', gambar: 'image', warna: 'palette',
+    ide: 'lightbulb', lampu: 'lightbulb', tas: 'backpack', topi: 'graduation', wisuda: 'graduation', olahraga: 'sport', bola: 'ball', doa: 'hands', masjid: 'landmark' };
+
+  function loadLucide() {
+    if (lucideCat) return Promise.resolve(lucideCat);
+    if (!lucideLoading) {
+      lucideLoading = fetch(App.LUCIDE + 'tags.json').then(function (r) { if (!r.ok) throw new Error('x'); return r.json(); })
+        .then(function (j) { lucideCat = Object.keys(j).sort().map(function (n) { return { n: n, t: (j[n] || []).join(' ').toLowerCase() }; }); return lucideCat; })
+        .catch(function (e) { lucideLoading = null; throw e; });
+    }
+    return lucideLoading;
+  }
+
+  function lucideMatches(q) {
+    const words = q.toLowerCase().split(/\s+/).filter(Boolean).map(function (w) { return ID_EN[w] || w; });
+    if (!words.length) return lucideCat;
+    return lucideCat.filter(function (x) {
+      return words.every(function (w) { return x.n.indexOf(w) >= 0 || x.t.indexOf(w) >= 0; });
+    });
+  }
+
+  async function renderLucide() {
+    const g = $('iconGrid'), more = $('iconMore');
+    g.hidden = false;
+    if (!lucideCat) {
+      g.replaceChildren(el('span', 'help', 'Memuat daftar ikon…'));
+      more.hidden = true;
+      try { await loadLucide(); } catch (e) {
+        g.replaceChildren(el('span', 'help', 'Daftar ikon tidak bisa dimuat (perlu internet). Anda tetap bisa mengetik nama ikon di kolom bawah.'));
+        return;
+      }
+      if ($('fIconType').value !== 'lucide') return;
+    }
+    const all = lucideMatches(lucideQuery);
+    const shown = all.slice(0, lucideLimit);
+    g.replaceChildren();
+    if (!all.length) g.append(el('span', 'help', 'Tidak ada ikon yang cocok. Coba kata lain (bahasa Inggris juga bisa).'));
+    shown.forEach(function (x) {
+      const b = el('button', 'ip-btn');
+      b.type = 'button'; b.dataset.v = x.n; b.title = x.n; b.setAttribute('aria-label', x.n);
+      b.append(App.icon({ ikon_jenis: 'lucide', ikon_isi: x.n }).firstChild);
+      b.addEventListener('click', function () { $('fIconValue').value = x.n; pressedSync(); refreshPreview(); });
+      g.append(b);
+    });
+    more.hidden = all.length <= shown.length;
+    more.textContent = 'Tampilkan lebih banyak (' + (all.length - shown.length) + ' lagi)';
+    pressedSync();
+  }
+
   const EMOJIS = ['📌', '📢', '📝', '📄', '📚', '🎓', '🏫', '🧑‍🏫', '👥', '🤝', '💰', '🧾', '📅', '⏰', '📷', '🎥', '🏆', '⭐', '❤️', '✅', '📞', '✉️', '🌐', '🔒', '🛠️', '🎉', '🕌', '🚀'];
   const BRANDS = ['instagram', 'whatsapp', 'youtube', 'tiktok', 'facebook', 'x', 'telegram', 'github', 'linkedin', 'google', 'googledrive', 'googleforms', 'googlesheets', 'googlemeet', 'gmail', 'zoom', 'spotify', 'discord', 'canva', 'notion', 'figma', 'shopee', 'tokopedia', 'threads'];
   const COLORS = ['#f4b942', '#ef4444', '#f97316', '#22c55e', '#14b8a6', '#3b82f6', '#6366f1', '#a855f7', '#ec4899', '#0f172a', '#ffffff'];
@@ -331,6 +391,9 @@
 
   function renderGrid(jenis) {
     const g = $('iconGrid');
+    $('iconSearch').hidden = jenis !== 'lucide';
+    $('iconMore').hidden = true;
+    if (jenis === 'lucide') { renderLucide(); return; }
     g.replaceChildren();
     let list = null;
     if (jenis === 'bawaan') list = App.ICON_CHOICES;
@@ -391,11 +454,18 @@
     });
   }
 
+  let searchTimer = null;
+  $('iconSearch').addEventListener('input', function () {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(function () { lucideQuery = $('iconSearch').value.trim(); lucideLimit = 90; renderLucide(); }, 200);
+  });
+  $('iconMore').addEventListener('click', function () { lucideLimit += 120; renderLucide(); });
+
   function updateIconFields() {
     const jenis = $('fIconType').value;
     const input = $('fIconValue');
     const help = $('iconHelp');
-    const showInput = jenis === 'emoji' || jenis === 'gambar' || jenis === 'pustaka';
+    const showInput = jenis === 'emoji' || jenis === 'gambar' || jenis === 'pustaka' || jenis === 'lucide';
     input.hidden = !showInput;
     help.hidden = !showInput;
     if (jenis === 'none' || jenis === 'bawaan') {
@@ -429,7 +499,7 @@
       ikon_warna: iconStyle.warna,
       ikon_bentuk: iconStyle.bentuk
     };
-    if (probe.ikon_jenis === 'pustaka') probe.ikon_isi = probe.ikon_isi.toLowerCase();
+    if (probe.ikon_jenis === 'pustaka' || probe.ikon_jenis === 'lucide') probe.ikon_isi = probe.ikon_isi.toLowerCase();
     $('iconPreview').replaceChildren(App.icon(probe));
     pressedSync();
 
@@ -449,6 +519,16 @@
         st.className = 'help ip-state bad';
         st.textContent = '✗ Gambar tidak bisa dimuat. Untuk Google Drive: Bagikan → Akses umum → "Siapa saja yang memiliki link" (Pelihat).';
       });
+    } else if (probe.ikon_jenis === 'lucide' && /^[a-z0-9][a-z0-9-]{0,59}$/.test(probe.ikon_isi)) {
+      // Pastikan nama ikon ada; bila tidak, pratinjau kosong tanpa penjelasan.
+      const im = new Image();
+      im.onload = function () { if (token === previewToken) st.hidden = true; };
+      im.onerror = function () {
+        if (token !== previewToken) return;
+        st.hidden = false; st.className = 'help ip-state bad';
+        st.textContent = '✗ Ikon "' + probe.ikon_isi + '" tidak ditemukan. Pilih dari galeri atau cek ejaan.';
+      };
+      im.src = App.LUCIDE + 'icons/' + probe.ikon_isi + '.svg';
     } else {
       st.hidden = true;
     }

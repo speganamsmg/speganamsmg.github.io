@@ -176,6 +176,9 @@
     return (0.299 * r + 0.587 * g + 0.114 * bl) > 160 ? '#10162b' : '#ffffff';
   }
 
+  // Galeri besar: Lucide (1.500+ ikon garis). Alamat dasar bisa diganti lewat LUCIDE_CDN di config.js.
+  App.LUCIDE = CFG.LUCIDE_CDN || 'https://cdn.jsdelivr.net/npm/lucide-static@1.54.0/';
+
   App.icon = function (item) {
     const box = App.el('span', 'icon');
     box.setAttribute('aria-hidden', 'true');
@@ -192,6 +195,10 @@
       const im = App.loadImage(isi, null, function () { im.remove(); box.append(fallback); });
       im.loading = 'lazy';
       box.append(im);
+    } else if (jenis === 'lucide' && /^[a-z0-9][a-z0-9-]{0,59}$/.test(isi)) {
+      const g = App.el('span', 'glyph');
+      g.style.setProperty('--icon-url', 'url("' + App.LUCIDE + 'icons/' + isi + '.svg")');
+      box.append(g);
     } else if (jenis === 'pustaka' && /^[a-z0-9]{1,50}$/.test(isi)) {
       const g = App.el('span', 'glyph');
       g.style.setProperty('--icon-url', 'url("' + (CFG.ICON_CDN || '') + isi + '.svg")');
