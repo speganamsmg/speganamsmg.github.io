@@ -54,7 +54,7 @@
       // Tinggi spanduk Google yang dipotong. Atur lewat ?clip=40 (uji coba) atau BEKALIN_CLIP di config.js.
       var clip = Number(qs.get('clip'));
       if (!isFinite(clip) || qs.get('clip') === null) clip = Number(cfg.BEKALIN_CLIP);
-      if (!isFinite(clip) || clip < 0 || clip > 120) clip = 42;
+      if (!isFinite(clip) || clip < 0 || clip > 120) clip = 0;
       document.documentElement.style.setProperty('--clip', clip + 'px');
 
       var f = document.getElementById('app');
