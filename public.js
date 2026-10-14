@@ -61,14 +61,16 @@
     });
     return acc;
   }
-  function isLeafMarked(i) { return i.tipe !== 'folder' && !!i.untuk; }
+  // "untuk" item = id tab dipisah koma ("bk,guru"); kosong = semua.
+  function untukOf(i) { return i.untuk ? String(i.untuk).split(',').filter(Boolean) : []; }
+  function isLeafMarked(i) { return i.tipe !== 'folder' && untukOf(i).length > 0; }
 
   function drawTabs(items, folder, onQr) {
     const box = $('audience');
     const marked = items.some(isLeafMarked);
     const visible = tabList().filter(function (t) {
       if (!t.ada) return true;
-      return items.some(function (i) { return i.tipe !== 'folder' && t.ada.indexOf(i.untuk) >= 0; });
+      return items.some(function (i) { return i.tipe !== 'folder' && untukOf(i).some(function (u) { return t.ada.indexOf(u) >= 0; }); });
     });
     if (visible.length && !visible.some(function (t) { return t.id === tab; })) tab = visible[0].id;
     if (!marked || !visible.length) tab = 'semua'; // tidak ada item berlabel audiens: tanpa tab, semua item tampil
@@ -240,13 +242,13 @@
     // Item biasa dicocokkan dengan kategorinya; folder tampil bila isinya (di kedalaman berapa pun) ada yang cocok.
     const leafCache = {};
     const leaves = function (id) { return leafCache[id] || (leafCache[id] = leavesOf(items, id, [])); };
-    const okLeaf = function (i) { return !cur.ok || cur.ok.indexOf(i.untuk || '') >= 0; };
+    const okLeaf = function (i) { const u = untukOf(i); return !cur.ok || !u.length || u.some(function (x) { return cur.ok.indexOf(x) >= 0; }); };
     const okItem = function (i) { return i.tipe === 'folder' ? (!cur.ok || leaves(i.id).some(okLeaf)) : okLeaf(i); };
-    // Kelompok sebuah folder di tab Semua: kategori tunggal isinya; bila campuran, tanpa judul.
+    // Kelompok di tab Semua: item dengan satu kategori, atau folder yang seluruh isinya satu kategori, ditaruh di bawah judulnya; selain itu tanpa judul.
     const groupOf = function (i) {
-      if (i.tipe !== 'folder') return i.untuk || '';
+      if (i.tipe !== 'folder') { const u = untukOf(i); return u.length === 1 ? u[0] : ''; }
       const set = {};
-      leaves(i.id).forEach(function (l) { if (l.untuk) set[l.untuk] = true; });
+      leaves(i.id).forEach(function (l) { untukOf(l).forEach(function (u) { set[u] = true; }); });
       const keys = Object.keys(set);
       return keys.length === 1 ? keys[0] : '';
     };

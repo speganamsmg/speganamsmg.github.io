@@ -155,7 +155,7 @@
     const title = el('div', 'row-title');
     title.append(el('span', '', it.judul));
     if (!it.tampil) title.append(el('span', 'badge', 'Disembunyikan'));
-    if (it.untuk) title.append(el('span', 'badge', untukNama(it.untuk)));
+    it.untuk.split(',').filter(Boolean).forEach(function (u) { title.append(el('span', 'badge', untukNama(u))); });
     if (it.segera) title.append(el('span', 'badge soon', 'Segera hadir'));
     const main = el('div', 'row-main');
     main.append(title, el('div', 'row-meta', metaText(it, map)));
@@ -531,7 +531,7 @@
       parent_id: $('fParent').value,
       tampil: $('fVisible').checked,
       segera: $('fSoon').checked,
-      untuk: tipe === 'folder' ? '' : $('fUntuk').value
+      untuk: tipe === 'folder' ? [] : readUntuk()
     };
     if (state.editingId) item.id = state.editingId;
 
@@ -554,12 +554,22 @@
   // ── Tab halaman utama ("Untuk siapa") ──
   let grupRows = [];
 
+  // Kotak centang kategori: tidak ada yang dicentang = untuk semua.
   function fillUntuk(val) {
-    const sel = $('fUntuk');
-    sel.replaceChildren(new Option('Semua (paling atas, tanpa judul)', ''));
-    (state.settings.grup || []).forEach(function (g) { sel.append(new Option(g.nama, g.id)); });
-    sel.value = val;
-    if (sel.value !== val) sel.value = '';
+    const box = $('fUntuk');
+    const on = String(val || '').split(',');
+    box.replaceChildren();
+    const list = state.settings.grup || [];
+    if (!list.length) box.append(el('span', 'help', 'Belum ada tab. Tambahkan di Pengaturan → Tab halaman utama.'));
+    list.forEach(function (g) {
+      const lab = el('label', 'check');
+      const cb = el('input'); cb.type = 'checkbox'; cb.value = g.id; cb.checked = on.indexOf(g.id) >= 0;
+      lab.append(cb, el('span', '', g.nama));
+      box.append(lab);
+    });
+  }
+  function readUntuk() {
+    return Array.prototype.map.call($('fUntuk').querySelectorAll('input:checked'), function (c) { return c.value; });
   }
 
   function renderGrupRows() {

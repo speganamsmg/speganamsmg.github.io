@@ -28,9 +28,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&display=swap">
-  <link rel="stylesheet" href="style.css?v=39">
-  <link rel="stylesheet" href="charts.css?v=39">
-  <link rel="stylesheet" href="admin.css?v=39">
+  <link rel="stylesheet" href="style.css?v=40">
+  <link rel="stylesheet" href="charts.css?v=40">
+  <link rel="stylesheet" href="admin.css?v=40">
 </head>
 <body>
   <div class="splash" id="splash" role="status" aria-label="Memuat">
@@ -199,7 +199,7 @@
   <dialog id="bulkDialog" aria-labelledby="bulkTitle">
     <form id="bulkForm">
       <h2 id="bulkTitle">Tempel daftar</h2>
-      <p class="hint">Satu baris satu item. Folder ditulis <code>[Nama Folder]</code> (folder tidak punya kategori sendiri; ia muncul di tab sesuai isinya), link ditulis <code>Judul | alamat | untuk</code> dan masuk ke folder di atasnya. "Untuk" diisi nama tab (mis. Guru, Murid) atau Semua. Baris berawalan # diabaikan. Item yang sama yang sudah ada dilewati.</p>
+      <p class="hint">Satu baris satu item. Folder ditulis <code>[Nama Folder]</code> (folder tidak punya kategori sendiri; ia muncul di tab sesuai isinya), link ditulis <code>Judul | alamat | untuk</code> dan masuk ke folder di atasnya. "Untuk" diisi nama tab (mis. Guru, Murid), boleh beberapa dipisah koma (Guru, BK), atau Semua. Baris berawalan # diabaikan. Item yang sama yang sudah ada dilewati.</p>
       <div class="field">
         <textarea class="input names-ta" id="bulkText" rows="12" spellcheck="false" placeholder="[7 Kebiasaan (G7KAIH)] | Semua&#10;Refleksi Kebiasaan | https://contoh.com/menu1 | Murid"></textarea>
       </div>
@@ -262,9 +262,9 @@
       </div>
 
       <div class="field">
-        <label for="fUntuk">Untuk siapa</label>
-        <select class="input" id="fUntuk"></select>
-        <span class="help">Pilihan mengikuti Pengaturan → Tab halaman utama. Di tab "Semua", item dikelompokkan sesuai urutan tab; "Semua" tampil paling atas tanpa judul.</span>
+        <label id="lblUntuk">Untuk siapa</label>
+        <div class="untuk-box" id="fUntuk" role="group" aria-labelledby="lblUntuk"></div>
+        <span class="help">Boleh pilih lebih dari satu (mis. BK dan Guru). Tidak ada yang dicentang = untuk semua. Pilihan mengikuti Pengaturan → Tab halaman utama. Di tab "Semua", item untuk satu kategori ditaruh di bawah judulnya; item untuk beberapa kategori atau semua tampil paling atas tanpa judul.</span>
       </div>
 
       <div class="field">
@@ -292,12 +292,12 @@
   <div id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15/Sortable.min.js"></script>
-  <script src="config.js?v=39"></script>
-  <script src="common.js?v=39"></script>
-  <script src="charts.js?v=39"></script>
-  <script src="admin.js?v=39"></script>
-  <script src="admin-forms.js?v=39"></script>
-  <script src="admin-names.js?v=39"></script>
-  <script src="admin-results.js?v=39"></script>
+  <script src="config.js?v=40"></script>
+  <script src="common.js?v=40"></script>
+  <script src="charts.js?v=40"></script>
+  <script src="admin.js?v=40"></script>
+  <script src="admin-forms.js?v=40"></script>
+  <script src="admin-names.js?v=40"></script>
+  <script src="admin-results.js?v=40"></script>
 </body>
 </html>
