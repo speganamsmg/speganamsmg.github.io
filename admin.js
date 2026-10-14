@@ -581,15 +581,24 @@
         mini('down', 'Turunkan', function () { if (i < grupRows.length - 1) { grupRows.splice(i + 1, 0, grupRows.splice(i, 1)[0]); renderGrupRows(); } }),
         mini('trash', 'Hapus', function () { grupRows.splice(i, 1); renderGrupRows(); })
       );
-      row.append(inp, tools);
+      row.append(inp);
+      if (!$('sTabSemua').checked) {
+        const q = el('label', 'check');
+        const cb = el('input'); cb.type = 'checkbox'; cb.checked = r.qr === true;
+        cb.addEventListener('change', function () { r.qr = cb.checked; });
+        q.append(cb, el('span', '', 'Pembuat QR di tab ini'));
+        row.append(q);
+      }
+      row.append(tools);
       box.append(row);
     });
     $('grupAdd').disabled = grupRows.length >= 8;
   }
 
+  $('sTabSemua').addEventListener('change', renderGrupRows);
   $('grupAdd').addEventListener('click', function () {
     if (grupRows.length >= 8) return;
-    grupRows.push({ id: '', nama: '' });
+    grupRows.push({ id: '', nama: '', qr: false });
     renderGrupRows();
     const ins = $('grupList').querySelectorAll('input.input');
     if (ins.length) ins[ins.length - 1].focus();
@@ -663,7 +672,8 @@
   function renderSettings() {
     socRows = (state.settings.sosmed || []).map(function (x) { return { tipe: x.tipe, url: x.url }; });
     renderSocRows();
-    grupRows = (state.settings.grup || []).map(function (g) { return { id: g.id, nama: g.nama }; });
+    grupRows = (state.settings.grup || []).map(function (g) { return { id: g.id, nama: g.nama, qr: g.qr === true }; });
+    $('sTabSemua').checked = state.settings.tab_semua !== 'tidak';
     renderGrupRows();
     $('sTitle').value = state.settings.judul || '';
     $('sSub').value = state.settings.subjudul || '';
@@ -689,7 +699,8 @@
       const d = await call('admin.saveSettings', {
         settings: { judul: $('sTitle').value, subjudul: $('sSub').value, deskripsi: $('sDesc').value, tema: $('sTheme').value,
           qr_aktif: $('sQrOn').checked, qr_judul: $('sQrTitle').value, qr_keterangan: $('sQrDesc').value,
-          grup: grupRows.map(function (g) { return { id: g.id, nama: g.nama }; }),
+          tab_semua: $('sTabSemua').checked,
+          grup: grupRows.map(function (g) { return { id: g.id, nama: g.nama, qr: g.qr === true }; }),
           sosmed: socRows.filter(function (r) { return r.tipe || r.url.trim(); }).map(function (r) { return { tipe: r.tipe, url: r.url }; }) }
       });
       state.settings = d.settings;

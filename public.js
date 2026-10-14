@@ -42,9 +42,12 @@
     return Array.isArray(g) ? g : GRUP_BAWAAN;
   }
   function tabList() {
-    return [{ id: 'semua', nama: 'Semua', ok: null, ada: null, qr: true }].concat(grupList().map(function (g) {
-      return { id: g.id, nama: g.nama, ok: ['', g.id], ada: [g.id], qr: false };
-    }));
+    const s = data && data.settings;
+    const semua = !s || s.tab_semua !== 'tidak';
+    const own = grupList().map(function (g) {
+      return { id: g.id, nama: g.nama, ok: ['', g.id], ada: [g.id], qr: g.qr === true };
+    });
+    return semua ? [{ id: 'semua', nama: 'Semua', ok: null, ada: null, qr: true }].concat(own) : own;
   }
   const TAB_KEY = 'pub_tab_v2';
   let tab = 'semua';
@@ -58,8 +61,8 @@
       return items.some(function (i) { return i.parent_id === '' && t.ada.indexOf(i.untuk) >= 0; });
     });
     if (visible.length && !visible.some(function (t) { return t.id === tab; })) tab = visible[0].id;
-    if (!marked) tab = 'semua'; // tidak ada item berlabel audiens: tanpa tab
-    box.hidden = !marked || !!folder || onQr;
+    if (!marked || !visible.length) tab = 'semua'; // tidak ada item berlabel audiens: tanpa tab, semua item tampil
+    box.hidden = !marked || !visible.length || !!folder || onQr;
     if (box.hidden) return;
     box.replaceChildren.apply(box, visible.map(function (t) {
       const b = el('button', 'aud-btn', t.nama); b.type = 'button';
@@ -223,7 +226,10 @@
     items.forEach(function (i) { counts[i.parent_id] = (counts[i.parent_id] || 0) + 1; });
 
     const tabs = tabList();
-    const cur = tabs.filter(function (t) { return t.id === tab; })[0] || tabs[0];
+    const marked = items.some(function (i) { return i.parent_id === '' && i.untuk; });
+    // Tanpa tab "Semua" dan tanpa item berlabel: semua item tampil tanpa tab; QR mengikuti tab Semua.
+    const cur = (marked && tabs.filter(function (t) { return t.id === tab; })[0]) ||
+      (marked ? tabs[0] : { id: 'semua', ok: null, qr: true });
     const here = items.filter(function (i) {
       return i.parent_id === folderId && (!cur.ok || cur.ok.indexOf(i.untuk || '') >= 0);
     });
