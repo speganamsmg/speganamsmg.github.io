@@ -1,7 +1,7 @@
 {
   "name": "SMP Negeri 36 Semarang",
-  "short_name": "Spegana",
-  "description": "Halaman resmi SMP Negeri 36 Semarang: tautan, formulir, dan hasilnya.",
+  "short_name": "SMP36",
+  "description": "Portal Internal SMP Negeri 36 Semarang",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
