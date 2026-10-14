@@ -520,7 +520,7 @@ svg.i { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round
 .qr-msg:empty { min-height: 0; }
 .qr-go { width: 100%; max-width: 14rem; }
 .qr-out { margin-top: 1rem; display: grid; justify-items: center; gap: 0.7rem; animation: pop 0.3s var(--ease); }
-.qr-out[hidden] { display: none; }
+.qr-out[hidden], .qr[hidden] { display: none; }
 .qr-frame { padding: 0.6rem; border-radius: 1rem; background: #fff; box-shadow: 0 0 0 1px var(--line), var(--shadow-up); }
 .qr-frame canvas { display: block; width: min(15rem, 62vw); height: auto; aspect-ratio: 1; image-rendering: pixelated; }
 .qr-text { margin: 0; max-width: 100%; color: var(--muted); font-size: 0.8rem; overflow-wrap: anywhere; }

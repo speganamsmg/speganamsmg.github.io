@@ -381,3 +381,5 @@ html, body { overflow-x: hidden; }
 .ip-custom::-webkit-color-swatch-wrapper { padding: 0; }
 .ip-custom::-webkit-color-swatch { border: 0; border-radius: 50%; }
 .ip-custom::-moz-color-swatch { border: 0; border-radius: 50%; }
+
+.sub-h { margin: 1.2rem 0 0.7rem; padding-top: 1rem; border-top: 1px solid var(--line); font-size: 1rem; }

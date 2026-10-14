@@ -29,7 +29,15 @@
     return m ? m[1] : '';
   }
 
+  let qrOn = true;
+
   function applySettings(s) {
+    qrOn = s.qr_aktif !== 'tidak';
+    if ($('qrTitle')) $('qrTitle').textContent = s.qr_judul || 'Pembuat QR Code';
+    if ($('qrLead')) {
+      $('qrLead').textContent = s.qr_keterangan === undefined ? 'Tempel link, lalu unduh QR-nya.' : s.qr_keterangan;
+      $('qrLead').hidden = !$('qrLead').textContent;
+    }
     $('title').textContent = s.judul;
     $('subtitle').textContent = s.subjudul;
     $('subtitle').hidden = !s.subjudul;
@@ -129,7 +137,7 @@
 
     const crumb = $('crumb');
     crumb.hidden = !folder;
-    if ($('qrTool')) $('qrTool').hidden = !!folder; // alat QR hanya di halaman utama
+    if ($('qrTool')) $('qrTool').hidden = !!folder || !qrOn; // alat QR hanya di halaman utama, dan bila diaktifkan admin
     if (folder) {
       $('crumbTitle').textContent = folder.judul;
       const back = $('back');

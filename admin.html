@@ -28,9 +28,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&display=swap">
-  <link rel="stylesheet" href="style.css?v=25">
-  <link rel="stylesheet" href="charts.css?v=25">
-  <link rel="stylesheet" href="admin.css?v=25">
+  <link rel="stylesheet" href="style.css?v=27">
+  <link rel="stylesheet" href="charts.css?v=27">
+  <link rel="stylesheet" href="admin.css?v=27">
 </head>
 <body>
   <div class="splash" id="splash" role="status" aria-label="Memuat">
@@ -142,6 +142,20 @@
             </select>
             <span class="help">Pengunjung tetap bisa menggantinya dengan tombol tema.</span>
           </div>
+          <h3 class="sub-h">Pembuat QR Code (halaman utama)</h3>
+          <label class="check">
+            <input type="checkbox" id="sQrOn">
+            <span>Tampilkan Pembuat QR Code</span>
+          </label>
+          <div class="field">
+            <label for="sQrTitle">Judul kartu</label>
+            <input class="input" id="sQrTitle" maxlength="60" placeholder="Pembuat QR Code">
+          </div>
+          <div class="field">
+            <label for="sQrDesc">Keterangan</label>
+            <input class="input" id="sQrDesc" maxlength="160" placeholder="Tempel link, lalu unduh QR-nya.">
+            <span class="help">Dikosongkan = tanpa keterangan.</span>
+          </div>
           <p class="msg" id="settingsMsg" role="alert"></p>
           <button class="btn btn-primary" type="submit">Simpan pengaturan</button>
         </form>
@@ -242,12 +256,12 @@
   <div id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15/Sortable.min.js"></script>
-  <script src="config.js?v=25"></script>
-  <script src="common.js?v=25"></script>
-  <script src="charts.js?v=25"></script>
-  <script src="admin.js?v=25"></script>
-  <script src="admin-forms.js?v=25"></script>
-  <script src="admin-names.js?v=25"></script>
-  <script src="admin-results.js?v=25"></script>
+  <script src="config.js?v=27"></script>
+  <script src="common.js?v=27"></script>
+  <script src="charts.js?v=27"></script>
+  <script src="admin.js?v=27"></script>
+  <script src="admin-forms.js?v=27"></script>
+  <script src="admin-names.js?v=27"></script>
+  <script src="admin-results.js?v=27"></script>
 </body>
 </html>

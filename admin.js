@@ -548,6 +548,9 @@
     $('sSub').value = state.settings.subjudul || '';
     $('sDesc').value = state.settings.deskripsi || '';
     $('sTheme').value = state.settings.tema || 'auto';
+    $('sQrOn').checked = state.settings.qr_aktif !== 'tidak';
+    $('sQrTitle').value = state.settings.qr_judul || '';
+    $('sQrDesc').value = state.settings.qr_keterangan === undefined ? 'Tempel link, lalu unduh QR-nya.' : state.settings.qr_keterangan;
   }
 
   function setMsg(id, text, ok) {
@@ -563,7 +566,8 @@
     setMsg('settingsMsg', '');
     try {
       const d = await call('admin.saveSettings', {
-        settings: { judul: $('sTitle').value, subjudul: $('sSub').value, deskripsi: $('sDesc').value, tema: $('sTheme').value }
+        settings: { judul: $('sTitle').value, subjudul: $('sSub').value, deskripsi: $('sDesc').value, tema: $('sTheme').value,
+          qr_aktif: $('sQrOn').checked, qr_judul: $('sQrTitle').value, qr_keterangan: $('sQrDesc').value }
       });
       state.settings = d.settings;
       renderSettings();
