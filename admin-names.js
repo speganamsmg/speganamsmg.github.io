@@ -34,7 +34,7 @@
       const top = el('div', 'fm-top');
       const main = el('div', 'row-main');
       main.append(el('div', 'row-title', l.list_id));
-      let meta = l.jumlah + ' nama';
+      let meta = l.jumlah + ' nama' + (l.kelompok ? ' · ' + l.kelompok + ' kelas' : '');
       if (l.dari_responden) meta += ' (' + l.dari_responden + ' ditambah responden)';
       main.append(el('div', 'row-meta nowrap-off', meta));
       const used = Array.isArray(l.dipakai_oleh) ? l.dipakai_oleh : [];
@@ -99,13 +99,13 @@
     card.append(nameField);
 
     const f2 = el('div', 'field');
-    const l2 = el('label', '', 'Daftar nama (satu nama per baris)'); l2.htmlFor = 'nlNames';
+    const l2 = el('label', '', 'Daftar nama (satu nama per baris, kelas boleh ditambahkan)'); l2.htmlFor = 'nlNames';
     const ta = el('textarea', 'input names-ta'); ta.id = 'nlNames'; ta.rows = 14; ta.spellcheck = false;
-    ta.value = names.map(function (n) { return n.nama; }).join('\n');
+    ta.value = names.map(function (n) { return n.kelompok ? n.nama + ' | ' + n.kelompok : n.nama; }).join('\n');
     const count = el('span', 'help');
     const upd = function () {
       const n = ta.value.split('\n').filter(function (x) { return x.trim(); }).length;
-      count.textContent = n + ' nama. Nama yang kembar otomatis digabung. Menghapus nama tidak menghapus jawaban yang sudah masuk.';
+      count.textContent = n + ' nama. Untuk pilih kelas dulu, tulis "Nama | Kelas" (atau tempel dua kolom dari Excel). Semua baris harus punya kelas, atau tidak sama sekali. Nama yang kembar dalam kelas yang sama otomatis digabung. Menghapus nama tidak menghapus jawaban yang sudah masuk.';
     };
     ta.addEventListener('input', upd);
     upd();
@@ -149,15 +149,16 @@
     (isNew ? nameIn : ta).focus();
   }
 
+  function pair(a, k) { return key(a || '') + '|' + key(k || ''); }
   function key(n) { return n.normalize('NFKC').toLowerCase().replace(/\s+/g, ' ').trim(); }
 
   async function savedAnyway(listId, text) {
     try {
       const want = {};
-      text.split('\n').forEach(function (n) { if (n.trim()) want[key(n)] = true; });
+      text.split('\n').forEach(function (n) { if (n.trim()) want[pair(n.split(/\t|\||;/)[0], n.split(/\t|\||;/)[1])] = true; });
       const got = (await A.call('admin.names.get', { list_id: listId })).names;
       const have = {};
-      got.forEach(function (n) { if (n.nama) have[key(n.nama)] = true; });
+      got.forEach(function (n) { if (n.nama) have[pair(n.nama, n.kelompok)] = true; });
       const a = Object.keys(want), b = Object.keys(have);
       return a.length === b.length && a.every(function (k) { return have[k]; });
     } catch (e) {

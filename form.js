@@ -276,6 +276,12 @@
       const search = el('input', 'field'); search.type = 'search'; search.placeholder = 'Cari nama…';
       search.setAttribute('aria-label', 'Cari nama');
       const list = el('div', 'names');
+      let pool = def.names || [];
+      let kelasDipilih = '';
+      let loading = false;
+      const grouped = !!f.dikelompokkan;
+      const kelasBar = el('div', 'names');
+      kelasBar.style.maxHeight = 'none';
       const ownBox = el('div'); ownBox.hidden = true;
       const ownInp = el('input', 'field'); ownInp.type = 'text'; ownInp.maxLength = 100;
       ownInp.setAttribute('aria-label', 'Nama Anda');
@@ -286,24 +292,54 @@
         const q = search.value.trim().toLowerCase();
         list.replaceChildren();
         let shown = 0;
-        def.names.forEach(function (n) {
+        if (grouped && !kelasDipilih) { return; }
+        if (loading) { list.append(el('p', 'hint', 'Memuat daftar nama…')); return; }
+        pool.forEach(function (n) {
           if (q && n.nama.toLowerCase().indexOf(q) < 0) return;
           shown++;
+          const val = n.label || n.nama;
           const b = el('button', 'name-btn'); b.type = 'button';
           b.append(el('span', '', n.nama));
-          b.setAttribute('aria-pressed', String(!own && chosen === n.nama));
+          b.setAttribute('aria-pressed', String(!own && chosen === val));
           b.addEventListener('click', function () {
-            own = false; ownBox.hidden = true; chosen = n.nama;
+            own = false; ownBox.hidden = true; chosen = val;
             note.hidden = true;
             draw();
           });
           list.append(b);
         });
-        if (!shown) list.append(el('p', 'hint', 'Tidak ada nama yang cocok.'));
+        if (!shown) list.append(el('p', 'hint', grouped ? 'Tidak ada nama tersisa di kelas ini.' : 'Tidak ada nama yang cocok.'));
       };
       search.addEventListener('input', draw);
+      if (grouped) {
+        card.append(el('p', 'hint', 'Pilih kelas dulu, lalu pilih nama Anda.'));
+        const kb = {};
+        (def.kelompok || []).forEach(function (k) {
+          const b = el('button', 'name-btn', k); b.type = 'button';
+          b.setAttribute('aria-pressed', 'false');
+          kb[k] = b;
+          b.addEventListener('click', async function () {
+            kelasDipilih = k; search.hidden = false; chosen = ''; loading = true; err.hidden = true; search.value = '';
+            Object.keys(kb).forEach(function (x) { kb[x].setAttribute('aria-pressed', String(x === k)); });
+            draw();
+            try {
+              const r = await App.get({ action: 'names', f: slug, k: k });
+              if (kelasDipilih !== k) return;
+              pool = r.names || [];
+            } catch (e) {
+              pool = []; err.textContent = e.message || 'Gagal memuat daftar nama.'; err.hidden = false;
+            }
+            loading = false; draw();
+          });
+          kelasBar.append(b);
+        });
+        kelasBar.style.gridTemplateColumns = 'repeat(auto-fill, minmax(5rem, 1fr))';
+        card.append(kelasBar);
+        pool = [];
+      }
       card.append(search, list);
-      if (f.mode_daftar === 'terbuka') {
+      if (grouped) { search.hidden = true; }
+      if (f.mode_daftar === 'terbuka' && !grouped) {
         const add = el('button', 'btn', 'Nama saya belum ada'); add.type = 'button';
         add.addEventListener('click', function () {
           own = true; chosen = ''; ownBox.hidden = false; note.hidden = true; draw(); ownInp.focus();
@@ -314,7 +350,7 @@
       const nv = card.lastChild; nv.style.marginTop = '0.9rem'; nv.append(go);
       go.addEventListener('click', function () {
         const n = own ? ownInp.value.trim() : chosen;
-        if (!n) { err.textContent = own ? 'Tuliskan nama Anda.' : 'Pilih nama Anda dulu.'; err.hidden = false; return; }
+        if (!n) { err.textContent = grouped && !kelasDipilih ? 'Pilih kelas dulu.' : own ? 'Tuliskan nama Anda.' : 'Pilih nama Anda dulu.'; err.hidden = false; return; }
         finish(n);
       });
       draw();

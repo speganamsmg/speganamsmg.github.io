@@ -73,6 +73,23 @@
       frag.append(ref);
     }
 
+    if (Array.isArray(d.kelas) && d.kelas.length) {
+      const kc = el('section', 'card dsec');
+      kc.append(el('h2', '', 'Partisipasi per kelas'));
+      const wrap = el('div', 'bars rank');
+      d.kelas.forEach(function (k) {
+        const p = k.dari ? (k.n / k.dari) * 100 : 0;
+        const row = el('div', 'bar-row');
+        const head = el('div', 'bar-head');
+        head.append(el('span', 'bar-label', k.k), el('span', 'bar-val', k.n + ' / ' + k.dari + ' · ' + Math.round(p) + '%'));
+        const track = el('div', 'bar-track'); const fill = el('span', 'bar-fill');
+        fill.style.setProperty('--w', Math.max(1, p) + '%'); track.append(fill);
+        row.append(head, track); wrap.append(row);
+      });
+      kc.append(wrap);
+      frag.append(kc);
+    }
+
     if (!d.blocks.length) {
       frag.append(note('Belum ada hasil yang ditampilkan.', word + ' belum dipilih untuk tampil di dashboard.'));
     } else if (!d.total) {
