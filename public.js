@@ -46,6 +46,20 @@
     if (s.deskripsi) d.append(App.rich(s.deskripsi));
     d.hidden = !s.deskripsi;
     App.theme.setDefault(s.tema);
+    const soc = $('social');
+    if (soc) {
+      const list = (Array.isArray(s.sosmed) ? s.sosmed : []).filter(function (x) { return App.safeUrl(x.url); });
+      soc.replaceChildren.apply(soc, list.map(function (x) {
+        const a = el('a', 'soc');
+        a.href = App.safeUrl(x.url);
+        a.target = '_blank'; a.rel = 'noopener noreferrer';
+        a.title = App.socialName(x.tipe);
+        a.setAttribute('aria-label', App.socialName(x.tipe));
+        a.append(App.socialIcon(x.tipe));
+        return a;
+      }));
+      soc.hidden = !list.length;
+    }
   }
 
   function tile(item, count) {

@@ -525,3 +525,14 @@ svg.i { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round
 .qr-frame canvas { display: block; width: min(15rem, 62vw); height: auto; aspect-ratio: 1; image-rendering: pixelated; }
 .qr-text { margin: 0; max-width: 100%; color: var(--muted); font-size: 0.8rem; overflow-wrap: anywhere; }
 .qr .dlg-actions { width: 100%; margin-top: 0.2rem; }
+
+/* ── Link media sosial & website ── */
+.social { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin: 1.5rem 0 0; animation: rise 0.55s var(--ease) 0.3s both; }
+.social[hidden] { display: none; }
+.soc { display: grid; place-items: center; width: 3.1rem; height: 3.1rem; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--ink); text-decoration: none; box-shadow: 0 1px 2px rgba(18, 26, 51, 0.05); transition: transform 0.18s var(--ease), border-color 0.15s, background-color 0.15s; }
+.soc:hover { transform: translateY(-3px); border-color: var(--accent); }
+.soc:active { transform: scale(0.94); }
+.soc:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.soc-ico { display: grid; place-items: center; }
+.soc-ico svg { width: 1.35rem; height: 1.35rem; }
+.soc-ico .glyph { display: block; width: 1.4rem; height: 1.4rem; background-color: currentColor; -webkit-mask: var(--icon-url) center / contain no-repeat; mask: var(--icon-url) center / contain no-repeat; }

@@ -209,6 +209,27 @@
     return box;
   };
 
+  // ── Media sosial & website (ikon deretan di halaman utama) ──
+  App.SOCIALS = [['instagram', 'Instagram'], ['facebook', 'Facebook'], ['youtube', 'YouTube'], ['tiktok', 'TikTok'], ['x', 'X (Twitter)'],
+    ['whatsapp', 'WhatsApp'], ['telegram', 'Telegram'], ['threads', 'Threads'], ['linkedin', 'LinkedIn'], ['github', 'GitHub'],
+    ['spotify', 'Spotify'], ['web', 'Website'], ['email', 'Email']];
+  App.socialName = function (tipe) {
+    const f = App.SOCIALS.filter(function (x) { return x[0] === tipe; })[0];
+    return f ? f[1] : tipe;
+  };
+  App.socialIcon = function (tipe) {
+    const box = App.el('span', 'soc-ico');
+    box.setAttribute('aria-hidden', 'true');
+    if (tipe === 'web') box.append(App.svg('globe'));
+    else if (tipe === 'email') box.append(App.svg('mail'));
+    else if (/^[a-z0-9]{1,30}$/.test(String(tipe || ''))) {
+      const g = App.el('span', 'glyph');
+      g.style.setProperty('--icon-url', 'url("' + (CFG.ICON_CDN || '') + tipe + '.svg")');
+      box.append(g);
+    } else box.append(App.svg('link'));
+    return box;
+  };
+
   // ── Teks bacaan: **tebal**, *miring*, daftar bernomor (1. ...), daftar butir (- ...) ──
   // Dibangun dengan DOM (bukan innerHTML), jadi isi dari admin tidak bisa menyisipkan HTML.
   function inline(parent, text) {

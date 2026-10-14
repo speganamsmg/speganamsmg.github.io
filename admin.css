@@ -383,3 +383,15 @@ html, body { overflow-x: hidden; }
 .ip-custom::-moz-color-swatch { border: 0; border-radius: 50%; }
 
 .sub-h { margin: 1.2rem 0 0.7rem; padding-top: 1rem; border-top: 1px solid var(--line); font-size: 1rem; }
+
+/* Daftar media sosial di pengaturan */
+.soc-list { display: grid; gap: 0.7rem; margin-bottom: 0.7rem; }
+.soc-row { display: grid; gap: 0.45rem; padding: 0.7rem; border: 1px solid var(--line); border-radius: 0.9rem; background: var(--bg); }
+.soc-top { display: flex; align-items: center; gap: 0.6rem; }
+.soc-top select { flex: 1; }
+.soc-prev { flex: none; display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--ink); }
+.soc-prev .soc-ico svg { width: 1.2rem; height: 1.2rem; }
+.soc-prev .glyph { display: block; width: 1.25rem; height: 1.25rem; background-color: currentColor; -webkit-mask: var(--icon-url) center / contain no-repeat; mask: var(--icon-url) center / contain no-repeat; }
+.soc-tools { display: flex; justify-content: center; gap: 0.5rem; }
+.soc-tools .icon-btn { width: 2.3rem; height: 2.3rem; }
+#socAdd { margin-bottom: 0.4rem; }

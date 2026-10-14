@@ -542,8 +542,74 @@
     }
   }
 
+  // ── Media sosial & website ──
+  let socRows = [];
+
+  function renderSocRows() {
+    const box = $('socList');
+    box.replaceChildren();
+    socRows.forEach(function (r, i) {
+      const row = el('div', 'soc-row');
+      const prev = el('span', 'soc-prev');
+      const sel = el('select', 'input');
+      sel.setAttribute('aria-label', 'Platform');
+      App.SOCIALS.forEach(function (x) { sel.append(new Option(x[1], x[0])); });
+      sel.append(new Option('Lainnya (nama ikon)…', 'lainnya'));
+      const known = App.SOCIALS.some(function (x) { return x[0] === r.tipe; });
+      sel.value = known ? r.tipe : 'lainnya';
+      const slug = el('input', 'input');
+      slug.setAttribute('aria-label', 'Nama ikon'); slug.placeholder = 'nama ikon, mis. snapchat'; slug.maxLength = 30;
+      slug.autocapitalize = 'off'; slug.spellcheck = false;
+      slug.value = known ? '' : r.tipe;
+      slug.hidden = known;
+      const url = el('input', 'input');
+      url.setAttribute('aria-label', 'Alamat link'); url.maxLength = 500; url.autocapitalize = 'off'; url.spellcheck = false;
+      url.placeholder = r.tipe === 'email' ? 'nama@contoh.com' : 'https://…';
+      url.value = r.url;
+
+      function sync() {
+        r.tipe = sel.value === 'lainnya' ? slug.value.trim().toLowerCase() : sel.value;
+        r.url = url.value;
+        slug.hidden = sel.value !== 'lainnya';
+        url.placeholder = r.tipe === 'email' ? 'nama@contoh.com' : 'https://…';
+        prev.replaceChildren(App.socialIcon(r.tipe || 'web'));
+      }
+      sel.addEventListener('change', function () { sync(); if (sel.value === 'lainnya') slug.focus(); });
+      slug.addEventListener('input', sync);
+      url.addEventListener('input', sync);
+      prev.append(App.socialIcon(r.tipe || 'web'));
+
+      function mini(icon, label, fn) {
+        const b = el('button', 'icon-btn'); b.type = 'button'; b.title = label; b.setAttribute('aria-label', label);
+        b.append(App.svg(icon)); b.addEventListener('click', fn); return b;
+      }
+      const tools = el('div', 'soc-tools');
+      tools.append(
+        mini('up', 'Naikkan', function () { if (i > 0) { socRows.splice(i - 1, 0, socRows.splice(i, 1)[0]); renderSocRows(); } }),
+        mini('down', 'Turunkan', function () { if (i < socRows.length - 1) { socRows.splice(i + 1, 0, socRows.splice(i, 1)[0]); renderSocRows(); } }),
+        mini('trash', 'Hapus', function () { socRows.splice(i, 1); renderSocRows(); })
+      );
+      const top = el('div', 'soc-top');
+      top.append(prev, sel);
+      row.append(top, slug, url, tools);
+      box.append(row);
+    });
+    $('socAdd').disabled = socRows.length >= 12;
+  }
+
+  $('socAdd').addEventListener('click', function () {
+    if (socRows.length >= 12) return;
+    socRows.push({ tipe: 'instagram', url: '' });
+    renderSocRows();
+    const ins = $('socList').querySelectorAll('.soc-row');
+    const last = ins[ins.length - 1];
+    if (last) last.querySelectorAll('input.input:not([hidden])')[0].focus();
+  });
+
   // ── Pengaturan ──
   function renderSettings() {
+    socRows = (state.settings.sosmed || []).map(function (x) { return { tipe: x.tipe, url: x.url }; });
+    renderSocRows();
     $('sTitle').value = state.settings.judul || '';
     $('sSub').value = state.settings.subjudul || '';
     $('sDesc').value = state.settings.deskripsi || '';
@@ -567,7 +633,8 @@
     try {
       const d = await call('admin.saveSettings', {
         settings: { judul: $('sTitle').value, subjudul: $('sSub').value, deskripsi: $('sDesc').value, tema: $('sTheme').value,
-          qr_aktif: $('sQrOn').checked, qr_judul: $('sQrTitle').value, qr_keterangan: $('sQrDesc').value }
+          qr_aktif: $('sQrOn').checked, qr_judul: $('sQrTitle').value, qr_keterangan: $('sQrDesc').value,
+          sosmed: socRows.filter(function (r) { return r.tipe || r.url.trim(); }).map(function (r) { return { tipe: r.tipe, url: r.url }; }) }
       });
       state.settings = d.settings;
       renderSettings();
