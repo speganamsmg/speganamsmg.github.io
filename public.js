@@ -53,12 +53,22 @@
   let tab = 'semua';
   try { tab = localStorage.getItem(TAB_KEY) || 'semua'; } catch (e) { /* abaikan */ }
 
+  // Folder tidak punya kategori sendiri: kategori diambil dari item (link/form/dashboard) di dalamnya, di kedalaman berapa pun.
+  function leavesOf(items, folderId, acc) {
+    items.forEach(function (i) {
+      if (i.parent_id !== folderId) return;
+      if (i.tipe === 'folder') leavesOf(items, i.id, acc); else acc.push(i);
+    });
+    return acc;
+  }
+  function isLeafMarked(i) { return i.tipe !== 'folder' && !!i.untuk; }
+
   function drawTabs(items, folder, onQr) {
     const box = $('audience');
-    const marked = items.some(function (i) { return i.parent_id === '' && i.untuk; });
+    const marked = items.some(isLeafMarked);
     const visible = tabList().filter(function (t) {
       if (!t.ada) return true;
-      return items.some(function (i) { return i.parent_id === '' && t.ada.indexOf(i.untuk) >= 0; });
+      return items.some(function (i) { return i.tipe !== 'folder' && t.ada.indexOf(i.untuk) >= 0; });
     });
     if (visible.length && !visible.some(function (t) { return t.id === tab; })) tab = visible[0].id;
     if (!marked || !visible.length) tab = 'semua'; // tidak ada item berlabel audiens: tanpa tab, semua item tampil
@@ -222,18 +232,28 @@
     drawTabs(items, folder, onQr);
     if (onQr) { clearState(); return; }
 
-    const counts = {};
-    items.forEach(function (i) { counts[i.parent_id] = (counts[i.parent_id] || 0) + 1; });
-
     const tabs = tabList();
-    const marked = items.some(function (i) { return i.parent_id === '' && i.untuk; });
+    const marked = items.some(isLeafMarked);
     // Tanpa tab "Semua" dan tanpa item berlabel: semua item tampil tanpa tab; QR mengikuti tab Semua.
     const cur = (marked && tabs.filter(function (t) { return t.id === tab; })[0]) ||
       (marked ? tabs[0] : { id: 'semua', ok: null, qr: true });
-    const here = items.filter(function (i) {
-      return i.parent_id === folderId && (!cur.ok || cur.ok.indexOf(i.untuk || '') >= 0);
-    });
-    const grouped = cur.id === 'semua' && here.some(function (i) { return i.untuk; });
+    // Item biasa dicocokkan dengan kategorinya; folder tampil bila isinya (di kedalaman berapa pun) ada yang cocok.
+    const leafCache = {};
+    const leaves = function (id) { return leafCache[id] || (leafCache[id] = leavesOf(items, id, [])); };
+    const okLeaf = function (i) { return !cur.ok || cur.ok.indexOf(i.untuk || '') >= 0; };
+    const okItem = function (i) { return i.tipe === 'folder' ? (!cur.ok || leaves(i.id).some(okLeaf)) : okLeaf(i); };
+    // Kelompok sebuah folder di tab Semua: kategori tunggal isinya; bila campuran, tanpa judul.
+    const groupOf = function (i) {
+      if (i.tipe !== 'folder') return i.untuk || '';
+      const set = {};
+      leaves(i.id).forEach(function (l) { if (l.untuk) set[l.untuk] = true; });
+      const keys = Object.keys(set);
+      return keys.length === 1 ? keys[0] : '';
+    };
+    const counts = {}; // jumlah isi folder = yang cocok dengan tab yang sedang dibuka
+    items.forEach(function (i) { if (okItem(i)) counts[i.parent_id] = (counts[i.parent_id] || 0) + 1; });
+    const here = items.filter(function (i) { return i.parent_id === folderId && okItem(i); });
+    const grouped = cur.id === 'semua' && here.some(function (i) { return groupOf(i); });
     let nodes = [];
     if (!grouped) {
       nodes = here.map(function (i) { return tile(i, counts[i.id] || 0); }).filter(Boolean);
@@ -244,8 +264,8 @@
         if (nama) { const h = el('li', 'grp-head'); h.append(el('h3', '', nama)); nodes.push(h); }
         nodes = nodes.concat(ts);
       };
-      add(here.filter(function (i) { return !i.untuk; }), '');
-      grupList().forEach(function (g) { add(here.filter(function (i) { return i.untuk === g.id; }), g.nama); });
+      add(here.filter(function (i) { return !groupOf(i); }), '');
+      grupList().forEach(function (g) { add(here.filter(function (i) { return groupOf(i) === g.id; }), g.nama); });
     }
     if (!folder && qrOn && cur.qr) { // hanya di tab Semua, paling bawah, dengan judul sendiri bila item dikelompokkan
       if (grouped) { const h = el('li', 'grp-head'); h.append(el('h3', '', 'Fitur Lain')); nodes.push(h); }

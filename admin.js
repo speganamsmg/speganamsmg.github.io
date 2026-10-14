@@ -498,6 +498,7 @@
       }
     }
     $('fUrl').value = item ? item.url : '';
+    $('fUntuk').closest('.field').hidden = tipe === 'folder';
     $('fUrlWrap').hidden = tipe !== 'link';
     $('fUrl').required = tipe === 'link';
     $('fIconType').value = item ? item.ikon_jenis : 'none';
@@ -530,7 +531,7 @@
       parent_id: $('fParent').value,
       tampil: $('fVisible').checked,
       segera: $('fSoon').checked,
-      untuk: $('fUntuk').value
+      untuk: tipe === 'folder' ? '' : $('fUntuk').value
     };
     if (state.editingId) item.id = state.editingId;
 
