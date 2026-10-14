@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>BEKALIN</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <meta name="theme-color" content="#121a33">
+  <link rel="preconnect" href="https://script.google.com">
+  <style>
+    :root { --bar: 46px; --bg: #f3f6fd; --ink: #121a33; --line: #d9e0f0; --accent: #f5b301; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #080e1d; --ink: #e8edf9; --line: #26314f; } }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    body { display: flex; flex-direction: column; overflow: hidden; }
+    .bar { flex: none; height: var(--bar); padding: 0 0.75rem; padding-top: env(safe-area-inset-top); display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; border-bottom: 1px solid var(--line); background: var(--bg); }
+    .bar a { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.7rem; border: 1px solid var(--line); border-radius: 99px; color: var(--ink); font-size: 0.82rem; font-weight: 600; text-decoration: none; }
+    .bar a:hover { border-color: var(--ink); }
+    .bar a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .bar b { font-size: 0.9rem; letter-spacing: 0.02em; }
+    /* Bingkai memotong bagian atas halaman Apps Script (spanduk "Aplikasi ini dibuat oleh pengguna Google Apps Script"). */
+    .frame { position: relative; flex: 1 1 auto; overflow: hidden; }
+    .frame iframe { position: absolute; left: 0; width: 100%; border: 0; top: calc(var(--clip, 0px) * -1); height: calc(100% + var(--clip, 0px)); background: #fff; }
+    .load { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ink); font-size: 0.9rem; opacity: 0.7; pointer-events: none; transition: opacity 0.3s; }
+    .load.done { opacity: 0; }
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <a href="./" id="back" aria-label="Kembali ke beranda">&#8249; Beranda</a>
+    <b>BEKALIN</b>
+    <a href="#" id="newtab" target="_blank" rel="noopener" aria-label="Buka di tab baru">Tab baru &#8599;</a>
+  </header>
+  <main class="frame">
+    <div class="load" id="load">Memuat BEKALIN…</div>
+    <iframe id="app" title="BEKALIN" allow="clipboard-write; fullscreen" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </main>
+  <script src="config.js"></script>
+  <script>
+    (function () {
+      // Alamat web app BEKALIN. Bisa diganti lewat BEKALIN_URL di config.js.
+      var DEFAULT_URL = 'https://script.google.com/macros/s/AKfycbyaFOrZL4dUZlS76yJpATtlHvyjpS6S7NM6pol5ER0c4cVRYnbnX_715ak6tMLFKBXFjg/exec';
+      var cfg = window.APP_CONFIG || {};
+      var base = String(cfg.BEKALIN_URL || DEFAULT_URL);
+      if (!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(base)) base = DEFAULT_URL;
+
+      var qs = new URLSearchParams(location.search);
+      var menu = (qs.get('menu') || '').trim();
+      var src = base + (/^[A-Za-z0-9_]{1,40}$/.test(menu) ? '?menu=' + menu : '');
+
+      // Tinggi spanduk Google yang dipotong. Atur lewat ?clip=40 (uji coba) atau BEKALIN_CLIP di config.js.
+      var clip = Number(qs.get('clip'));
+      if (!isFinite(clip) || qs.get('clip') === null) clip = Number(cfg.BEKALIN_CLIP);
+      if (!isFinite(clip) || clip < 0 || clip > 120) clip = 42;
+      document.documentElement.style.setProperty('--clip', clip + 'px');
+
+      var f = document.getElementById('app');
+      f.addEventListener('load', function () { document.getElementById('load').classList.add('done'); });
+      f.src = src;
+      document.getElementById('newtab').href = src;
+    })();
+  </script>
+</body>
+</html>
