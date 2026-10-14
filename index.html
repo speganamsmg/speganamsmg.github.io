@@ -35,7 +35,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&display=swap">
-  <link rel="stylesheet" href="style.css?v=24">
+  <link rel="stylesheet" href="style.css?v=25">
 </head>
 <body>
   <div class="splash" id="splash" role="status" aria-label="Memuat">
@@ -57,6 +57,25 @@
 
     <ul class="list" id="list"></ul>
     <div id="state"></div>
+
+    <section class="qr card" id="qrTool" aria-labelledby="qrTitle">
+      <h2 id="qrTitle">Pembuat QR Code</h2>
+      <p class="qr-lead">Tempel link, lalu unduh QR-nya.</p>
+      <form id="qrForm" novalidate>
+        <label class="sr-only" for="qrInput">Link atau teks untuk dijadikan QR</label>
+        <input class="qr-input" id="qrInput" type="text" inputmode="url" autocapitalize="off" autocomplete="off" spellcheck="false" maxlength="1200" placeholder="https://contoh.com/link-anda">
+        <p class="qr-msg" id="qrMsg" role="alert"></p>
+        <button class="btn btn-primary qr-go" type="submit">Buat QR</button>
+      </form>
+      <div class="qr-out" id="qrOut" hidden>
+        <div class="qr-frame"><canvas id="qrCanvas" width="1" height="1" aria-label="Kode QR hasil"></canvas></div>
+        <p class="qr-text" id="qrText"></p>
+        <div class="dlg-actions">
+          <button class="btn" id="qrPng" type="button">Unduh PNG</button>
+          <button class="btn" id="qrSvg" type="button">Unduh SVG</button>
+        </div>
+      </div>
+    </section>
     <noscript><p class="state"><strong>JavaScript dimatikan.</strong>Aktifkan JavaScript untuk melihat daftar tautan.</p></noscript>
   </main>
 
@@ -66,8 +85,10 @@
     <button class="icon-btn theme-btn" id="themeBtn" type="button" aria-label="Ganti tema terang atau gelap"></button>
   </nav>
 
-  <script src="config.js?v=24"></script>
-  <script src="common.js?v=24"></script>
-  <script src="public.js?v=24"></script>
+  <script src="config.js?v=25"></script>
+  <script src="common.js?v=25"></script>
+  <script src="qr-lib.js?v=25"></script>
+  <script src="qr.js?v=25"></script>
+  <script src="public.js?v=25"></script>
 </body>
 </html>

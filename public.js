@@ -129,6 +129,7 @@
 
     const crumb = $('crumb');
     crumb.hidden = !folder;
+    if ($('qrTool')) $('qrTool').hidden = !!folder; // alat QR hanya di halaman utama
     if (folder) {
       $('crumbTitle').textContent = folder.judul;
       const back = $('back');
