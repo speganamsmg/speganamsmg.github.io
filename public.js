@@ -239,7 +239,10 @@
       add(here.filter(function (i) { return !i.untuk; }), '');
       GRUP.forEach(function (g) { add(here.filter(function (i) { return i.untuk === g.id; }), g.nama); });
     }
-    if (!folder && qrOn && cur.qr) nodes.push(qrTile()); // hanya di tab Semua, paling bawah
+    if (!folder && qrOn && cur.qr) { // hanya di tab Semua, paling bawah, dengan judul sendiri bila item dikelompokkan
+      if (grouped) { const h = el('li', 'grp-head'); h.append(el('h3', '', 'Fitur Lain')); nodes.push(h); }
+      nodes.push(qrTile());
+    }
 
     $('list').replaceChildren.apply($('list'), nodes);
     if (nodes.length) {
