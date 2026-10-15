@@ -123,7 +123,7 @@
       $('qrLead').textContent = s.qr_keterangan === undefined ? 'Tempel link, lalu unduh QR-nya.' : s.qr_keterangan;
       $('qrLead').hidden = !$('qrLead').textContent;
     }
-    $('title').textContent = s.judul;
+    animTitle($('title'), s.judul);
     $('subtitle').textContent = s.subjudul;
     $('subtitle').hidden = !s.subjudul;
     const d = $('desc');
@@ -222,6 +222,30 @@
           render();
         }
       }
+    });
+  }
+
+  /* Judul huruf demi huruf (animasi masuk + gelombang halus); teks asli tetap untuk pembaca layar. */
+  function animTitle(h, text) {
+    text = text || '';
+    if (h.dataset.t === text) return;
+    h.dataset.t = text;
+    h.setAttribute('aria-label', text);
+    h.replaceChildren();
+    let n = 0;
+    text.split(/(\s+)/).forEach(function (w) {
+      if (!w) return;
+      if (/^\s+$/.test(w)) { h.append(' '); return; }
+      const word = document.createElement('span');
+      word.className = 'w';
+      word.setAttribute('aria-hidden', 'true');
+      Array.from(w).forEach(function (ch) {
+        const i = document.createElement('i');
+        i.textContent = ch;
+        i.style.setProperty('--i', n++);
+        word.append(i);
+      });
+      h.append(word);
     });
   }
 

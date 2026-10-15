@@ -428,6 +428,33 @@ svg.i { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round
 @keyframes sweep { from { background-position: 130% 0; } to { background-position: -30% 0; } }
 @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.035); } }
 
+/* ---- Animasi halaman utama (transform & opacity saja agar ringan di HP) ---- */
+.orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.orbs i { position: absolute; border-radius: 50%; opacity: 0.5; will-change: transform; animation: orbFloat 14s ease-in-out infinite alternate; }
+.orbs .o1 { width: 200px; height: 200px; left: -60px; top: 12%; background: radial-gradient(closest-side, rgba(112,156,255,.40), rgba(112,156,255,0)); }
+.orbs .o2 { width: 240px; height: 240px; right: -80px; top: 48%; background: radial-gradient(closest-side, rgba(245,168,0,.28), rgba(245,168,0,0)); animation-duration: 18s; animation-delay: -4s; }
+.orbs .o3 { width: 160px; height: 160px; left: 14%; bottom: 6%; background: radial-gradient(closest-side, rgba(0,163,173,.30), rgba(0,163,173,0)); animation-duration: 16s; animation-delay: -8s; }
+@keyframes orbFloat { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(18px,-26px,0) scale(1.12); } }
+.wrap { position: relative; z-index: 1; }
+
+.hero .avatar { animation: pop 0.7s var(--ease) both, avFloat 6s ease-in-out 0.9s infinite; }
+.hero .avatar::after { content: ''; position: absolute; inset: -0.45rem; border-radius: 50%; border: 2px solid var(--accent); opacity: 0; animation: avRing 3.2s ease-out 1s infinite; pointer-events: none; }
+@keyframes avFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes avRing { 0% { opacity: 0.55; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(1.28); } }
+
+.hero h1 .w { display: inline-block; white-space: nowrap; }
+.hero h1 i { font-style: normal; display: inline-block; will-change: transform, opacity;
+  animation: hLetterIn 0.45s cubic-bezier(.2,.9,.3,1.25) both, hWave 6s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 55ms), calc(1.3s + var(--i) * 60ms); }
+@keyframes hLetterIn { from { opacity: 0; transform: translateY(16px) scale(0.85); } to { opacity: 1; transform: none; } }
+@keyframes hWave { 0%, 14%, 100% { transform: translateY(0); } 7% { transform: translateY(-5px); } }
+
+.spark { position: relative; width: 132px; height: 3px; border-radius: 3px; margin: 0.7rem auto 0; background: color-mix(in srgb, var(--accent) 22%, transparent); overflow: hidden; }
+.spark b { position: absolute; top: 0; bottom: 0; width: 44px; border-radius: 3px; background: linear-gradient(90deg, transparent, var(--accent), #6f9bff, transparent); animation: sparkSweep 2.4s ease-in-out infinite; }
+@keyframes sparkSweep { from { left: -44px; } to { left: 132px; } }
+.hero #subtitle { animation: subIn 0.6s var(--ease) 0.9s both; }
+@keyframes subIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
 @media (prefers-reduced-motion: reduce) {
   body::before { animation: none !important; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
