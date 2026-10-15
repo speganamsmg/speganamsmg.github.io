@@ -275,7 +275,7 @@ svg.i { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round
 .loading-box { display: grid; justify-items: center; gap: 0.75rem; padding: 2.5rem 1rem; color: var(--muted); }
 
 /* ── Halaman publik ── */
-.wrap { max-width: 30rem; margin: 0 auto; padding: clamp(2rem, 7vh, 3.5rem) 1.25rem 6rem; }
+.wrap { max-width: 30rem; margin: 0 auto; padding: calc(clamp(2.6rem, 8vh, 4rem) + env(safe-area-inset-top, 0px)) 1.25rem 6rem; }
 
 .hero { position: relative; display: grid; justify-items: center; text-align: center; margin-bottom: 2rem; }
 /* Pintasan di bawah tengah */
@@ -410,7 +410,7 @@ svg.i { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round
 @media (max-width: 480px) {
   /* 13px pada lebar 440 (iPhone 16 Pro Max); mengecil proporsional, jadi di 393 (iPhone 16) jarak & rasio sama persis */
   html { font-size: clamp(11px, 2.9545vw, 13px); }
-  .wrap { padding: 1.6rem 1.1rem 5.5rem; }
+  .wrap { padding: calc(2.7rem + env(safe-area-inset-top, 0px)) 1.1rem 5.5rem; }
   .avatar { width: 5.2rem; height: 5.2rem; margin-bottom: 0.95rem; }
   .avatar::before { inset: -0.38rem; }
   .hero { margin-bottom: 1.5rem; }

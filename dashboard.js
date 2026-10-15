@@ -46,8 +46,19 @@
       t.append(el('strong', '', value), el('span', '', label));
       kpi.append(t);
     }
-    tile('main', String(d.total), 'responden');
-    tile('', String(d.hari_ini || 0), 'hari ini');
+    if (d.dari) {
+      // Form dengan daftar nama: "12 dari 55" dan persentase yang sudah mengisi.
+      const pct = Math.min(100, Math.round(d.total / d.dari * 100));
+      const t1 = el('div', 'kpi main');
+      const s1 = el('strong', '', String(d.total));
+      s1.append(el('small', '', ' dari ' + d.dari));
+      t1.append(s1, el('span', '', 'responden'));
+      kpi.append(t1);
+      tile('', pct + '%', 'sudah mengisi');
+    } else {
+      tile('main', String(d.total), 'responden');
+      tile('', String(d.hari_ini || 0), 'hari ini');
+    }
     if (skor.length) {
       const w = skor.reduce(function (s, x) { return s + x.n; }, 0);
       const avg = w ? skor.reduce(function (s, x) { return s + x.v * x.n; }, 0) / w : 0;
