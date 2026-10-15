@@ -8,30 +8,31 @@
   <link rel="icon" href="assets/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <meta name="theme-color" content="#121a33">
+  <meta name="theme-color" content="#0d226b">
   <link rel="preconnect" href="https://script.google.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Offside&display=swap" rel="stylesheet">
   <style>
-    :root { --bar: 46px; --bg: #f3f6fd; --ink: #121a33; --line: #d9e0f0; --accent: #f5b301; }
-    @media (prefers-color-scheme: dark) { :root { --bg: #080e1d; --ink: #e8edf9; --line: #26314f; } }
+    :root { --bar: 46px; --bg: #f2f2f7; --bar-bg: #0d226b; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #070d18; --bar-bg: #0a1640; } }
     * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    html, body { height: 100%; margin: 0; background: var(--bg); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif; }
     body { display: flex; flex-direction: column; overflow: hidden; }
-    .bar { flex: none; height: var(--bar); padding: 0 0.75rem; padding-top: env(safe-area-inset-top); display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; border-bottom: 1px solid var(--line); background: var(--bg); }
-    .bar a { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.7rem; border: 1px solid var(--line); border-radius: 99px; color: var(--ink); font-size: 0.82rem; font-weight: 600; text-decoration: none; }
-    .bar a:hover { border-color: var(--ink); }
-    .bar a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-    .bar b { font-size: 0.9rem; letter-spacing: 0.02em; }
+    /* Bar atas: hanya nama BEKALIN di tengah (huruf Offside seperti logo di dashboard). */
+    .bar { flex: none; height: calc(var(--bar) + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px); display: flex; align-items: center; justify-content: center; background: var(--bar-bg); }
+    .bar b { font-family: 'Offside', 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 400; font-size: 24px; line-height: 1; letter-spacing: 0.06em; color: #fff; user-select: none; }
+    .bar b i { font-style: normal; color: #36d1da; }
     /* Bingkai memotong bagian atas halaman Apps Script (spanduk "Aplikasi ini dibuat oleh pengguna Google Apps Script"). */
-    .frame { position: relative; flex: 1 1 auto; overflow: hidden; }
-    .frame iframe { position: absolute; left: 0; width: 100%; border: 0; top: calc(var(--clip, 0px) * -1); height: calc(100% + var(--clip, 0px)); background: #fff; }
-    .load { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ink); font-size: 0.9rem; opacity: 0.7; pointer-events: none; transition: opacity 0.3s; }
+    .frame { position: relative; flex: 1 1 auto; overflow: hidden; margin-bottom: env(safe-area-inset-bottom, 0px); }
+    .frame iframe { position: absolute; left: 0; width: 100%; border: 0; top: calc(var(--clip, 0px) * -1); height: calc(100% + var(--clip, 0px)); background: transparent; }
+    .load { position: absolute; inset: 0; display: grid; place-items: center; color: #8a8a8e; font-size: 0.9rem; pointer-events: none; transition: opacity 0.3s; }
     .load.done { opacity: 0; }
   </style>
 </head>
 <body>
   <header class="bar">
-    <a href="./" id="back" aria-label="Kembali ke beranda">&#8249; Beranda</a>
-    <b>BEKALIN</b>
+    <b aria-label="BEKALIN">BEKA<i>LIN</i></b>
   </header>
   <main class="frame">
     <div class="load" id="load">Memuat BEKALIN…</div>
