@@ -173,3 +173,6 @@ textarea.field { min-height: 6.5rem; resize: vertical; }
 .done .check { margin-left: auto; margin-right: auto; }
 .done .actions { justify-content: center; }
 .done .actions .btn { flex: 1 1 10rem; max-width: 14rem; }
+
+.names-info { margin-top: -0.35rem; padding: 0.55rem 0.7rem; border-radius: var(--r-md, 0.7rem); background: color-mix(in srgb, var(--accent) 14%, transparent); font-size: 0.82rem; line-height: 1.4; }
+.names-info strong { font-weight: 700; }

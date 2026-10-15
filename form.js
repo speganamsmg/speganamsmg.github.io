@@ -271,6 +271,14 @@
       card.append(el('p', 'hint', f.mode_daftar === 'terbuka'
         ? 'Pilih nama Anda. Jika belum ada di daftar, tambahkan sendiri.'
         : 'Pilih nama Anda dari daftar.'));
+      if (f.tampil_status_nama && f.kuota_per_nama > 0) {
+        // Nama yang sudah mengisi disembunyikan server; beri tahu agar peserta tidak bingung.
+        const info = el('p', 'hint names-info');
+        info.append(el('strong', '', 'Daftar ini hanya berisi nama yang belum mengisi.'));
+        info.append(' Jika nama Anda tidak ada, kemungkinan Anda sudah mengisi.');
+        if (!f.dikelompokkan && def.names) info.append(' (' + def.names.length + ' nama belum mengisi)');
+        card.append(info);
+      }
       let chosen = nama;
       let own = false;
       const search = el('input', 'field'); search.type = 'search'; search.placeholder = 'Cari nama…';
