@@ -89,6 +89,37 @@
     'pin', 'camera', 'image', 'video', 'music', 'cart', 'gift', 'award', 'shield', 'lock', 'flag', 'bookmark', 'bulb',
     'coffee', 'graduation', 'uang', 'bolt', 'wrench', 'settings', 'eye'];
 
+  /* Tombol kembali: bila form/dashboard dibuka dari dalam folder, tawarkan kembali ke folder itu (selain Beranda). */
+  App.dariFolder = {
+    simpan: function (slug, id, judul) {
+      try {
+        if (id) sessionStorage.setItem('dari_folder', JSON.stringify({ slug: slug, id: id, judul: judul || 'Folder' }));
+        else sessionStorage.removeItem('dari_folder');
+      } catch (e) { /* abaikan */ }
+    },
+    ambil: function (slug) {
+      try {
+        const v = JSON.parse(sessionStorage.getItem('dari_folder') || 'null');
+        return v && v.slug === slug && /^[\w-]+$/.test(v.id) ? v : null;
+      } catch (e) { return null; }
+    }
+  };
+  App.pasangBack = function (slug) {
+    const home = document.getElementById('home');
+    const v = App.dariFolder.ambil(slug);
+    home.replaceChildren();
+    if (!v) { home.append(App.svg('back'), document.createTextNode('Beranda')); return; }
+    const bar = home.parentNode;
+    home.href = './#/f/' + v.id;
+    home.classList.add('back-folder');
+    const t = document.createElement('span'); t.className = 'bf-t'; t.textContent = v.judul;
+    home.append(App.svg('back'), t);
+    const h = document.createElement('a');
+    h.className = 'icon-btn home-btn'; h.href = './'; h.setAttribute('aria-label', 'Beranda'); h.title = 'Beranda';
+    h.append(App.svg('home'));
+    bar.insertBefore(h, document.getElementById('themeBtn'));
+  };
+
   App.svg = function (name, cls) {
     const t = document.createElement('template');
     t.innerHTML =

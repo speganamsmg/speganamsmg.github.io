@@ -11,7 +11,7 @@
   const themeBtn = $('themeBtn');
   themeBtn.append(App.svg('moon', 'moon'), App.svg('sun', 'sun'));
   themeBtn.addEventListener('click', App.theme.toggle);
-  $('home').append(App.svg('back'), document.createTextNode('Beranda'));
+  App.pasangBack(new URLSearchParams(location.search).get('f') || '');
 
   function note(title, text, retry) {
     const c = el('div', 'card');

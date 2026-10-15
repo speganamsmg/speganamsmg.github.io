@@ -147,6 +147,13 @@
     }
   }
 
+  // Ingat folder asal agar tombol kembali di form/dashboard bisa ke folder itu.
+  function rememberFolder(slug) {
+    const id = currentFolderId();
+    const f = id ? effectiveItems().filter(function (i) { return i.id === id; })[0] : null;
+    App.dariFolder.simpan(slug, f ? id : '', f ? f.judul : '');
+  }
+
   function tile(item, count) {
     const a = el('a', 'tile tile-' + item.tipe + (item.segera ? ' is-soon' : ''));
     let closed = false;
@@ -164,9 +171,11 @@
     } else if (item.tipe === 'dashboard') {
       if (!item.form || !item.form.slug) return null;
       a.href = 'dashboard.html?f=' + encodeURIComponent(item.form.slug);
+      a.addEventListener('click', function () { rememberFolder(item.form.slug); });
     } else if (item.tipe === 'form') {
       if (!item.form || !item.form.slug) return null;
       a.href = 'form.html?f=' + encodeURIComponent(item.form.slug);
+      a.addEventListener('click', function () { rememberFolder(item.form.slug); });
       const now = Date.now();
       closed = item.form.status !== 'buka' ||
         (item.form.buka && now < item.form.buka) || (item.form.tutup && now > item.form.tutup);
