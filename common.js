@@ -569,6 +569,51 @@
     document.body.append(d); d.showModal(); ok.focus();
   };
 
+  // Password form/dashboard disimpan sementara di tab ini saja (hilang saat tab ditutup).
+  App.sandi = {
+    get: function (jenis, slug) { try { return sessionStorage.getItem('pw_' + jenis + '_' + slug) || ''; } catch (e) { return ''; } },
+    set: function (jenis, slug, v) { try { if (v) sessionStorage.setItem('pw_' + jenis + '_' + slug, v); else sessionStorage.removeItem('pw_' + jenis + '_' + slug); } catch (e) { /* abaikan */ } }
+  };
+
+  // Dialog meminta password. o.submit(password) harus melempar galat bila salah. Mengembalikan Promise<boolean> (true = berhasil dibuka).
+  App.askPassword = function (o) {
+    return new Promise(function (resolve) {
+      const d = document.createElement('dialog');
+      d.className = 'install-dlg';
+      const box = document.createElement('div'); box.className = 'in';
+      const h = document.createElement('h2'); h.textContent = o.title;
+      const p = document.createElement('p'); p.className = 'dlg-line'; p.textContent = o.text || 'Masukkan password yang diberikan kepada Anda.';
+      const form = document.createElement('form'); form.noValidate = true;
+      const inp = document.createElement('input');
+      inp.type = 'password'; inp.className = 'input'; inp.autocomplete = 'off'; inp.maxLength = 64;
+      inp.autocapitalize = 'off'; inp.spellcheck = false; inp.setAttribute('aria-label', 'Password');
+      const msg = document.createElement('p'); msg.className = 'dlg-line lock-msg'; msg.setAttribute('role', 'alert');
+      const row = document.createElement('div'); row.className = 'dlg-actions';
+      const no = document.createElement('button'); no.type = 'button'; no.className = 'btn'; no.textContent = 'Batal';
+      const ok = document.createElement('button'); ok.type = 'submit'; ok.className = 'btn btn-primary'; ok.textContent = 'Buka';
+      row.append(no, ok); form.append(inp, msg, row); box.append(h, p, form); d.append(box);
+      let result = false;
+      no.addEventListener('click', function () { d.close(); });
+      d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
+      d.addEventListener('close', function () { d.remove(); resolve(result); });
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        if (!inp.value) { msg.textContent = 'Isi password dulu.'; return; }
+        ok.disabled = true; msg.textContent = '';
+        try {
+          await o.submit(inp.value);
+          result = true; d.close();
+        } catch (err) {
+          msg.textContent = err.message || 'Password salah.';
+          inp.select();
+        } finally {
+          ok.disabled = false;
+        }
+      });
+      document.body.append(d); d.showModal(); inp.focus();
+    });
+  };
+
   App.confirm = function (o) {
     return new Promise(function (resolve) {
       const d = document.createElement('dialog');

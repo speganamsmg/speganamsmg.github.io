@@ -323,7 +323,8 @@
             Object.keys(kb).forEach(function (x) { kb[x].setAttribute('aria-pressed', String(x === k)); });
             draw();
             try {
-              const r = await App.get({ action: 'names', f: slug, k: k });
+              const pw = App.sandi.get('form', slug);
+              const r = pw ? await App.post({ action: 'names', f: slug, k: k, sandi: pw }) : await App.get({ action: 'names', f: slug, k: k });
               if (kelasDipilih !== k) return;
               pool = r.names || [];
             } catch (e) {
@@ -484,7 +485,7 @@
     busy = true; banner = '';
     showQuestions();
     if (!rid) rid = App.randomId(20);
-    const payload = { action: 'submit', form: slug, rid: rid, device: App.deviceId(), nama: nama, answers: ans };
+    const payload = { action: 'submit', form: slug, rid: rid, device: App.deviceId(), nama: nama, answers: ans, sandi: App.sandi.get('form', slug) };
     try {
       const r = await App.post(payload);
       busy = false;
@@ -492,6 +493,9 @@
       showDone(r);
     } catch (e) {
       busy = false;
+      if (e.code === 'BADPASS' || e.code === 'NEEDPASS') { // password diganti admin: minta lagi tanpa kehilangan jawaban sebisanya
+        App.sandi.set('form', slug, ''); def = null; load(); return;
+      }
       if (e.code === 'CLOSED') { showClosed(def.form.status.alasan === 'buka' ? 'ditutup' : def.form.status.alasan); return; }
       if (e.code === 'QUOTA' || e.code === 'DEVICE' || e.code === 'FULL') rid = '';
       banner = e.message || 'Gagal mengirim. Coba lagi.';
@@ -541,6 +545,42 @@
     pages = def.blocks.map(function (b) { return [b]; });
   }
 
+  // Form berpassword: coba password yang sudah dimasukkan di tab ini, kalau tidak ada/salah minta lewat dialog.
+  async function fetchDef() {
+    const pw = App.sandi.get('form', slug);
+    if (pw) {
+      try {
+        const d = await App.post({ action: 'form', f: slug, sandi: pw });
+        if (!d.terkunci) return d;
+      } catch (e) {
+        if (e.code !== 'BADPASS') throw e;
+        App.sandi.set('form', slug, '');
+      }
+    }
+    const d = await App.get({ action: 'form', f: slug });
+    if (!d.terkunci) return d;
+    App.splash.hide(300);
+    return new Promise(function (resolve) {
+      const ask = function () {
+        App.askPassword({
+          title: d.form.judul,
+          text: 'Form ini dikunci. Masukkan password yang diberikan kepada Anda.',
+          submit: async function (p) {
+            const r = await App.post({ action: 'form', f: slug, sandi: p });
+            App.sandi.set('form', slug, p);
+            resolve(r);
+          }
+        });
+      };
+      const b = el('button', 'btn btn-primary', 'Masukkan password'); b.type = 'button';
+      b.addEventListener('click', ask);
+      const c = msgCard(d.form.judul, 'Form ini dikunci. Hanya yang diberi password yang bisa mengisi.');
+      c.append(b);
+      setStage(c);
+      ask();
+    });
+  }
+
   async function load() {
     const first = !def;
     phase = 'load';
@@ -552,7 +592,7 @@
     }
     setStage(el('div', 'skel'));
     try {
-      def = await App.get({ action: 'form', f: slug });
+      def = await fetchDef();
       if (first) App.splash.hide(1100);
     } catch (e) {
       App.splash.hide(400);

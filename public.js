@@ -188,9 +188,11 @@
     } else if (item.tipe === 'folder') {
       a.append(el('span', 'count', count + ' item'), App.svg('chevron', 'trail'));
     } else if (item.tipe === 'dashboard') {
+      if (item.form && item.form.kunci) a.append(el('span', 'count', 'Terkunci'));
       a.append(App.svg('chevron', 'trail'));
     } else if (item.tipe === 'form') {
       if (closed) a.append(el('span', 'count', 'Ditutup'));
+      else if (item.form && item.form.kunci) a.append(el('span', 'count', 'Terkunci'));
       a.append(App.svg('chevron', 'trail'));
     } else {
       a.append(App.svg('arrow', 'trail'));
@@ -202,34 +204,12 @@
 
   // Dialog password untuk link/folder terkunci.
   function askPassword(item) {
-    const d = document.createElement('dialog');
-    d.className = 'install-dlg';
-    const box = el('div', 'in');
-    box.append(el('h2', '', item.judul));
-    box.append(el('p', 'dlg-line', 'Item ini dikunci. Masukkan password yang diberikan kepada Anda.'));
-    const form = document.createElement('form');
-    form.noValidate = true;
-    const inp = document.createElement('input');
-    inp.type = 'password'; inp.className = 'input'; inp.autocomplete = 'off';
-    inp.setAttribute('aria-label', 'Password'); inp.maxLength = 64; inp.autocapitalize = 'off'; inp.spellcheck = false;
-    const msg = el('p', 'dlg-line lock-msg', ''); msg.setAttribute('role', 'alert');
-    const row = el('div', 'dlg-actions');
-    const no = el('button', 'btn', 'Batal'); no.type = 'button';
-    const ok = el('button', 'btn btn-primary', 'Buka'); ok.type = 'submit';
-    row.append(no, ok);
-    form.append(inp, msg, row);
-    box.append(form); d.append(box);
-    no.addEventListener('click', function () { d.close(); });
-    d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
-    d.addEventListener('close', function () { d.remove(); });
-    form.addEventListener('submit', async function (e) {
-      e.preventDefault();
-      if (!inp.value) { msg.textContent = 'Isi password dulu.'; return; }
-      ok.disabled = true; msg.textContent = '';
-      try {
-        const r = await App.post({ action: 'unlock', id: item.id, sandi: inp.value });
+    App.askPassword({
+      title: item.judul,
+      text: 'Item ini dikunci. Masukkan password yang diberikan kepada Anda.',
+      submit: async function (pw) {
+        const r = await App.post({ action: 'unlock', id: item.id, sandi: pw });
         unlocked[item.id] = r.items ? { items: r.items } : { url: r.url };
-        d.close();
         if (item.tipe === 'folder') {
           location.hash = '#/f/' + item.id; render();
         } else {
@@ -241,14 +221,8 @@
           }
           render();
         }
-      } catch (err) {
-        msg.textContent = err.message;
-        inp.select();
-      } finally {
-        ok.disabled = false;
       }
     });
-    document.body.append(d); d.showModal(); inp.focus();
   }
 
   function showState(title, text, retry) {

@@ -376,6 +376,33 @@
     dc.append(mk('p', 'help', 'Bila aktif, siapa pun yang punya tautannya bisa melihat ringkasan jawaban (tanpa nama responden dan tanpa jawaban teks). Pilih soal mana yang tampil di bagian pertanyaan. Pasang tombolnya di beranda lewat tab Item, Tambah dashboard.'));
     root.append(dc);
 
+    // Password (terpisah untuk mengisi form dan untuk melihat dashboard)
+    const pc = mk('section', 'card');
+    pc.append(mk('h3', '', 'Password'));
+    pc.append(mk('p', 'help', 'Bawaan: tanpa password. Bila dinyalakan, orang harus memasukkan password yang Anda bagikan langsung kepada mereka. Password disimpan terenkripsi; isi form / dashboard baru dikirim setelah password benar.'));
+    const pwBlok = function (flag, key, label) {
+      const host = mk('div', 'pw-blok');
+      const draw = function () {
+        host.replaceChildren(checkbox(f, flag, label, draw));
+        if (f[flag]) {
+          const inp = mk('input', 'input'); inp.type = 'password'; inp.autocomplete = 'new-password';
+          inp.maxLength = 64; inp.autocapitalize = 'off'; inp.spellcheck = false;
+          inp.placeholder = f.form_id && f[flag + '_ada'] ? 'Kosongkan = pakai password yang lama' : 'Password baru (4–64 karakter)';
+          inp.value = f[key] || '';
+          inp.addEventListener('input', function () { f[key] = inp.value; });
+          host.append(inp);
+          if (App.passwordEye) App.passwordEye(inp);
+        }
+      };
+      draw();
+      return host;
+    };
+    f.pakai_sandi_form_ada = f.pakai_sandi_form === true;
+    f.pakai_sandi_dashboard_ada = f.pakai_sandi_dashboard === true;
+    pc.append(pwBlok('pakai_sandi_form', 'sandi_form', 'Kunci form (password untuk mengisi)'));
+    pc.append(pwBlok('pakai_sandi_dashboard', 'sandi_dashboard', 'Kunci dashboard (password untuk melihat hasil)'));
+    root.append(pc);
+
     // Identitas dan batas
     const idc = mk('section', 'card');
     idc.append(mk('h3', '', 'Responden dan batasan'));

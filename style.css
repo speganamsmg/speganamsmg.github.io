@@ -554,3 +554,5 @@ svg.i { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round
 .tile .lock-note { display: inline-flex; align-items: center; gap: 4px; }
 .lock-msg { color: var(--danger, #b3261e); min-height: 1.2em; margin: 6px 0 0; }
 .install-dlg form .input { width: 100%; box-sizing: border-box; }
+.pw-blok { margin-top: 10px; }
+.pw-blok .input { margin-top: 8px; width: 100%; box-sizing: border-box; }

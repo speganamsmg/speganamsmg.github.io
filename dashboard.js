@@ -119,6 +119,45 @@
     stage.replaceChildren(frag);
   }
 
+  // Dashboard berpassword: pakai password yang sudah dimasukkan di tab ini, atau minta lewat dialog (hanya saat pertama dibuka).
+  async function fetchDash(first, btn) {
+    const quiet = { silent: !first && !btn };
+    const pw = App.sandi.get('dashboard', slug);
+    if (pw) {
+      try {
+        const r = await App.post({ action: 'dashboard', f: slug, sandi: pw }, quiet);
+        if (!r.terkunci) return r;
+      } catch (e) {
+        if (e.code !== 'BADPASS') throw e;
+        App.sandi.set('dashboard', slug, '');
+      }
+    }
+    const d = await App.get({ action: 'dashboard', f: slug }, quiet);
+    if (!d.terkunci) return d;
+    clearInterval(timer);
+    if (first) App.splash.hide(300);
+    $('dhead').hidden = true;
+    const ask = function () {
+      App.askPassword({
+        title: d.form.judul,
+        text: 'Dashboard ini dikunci. Masukkan password yang diberikan kepada Anda.',
+        submit: async function (p) {
+          const r = await App.post({ action: 'dashboard', f: slug, sandi: p });
+          App.sandi.set('dashboard', slug, p);
+          load(true);
+        }
+      });
+    };
+    const c = note(d.form.judul, 'Dashboard ini dikunci. Hanya yang diberi password yang bisa melihat hasilnya.');
+    const b = el('button', 'btn btn-primary', 'Masukkan password'); b.type = 'button';
+    b.addEventListener('click', ask);
+    c.append(b);
+    stage.replaceChildren(c);
+    last = '';
+    if (first) ask();
+    return null;
+  }
+
   async function load(first, btn) {
     if (!/^[a-z0-9-]{1,60}$/.test(slug)) {
       stage.replaceChildren(note('Dashboard tidak ditemukan.', 'Alamat tidak lengkap atau salah.'));
@@ -127,7 +166,8 @@
     }
     if (btn) btn.classList.add('is-busy');
     try {
-      const d = await App.get({ action: 'dashboard', f: slug }, { silent: !first && !btn });
+      const d = await fetchDash(first, btn);
+      if (!d) return; // masih terkunci, menunggu password
       const s = JSON.stringify(d);
       if (s !== last) { last = s; render(d); }
       if (first) App.splash.hide(1000);
