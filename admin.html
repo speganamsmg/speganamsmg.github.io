@@ -270,6 +270,14 @@
         <span class="help">Boleh pilih lebih dari satu (mis. BK dan Guru). Tidak ada yang dicentang = untuk semua. Pilihan mengikuti Pengaturan → Tab halaman utama. Di tab "Semua", item untuk satu kategori ditaruh di bawah judulnya; item untuk beberapa kategori atau semua tampil paling atas tanpa judul.</span>
       </div>
 
+      <div class="field" id="fLockWrap">
+        <label class="check"><input type="checkbox" id="fLock"> Kunci dengan password</label>
+        <div id="fSandiWrap" hidden>
+          <input class="input" id="fSandi" type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false" maxlength="64">
+        </div>
+        <span class="help">Bawaan: tanpa password. Bila dikunci, alamat link / isi folder baru dikirim ke pengunjung setelah memasukkan password yang benar. Bagikan password langsung ke orang yang dipilih. Form dan dashboard tidak memakai password ini.</span>
+      </div>
+
       <div class="field">
         <label for="fParent">Letakkan di</label>
         <select class="input" id="fParent"></select>

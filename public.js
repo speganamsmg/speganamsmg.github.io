@@ -31,6 +31,22 @@
 
   let qrOn = true;
 
+  // Isi folder/link berpassword yang sudah dibuka di sesi ini (hanya di memori; muat ulang = minta password lagi).
+  const unlocked = {}; // id -> { url } untuk link, { items } untuk folder
+  function effectiveItems() {
+    const base = data.items;
+    const ids = Object.keys(unlocked).filter(function (k) { return unlocked[k].items; });
+    if (!ids.length) return base;
+    const seen = {};
+    base.forEach(function (i) { seen[i.id] = true; });
+    let out = base.slice();
+    ids.forEach(function (k) {
+      unlocked[k].items.forEach(function (i) { if (!seen[i.id]) { seen[i.id] = true; out.push(i); } });
+    });
+    return out;
+  }
+  function isOpen(i) { return !i.terkunci || !!unlocked[i.id]; }
+
   // Tab audiens diatur admin (Pengaturan → Tab halaman utama). "Semua" selalu ada di depan.
   // Tab yang tidak punya item sendiri disembunyikan.
   const GRUP_BAWAAN = [
@@ -57,7 +73,8 @@
   function leavesOf(items, folderId, acc) {
     items.forEach(function (i) {
       if (i.parent_id !== folderId) return;
-      if (i.tipe === 'folder') leavesOf(items, i.id, acc); else acc.push(i);
+      if (i.tipe === 'folder' && i.terkunci && !unlocked[i.id]) acc.push({ id: i.id, tipe: 'link', untuk: i.untuk_isi || '' });
+      else if (i.tipe === 'folder') leavesOf(items, i.id, acc); else acc.push(i);
     });
     return acc;
   }
@@ -136,6 +153,12 @@
     if (item.segera) {
       a.href = '#'; a.setAttribute('role', 'button');
       a.addEventListener('click', function (e) { e.preventDefault(); App.soon(item.judul); });
+    } else if (item.terkunci && !unlocked[item.id]) {
+      a.href = '#'; a.setAttribute('role', 'button');
+      a.addEventListener('click', function (e) { e.preventDefault(); askPassword(item); });
+      a.append(App.icon(item), el('span', 'label', item.judul), el('span', 'count lock-note', 'Terkunci'));
+      a.append(App.svg('lock', 'trail'));
+      const li0 = el('li'); li0.append(a); return li0;
     } else if (item.tipe === 'folder') {
       a.href = '#/f/' + item.id;
     } else if (item.tipe === 'dashboard') {
@@ -148,7 +171,7 @@
       closed = item.form.status !== 'buka' ||
         (item.form.buka && now < item.form.buka) || (item.form.tutup && now > item.form.tutup);
     } else {
-      const u = App.safeUrl(item.url);
+      const u = App.safeUrl(item.terkunci && unlocked[item.id] ? unlocked[item.id].url : item.url);
       if (!u) return null;
       a.href = u;
       if (/^https?:/i.test(u)) {
@@ -175,6 +198,57 @@
     const li = el('li');
     li.append(a);
     return li;
+  }
+
+  // Dialog password untuk link/folder terkunci.
+  function askPassword(item) {
+    const d = document.createElement('dialog');
+    d.className = 'install-dlg';
+    const box = el('div', 'in');
+    box.append(el('h2', '', item.judul));
+    box.append(el('p', 'dlg-line', 'Item ini dikunci. Masukkan password yang diberikan kepada Anda.'));
+    const form = document.createElement('form');
+    form.noValidate = true;
+    const inp = document.createElement('input');
+    inp.type = 'password'; inp.className = 'input'; inp.autocomplete = 'off';
+    inp.setAttribute('aria-label', 'Password'); inp.maxLength = 64; inp.autocapitalize = 'off'; inp.spellcheck = false;
+    const msg = el('p', 'dlg-line lock-msg', ''); msg.setAttribute('role', 'alert');
+    const row = el('div', 'dlg-actions');
+    const no = el('button', 'btn', 'Batal'); no.type = 'button';
+    const ok = el('button', 'btn btn-primary', 'Buka'); ok.type = 'submit';
+    row.append(no, ok);
+    form.append(inp, msg, row);
+    box.append(form); d.append(box);
+    no.addEventListener('click', function () { d.close(); });
+    d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
+    d.addEventListener('close', function () { d.remove(); });
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      if (!inp.value) { msg.textContent = 'Isi password dulu.'; return; }
+      ok.disabled = true; msg.textContent = '';
+      try {
+        const r = await App.post({ action: 'unlock', id: item.id, sandi: inp.value });
+        unlocked[item.id] = r.items ? { items: r.items } : { url: r.url };
+        d.close();
+        if (item.tipe === 'folder') {
+          location.hash = '#/f/' + item.id; render();
+        } else {
+          App.ping(item.id);
+          const u = App.safeUrl(r.url);
+          if (u) {
+            const w = window.open(u, '_blank', 'noopener');
+            if (!w) location.href = u; // popup diblokir (mis. Safari)
+          }
+          render();
+        }
+      } catch (err) {
+        msg.textContent = err.message;
+        inp.select();
+      } finally {
+        ok.disabled = false;
+      }
+    });
+    document.body.append(d); d.showModal(); inp.focus();
   }
 
   function showState(title, text, retry) {
@@ -206,7 +280,7 @@
 
   function render() {
     if (!data) return;
-    const items = data.items;
+    const items = effectiveItems();
     const folderId = currentFolderId();
     const folder = folderId
       ? items.filter(function (i) { return i.id === folderId && i.tipe === 'folder'; })[0]
@@ -214,6 +288,12 @@
 
     if (folderId && !folder) { // folder sudah dihapus atau disembunyikan
       location.hash = '#/';
+      return;
+    }
+
+    if (folder && folder.terkunci && !unlocked[folder.id]) { // dibuka lewat tautan langsung: minta password dulu
+      location.hash = folder.parent_id ? '#/f/' + folder.parent_id : '#/';
+      askPassword(folder);
       return;
     }
 

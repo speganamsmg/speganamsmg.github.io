@@ -549,3 +549,8 @@ svg.i { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round
 .aud-btn:hover { color: var(--ink); }
 .aud-btn[aria-selected="true"] { background: var(--ink); color: var(--bg); }
 .aud-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Item berpassword */
+.tile .lock-note { display: inline-flex; align-items: center; gap: 4px; }
+.lock-msg { color: var(--danger, #b3261e); min-height: 1.2em; margin: 6px 0 0; }
+.install-dlg form .input { width: 100%; box-sizing: border-box; }

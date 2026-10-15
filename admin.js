@@ -105,7 +105,7 @@
       id: it.id, tipe: it.tipe, judul: it.judul, url: it.url, form_id: it.form_id || '',
       ikon_jenis: it.ikon_jenis, ikon_isi: it.ikon_isi,
       ikon_warna: it.ikon_warna || '', ikon_bentuk: it.ikon_bentuk || '',
-      parent_id: it.parent_id, tampil: it.tampil, segera: it.segera === true, untuk: it.untuk || ''
+      parent_id: it.parent_id, tampil: it.tampil, segera: it.segera === true, untuk: it.untuk || '', pakai_sandi: it.pakai_sandi === true
     }, over || {});
   }
 
@@ -157,6 +157,7 @@
     if (!it.tampil) title.append(el('span', 'badge', 'Disembunyikan'));
     it.untuk.split(',').filter(Boolean).forEach(function (u) { title.append(el('span', 'badge', untukNama(u))); });
     if (it.segera) title.append(el('span', 'badge soon', 'Segera hadir'));
+    if (it.pakai_sandi) title.append(el('span', 'badge', 'Berpassword'));
     const main = el('div', 'row-main');
     main.append(title, el('div', 'row-meta', metaText(it, map)));
 
@@ -588,12 +589,24 @@
     $('fVisible').checked = item ? item.tampil : true;
     fillUntuk(item ? (item.untuk || '') : '');
     $('fSoon').checked = item ? item.segera === true : false;
+    const bisaSandi = tipe === 'link' || tipe === 'folder';
+    $('fLockWrap').hidden = !bisaSandi;
+    $('fLock').checked = bisaSandi && !!item && item.pakai_sandi === true;
+    $('fSandi').value = '';
+    $('fSandi').placeholder = (item && item.pakai_sandi) ? 'Kosongkan = pakai password yang lama' : 'Password baru (4–64 karakter)';
+    $('fSandiWrap').hidden = !$('fLock').checked;
     $('dlgMsg').textContent = '';
     fillParentOptions(item, tipe, '');
     updateIconFields();
     $('itemDialog').showModal();
     $('fTitle').focus();
   }
+
+  $('fLock').addEventListener('change', function () {
+    $('fSandiWrap').hidden = !$('fLock').checked;
+    if ($('fLock').checked) $('fSandi').focus();
+  });
+  App.passwordEye($('fSandi'));
 
   async function submitItem(e) {
     e.preventDefault();
@@ -613,6 +626,10 @@
       segera: $('fSoon').checked,
       untuk: tipe === 'folder' ? [] : readUntuk()
     };
+    if (tipe === 'link' || tipe === 'folder') {
+      item.pakai_sandi = $('fLock').checked;
+      if (item.pakai_sandi && $('fSandi').value) item.sandi = $('fSandi').value;
+    }
     if (state.editingId) item.id = state.editingId;
 
     setBusy(btn, true);
