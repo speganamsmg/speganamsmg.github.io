@@ -15,14 +15,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Offside&display=swap" rel="stylesheet">
   <style>
     html { -webkit-text-size-adjust: 100%; }
-    :root { --bar: 42px; --bg: #f2f2f7; --bar-bg: #0d226b; }
+    :root { --bar: 38px; --bg: #f2f2f7; --bar-bg: #0d226b; }
     @media (prefers-color-scheme: dark) { :root { --bg: #070d18; --bar-bg: #0a1640; } }
     * { box-sizing: border-box; }
     html, body { height: 100%; margin: 0; background: var(--bg); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif; }
     body { display: flex; flex-direction: column; overflow: hidden; }
     /* Bar atas: hanya nama BEKALIN di tengah (huruf Offside seperti logo di dashboard). */
     .bar { flex: none; height: calc(var(--bar) + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px); display: flex; align-items: center; justify-content: center; background: var(--bar-bg); }
-    .bar b { font-family: 'Offside', 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 400; font-size: 20px; line-height: 1; letter-spacing: 0.06em; color: #fff; user-select: none; }
+    .bar b { font-family: 'Offside', 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 400; font-size: 16px; line-height: 1; letter-spacing: 0.06em; color: #fff; user-select: none; }
     .bar b i { font-style: normal; color: #36d1da; }
     /* Bingkai memotong bagian atas halaman Apps Script (spanduk "Aplikasi ini dibuat oleh pengguna Google Apps Script"). */
     .frame { position: relative; flex: 1 1 auto; overflow: hidden; margin-bottom: env(safe-area-inset-bottom, 0px); }
