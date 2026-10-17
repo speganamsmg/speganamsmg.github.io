@@ -1,0 +1,45 @@
+/* SPEGANA — Laporan IKS (melengkapi dashboard.css & charts.css) */
+.iks-tabs { display: flex; gap: 0.3rem; padding: 0.3rem; margin-bottom: 0.9rem; border: 1px solid var(--line); border-radius: 99px; background: color-mix(in srgb, var(--surface) 80%, transparent); }
+.iks-tab { flex: 1; border: 0; border-radius: 99px; padding: 0.6rem 0.5rem; background: transparent; color: var(--muted); font: inherit; font-weight: 700; font-size: 0.92rem; cursor: pointer; transition: background-color 0.15s, color 0.15s; }
+.iks-tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+.iks-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.iks-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.9rem; }
+.iks-kpis .kpi { min-width: 0; margin: 0; }
+.iks-kpis .kpi.saldo { grid-column: 1 / -1; }
+.iks-kpis .kpi.saldo strong { font-size: clamp(1.7rem, 8vw, 2.2rem); }
+.iks-kpis .kpi strong { font-size: clamp(1.05rem, 4.6vw, 1.35rem); overflow-wrap: anywhere; }
+
+.iks-prog { display: grid; gap: 0.6rem; }
+.iks-prog strong { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.iks-prog strong small { font-size: 0.9rem; font-weight: 600; color: var(--muted); letter-spacing: 0; }
+.iks-prog .bar-track { height: 0.7rem; }
+
+.iks-out, .iks-people { list-style: none; margin: 0 0 0.6rem; padding: 0; display: grid; gap: 0.15rem; }
+.iks-out li { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.8rem; padding: 0.7rem 0; border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent); }
+.iks-out li:first-child { border-top: 0; padding-top: 0.1rem; }
+.o-l { display: grid; gap: 0.1rem; min-width: 0; }
+.o-l span { color: var(--muted); font-size: 0.82rem; overflow-wrap: anywhere; }
+.o-l .o-d { font-size: 0.75rem; }
+.o-r { flex: none; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+.iks-q { width: 100%; margin-bottom: 0.7rem; }
+.iks-p { border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent); padding: 0.55rem 0; }
+.iks-p:first-child { border-top: 0; }
+.p-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.8rem; width: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.p-name { display: grid; min-width: 0; }
+.p-name strong { overflow-wrap: anywhere; font-weight: 700; }
+.p-name span { color: var(--muted); font-size: 0.78rem; }
+.p-tot { flex: none; font-weight: 800; font-variant-numeric: tabular-nums; }
+.p-dots { display: flex; gap: 3px; margin-top: 0.45rem; }
+.p-dots i { flex: 1; height: 0.5rem; max-width: 1.4rem; border-radius: 3px; background: var(--tint); }
+.p-dots i.on { background: var(--c1, var(--accent)); }
+.p-dots i.now { outline: 1.5px solid var(--ink); outline-offset: 1px; }
+.p-det[hidden] { display: none; }
+.p-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(5.2rem, 1fr)); gap: 0.4rem; margin-top: 0.6rem; }
+.pg { display: grid; gap: 0.1rem; padding: 0.4rem 0.5rem; border-radius: 0.6rem; background: var(--tint); }
+.pg span { font-size: 0.7rem; color: var(--muted); font-weight: 600; }
+.pg strong { font-size: 0.82rem; font-variant-numeric: tabular-nums; color: var(--muted); }
+.pg.on strong { color: var(--ink); }
+.iks-none { color: var(--muted); padding: 0.5rem 0; }
+.card .btn.sm { min-height: 2.25rem; padding: 0.25rem 0.9rem; font-size: 0.85rem; }

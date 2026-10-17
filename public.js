@@ -147,6 +147,11 @@
     }
   }
 
+  // Halaman laporan IKS milik situs ini: dibuka di tab yang sama agar tombol kembali ke folder bisa bekerja.
+  function isLaporanIks(u) {
+    try { const x = new URL(u, location.href); return x.origin === location.origin && /\/laporan-iks\.html$/.test(x.pathname); } catch (e) { return false; }
+  }
+
   // Ingat folder asal agar tombol kembali di form/dashboard bisa ke folder itu.
   function rememberFolder(slug) {
     const id = currentFolderId();
@@ -183,7 +188,9 @@
       const u = App.safeUrl(item.terkunci && unlocked[item.id] ? unlocked[item.id].url : item.url);
       if (!u) return null;
       a.href = u;
-      if (/^https?:/i.test(u)) {
+      if (isLaporanIks(u)) {
+        a.addEventListener('click', function () { rememberFolder('laporan-iks'); });
+      } else if (/^https?:/i.test(u)) {
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
       }

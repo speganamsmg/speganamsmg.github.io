@@ -431,7 +431,7 @@
   }
 
   // Aksi yang aman diulang otomatis kalau balasan server rusak atau jaringan putus sesaat.
-  const SAFE_POST = /^(login|admin\.(list|results|forms\.list|form\.get|names\.lists|names\.get))$/;
+  const SAFE_POST = /^(login|iks|admin\.(list|results|forms\.list|form\.get|names\.lists|names\.get))$/;
   function transient(err) { return err && (err.code === 'BAD_RESPONSE' || err.code === 'NETWORK'); }
   function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
   async function withRetry(fn, safe) {
