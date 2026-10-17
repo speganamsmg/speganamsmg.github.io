@@ -176,7 +176,12 @@
     $('dhead').hidden = false;
     $('dtitle').textContent = 'Laporan IKS';
     const desc = $('ddesc');
-    desc.textContent = 'Iuran Kesetiakawanan Sosial dan Pensiun. Diperbarui ' + d.diperbarui.slice(8, 10) + '/' + d.diperbarui.slice(5, 7) + ' ' + d.diperbarui.slice(11, 16) + '.';
+    const ref = el('button', 'icon-btn sm iks-reload'); ref.type = 'button';
+    ref.setAttribute('aria-label', 'Muat ulang'); ref.append(App.svg('refresh'));
+    ref.addEventListener('click', function () { load(false, ref); });
+    const stamp = el('div', 'iks-stamp');
+    stamp.append(el('span', '', 'Diperbarui ' + d.diperbarui.slice(8, 10) + '/' + d.diperbarui.slice(5, 7) + ' ' + d.diperbarui.slice(11, 16) + '.'), ref);
+    desc.replaceChildren(el('div', '', 'Iuran Kesetiakawanan Sosial dan Pensiun.'), stamp);
 
     const tabs = el('div', 'iks-tabs'); tabs.setAttribute('role', 'tablist');
     [['sosial', 'Sosial'], ['pensiun', 'Pensiun']].forEach(function (t) {

@@ -43,3 +43,6 @@
 .pg.on strong { color: var(--ink); }
 .iks-none { color: var(--muted); padding: 0.5rem 0; }
 .card .btn.sm { min-height: 2.25rem; padding: 0.25rem 0.9rem; font-size: 0.85rem; }
+
+.iks-stamp { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.15rem; }
+.iks-reload { flex: none; }
