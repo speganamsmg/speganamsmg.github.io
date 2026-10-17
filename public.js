@@ -152,6 +152,11 @@
     try { const x = new URL(u, location.href); return x.origin === location.origin && /\/laporan-iks\.html$/.test(x.pathname); } catch (e) { return false; }
   }
 
+  // Halaman lain di situs ini (mis. /bekalin.html) dibuka di tab yang sama.
+  function isSitusIni(u) {
+    try { const x = new URL(u, location.href); return x.origin === location.origin; } catch (e) { return false; }
+  }
+
   // Ingat folder asal agar tombol kembali di form/dashboard bisa ke folder itu.
   function rememberFolder(slug) {
     const id = currentFolderId();
@@ -190,6 +195,8 @@
       a.href = u;
       if (isLaporanIks(u)) {
         a.addEventListener('click', function () { rememberFolder('laporan-iks'); });
+      } else if (isSitusIni(u)) {
+        /* halaman lain di situs ini (mis. bekalin.html): tab yang sama, tombol kembali browser ke sini */
       } else if (/^https?:/i.test(u)) {
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
@@ -232,8 +239,11 @@
           App.ping(item.id);
           const u = App.safeUrl(r.url);
           if (u) {
-            const w = window.open(u, '_blank', 'noopener');
-            if (!w) location.href = u; // popup diblokir (mis. Safari)
+            if (isSitusIni(u)) location.href = u;
+            else {
+              const w = window.open(u, '_blank', 'noopener');
+              if (!w) location.href = u; // popup diblokir (mis. Safari)
+            }
           }
           render();
         }
