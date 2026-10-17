@@ -2,7 +2,7 @@
  * Tujuan: perubahan file di GitHub langsung tampil tanpa muat ulang paksa,
  * dan situs bisa dipasang ke layar utama. Selalu tanya server dulu (revalidasi),
  * memakai salinan tersimpan hanya saat tidak ada koneksi. */
-const CACHE = 'speganamsmg-shell-v8';
+const CACHE = 'speganamsmg-shell-v9';
 
 self.addEventListener('install', function () { self.skipWaiting(); });
 

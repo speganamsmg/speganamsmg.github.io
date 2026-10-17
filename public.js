@@ -166,7 +166,7 @@
 
   function tile(item, count) {
     const a = el('a', 'tile tile-' + item.tipe + (item.segera ? ' is-soon' : ''));
-    let closed = false;
+    let closed = false, appTag = false;
     if (item.segera) {
       a.href = '#'; a.setAttribute('role', 'button');
       a.addEventListener('click', function (e) { e.preventDefault(); App.soon(item.judul); });
@@ -195,8 +195,10 @@
       a.href = u;
       if (isLaporanIks(u)) {
         a.addEventListener('click', function () { rememberFolder('laporan-iks'); });
+        appTag = true;
       } else if (isSitusIni(u)) {
         /* halaman lain di situs ini (mis. bekalin.html): tab yang sama, tombol kembali browser ke sini */
+        appTag = true;
       } else if (/^https?:/i.test(u)) {
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
@@ -218,6 +220,7 @@
       else if (item.form && item.form.kunci) a.append(el('span', 'count', 'Terkunci'));
       a.append(App.svg('chevron', 'trail'));
     } else {
+      if (appTag) a.append(el('span', 'count app-tag', 'App'));
       a.append(App.svg('arrow', 'trail'));
     }
     const li = el('li');
