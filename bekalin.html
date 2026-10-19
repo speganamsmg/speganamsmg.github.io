@@ -4,7 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>BEKALIN</title>
+  <meta name="description" content="Better Education Keeps All Learners Inspired &amp; Nurtured">
   <meta name="robots" content="noindex">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BEKALIN">
+  <meta property="og:title" content="BEKALIN">
+  <meta property="og:description" content="Better Education Keeps All Learners Inspired &amp; Nurtured">
+  <meta property="og:url" content="https://speganamsmg.github.io/bekalin.html">
+  <meta property="og:image" content="https://speganamsmg.github.io/assets/icon-512.png">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="512">
+  <meta name="twitter:card" content="summary">
   <link rel="icon" href="assets/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -42,7 +52,7 @@
   <script src="config.js"></script>
   <script>
     (function () {
-      // Alamat web app BEKALIN. Bisa diganti lewat BEKALIN_URL di config.js.
+      // Versi Speganam: ikon SMP Negeri 36 + tombol kembali ke Speganam. Alamat web app bisa diganti lewat BEKALIN_URL di config.js.
       var DEFAULT_URL = 'https://script.google.com/macros/s/AKfycbyaFOrZL4dUZlS76yJpATtlHvyjpS6S7NM6pol5ER0c4cVRYnbnX_715ak6tMLFKBXFjg/exec';
       var cfg = window.APP_CONFIG || {};
       var base = String(cfg.BEKALIN_URL || DEFAULT_URL);
@@ -50,7 +60,8 @@
 
       var qs = new URLSearchParams(location.search);
       var menu = (qs.get('menu') || '').trim();
-      var src = base + (/^[A-Za-z0-9_]{1,40}$/.test(menu) ? '?menu=' + menu : '');
+      // ?dari=speganam memberi tahu aplikasi bahwa ia dibuka dari Speganam, sehingga tombol "Speganam" tampil di bar navigasi.
+      var src = base + '?dari=speganam' + (/^[A-Za-z0-9_]{1,40}$/.test(menu) ? '&menu=' + menu : '');
 
       // Tinggi spanduk Google yang dipotong. Atur lewat ?clip=40 (uji coba) atau BEKALIN_CLIP di config.js.
       var clip = Number(qs.get('clip'));
