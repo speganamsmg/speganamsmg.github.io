@@ -94,3 +94,17 @@ select.input { appearance: auto; }
 .iksk-chk label span { flex: 1; min-width: 0; }
 .iksk-chk label em { flex: none; font-style: normal; font-size: 0.76rem; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
 .iksk-dlg .hint { text-align: left; }
+
+/* ═══ Tablet & desktop ═══ */
+@media (min-width: 641px) {
+  .iksk-bar { width: min(34rem, calc(100% - 3rem)); bottom: 1.4rem; }
+  .iksk-toast { bottom: 5.4rem; }
+  .iksk-has-bar .wrap { padding-bottom: 8rem; }
+  .iksk-item { padding: 0.65rem 0.7rem; }
+}
+@media (min-width: 1024px) {
+  /* Daftar anggota dua kolom */
+  .iksk-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.6rem; }
+  .iksk-item:nth-child(2) { border-top: 0; }
+  .iksk-amt { width: 9.5rem; }
+}

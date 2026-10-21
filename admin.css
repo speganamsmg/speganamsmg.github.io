@@ -413,3 +413,23 @@ html, body { overflow-x: hidden; }
 .iks-sh span { color: var(--muted); font-size: 0.8rem; }
 .iks-sh em { font-style: normal; font-size: 0.82rem; font-weight: 600; }
 .iks-sh.ok em { color: #1a8a5a; } .iks-sh.bad em { color: #c0392b; }
+
+/* ═══ Tablet & desktop ═══ */
+@media (min-width: 641px) {
+  .shell { max-width: 56rem; padding: 2rem 2rem 4rem; }
+  .tab .lbl, .tab[aria-selected="true"] .lbl { display: inline; }
+  .tabs { overflow-x: visible; }
+  .tab { flex: 1 1 0; }
+  .shell { padding-bottom: 4rem; }
+  .save-bar { bottom: 1.2rem; }
+  #toast { bottom: 1.5rem; }
+}
+@media (min-width: 1024px) {
+  .shell { max-width: 80rem; }
+  #appView:not([hidden]) { display: grid; grid-template-columns: 14rem minmax(0, 1fr); column-gap: 2rem; align-items: start; }
+  #appView > .bar { grid-column: 1 / -1; }
+  #appView > .tabs { grid-column: 1; grid-row: 2 / span 30; position: sticky; top: 1rem; flex-direction: column; gap: 0.3rem; padding: 0.5rem; border-radius: 1.4rem; overflow: visible; }
+  #appView > .tabs .tab { justify-content: flex-start; flex: none; padding: 0.7rem 1rem; border-radius: 1rem; }
+  #appView > :not(.bar):not(.tabs) { grid-column: 2; min-width: 0; }
+  .login { max-width: 26rem; margin-left: auto; margin-right: auto; }
+}

@@ -593,3 +593,50 @@ svg.i { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round
 /* Penanda "App": link ke halaman lain di situs ini (mis. BEKALIN, Laporan IKS) */
 .tile .count.app-tag { flex: none; display: inline-flex; align-items: center; line-height: 1.5; padding: 0.2rem 0.55rem 0.1rem; border: 1px solid color-mix(in srgb, var(--accent) 60%, var(--line)); border-radius: 99px; background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--ink); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.02em; }
 .tile:hover .count.app-tag { color: inherit; opacity: 1; }
+
+/* ═══ Tampilan per perangkat ═══
+   Ponsel (≤ 640px): kolom tunggal seperti sebelumnya, bilah navigasi melayang di bawah.
+   Tablet (641–1023px): kolom lebih lebar, kartu dua kolom, tombol navigasi di sudut atas.
+   Desktop (≥ 1024px): tata letak dua kolom, panel profil tetap di kiri, bilah navigasi di sudut kanan atas. */
+@media (min-width: 641px) {
+  html { font-size: 17px; }
+  .wrap { max-width: 44rem; padding-left: 2rem; padding-right: 2rem; padding-bottom: 5rem; }
+  .avatar { transform-origin: center; }
+  .hero { margin-bottom: 2.4rem; }
+  .hero h1 { font-size: clamp(2.2rem, 5vw, 2.8rem); }
+  .hero .desc { max-width: 32rem; font-size: 1rem; }
+  .list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .list > li { min-width: 0; }
+  .tile { height: 100%; }
+  /* Tombol Beranda/tema pindah ke sudut kanan atas */
+  .dock { left: auto; right: 1.5rem; bottom: auto; top: 1.25rem; transform: none; }
+  .topbar { position: static; margin-bottom: 1.2rem; }
+  .wrap { padding-top: clamp(4.5rem, 9vh, 5.5rem); }
+  /* Bilah atas halaman dalam: tombol tema tetap sebaris dengan tombol kembali */
+  .wrap > .topbar { position: absolute; top: 1.25rem; left: 2rem; right: 2rem; margin: 0; }
+}
+@media (min-width: 1024px) {
+  html { font-size: 17.5px; }
+  .wrap:has(> .hero) { max-width: 76rem; display: grid; grid-template-columns: 21rem minmax(0, 1fr); column-gap: 3.5rem; align-items: start; padding-top: 5rem; padding-bottom: 4rem; }
+  .wrap:has(> .hero) > .hero { grid-column: 1; grid-row: 1 / span 12; position: sticky; top: 4.5rem; margin-bottom: 0; padding: 1.8rem 1.4rem; border: 1px solid var(--line); border-radius: 1.8rem; background: var(--surface); box-shadow: var(--shadow); }
+  .wrap:has(> .hero) > :not(.hero) { grid-column: 2; min-width: 0; }
+  .wrap:has(> .hero) .list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .wrap:has(> .hero) .qr, .wrap:has(> .hero) .social { max-width: 34rem; }
+  .wrap:has(> .hero) .social { justify-content: flex-start; }
+  .wrap:has(> .hero) .audience { width: fit-content; max-width: 100%; }
+}
+@media (min-width: 1500px) {
+  .wrap:has(> .hero) { max-width: 88rem; grid-template-columns: 23rem minmax(0, 1fr); }
+  .wrap:has(> .hero) .list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* Halaman laporan / dashboard / form lebih lebar di tablet dan desktop */
+@media (min-width: 641px) {
+  .wrap:has(> .dhead), .wrap:has(> #dhead) { max-width: 50rem; }
+  .wrap:has(> .fhead), .wrap:has(> #fhead) { max-width: 46rem; }
+}
+@media (min-width: 1024px) {
+  .wrap:has(> #dhead) { max-width: 76rem; }
+  .wrap:has(> #fhead) { max-width: 50rem; }
+  #dhead { max-width: 52rem; }
+}

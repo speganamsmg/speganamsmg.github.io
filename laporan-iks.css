@@ -92,3 +92,32 @@ select.input { appearance: auto; }
 .iks-tbl td .iks-rapel { font-size: 0.78rem; font-weight: 700; color: color-mix(in srgb, #1b7a43 78%, var(--ink)); }
 .iks-tbl td .iks-note { display: block; margin-left: auto; max-width: 9.5rem; margin-top: 0.1rem; font-size: 0.7rem; line-height: 1.25; font-weight: 600; color: var(--muted); white-space: normal; overflow-wrap: anywhere; text-align: right; }
 .iks-tbl tbody tr.belum td .iks-note { color: color-mix(in srgb, #c2255c 70%, var(--muted)); }
+
+/* ═══ Tablet & desktop ═══ */
+@media (min-width: 641px) {
+  .iks-tabs { max-width: 28rem; }
+  .iks-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .iks-kpis .kpi.saldo { grid-column: auto; }
+  .iks-sheet { max-height: 72vh; max-height: 72dvh; }
+  .iks-tbl { font-size: 0.9rem; }
+  .iks-tbl .c-nama { min-width: 12rem; max-width: 16rem; }
+}
+@media (min-width: 1024px) {
+  /* Tab Per bulan: pilihan bulan, ringkasan dan pencarian di kiri, tabel di kanan */
+  .iks-sheetcard:has(.iks-sheet) { display: grid; grid-template-columns: 17rem minmax(0, 1fr); column-gap: 1.6rem; align-items: start; padding: 1.4rem; }
+  .iks-sheetcard:has(.iks-sheet) > .iks-bln, .iks-sheetcard:has(.iks-sheet) > .iks-ring, .iks-sheetcard:has(.iks-sheet) > .iks-q, .iks-sheetcard:has(.iks-sheet) > .hint { grid-column: 1; }
+  .iks-sheetcard:has(.iks-sheet) > .iks-sheet { grid-column: 2; grid-row: 1 / span 12; max-height: 76vh; }
+  .iks-tabs { max-width: 30rem; }
+  /* Rincian: kas di atas, lalu Per bulan / Sosial / Pensiun berdampingan */
+  .iks-rincian { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; align-items: start; }
+  .iks-rincian > * { margin: 0; min-width: 0; }
+  .iks-kpis .kpi.saldo strong { font-size: 2rem; }
+}
+@media (min-width: 1024px) {
+  .iks-rincian > .iks-kpis, .iks-rincian > .card:first-of-type { grid-column: 1 / -1; }
+  .iks-rincian { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .iks-rincian .iks-kpis { grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); }
+  .iks-rincian .iks-kpis .kpi strong { font-size: 1.15rem; white-space: nowrap; overflow-wrap: normal; }
+  .iks-rincian > .iks-kpis:first-child { grid-template-columns: 1.4fr 1fr 1fr; }
+  .iks-rincian > .iks-kpis:first-child .kpi.saldo strong { font-size: 1.9rem; }
+}

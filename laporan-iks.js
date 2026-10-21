@@ -172,7 +172,7 @@
   }
 
   function rincianView(d) {
-    const f = document.createDocumentFragment();
+    const f = el('div', 'iks-rincian');
     const s = d.sosial, p = d.pensiun;
     // Total kas saat ini: saldo awal + semua pemasukan − semua pengeluaran.
     const kas = el('section', 'iks-kpis');

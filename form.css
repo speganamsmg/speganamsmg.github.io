@@ -176,3 +176,14 @@ textarea.field { min-height: 6.5rem; resize: vertical; }
 
 .names-info { margin-top: -0.35rem; padding: 0.55rem 0.7rem; border-radius: var(--r-md, 0.7rem); background: color-mix(in srgb, var(--accent) 14%, transparent); font-size: 0.82rem; line-height: 1.4; }
 .names-info strong { font-weight: 700; }
+
+/* ═══ Tablet & desktop: form di tengah dalam kartu lebar ═══ */
+@media (min-width: 641px) {
+  .fhead { margin-bottom: 1.8rem; }
+  .fhead h1 { font-size: clamp(2rem, 4vw, 2.6rem); }
+  #stage { padding: 1.4rem 1.6rem; border: 1px solid var(--line); border-radius: 1.6rem; background: color-mix(in srgb, var(--surface) 55%, transparent); }
+  #stage:empty { display: none; }
+}
+@media (min-width: 1024px) {
+  #stage { padding: 2rem 2.4rem; }
+}
