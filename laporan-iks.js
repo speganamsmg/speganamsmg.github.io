@@ -7,7 +7,7 @@
   const KEY = 'laporan';
   const BLN = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
   const BLN_PENUH = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-  const state = { dana: 'sosial', q: '', buka: Object.create(null), semuaKeluar: false };
+  const state = { tab: 'sosial', q: '', bln: '', reset: false };
   let last = '';
   let timer = 0;
 
@@ -38,63 +38,99 @@
   }
 
   // ── Bagian-bagian halaman ──
-  function kpis(x) {
-    const box = el('section', 'iks-kpis');
-    const t = function (cls, value, label) {
-      const k = el('div', 'kpi ' + cls);
-      k.append(el('strong', '', value), el('span', '', label));
-      box.append(k);
-    };
-    t('main saldo', rp(x.saldo), 'Saldo kas' + (x.saldo_awal ? ' (termasuk saldo awal ' + rp(x.saldo_awal) + ')' : ''));
-    t('', rp(x.total_masuk), 'Pemasukan');
-    t('', rp(x.total_keluar), 'Pengeluaran');
-    return box;
-  }
+  // Tabel iuran seperti spreadsheet: NAMA | bulan… | JUMLAH. Kolom nama dan judul bulan tetap terlihat saat digulir.
+  function angka(n) { return n > 0 ? Math.round(n).toLocaleString('id-ID') : ''; }
 
-  function progress(x) {
-    const c = el('section', 'card dsec');
+  function tabel(x) {
+    const c = el('section', 'card dsec iks-sheetcard');
     const k = x.bulan[x.acuan];
-    c.append(el('h2', '', 'Sudah membayar · ' + (k ? bulanPenuh(k) : '-')));
-    const row = el('div', 'iks-prog');
-    const big = el('strong', '', x.n_bayar + ' dari ' + x.n_anggota);
-    big.append(el('small', '', ' (' + x.persen_bayar + '%)'));
-    const track = el('div', 'bar-track'); const fill = el('span', 'bar-fill');
-    fill.style.setProperty('--w', Math.max(x.persen_bayar ? 2 : 0, x.persen_bayar) + '%');
-    track.append(fill);
-    row.append(big, track);
-    c.append(row);
+    c.append(el('p', 'hint iks-ring', x.n_bayar + ' dari ' + x.n_anggota + ' sudah membayar' + (k ? ' · ' + bulanPenuh(k) : '')));
+    const q = el('input', 'input iks-q'); q.type = 'search'; q.placeholder = 'Cari nama…'; q.setAttribute('aria-label', 'Cari nama');
+    q.value = state.q;
+    const box = el('div', 'iks-sheet'); box.tabIndex = 0; box.setAttribute('role', 'region'); box.setAttribute('aria-label', 'Tabel iuran per anggota');
+    const t = el('table', 'iks-tbl');
+
+    const hd = el('thead'); const hr = el('tr');
+    hr.append(el('th', 'c-nama', 'Nama'));
+    x.bulan.forEach(function (b, i) { hr.append(el('th', 'c-num' + (i === x.acuan ? ' now' : ''), bulanPendek(b, true))); });
+    hr.append(el('th', 'c-num c-jml', 'Jumlah'));
+    hd.append(hr); t.append(hd);
+
+    const body = el('tbody');
+    const ft = el('tfoot');
+    const gambarBaris = function () {
+      body.replaceChildren(); ft.replaceChildren();
+      const s = state.q.trim().toLowerCase();
+      const sum = x.bulan.map(function () { return 0; });
+      let n = 0, jml = 0;
+      x.orang.forEach(function (o) {
+        if (s && o.nama.toLowerCase().indexOf(s) < 0) return;
+        n++;
+        const tr = el('tr');
+        tr.append(el('th', 'c-nama', o.nama));
+        o.bayar.forEach(function (v, i) {
+          sum[i] += v;
+          const td = el('td', 'c-num' + (v > 0 ? '' : ' kosong') + (i === x.acuan ? ' now' : ''), v > 0 ? angka(v) : '–');
+          td.title = bulanPenuh(x.bulan[i]) + ' · ' + (v > 0 ? rp(v) : 'belum');
+          tr.append(td);
+        });
+        jml += o.total;
+        tr.append(el('td', 'c-num c-jml', angka(o.total) || '–'));
+        body.append(tr);
+      });
+      if (!n) {
+        const tr = el('tr'); const td = el('td', 'iks-none', 'Nama tidak ditemukan.'); td.colSpan = x.bulan.length + 2; tr.append(td); body.append(tr);
+        return;
+      }
+      const fr = el('tr');
+      fr.append(el('th', 'c-nama', s ? 'Jumlah (hasil cari)' : 'Jumlah'));
+      sum.forEach(function (v, i) { fr.append(el('td', 'c-num' + (i === x.acuan ? ' now' : ''), angka(v) || '–')); });
+      fr.append(el('td', 'c-num c-jml', angka(jml) || '–'));
+      ft.append(fr);
+    };
+    t.append(body, ft);
+    box.append(t);
+    q.addEventListener('input', function () { state.q = q.value; gambarBaris(); });
+    c.append(q, box);
+    gambarBaris();
     return c;
   }
 
-  function chart(x) {
-    const c = el('section', 'card dsec');
-    c.append(el('h2', '', 'Pemasukan per bulan'));
-    const max = x.per_bulan.reduce(function (m, b) { return Math.max(m, b.masuk); }, 0);
-    if (!max) { c.append(el('p', 'hint', 'Belum ada pemasukan tercatat.')); return c; }
-    const box = el('div', 'trend');
-    const row = el('div', 'trend-cols');
-    x.per_bulan.forEach(function (b, i) {
-      const col = el('div', 'tcol' + (i === x.acuan ? ' top' : ''));
-      col.title = bulanPenuh(b.bln) + ' · ' + rp(b.masuk) + ' · ' + b.n_bayar + ' orang';
-      const bar = el('span', 'tbar');
-      bar.style.setProperty('--h', (b.masuk / max * 100) + '%');
-      col.append(bar); row.append(col);
-    });
-    box.append(row);
-    const ax = el('div', 'trend-ax');
-    ax.append(el('span', '', bulanPendek(x.bulan[0], true)), el('span', '', bulanPendek(x.bulan[x.bulan.length - 1], true)));
-    box.append(ax);
-    c.append(box);
-    return c;
+  function tabelView(x) {
+    const f = document.createDocumentFragment();
+    if (!x.ok) { f.append(note('Data belum tersedia', x.pesan)); return f; }
+    if (!x.bulan.length || !x.orang.length) { f.append(note('Belum ada data iuran', 'Daftar anggota atau judul bulan belum diisi.')); return f; }
+    f.append(tabel(x));
+    return f;
   }
 
-  function pengeluaran(x) {
+  // ── Rincian keuangan: total kas + pemasukan/pengeluaran per bulan terpilih ──
+  function bulanGabungan(d) {
+    const set = {};
+    ['sosial', 'pensiun'].forEach(function (j) { if (d[j].ok) d[j].bulan.forEach(function (b) { set[b] = 1; }); });
+    return Object.keys(set).sort();
+  }
+
+  function rincianDana(x, nama, bln) {
     const c = el('section', 'card dsec');
-    c.append(el('h2', '', 'Pengeluaran'));
-    if (!x.keluar.length) { c.append(el('p', 'hint', 'Belum ada pengeluaran.')); return c; }
+    c.append(el('h2', '', nama));
+    if (!x.ok) { c.append(el('p', 'hint', x.pesan)); return c; }
+    const i = x.bulan.indexOf(bln);
+    const pb = i >= 0 ? x.per_bulan[i] : { masuk: 0, keluar: 0, n_bayar: 0 };
+    const grid = el('div', 'iks-kpis');
+    const t = function (value, label) {
+      const kp = el('div', 'kpi'); kp.append(el('strong', '', value), el('span', '', label)); grid.append(kp);
+    };
+    t(rp(pb.masuk), 'Pemasukan');
+    t(rp(pb.keluar), 'Pengeluaran');
+    c.append(grid);
+    const sel = pb.masuk - pb.keluar;
+    c.append(el('p', 'hint iks-sel', 'Selisih bulan ini ' + (sel > 0 ? '+' : '') + rp(sel) + (i >= 0 ? ' · ' + pb.n_bayar + ' dari ' + x.n_anggota + ' orang membayar' : '')));
+    const daftar = x.keluar.filter(function (k) { return k.tgl && k.tgl.slice(0, 7) === bln; });
+    c.append(el('h3', 'iks-sub', 'Pengeluaran bulan ini'));
+    if (!daftar.length) { c.append(el('p', 'hint', 'Tidak ada pengeluaran.')); return c; }
     const list = el('ul', 'iks-out');
-    const tampil = state.semuaKeluar ? x.keluar : x.keluar.slice(0, 6);
-    tampil.forEach(function (k) {
+    daftar.forEach(function (k) {
       const li = el('li');
       const kiri = el('div', 'o-l');
       kiri.append(el('strong', '', k.jenis || 'Pengeluaran'));
@@ -105,67 +141,35 @@
       list.append(li);
     });
     c.append(list);
-    if (x.keluar.length > 6) {
-      const b = el('button', 'btn sm', state.semuaKeluar ? 'Ringkas' : 'Tampilkan semua (' + x.keluar.length + ')'); b.type = 'button';
-      b.addEventListener('click', function () { state.semuaKeluar = !state.semuaKeluar; draw(); });
-      c.append(b);
-    }
     return c;
   }
 
-  function perOrang(x) {
-    const c = el('section', 'card dsec');
-    c.append(el('h2', '', 'Per anggota'));
-    const q = el('input', 'input iks-q'); q.type = 'search'; q.placeholder = 'Cari nama…'; q.setAttribute('aria-label', 'Cari nama');
-    q.value = state.q;
-    const list = el('ul', 'iks-people');
-    const draw2 = function () {
-      list.replaceChildren();
-      const s = state.q.trim().toLowerCase();
-      let n = 0;
-      x.orang.forEach(function (o) {
-        if (s && o.nama.toLowerCase().indexOf(s) < 0) return;
-        n++;
-        const id = state.dana + '|' + o.nama;
-        const li = el('li', 'iks-p' + (state.buka[id] ? ' open' : ''));
-        const head = el('button', 'p-head'); head.type = 'button';
-        head.setAttribute('aria-expanded', state.buka[id] ? 'true' : 'false');
-        const nm = el('div', 'p-name');
-        nm.append(el('strong', '', o.nama), el('span', '', o.jabatan || ''));
-        const tot = el('div', 'p-tot', rp(o.total));
-        head.append(nm, tot);
-        const dots = el('div', 'p-dots');
-        o.bayar.forEach(function (v, i) {
-          const d = el('i', (v > 0 ? 'on' : '') + (i === x.acuan ? ' now' : ''));
-          d.title = bulanPenuh(x.bulan[i]) + ' · ' + (v > 0 ? rp(v) : 'belum');
-          dots.append(d);
-        });
-        const det = el('div', 'p-det'); det.hidden = !state.buka[id];
-        if (state.buka[id]) {
-          const g = el('div', 'p-grid');
-          o.bayar.forEach(function (v, i) {
-            const cell = el('div', 'pg' + (v > 0 ? ' on' : ''));
-            cell.append(el('span', '', bulanPendek(x.bulan[i], true)), el('strong', '', v > 0 ? rp(v) : '—'));
-            g.append(cell);
-          });
-          det.append(g);
-        }
-        head.addEventListener('click', function () { state.buka[id] = !state.buka[id]; draw2(); });
-        li.append(head, dots, det);
-        list.append(li);
-      });
-      if (!n) list.append(el('li', 'iks-none', 'Nama tidak ditemukan.'));
-    };
-    q.addEventListener('input', function () { state.q = q.value; draw2(); });
-    c.append(q, list);
-    draw2();
-    return c;
-  }
-
-  function danaView(x) {
+  function rincianView(d) {
     const f = document.createDocumentFragment();
-    if (!x.ok) { f.append(note('Data belum tersedia', x.pesan)); return f; }
-    f.append(kpis(x), progress(x), chart(x), pengeluaran(x), perOrang(x));
+    const s = d.sosial, p = d.pensiun;
+    // Total kas saat ini: saldo awal + semua pemasukan − semua pengeluaran.
+    const kas = el('section', 'iks-kpis');
+    const total = (s.ok ? s.saldo : 0) + (p.ok ? p.saldo : 0);
+    const big = el('div', 'kpi main saldo');
+    big.append(el('strong', '', rp(total)), el('span', '', 'Total kas saat ini'));
+    const a = el('div', 'kpi'); a.append(el('strong', '', s.ok ? rp(s.saldo) : '-'), el('span', '', 'Kas Sosial'));
+    const b = el('div', 'kpi'); b.append(el('strong', '', p.ok ? rp(p.saldo) : '-'), el('span', '', 'Kas Pensiun'));
+    kas.append(big, a, b);
+    f.append(kas);
+
+    const bulan = bulanGabungan(d);
+    if (!bulan.length) { f.append(note('Belum ada data bulanan', 'Judul bulan di sheet iuran belum diisi.')); return f; }
+    if (bulan.indexOf(state.bln) < 0) {
+      const ref = s.ok ? s.bulan[s.acuan] : p.ok ? p.bulan[p.acuan] : '';
+      state.bln = bulan.indexOf(ref) >= 0 ? ref : bulan[bulan.length - 1];
+    }
+    const pick = el('section', 'card dsec');
+    pick.append(el('h2', '', 'Per bulan'));
+    const sel = el('select', 'input iks-bln'); sel.setAttribute('aria-label', 'Pilih bulan');
+    bulan.forEach(function (bk) { const o = el('option', '', bulanPenuh(bk)); o.value = bk; if (bk === state.bln) o.selected = true; sel.append(o); });
+    sel.addEventListener('change', function () { state.bln = sel.value; draw(); });
+    pick.append(sel);
+    f.append(pick, rincianDana(s, 'Sosial', state.bln), rincianDana(p, 'Pensiun', state.bln));
     return f;
   }
 
@@ -184,15 +188,20 @@
     desc.replaceChildren(el('div', '', 'Iuran Kesetiakawanan Sosial dan Pensiun.'), stamp);
 
     const tabs = el('div', 'iks-tabs'); tabs.setAttribute('role', 'tablist');
-    [['sosial', 'Sosial'], ['pensiun', 'Pensiun']].forEach(function (t) {
+    [['sosial', 'Sosial'], ['pensiun', 'Pensiun'], ['rincian', 'Rincian Keuangan']].forEach(function (t) {
       const b = el('button', 'iks-tab', t[1]); b.type = 'button'; b.setAttribute('role', 'tab');
-      b.setAttribute('aria-selected', state.dana === t[0] ? 'true' : 'false');
-      b.addEventListener('click', function () { if (state.dana !== t[0]) { state.dana = t[0]; state.q = ''; state.semuaKeluar = false; draw(); } });
+      b.setAttribute('aria-selected', state.tab === t[0] ? 'true' : 'false');
+      b.addEventListener('click', function () { if (state.tab !== t[0]) { state.tab = t[0]; state.q = ''; state.reset = true; draw(); } });
       tabs.append(b);
     });
+    const sheet = stage.querySelector('.iks-sheet');
+    const pos = sheet && !state.reset ? { l: sheet.scrollLeft, t: sheet.scrollTop } : null;
+    state.reset = false;
     const frag = document.createDocumentFragment();
-    frag.append(tabs, danaView(d[state.dana]));
+    frag.append(tabs, state.tab === 'rincian' ? rincianView(d) : tabelView(d[state.tab]));
     stage.replaceChildren(frag);
+    const baru = stage.querySelector('.iks-sheet');
+    if (pos && baru) { baru.scrollLeft = pos.l; baru.scrollTop = pos.t; }
   }
 
   // ── Pengambilan data + password ──

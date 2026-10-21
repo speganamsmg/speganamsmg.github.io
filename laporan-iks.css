@@ -46,3 +46,36 @@
 
 .iks-stamp { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.15rem; }
 .iks-reload { flex: none; }
+
+/* Tabel iuran seperti spreadsheet */
+.iks-tabs .iks-tab { white-space: nowrap; font-size: 0.88rem; padding-left: 0.4rem; padding-right: 0.4rem; }
+.iks-sheetcard { padding-left: 0.9rem; padding-right: 0.9rem; }
+.iks-ring { margin: 0 0 0.7rem; font-variant-numeric: tabular-nums; }
+.iks-sheet { max-height: 68vh; max-height: 68dvh; overflow: auto; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--surface); -webkit-overflow-scrolling: touch; }
+.iks-sheet:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.iks-tbl { border-collapse: separate; border-spacing: 0; width: max-content; min-width: 100%; font-size: 0.84rem; font-variant-numeric: tabular-nums; }
+.iks-tbl th, .iks-tbl td { padding: 0.5rem 0.65rem; border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent); white-space: nowrap; background: var(--surface); }
+.iks-tbl thead th { position: sticky; top: 0; z-index: 2; font-size: 0.76rem; font-weight: 800; color: var(--muted); background: var(--tint); border-bottom: 1px solid var(--line); }
+.iks-tbl tbody tr:nth-child(even) td, .iks-tbl tbody tr:nth-child(even) th { background: color-mix(in srgb, var(--tint) 45%, var(--surface)); }
+.iks-tbl .c-nama { position: sticky; left: 0; z-index: 1; min-width: 9.5rem; max-width: 11rem; text-align: left; font-weight: 700; white-space: normal; overflow-wrap: anywhere; border-right: 1px solid var(--line); }
+.iks-tbl thead .c-nama { z-index: 3; }
+.iks-tbl .c-num { text-align: right; min-width: 4.4rem; }
+.iks-tbl td.kosong { color: color-mix(in srgb, var(--muted) 55%, transparent); }
+.iks-tbl thead th.now { color: var(--ink); box-shadow: inset 0 -3px 0 var(--accent); }
+.iks-tbl td.now { background: color-mix(in srgb, var(--accent) 12%, var(--surface)); }
+.iks-tbl tbody tr:nth-child(even) td.now { background: color-mix(in srgb, var(--accent) 16%, var(--surface)); }
+.iks-tbl .c-jml { font-weight: 800; border-left: 1px solid var(--line); }
+.iks-tbl tfoot th, .iks-tbl tfoot td { position: sticky; bottom: 0; z-index: 2; font-weight: 800; background: var(--tint); border-top: 1px solid var(--line); border-bottom: 0; }
+.iks-tbl tfoot th.c-nama { z-index: 3; }
+
+/* Rincian keuangan */
+.iks-bln { width: 100%; box-sizing: border-box; font-weight: 700; margin-bottom: 0.2rem; }
+.iks-sel { margin: 0.1rem 0 0.4rem; font-variant-numeric: tabular-nums; }
+.iks-sub { margin: 0.8rem 0 0.5rem; font-size: 0.9rem; font-weight: 800; }
+.iks-kpis .kpi.saldo span { font-size: 0.88rem; }
+.iks-bln, .iks-q { width: 100%; box-sizing: border-box; }
+
+/* Kolom isian (gaya dasar .input sebelumnya hanya ada di admin.css) */
+.input { width: 100%; min-height: 2.6rem; padding: 0.55rem 0.75rem; border: 1px solid var(--line); border-radius: 0.75rem; background: var(--surface); color: var(--ink); font: inherit; box-sizing: border-box; transition: border-color 0.15s, box-shadow 0.15s; }
+.input:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 45%, transparent); }
+select.input { appearance: auto; }
