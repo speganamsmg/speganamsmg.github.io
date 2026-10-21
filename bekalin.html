@@ -35,7 +35,7 @@
     .bar b { font-family: 'Offside', 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 400; font-size: 16px; line-height: 1; letter-spacing: 0.06em; color: #fff; user-select: none; }
     .bar b i { font-style: normal; color: #36d1da; }
     /* Bingkai memotong bagian atas halaman Apps Script (spanduk "Aplikasi ini dibuat oleh pengguna Google Apps Script"). */
-    .frame { position: relative; flex: 1 1 auto; overflow: hidden; margin-bottom: env(safe-area-inset-bottom, 0px); }
+    .frame { position: relative; flex: 1 1 auto; overflow: hidden; }
     .frame iframe { position: absolute; left: 0; width: 100%; border: 0; top: calc(var(--clip, 0px) * -1); height: calc(100% + var(--clip, 0px)); background: transparent; }
     .load { position: absolute; inset: 0; display: grid; place-items: center; color: #8a8a8e; font-size: 0.9rem; pointer-events: none; transition: opacity 0.3s; }
     .load.done { opacity: 0; }
