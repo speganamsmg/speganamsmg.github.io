@@ -148,8 +148,12 @@
   }
 
   // Halaman laporan IKS milik situs ini: dibuka di tab yang sama agar tombol kembali ke folder bisa bekerja.
-  function isLaporanIks(u) {
-    try { const x = new URL(u, location.href); return x.origin === location.origin && /\/laporan-iks\.html$/.test(x.pathname); } catch (e) { return false; }
+  function slugIks(u) {
+    try {
+      const x = new URL(u, location.href);
+      const m = x.origin === location.origin ? /\/(laporan-iks|kelola-iks)\.html$/.exec(x.pathname) : null;
+      return m ? m[1] : '';
+    } catch (e) { return ''; }
   }
 
   // Halaman lain di situs ini (mis. /bekalin.html) dibuka di tab yang sama.
@@ -193,8 +197,9 @@
       const u = App.safeUrl(item.terkunci && unlocked[item.id] ? unlocked[item.id].url : item.url);
       if (!u) return null;
       a.href = u;
-      if (isLaporanIks(u)) {
-        a.addEventListener('click', function () { rememberFolder('laporan-iks'); });
+      const slugI = slugIks(u);
+      if (slugI) {
+        a.addEventListener('click', function () { rememberFolder(slugI); });
         appTag = true;
       } else if (isSitusIni(u)) {
         /* halaman lain di situs ini (mis. bekalin.html): tab yang sama, tombol kembali browser ke sini */

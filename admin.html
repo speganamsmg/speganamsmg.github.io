@@ -28,9 +28,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&display=swap">
-  <link rel="stylesheet" href="style.css?v=49">
-  <link rel="stylesheet" href="charts.css?v=49">
-  <link rel="stylesheet" href="admin.css?v=49">
+  <link rel="stylesheet" href="style.css?v=50">
+  <link rel="stylesheet" href="charts.css?v=50">
+  <link rel="stylesheet" href="admin.css?v=50">
 </head>
 <body>
   <div class="splash" id="splash" role="status" aria-label="Memuat">
@@ -194,6 +194,37 @@
           <button class="btn sm" id="iksRefresh" type="button">Periksa lagi</button>
         </section>
 
+        <section class="card" id="ikskCard">
+          <h2>Kelola IKS</h2>
+          <p class="help">Halaman <a href="kelola-iks.html" target="_blank" rel="noopener">kelola-iks.html</a> dipakai untuk mengisi iuran, pengeluaran, dan saldo awal. Masuk hanya dengan password (tanpa nama pengguna). Password bendahara dan admin dibuat berbeda supaya tab LOG bisa mencatat siapa yang mengubah. Saldo awal hanya bisa diubah dengan password admin.</p>
+          <form class="iksk-form" data-peran="bendahara" autocomplete="off">
+            <div class="field">
+              <label for="ikskPwBendahara">Password bendahara</label>
+              <input class="input" id="ikskPwBendahara" type="password" autocomplete="new-password" maxlength="64">
+              <span class="help iksk-st" data-st="bendahara">Memuat…</span>
+            </div>
+            <div class="iks-actions">
+              <button class="btn btn-primary" type="submit">Simpan password bendahara</button>
+              <button class="btn iksk-off" type="button" hidden>Hapus</button>
+            </div>
+          </form>
+          <form class="iksk-form" data-peran="admin" autocomplete="off">
+            <div class="field">
+              <label for="ikskPwAdmin">Password admin</label>
+              <input class="input" id="ikskPwAdmin" type="password" autocomplete="new-password" maxlength="64">
+              <span class="help iksk-st" data-st="admin">Memuat…</span>
+            </div>
+            <div class="iks-actions">
+              <button class="btn btn-primary" type="submit">Simpan password admin</button>
+              <button class="btn iksk-off" type="button" hidden>Hapus</button>
+            </div>
+          </form>
+          <p class="help">Minimal 6 karakter. Mengganti atau menghapus password langsung mengeluarkan semua yang sedang masuk dengan password itu.</p>
+          <p class="msg" id="ikskMsg" role="alert"></p>
+          <h3 class="sub-h">Sambungan ke LAPORAN_IKS</h3>
+          <ul class="iks-sheets" id="ikskSumber"></ul>
+        </section>
+
         <form class="card" id="passwordForm" autocomplete="off">
           <h2>Ganti password</h2>
           <div class="field">
@@ -324,13 +355,13 @@
   <div id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15/Sortable.min.js"></script>
-  <script src="config.js?v=49"></script>
-  <script src="common.js?v=49"></script>
-  <script src="charts.js?v=49"></script>
-  <script src="admin.js?v=49"></script>
-  <script src="admin-forms.js?v=49"></script>
-  <script src="admin-names.js?v=49"></script>
-  <script src="admin-results.js?v=49"></script>
-  <script src="admin-iks.js?v=49"></script>
+  <script src="config.js?v=50"></script>
+  <script src="common.js?v=50"></script>
+  <script src="charts.js?v=50"></script>
+  <script src="admin.js?v=50"></script>
+  <script src="admin-forms.js?v=50"></script>
+  <script src="admin-names.js?v=50"></script>
+  <script src="admin-results.js?v=50"></script>
+  <script src="admin-iks.js?v=50"></script>
 </body>
 </html>

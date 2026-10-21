@@ -64,6 +64,65 @@
   });
 
   $('iksRefresh').addEventListener('click', function () { load($('iksRefresh')); });
-  A.onTab('settings', function () { load(); });
   if (window.App && App.passwordEye) App.passwordEye($('iksPw'));
+
+  // ── Kelola IKS: dua password (bendahara, admin) + sambungan ke LAPORAN_IKS ──
+  const PERAN = { bendahara: 'bendahara', admin: 'admin' };
+  function ikskMsg(text, ok) { const m = $('ikskMsg'); m.textContent = text; m.classList.toggle('ok', !!ok); }
+
+  function ikskShow(d) {
+    Object.keys(PERAN).forEach(function (p) {
+      const st = document.querySelector('[data-st="' + p + '"]');
+      const on = !!d[p];
+      st.textContent = on ? 'Sudah ada password. Isi kolom ini lalu simpan untuk menggantinya.' : 'Belum ada password (peran ini belum bisa masuk).';
+      document.querySelector('.iksk-form[data-peran="' + p + '"] .iksk-off').hidden = !on;
+    });
+    const ul = $('ikskSumber');
+    ul.replaceChildren();
+    const s = d.sumber || { ok: false, pesan: '', tab: [] };
+    if (s.pesan && !s.tab.length) {
+      const li = el('li', 'iks-sh bad'); li.append(el('strong', '', 'LAPORAN_IKS'), el('em', '', s.pesan)); ul.append(li);
+      return;
+    }
+    s.tab.forEach(function (t) {
+      const li = el('li', 'iks-sh ' + (t.ada ? 'ok' : 'bad'));
+      li.append(el('strong', '', t.tab), el('em', '', t.ada ? 'Tersambung' : 'Tab belum ada'));
+      ul.append(li);
+    });
+  }
+
+  async function ikskLoad() {
+    try { ikskShow(await A.call('admin.iksk.get', {})); }
+    catch (e) { if (e.code !== 'AUTH') ikskMsg(e.message); }
+  }
+
+  document.querySelectorAll('.iksk-form').forEach(function (f) {
+    const peran = f.dataset.peran;
+    const input = f.querySelector('input');
+    if (window.App && App.passwordEye) App.passwordEye(input);
+    f.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const btn = e.submitter || f.querySelector('button[type="submit"]');
+      ikskMsg('');
+      if (!input.value) { ikskMsg('Isi password dulu.'); return; }
+      A.setBusy(btn, true);
+      try {
+        ikskShow(await A.call('admin.iksk.save', { peran: peran, sandi: input.value }));
+        input.value = '';
+        ikskMsg('Password ' + peran + ' disimpan. Bagikan kepada yang bersangkutan.', true);
+      } catch (err) { if (err.code !== 'AUTH') ikskMsg(err.message); }
+      finally { A.setBusy(btn, false); }
+    });
+    f.querySelector('.iksk-off').addEventListener('click', async function (e) {
+      const btn = e.currentTarget;
+      const ok = await App.confirm({ title: 'Hapus password ' + peran + '?', lines: ['Peran ini tidak bisa masuk lagi ke Kelola IKS sampai Anda membuat password baru.'], ok: 'Hapus' });
+      if (!ok) return;
+      ikskMsg('');
+      A.setBusy(btn, true);
+      try { ikskShow(await A.call('admin.iksk.save', { peran: peran, hapus: true })); ikskMsg('Password ' + peran + ' dihapus.', true); }
+      catch (err) { if (err.code !== 'AUTH') ikskMsg(err.message); }
+      finally { A.setBusy(btn, false); }
+    });
+  });
+  A.onTab('settings', function () { load(); ikskLoad(); });
 })();
