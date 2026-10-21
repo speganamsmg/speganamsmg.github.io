@@ -595,48 +595,83 @@ svg.i { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round
 .tile:hover .count.app-tag { color: inherit; opacity: 1; }
 
 /* ═══ Tampilan per perangkat ═══
-   Ponsel (≤ 640px): kolom tunggal seperti sebelumnya, bilah navigasi melayang di bawah.
-   Tablet (641–1023px): kolom lebih lebar, kartu dua kolom, tombol navigasi di sudut atas.
-   Desktop (≥ 1024px): tata letak dua kolom, panel profil tetap di kiri, bilah navigasi di sudut kanan atas. */
+   Ponsel (≤ 640px): daftar satu kolom, bilah navigasi melayang di bawah.
+   Tablet (641–1023px): kepala profil melebar di atas, kartu tautan berbentuk kartu (ikon di atas, judul di bawah).
+   Desktop (≥ 1024px): panel profil tetap di kiri, kartu tautan mengisi sisa layar, seluruh susunan di tengah layar. */
 @media (min-width: 641px) {
   html { font-size: 17px; }
-  .wrap { max-width: 44rem; padding-left: 2rem; padding-right: 2rem; padding-bottom: 5rem; }
-  .avatar { transform-origin: center; }
-  .hero { margin-bottom: 2.4rem; }
-  .hero h1 { font-size: clamp(2.2rem, 5vw, 2.8rem); }
-  .hero .desc { max-width: 32rem; font-size: 1rem; }
-  .list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-  .list > li { min-width: 0; }
-  .tile { height: 100%; }
+  .wrap { max-width: 52rem; padding: clamp(5rem, 9vh, 6rem) 2rem 5rem; }
   /* Tombol Beranda/tema pindah ke sudut kanan atas */
   .dock { left: auto; right: 1.5rem; bottom: auto; top: 1.25rem; transform: none; }
-  .topbar { position: static; margin-bottom: 1.2rem; }
-  .wrap { padding-top: clamp(4.5rem, 9vh, 5.5rem); }
-  /* Bilah atas halaman dalam: tombol tema tetap sebaris dengan tombol kembali */
   .wrap > .topbar { position: absolute; top: 1.25rem; left: 2rem; right: 2rem; margin: 0; }
+
+  /* Kartu tautan */
+  .list { grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: 1.1rem; align-items: stretch; }
+  .list > li { min-width: 0; display: flex; }
+  .list > li > .tile { flex: 1; }
+  .grp-head { grid-column: 1 / -1; text-align: left; }
+  .tile {
+    display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto; grid-template-areas: "icon trail" "label label" "count count";
+    align-items: start; row-gap: 0.7rem; min-height: 9.8rem; padding: 1.15rem 1.15rem 1.2rem; border-radius: 1.6rem;
+  }
+  .tile > .icon { grid-area: icon; width: 3.2rem; height: 3.2rem; border-radius: 1rem; justify-self: start; }
+  .tile > .icon svg { width: 1.5rem; height: 1.5rem; }
+  .tile > .trail { grid-area: trail; width: 2.3rem; height: 2.3rem; padding: 0.55rem; }
+  .tile > .label { grid-area: label; align-self: end; font-size: 1.14rem; line-height: 1.22; }
+  .tile > .count { grid-area: count; justify-self: start; align-self: end; }
+  .tile > .count + .count { display: none; }
+  .tile-folder { margin-bottom: 0.5rem; }
+  .audience { width: fit-content; max-width: 100%; margin-bottom: 1.4rem; }
+  .qr { max-width: 36rem; margin-left: auto; margin-right: auto; }
+  .social { margin-top: 2rem; }
 }
+
+/* Tablet: kepala profil mendatar */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .wrap:has(> .hero) > .hero {
+    grid-template-columns: auto 1fr; grid-template-areas: "av title" "av spark" "av sub" "av desc"; justify-items: start; text-align: left; align-content: center;
+    column-gap: 2rem; margin-bottom: 2rem; padding: 1.7rem 2rem; border: 1px solid var(--line); border-radius: 2rem; background: color-mix(in srgb, var(--surface) 80%, transparent); box-shadow: var(--shadow);
+  }
+  .hero > .avatar { grid-area: av; width: 8.5rem; height: 8.5rem; margin: 0.45rem 0; align-self: center; }
+  .hero > h1 { grid-area: title; font-size: 2.3rem; text-align: left; }
+  .hero > .spark { grid-area: spark; justify-self: start; }
+  .hero > #subtitle { grid-area: sub; }
+  .hero > .desc { grid-area: desc; max-width: none; text-align: left; }
+  .social { justify-content: flex-start; }
+}
+
+/* Desktop */
 @media (min-width: 1024px) {
   html { font-size: 17.5px; }
-  .wrap:has(> .hero) { max-width: 76rem; display: grid; grid-template-columns: 21rem minmax(0, 1fr); column-gap: 3.5rem; align-items: start; padding-top: 5rem; padding-bottom: 4rem; }
-  .wrap:has(> .hero) > .hero { grid-column: 1; grid-row: 1 / span 12; position: sticky; top: 4.5rem; margin-bottom: 0; padding: 1.8rem 1.4rem; border: 1px solid var(--line); border-radius: 1.8rem; background: var(--surface); box-shadow: var(--shadow); }
+  .wrap:has(> .hero) {
+    max-width: 82rem; min-height: 100vh; min-height: 100dvh; box-sizing: border-box; display: grid; grid-template-columns: 22rem minmax(0, 1fr); column-gap: 4rem;
+    align-content: center; align-items: start; padding-top: 5rem; padding-bottom: 4rem;
+  }
+  .wrap:has(> .hero) > .hero {
+    grid-column: 1; grid-row: 1 / span 12; position: sticky; top: 5rem; margin-bottom: 0; padding: 2.4rem 1.6rem 2.2rem;
+    border: 1px solid var(--line); border-radius: 2.2rem; background: color-mix(in srgb, var(--surface) 85%, transparent); box-shadow: var(--shadow-up);
+  }
+  .hero > .avatar { width: 9rem; height: 9rem; margin-bottom: 1.5rem; }
+  .hero > h1 { font-size: 2.2rem; }
   .wrap:has(> .hero) > :not(.hero) { grid-column: 2; min-width: 0; }
-  .wrap:has(> .hero) .list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .wrap:has(> .hero) .qr, .wrap:has(> .hero) .social { max-width: 34rem; }
   .wrap:has(> .hero) .social { justify-content: flex-start; }
-  .wrap:has(> .hero) .audience { width: fit-content; max-width: 100%; }
+  .wrap:has(> .hero) .qr { margin-left: 0; margin-right: 0; }
 }
 @media (min-width: 1500px) {
-  .wrap:has(> .hero) { max-width: 88rem; grid-template-columns: 23rem minmax(0, 1fr); }
-  .wrap:has(> .hero) .list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  html { font-size: 18px; }
+  .wrap:has(> .hero) { max-width: 98rem; grid-template-columns: 24rem minmax(0, 1fr); }
+  .list { grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
 }
 
 /* Halaman laporan / dashboard / form lebih lebar di tablet dan desktop */
 @media (min-width: 641px) {
-  .wrap:has(> .dhead), .wrap:has(> #dhead) { max-width: 50rem; }
-  .wrap:has(> .fhead), .wrap:has(> #fhead) { max-width: 46rem; }
+  .wrap:has(> #dhead) { max-width: 52rem; }
+  .wrap:has(> #fhead) { max-width: 46rem; }
 }
 @media (min-width: 1024px) {
   .wrap:has(> #dhead) { max-width: 76rem; }
   .wrap:has(> #fhead) { max-width: 50rem; }
   #dhead { max-width: 52rem; }
 }
+@media (min-width: 1500px) { .wrap:has(> #dhead) { max-width: 88rem; } }
+@media (min-width: 641px) and (max-width: 1023px) { .hero > .spark { margin-left: 0; margin-right: 0; } }
