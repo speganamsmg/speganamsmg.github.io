@@ -77,3 +77,20 @@ select.input { appearance: auto; }
 .iksk-toast { bottom: calc(9.2rem + env(safe-area-inset-bottom, 0px)); }
 .iksk-has-bar .wrap { padding-bottom: 12rem; }
 .iksk-dlg form, .iksk-dlg .field label, .iksk-dlg .help { text-align: left; }
+
+/* Rapel: tombol keterangan di bawah nama dan daftar centang bulan */
+.iksk-pills { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.25rem; }
+.iksk-pill { display: inline-block; max-width: 100%; padding: 0.12rem 0.6rem; border: 1px dashed var(--line); border-radius: 99px; background: transparent; color: var(--muted); font: inherit; font-size: 0.72rem; font-weight: 700; text-align: left; cursor: pointer; overflow-wrap: anywhere; }
+.iksk-pill:hover { border-color: var(--ink); color: var(--ink); }
+.iksk-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.iksk-pill.on { border-style: solid; border-color: color-mix(in srgb, #2ecc71 55%, var(--line)); background: color-mix(in srgb, #2ecc71 18%, var(--surface)); color: color-mix(in srgb, #1b7a43 78%, var(--ink)); }
+.iksk-pill.has { border-style: solid; color: var(--ink); }
+.iksk-pill.cov { border-style: solid; border-color: color-mix(in srgb, #2ecc71 55%, var(--line)); background: color-mix(in srgb, #2ecc71 18%, var(--surface)); color: color-mix(in srgb, #1b7a43 78%, var(--ink)); cursor: default; }
+.iksk-chk { list-style: none; margin: 0 0 0.8rem; padding: 0; display: grid; gap: 0.1rem; max-height: 14rem; overflow: auto; border: 1px solid var(--line); border-radius: 0.8rem; }
+.iksk-chk li { border-top: 1px solid color-mix(in srgb, var(--line) 60%, transparent); }
+.iksk-chk li:first-child { border-top: 0; }
+.iksk-chk label { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.75rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; text-align: left; }
+.iksk-chk input { width: 1.1rem; height: 1.1rem; flex: none; accent-color: var(--ink); }
+.iksk-chk label span { flex: 1; min-width: 0; }
+.iksk-chk label em { flex: none; font-style: normal; font-size: 0.76rem; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.iksk-dlg .hint { text-align: left; }

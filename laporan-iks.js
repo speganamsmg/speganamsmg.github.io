@@ -76,8 +76,11 @@
     c.append(pilihBulan(daftar));
     const i = x.bulan.indexOf(state.bln);
     if (i < 0) { c.append(el('p', 'hint', 'Bulan ini belum ada di sheet iuran.')); return c; }
-    const nBayar = x.orang.filter(function (o) { return o.bayar[i] > 0; }).length;
-    c.append(el('p', 'hint iks-ring', nBayar + ' dari ' + x.orang.length + ' sudah membayar · ' + bulanPenuh(state.bln)));
+    // Rapel: bulan yang dilunasi lewat pembayaran di bulan lain (keterangan "Rapel Sep 26, Okt 26") dihitung sudah membayar.
+    const rapelDi = function (o) { return (o.rapel && o.rapel[i]) || ''; };
+    const nBayar = x.orang.filter(function (o) { return o.bayar[i] > 0 || rapelDi(o); }).length;
+    const nRapel = x.orang.filter(function (o) { return rapelDi(o); }).length;
+    c.append(el('p', 'hint iks-ring', nBayar + ' dari ' + x.orang.length + ' sudah membayar · ' + bulanPenuh(state.bln) + (nRapel ? ' · ' + nRapel + ' lewat rapel' : '')));
     const q = el('input', 'input iks-q'); q.type = 'search'; q.placeholder = 'Cari nama…'; q.setAttribute('aria-label', 'Cari nama');
     q.value = state.q;
     const box = el('div', 'iks-sheet'); box.tabIndex = 0; box.setAttribute('role', 'region'); box.setAttribute('aria-label', 'Tabel iuran per anggota');
@@ -97,8 +100,17 @@
         n++;
         const v = o.bayar[i];
         jml += v;
-        const tr = el('tr', v > 0 ? '' : 'belum');
-        tr.append(el('th', 'c-nama', o.nama), el('td', 'c-num' + (v > 0 ? '' : ' kosong'), v > 0 ? angka(v) : 'Belum'));
+        const rd = rapelDi(o);
+        const ket = (o.ket && o.ket[i]) || '';
+        const tr = el('tr', rd ? 'rapel' : (v > 0 ? '' : 'belum'));
+        const td = el('td', 'c-num' + (v > 0 || rd ? '' : ' kosong'));
+        if (v > 0) td.append(el('span', 'iks-v', angka(v)));
+        else if (rd && rd !== state.bln) td.append(el('span', 'iks-v iks-rapel', 'Rapel ' + bulanPendek(rd, true)));   // dibayar di bulan lain
+        else if (rd) td.append(el('span', 'iks-v', '–'));
+        else td.append(el('span', 'iks-v', 'Belum'));
+        if (v > 0 && rd && rd !== state.bln) td.append(el('span', 'iks-note', 'Rapel ' + bulanPendek(rd, true)));
+        if (ket) td.append(el('span', 'iks-note', ket));
+        tr.append(el('th', 'c-nama', o.nama), td);
         body.append(tr);
       });
       if (!n) {

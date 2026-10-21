@@ -114,8 +114,11 @@
         const p = k.split('|'); const o = cariOrang(j, +p[0]);
         const i = m.bulan.indexOf(p[1]);
         const e = S.edit[j][k];
-        if (!o || i < 0 || o.bayar[i] === angka(e.v)) { delete S.edit[j][k]; return; }
-        if (o.bayar[i] !== e.lama) { delete S.edit[j][k]; basi++; }
+        if (!o || i < 0) { delete S.edit[j][k]; return; }
+        const ketSkrg = o.ket[i] || '';
+        const ketSama = e.ket === undefined || e.ket === ketSkrg;
+        if (o.bayar[i] === angka(e.v) && ketSama) { delete S.edit[j][k]; return; }
+        if (o.bayar[i] !== e.lama || (e.ket !== undefined && ketSkrg !== e.ketLama)) { delete S.edit[j][k]; basi++; }
       });
     });
     if (S.tab === 'saldo' && d.peran !== 'admin') S.tab = 'iuran';
@@ -265,7 +268,7 @@
     const ringkas = el('p', 'hint iksk-ring');
     const upd = function () {
       let n = 0, tot = 0;
-      m.orang.forEach(function (o) { const v = nilaiEfektif(o, i, bln); if (v > 0) { n++; tot += v; } });
+      m.orang.forEach(function (o) { const v = nilaiEfektif(o, i, bln); if (v > 0 || (o.rapel && o.rapel[i])) n++; if (v > 0) tot += v; });
       ringkas.textContent = n + ' dari ' + m.orang.length + ' sudah membayar · ' + rp(tot);
     };
     upd();
@@ -284,7 +287,7 @@
         const ubah = Object.prototype.hasOwnProperty.call(S.edit[j], k);
         const li = el('li', 'iksk-item' + (ubah ? ' changed' : ''));
         const nm = el('div', 'iksk-nm');
-        nm.append(el('strong', '', o.nama), el('span', '', o.jabatan || ''));
+        nm.append(el('strong', '', o.nama), el('span', '', o.jabatan || ''), pilRapel(j, o, bln, i));
         const wrap = el('label', 'iksk-amt');
         wrap.append(el('span', '', 'Rp'));
         const inp = el('input'); inp.type = 'text'; inp.inputMode = 'numeric'; inp.autocomplete = 'off';
@@ -295,7 +298,7 @@
         inp.addEventListener('input', function () {
           const bersih = inp.value.replace(/\D/g, '').slice(0, 10);
           if (bersih !== inp.value) inp.value = bersih;
-          setEdit(j, o, bln, i, angka(bersih));
+          aturEdit(j, o, bln, i, { v: angka(bersih) });
           li.classList.toggle('changed', Object.prototype.hasOwnProperty.call(S.edit[j], k));
           upd(); barSimpan();
         });
@@ -312,9 +315,125 @@
     return f;
   }
 
-  function setEdit(j, o, bln, i, n) {
+  // Isian sementara satu sel: { v: nominal, lama: nominal asli, ket?: keterangan baru, ketLama?: keterangan asli }.
+  function aturEdit(j, o, bln, i, patch) {
     const k = o.baris + '|' + bln;
-    if (n === o.bayar[i]) delete S.edit[j][k]; else S.edit[j][k] = { v: String(n), lama: o.bayar[i] };
+    const e = S.edit[j][k] || { v: String(o.bayar[i]), lama: o.bayar[i] };
+    if (patch.v !== undefined) e.v = String(patch.v);
+    if (patch.ket !== undefined) { if (e.ket === undefined) e.ketLama = o.ket[i] || ''; e.ket = patch.ket; }
+    const ketSama = e.ket === undefined || e.ket === (o.ket[i] || '');
+    if (angka(e.v) === o.bayar[i] && ketSama) delete S.edit[j][k]; else S.edit[j][k] = e;
+  }
+
+  function ketEfektif(j, o, i, bln) {
+    const e = S.edit[j][o.baris + '|' + bln];
+    return e && e.ket !== undefined ? e.ket : (o.ket[i] || '');
+  }
+
+  // ── Rapel: pembayaran sekaligus beberapa bulan, ditulis di kolom "Ket <bulan>" ──
+  const BLN_NO = { jan: 1, feb: 2, peb: 2, mar: 3, apr: 4, mei: 5, may: 5, jun: 6, jul: 7, agu: 8, aug: 8, agt: 8, ags: 8, sep: 9, okt: 10, oct: 10, nov: 11, nop: 11, des: 12, dec: 12 };
+  function bulanDariTeks(t, acuan) {
+    const m = /^([a-z]{3,})\.?\s*[-\/']?\s*(\d{2}|\d{4})?$/i.exec(String(t || '').trim());
+    if (!m) return '';
+    const n = BLN_NO[m[1].toLowerCase().slice(0, 3)];
+    if (!n) return '';
+    let y;
+    if (m[2]) y = m[2].length === 2 ? 2000 + Number(m[2]) : Number(m[2]);
+    else {
+      const ay = +acuan.slice(0, 4), am = +acuan.slice(5, 7);
+      let best = Infinity; y = ay;
+      [ay - 1, ay, ay + 1].forEach(function (c) { const d = Math.abs(c * 12 + n - (ay * 12 + am)); if (d < best) { best = d; y = c; } });
+    }
+    return y + '-' + ('0' + n).slice(-2);
+  }
+  // Daftar bulan yang dilunasi menurut keterangan; null bila bukan rapel.
+  function parseRapel(teks, bulanBayar) {
+    const m = /^rapel\b[\s:.\-–]*(.*)$/i.exec(String(teks || '').trim());
+    if (!m) return null;
+    const hasil = [];
+    m[1].split(/\s*(?:,|;|&|\bdan\b)\s*/i).forEach(function (x) { const b = bulanDariTeks(x, bulanBayar); if (b && hasil.indexOf(b) < 0) hasil.push(b); });
+    return hasil;
+  }
+  function bulanSingkat(k) { return BLN[+k.slice(5, 7) - 1] + ' ' + k.slice(2, 4); }
+
+  // Tombol kecil di bawah nama: keterangan rapel bulan ini, dan penanda bila bulan ini sudah dilunasi lewat rapel bulan lain.
+  function pilRapel(j, o, bln, i) {
+    const wrap = el('div', 'iksk-pills');
+    const ket = ketEfektif(j, o, i, bln);
+    const b = el('button', 'iksk-pill' + (ket ? (/^\s*rapel\b/i.test(ket) ? ' on' : ' has') : ''), ket || '+ Rapel'); b.type = 'button';
+    b.setAttribute('aria-label', 'Keterangan rapel ' + o.nama);
+    b.addEventListener('click', function () {
+      const m = S.d[j].masuk;
+      if (!m.ada_ket[i]) {
+        toast('Kolom "Ket ' + BLN[+bln.slice(5, 7) - 1] + ' ' + bln.slice(0, 4) + '" belum ada di tab ' + (j === 'sosial' ? 'SOSIAL_IN' : 'PENSIUN_IN') + '. Tambahkan dulu di Google Sheets, di kanan kolom bulannya.', true);
+        return;
+      }
+      formRapel(j, o, bln, i);
+    });
+    wrap.append(b);
+    const rd = (o.rapel && o.rapel[i]) || '';
+    if (rd && rd !== bln) wrap.append(el('span', 'iksk-pill cov', 'Rapel ' + bulanSingkat(rd)));
+    return wrap;
+  }
+
+  function formRapel(j, o, bln, i) {
+    const m = S.d[j].masuk;
+    const awal = ketEfektif(j, o, i, bln);
+    const pilih = {};
+    (parseRapel(awal, bln) || []).forEach(function (b) { if (b !== bln) pilih[b] = true; });
+    const d = document.createElement('dialog');
+    d.className = 'install-dlg iksk-dlg';
+    const box = el('div', 'in');
+    box.append(el('h2', '', 'Rapel ' + o.nama));
+    box.append(el('p', 'hint', 'Dibayar di ' + bulanPenuh(bln) + '. Centang bulan sebelumnya yang ikut dilunasi. Nominalnya tetap diisi di kolom iuran bulan ini.'));
+    const form = el('form'); form.noValidate = true;
+
+    const teks = el('input', 'input'); teks.type = 'text'; teks.maxLength = 120; teks.autocomplete = 'off';
+    teks.value = awal;
+    const susun = function () {
+      const p = Object.keys(pilih).filter(function (b) { return pilih[b]; }).sort();
+      return p.length ? 'Rapel ' + p.concat([bln]).map(bulanSingkat).join(', ') : '';
+    };
+
+    const daftar = m.bulan.filter(function (b) { return b < bln; }).sort().reverse().slice(0, 12);
+    const ul = el('ul', 'iksk-chk');
+    const pas = el('li');
+    const pl = el('label'); const pc = el('input'); pc.type = 'checkbox'; pc.checked = true; pc.disabled = true;
+    pl.append(pc, el('span', '', bulanPenuh(bln)), el('em', '', 'dibayar bulan ini'));
+    pas.append(pl); ul.append(pas);
+    if (!daftar.length) ul.append(el('li', 'iks-none', 'Tidak ada bulan sebelumnya di sheet.'));
+    daftar.forEach(function (b) {
+      const idx = m.bulan.indexOf(b);
+      const v = o.bayar[idx];
+      const rd = (o.rapel && o.rapel[idx]) || '';
+      const st = v > 0 ? rp(v) : (rd && rd !== bln ? 'Rapel ' + bulanSingkat(rd) : 'Belum');
+      const li = el('li');
+      const lb = el('label'); const cb = el('input'); cb.type = 'checkbox'; cb.checked = !!pilih[b];
+      cb.addEventListener('change', function () { pilih[b] = cb.checked; teks.value = susun(); });
+      lb.append(cb, el('span', '', bulanPenuh(b)), el('em', '', st));
+      li.append(lb); ul.append(li);
+    });
+    form.append(ul);
+    form.append(kolomForm('Keterangan di sheet', teks, 'Terisi otomatis dari centang. Boleh diubah; kosongkan untuk menghapus keterangan.'));
+
+    const msg = el('p', 'iksk-err', ''); msg.setAttribute('role', 'alert');
+    const row = el('div', 'dlg-actions');
+    const no = el('button', 'btn', 'Batal'); no.type = 'button';
+    const ok = el('button', 'btn btn-primary', 'Pakai'); ok.type = 'submit';
+    row.append(no, ok);
+    form.append(msg, row);
+    box.append(form); d.append(box);
+    no.addEventListener('click', function () { d.close(); });
+    d.addEventListener('close', function () { d.remove(); });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const val = teks.value.replace(/\s+/g, ' ').trim();
+      if (val.length > 120) { msg.textContent = 'Keterangan terlalu panjang (maksimal 120 karakter).'; return; }
+      aturEdit(j, o, bln, i, { ket: val });
+      d.close();
+      gambar();
+    });
+    document.body.append(d); d.showModal();
   }
 
   function barSimpan() {
@@ -335,15 +454,19 @@
     const j = S.dana;
     const m = S.d[j].masuk;
     const ubah = [];
+    let nKet = 0;
     Object.keys(S.edit[j]).forEach(function (k) {
       const p = k.split('|'); const o = cariOrang(j, +p[0]); const i = m.bulan.indexOf(p[1]);
       if (!o || i < 0) return;
-      ubah.push({ baris: o.baris, nama: o.nama, bln: p[1], lama: o.bayar[i], baru: angka(S.edit[j][k].v) });
+      const e = S.edit[j][k];
+      const u = { baris: o.baris, nama: o.nama, bln: p[1], lama: o.bayar[i], baru: angka(e.v) };
+      if (e.ket !== undefined) { u.ket = e.ket; u.ketLama = o.ket[i] || ''; nKet++; }
+      ubah.push(u);
     });
     if (!ubah.length) return;
     const ok = await App.confirm({
       title: 'Simpan ' + ubah.length + ' perubahan?',
-      lines: ['Iuran ' + (j === 'sosial' ? 'sosial' : 'pensiun') + ' akan diperbarui di LAPORAN_IKS dan tercatat di tab LOG.'],
+      lines: ['Iuran ' + (j === 'sosial' ? 'sosial' : 'pensiun') + (nKet ? ' dan ' + nKet + ' keterangan rapel' : '') + ' akan diperbarui di LAPORAN_IKS dan tercatat di tab LOG.'],
       ok: 'Simpan'
     });
     if (!ok) return;

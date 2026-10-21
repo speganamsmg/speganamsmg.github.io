@@ -85,3 +85,10 @@ select.input { appearance: auto; }
 .iks-tbl tbody tr.belum td.kosong { color: color-mix(in srgb, #c2255c 80%, var(--ink)); font-weight: 700; font-size: 0.78rem; }
 .iks-tbl .c-num { min-width: 5.2rem; }
 .iks-sheetcard .iks-bln { margin-bottom: 0.7rem; }
+
+/* Rapel: bulan yang dilunasi lewat pembayaran di bulan lain berwarna hijau */
+.iks-tbl tbody tr.rapel th, .iks-tbl tbody tr.rapel td { background: color-mix(in srgb, #2ecc71 20%, var(--surface)); }
+.iks-tbl td .iks-v { display: block; }
+.iks-tbl td .iks-rapel { font-size: 0.78rem; font-weight: 700; color: color-mix(in srgb, #1b7a43 78%, var(--ink)); }
+.iks-tbl td .iks-note { display: block; margin-left: auto; max-width: 9.5rem; margin-top: 0.1rem; font-size: 0.7rem; line-height: 1.25; font-weight: 600; color: var(--muted); white-space: normal; overflow-wrap: anywhere; text-align: right; }
+.iks-tbl tbody tr.belum td .iks-note { color: color-mix(in srgb, #c2255c 70%, var(--muted)); }
