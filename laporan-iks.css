@@ -79,3 +79,9 @@
 .input { width: 100%; min-height: 2.6rem; padding: 0.55rem 0.75rem; border: 1px solid var(--line); border-radius: 0.75rem; background: var(--surface); color: var(--ink); font: inherit; box-sizing: border-box; transition: border-color 0.15s, box-shadow 0.15s; }
 .input:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 45%, transparent); }
 select.input { appearance: auto; }
+
+/* Satu bulan: yang belum membayar berwarna merah muda */
+.iks-tbl tbody tr.belum th, .iks-tbl tbody tr.belum td { background: color-mix(in srgb, #ff5c8a 16%, var(--surface)); }
+.iks-tbl tbody tr.belum td.kosong { color: color-mix(in srgb, #c2255c 80%, var(--ink)); font-weight: 700; font-size: 0.78rem; }
+.iks-tbl .c-num { min-width: 5.2rem; }
+.iks-sheetcard .iks-bln { margin-bottom: 0.7rem; }

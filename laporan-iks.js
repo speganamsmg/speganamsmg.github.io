@@ -39,21 +39,51 @@
 
   // ── Bagian-bagian halaman ──
   // Tabel iuran seperti spreadsheet: NAMA | bulan… | JUMLAH. Kolom nama dan judul bulan tetap terlihat saat digulir.
+  // Bulan setelah bulan berjalan tidak ditampilkan. Bila semua bulan lebih baru dari hari ini, bulan pertama tetap tampil.
+  function bulanTampil(daftar, bulanIni) {
+    const v = daftar.filter(function (b) { return b <= bulanIni; });
+    return v.length ? v : daftar.slice(0, 1);
+  }
+
   function angka(n) { return n > 0 ? Math.round(n).toLocaleString('id-ID') : ''; }
 
-  function tabel(x) {
+  // Daftar bulan untuk picker (gabungan sosial dan pensiun, sampai bulan berjalan).
+  function bulanGabungan(d) {
+    const set = {};
+    ['sosial', 'pensiun'].forEach(function (j) { if (d[j].ok) d[j].bulan.forEach(function (b) { set[b] = 1; }); });
+    return bulanTampil(Object.keys(set).sort(), d.bulan_ini);
+  }
+
+  // Bulan terpilih dipakai bersama oleh ketiga tab; bawaannya bulan berjalan.
+  function pastikanBulan(d) {
+    const daftar = bulanGabungan(d);
+    if (daftar.length && daftar.indexOf(state.bln) < 0) {
+      state.bln = daftar.indexOf(d.bulan_ini) >= 0 ? d.bulan_ini : daftar[daftar.length - 1];
+    }
+    return daftar;
+  }
+
+  function pilihBulan(daftar) {
+    const sel = el('select', 'input iks-bln'); sel.setAttribute('aria-label', 'Pilih bulan');
+    daftar.forEach(function (bk) { const o = el('option', '', bulanPenuh(bk)); o.value = bk; if (bk === state.bln) o.selected = true; sel.append(o); });
+    sel.addEventListener('change', function () { state.bln = sel.value; state.q = ''; state.reset = true; draw(); });
+    return sel;
+  }
+
+  // Tabel iuran satu bulan: NAMA | IURAN. Yang belum membayar diberi warna merah muda.
+  function tabel(x, daftar) {
     const c = el('section', 'card dsec iks-sheetcard');
-    const k = x.bulan[x.acuan];
-    c.append(el('p', 'hint iks-ring', x.n_bayar + ' dari ' + x.n_anggota + ' sudah membayar' + (k ? ' · ' + bulanPenuh(k) : '')));
+    c.append(pilihBulan(daftar));
+    const i = x.bulan.indexOf(state.bln);
+    if (i < 0) { c.append(el('p', 'hint', 'Bulan ini belum ada di sheet iuran.')); return c; }
+    const nBayar = x.orang.filter(function (o) { return o.bayar[i] > 0; }).length;
+    c.append(el('p', 'hint iks-ring', nBayar + ' dari ' + x.orang.length + ' sudah membayar · ' + bulanPenuh(state.bln)));
     const q = el('input', 'input iks-q'); q.type = 'search'; q.placeholder = 'Cari nama…'; q.setAttribute('aria-label', 'Cari nama');
     q.value = state.q;
     const box = el('div', 'iks-sheet'); box.tabIndex = 0; box.setAttribute('role', 'region'); box.setAttribute('aria-label', 'Tabel iuran per anggota');
     const t = el('table', 'iks-tbl');
-
     const hd = el('thead'); const hr = el('tr');
-    hr.append(el('th', 'c-nama', 'Nama'));
-    x.bulan.forEach(function (b, i) { hr.append(el('th', 'c-num' + (i === x.acuan ? ' now' : ''), bulanPendek(b, true))); });
-    hr.append(el('th', 'c-num c-jml', 'Jumlah'));
+    hr.append(el('th', 'c-nama', 'Nama'), el('th', 'c-num', 'Iuran'));
     hd.append(hr); t.append(hd);
 
     const body = el('tbody');
@@ -61,31 +91,22 @@
     const gambarBaris = function () {
       body.replaceChildren(); ft.replaceChildren();
       const s = state.q.trim().toLowerCase();
-      const sum = x.bulan.map(function () { return 0; });
       let n = 0, jml = 0;
       x.orang.forEach(function (o) {
         if (s && o.nama.toLowerCase().indexOf(s) < 0) return;
         n++;
-        const tr = el('tr');
-        tr.append(el('th', 'c-nama', o.nama));
-        o.bayar.forEach(function (v, i) {
-          sum[i] += v;
-          const td = el('td', 'c-num' + (v > 0 ? '' : ' kosong') + (i === x.acuan ? ' now' : ''), v > 0 ? angka(v) : '–');
-          td.title = bulanPenuh(x.bulan[i]) + ' · ' + (v > 0 ? rp(v) : 'belum');
-          tr.append(td);
-        });
-        jml += o.total;
-        tr.append(el('td', 'c-num c-jml', angka(o.total) || '–'));
+        const v = o.bayar[i];
+        jml += v;
+        const tr = el('tr', v > 0 ? '' : 'belum');
+        tr.append(el('th', 'c-nama', o.nama), el('td', 'c-num' + (v > 0 ? '' : ' kosong'), v > 0 ? angka(v) : 'Belum'));
         body.append(tr);
       });
       if (!n) {
-        const tr = el('tr'); const td = el('td', 'iks-none', 'Nama tidak ditemukan.'); td.colSpan = x.bulan.length + 2; tr.append(td); body.append(tr);
+        const tr = el('tr'); const td = el('td', 'iks-none', 'Nama tidak ditemukan.'); td.colSpan = 2; tr.append(td); body.append(tr);
         return;
       }
       const fr = el('tr');
-      fr.append(el('th', 'c-nama', s ? 'Jumlah (hasil cari)' : 'Jumlah'));
-      sum.forEach(function (v, i) { fr.append(el('td', 'c-num' + (i === x.acuan ? ' now' : ''), angka(v) || '–')); });
-      fr.append(el('td', 'c-num c-jml', angka(jml) || '–'));
+      fr.append(el('th', 'c-nama', s ? 'Jumlah (hasil cari)' : 'Jumlah'), el('td', 'c-num', angka(jml) || '–'));
       ft.append(fr);
     };
     t.append(body, ft);
@@ -96,21 +117,15 @@
     return c;
   }
 
-  function tabelView(x) {
+  function tabelView(x, daftar) {
     const f = document.createDocumentFragment();
     if (!x.ok) { f.append(note('Data belum tersedia', x.pesan)); return f; }
     if (!x.bulan.length || !x.orang.length) { f.append(note('Belum ada data iuran', 'Daftar anggota atau judul bulan belum diisi.')); return f; }
-    f.append(tabel(x));
+    f.append(tabel(x, daftar));
     return f;
   }
 
   // ── Rincian keuangan: total kas + pemasukan/pengeluaran per bulan terpilih ──
-  function bulanGabungan(d) {
-    const set = {};
-    ['sosial', 'pensiun'].forEach(function (j) { if (d[j].ok) d[j].bulan.forEach(function (b) { set[b] = 1; }); });
-    return Object.keys(set).sort();
-  }
-
   function rincianDana(x, nama, bln) {
     const c = el('section', 'card dsec');
     c.append(el('h2', '', nama));
@@ -157,18 +172,10 @@
     kas.append(big, a, b);
     f.append(kas);
 
-    const bulan = bulanGabungan(d);
+    const bulan = pastikanBulan(d);
     if (!bulan.length) { f.append(note('Belum ada data bulanan', 'Judul bulan di sheet iuran belum diisi.')); return f; }
-    if (bulan.indexOf(state.bln) < 0) {
-      const ref = s.ok ? s.bulan[s.acuan] : p.ok ? p.bulan[p.acuan] : '';
-      state.bln = bulan.indexOf(ref) >= 0 ? ref : bulan[bulan.length - 1];
-    }
     const pick = el('section', 'card dsec');
-    pick.append(el('h2', '', 'Per bulan'));
-    const sel = el('select', 'input iks-bln'); sel.setAttribute('aria-label', 'Pilih bulan');
-    bulan.forEach(function (bk) { const o = el('option', '', bulanPenuh(bk)); o.value = bk; if (bk === state.bln) o.selected = true; sel.append(o); });
-    sel.addEventListener('change', function () { state.bln = sel.value; draw(); });
-    pick.append(sel);
+    pick.append(el('h2', '', 'Per bulan'), pilihBulan(bulan));
     f.append(pick, rincianDana(s, 'Sosial', state.bln), rincianDana(p, 'Pensiun', state.bln));
     return f;
   }
@@ -198,7 +205,8 @@
     const pos = sheet && !state.reset ? { l: sheet.scrollLeft, t: sheet.scrollTop } : null;
     state.reset = false;
     const frag = document.createDocumentFragment();
-    frag.append(tabs, state.tab === 'rincian' ? rincianView(d) : tabelView(d[state.tab]));
+    const daftar = pastikanBulan(d);
+    frag.append(tabs, state.tab === 'rincian' ? rincianView(d) : tabelView(d[state.tab], daftar));
     stage.replaceChildren(frag);
     const baru = stage.querySelector('.iks-sheet');
     if (pos && baru) { baru.scrollLeft = pos.l; baru.scrollTop = pos.t; }
