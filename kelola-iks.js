@@ -243,13 +243,6 @@
     return Object.prototype.hasOwnProperty.call(S.edit[S.dana], k) ? angka(S.edit[S.dana][k].v) : o.bayar[i];
   }
 
-  function nominalUmum(m, i) {
-    const hitung = {};
-    let best = 0, n = 0;
-    m.orang.forEach(function (o) { const v = o.bayar[i]; if (v > 0) { hitung[v] = (hitung[v] || 0) + 1; if (hitung[v] > n) { n = hitung[v]; best = v; } } });
-    return best;
-  }
-
   function viewIuran() {
     const j = S.dana;
     const m = S.d[j].masuk;
@@ -277,20 +270,6 @@
     };
     upd();
     c.append(ringkas);
-
-    // Isi cepat: nominal untuk yang masih kosong di bulan ini.
-    const cepat = el('div', 'iksk-quick');
-    const nom = el('input', 'input'); nom.type = 'text'; nom.inputMode = 'numeric'; nom.setAttribute('aria-label', 'Nominal iuran');
-    nom.placeholder = 'Nominal'; nom.value = String(nominalUmum(m, i) || '');
-    const isi = el('button', 'btn sm', 'Isi yang kosong'); isi.type = 'button';
-    isi.addEventListener('click', function () {
-      const n = angka(nom.value);
-      if (!n) { toast('Isi nominalnya dulu.', true); return; }
-      m.orang.forEach(function (o) { if (nilaiEfektif(o, i, bln) === 0) setEdit(j, o, bln, i, n); });
-      gambar();
-    });
-    cepat.append(nom, isi);
-    c.append(cepat);
 
     const q = el('input', 'input iks-q'); q.type = 'search'; q.placeholder = 'Cari nama…'; q.setAttribute('aria-label', 'Cari nama'); q.value = S.q;
     const list = el('ul', 'iksk-list');
