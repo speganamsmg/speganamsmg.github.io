@@ -25,7 +25,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Offside&display=swap" rel="stylesheet">
   <style>
     html { -webkit-text-size-adjust: 100%; }
-    :root { --bar: 38px; --bg: #f2f2f7; --bar-bg: #0d226b; }
+    :root { --z: 1; --bar: 38px; --bg: #f2f2f7; --bar-bg: #0d226b; }
     @media (prefers-color-scheme: dark) { :root { --bg: #070d18; --bar-bg: #0a1640; } }
     * { box-sizing: border-box; }
     html, body { height: 100%; margin: 0; background: var(--bg); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif; }
@@ -36,7 +36,14 @@
     .bar b i { font-style: normal; color: #36d1da; }
     /* Bingkai memotong bagian atas halaman Apps Script (spanduk "Aplikasi ini dibuat oleh pengguna Google Apps Script"). */
     .frame { position: relative; flex: 1 1 auto; overflow: hidden; }
-    .frame iframe { position: absolute; left: 0; width: 100%; border: 0; top: calc(var(--clip, 0px) * -1); height: calc(100% + var(--clip, 0px)); background: transparent; }
+    /* Zoom: halaman Apps Script berasal dari domain lain, jadi diperbesar dengan menskala bingkainya. */
+    .frame iframe { position: absolute; left: 0; top: calc(var(--clip, 0px) * var(--z) * -1); width: calc(100% / var(--z)); height: calc((100% + var(--clip, 0px) * var(--z)) / var(--z)); border: 0; background: transparent; transform: scale(var(--z)); transform-origin: 0 0; }
+    .zoom { position: absolute; right: max(10px, env(safe-area-inset-right, 0px)); top: calc(env(safe-area-inset-top, 0px) + 5px); height: 28px; display: flex; align-items: center; gap: 2px; padding: 0 2px; border-radius: 99px; background: rgba(255,255,255,0.12); }
+    .zoom button { min-width: 28px; height: 24px; padding: 0 6px; border: 0; border-radius: 99px; background: transparent; color: #fff; font: 600 15px/1 -apple-system, system-ui, sans-serif; cursor: pointer; }
+    .zoom button:hover:not(:disabled) { background: rgba(255,255,255,0.18); }
+    .zoom button:disabled { opacity: 0.35; cursor: default; }
+    .zoom button:focus-visible { outline: 2px solid #36d1da; outline-offset: 1px; }
+    .zoom .pct { min-width: 42px; font-size: 12px; font-variant-numeric: tabular-nums; }
     .load { position: absolute; inset: 0; display: grid; place-items: center; color: #8a8a8e; font-size: 0.9rem; pointer-events: none; transition: opacity 0.3s; }
     .load.done { opacity: 0; }
   </style>
@@ -44,6 +51,11 @@
 <body>
   <header class="bar">
     <b aria-label="BEKALIN">BEKA<i>LIN</i></b>
+    <div class="zoom" role="group" aria-label="Perbesar atau perkecil tampilan">
+      <button type="button" id="zOut" aria-label="Perkecil tampilan">&minus;</button>
+      <button type="button" id="zPct" class="pct" aria-label="Kembalikan ukuran awal" title="Kembalikan ukuran awal">100%</button>
+      <button type="button" id="zIn" aria-label="Perbesar tampilan">+</button>
+    </div>
   </header>
   <main class="frame">
     <div class="load" id="load">Memuat BEKALIN…</div>
@@ -68,6 +80,27 @@
       if (!isFinite(clip) || qs.get('clip') === null) clip = Number(cfg.BEKALIN_CLIP);
       if (!isFinite(clip) || clip < 0 || clip > 120) clip = 0;
       document.documentElement.style.setProperty('--clip', clip + 'px');
+
+      // Zoom: pilihan tersimpan di peramban. Bila belum pernah dipilih, layar lebar otomatis diperbesar.
+      var STEPS = [0.8, 0.9, 1, 1.1, 1.25, 1.4, 1.6, 1.8, 2];
+      var KEY = 'bekalin_zoom';
+      function awal() { var w = window.innerWidth; return w >= 1800 ? 1.4 : w >= 1280 ? 1.25 : 1; }
+      var z = awal();
+      try { var t = Number(localStorage.getItem(KEY)); if (STEPS.indexOf(t) >= 0) z = t; } catch (e) {}
+      function idx() { var b = 0; STEPS.forEach(function (v, i) { if (Math.abs(v - z) < Math.abs(STEPS[b] - z)) b = i; }); return b; }
+      function pasang(nilai, simpan) {
+        z = nilai;
+        document.documentElement.style.setProperty('--z', String(z));
+        document.getElementById('zPct').textContent = Math.round(z * 100) + '%';
+        document.getElementById('zOut').disabled = idx() === 0;
+        document.getElementById('zIn').disabled = idx() === STEPS.length - 1;
+        if (simpan) { try { localStorage.setItem(KEY, String(z)); } catch (e) {} }
+      }
+      z = STEPS[idx()];
+      pasang(z, false);
+      document.getElementById('zOut').addEventListener('click', function () { pasang(STEPS[Math.max(0, idx() - 1)], true); });
+      document.getElementById('zIn').addEventListener('click', function () { pasang(STEPS[Math.min(STEPS.length - 1, idx() + 1)], true); });
+      document.getElementById('zPct').addEventListener('click', function () { try { localStorage.removeItem(KEY); } catch (e) {} pasang(awal(), false); z = STEPS[idx()]; pasang(z, false); });
 
       var f = document.getElementById('app');
       f.addEventListener('load', function () { document.getElementById('load').classList.add('done'); });
