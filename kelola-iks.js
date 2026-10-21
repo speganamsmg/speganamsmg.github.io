@@ -332,7 +332,7 @@
 
   // ── Rapel: pembayaran sekaligus beberapa bulan, ditulis di kolom "Ket <bulan>" ──
   const BLN_NO = { jan: 1, feb: 2, peb: 2, mar: 3, apr: 4, mei: 5, may: 5, jun: 6, jul: 7, agu: 8, aug: 8, agt: 8, ags: 8, sep: 9, okt: 10, oct: 10, nov: 11, nop: 11, des: 12, dec: 12 };
-  function bulanDariTeks(t, acuan) {
+  function bulanDariTeks(t, acuan, sebelum) {
     const m = /^([a-z]{3,})\.?\s*[-\/']?\s*(\d{2}|\d{4})?$/i.exec(String(t || '').trim());
     if (!m) return '';
     const n = BLN_NO[m[1].toLowerCase().slice(0, 3)];
@@ -341,18 +341,53 @@
     if (m[2]) y = m[2].length === 2 ? 2000 + Number(m[2]) : Number(m[2]);
     else {
       const ay = +acuan.slice(0, 4), am = +acuan.slice(5, 7);
-      let best = Infinity; y = ay;
-      [ay - 1, ay, ay + 1].forEach(function (c) { const d = Math.abs(c * 12 + n - (ay * 12 + am)); if (d < best) { best = d; y = c; } });
+      if (sebelum) y = n <= am ? ay : ay - 1;
+      else {
+        let best = Infinity; y = ay;
+        [ay - 1, ay, ay + 1].forEach(function (c) { const d = Math.abs(c * 12 + n - (ay * 12 + am)); if (d < best) { best = d; y = c; } });
+      }
     }
     return y + '-' + ('0' + n).slice(-2);
   }
-  // Daftar bulan yang dilunasi menurut keterangan; null bila bukan rapel.
+  const RENTANG = /\s+s\s*[.\/]\s*d\.?\s*|\s+sd\.?\s+|\s+(?:sampai|hingga|to)\s+|\s*[–—]\s*|\s+-\s+/i;
+  function noBulan(b) { return +b.slice(0, 4) * 12 + +b.slice(5, 7) - 1; }
+  function keBulan(n) { return Math.floor(n / 12) + '-' + ('0' + (n % 12 + 1)).slice(-2); }
+  // Daftar bulan yang dilunasi menurut keterangan (koma atau "s.d"); null bila bukan rapel.
   function parseRapel(teks, bulanBayar) {
     const m = /^rapel\b[\s:.\-–]*(.*)$/i.exec(String(teks || '').trim());
     if (!m) return null;
     const hasil = [];
-    m[1].split(/\s*(?:,|;|&|\bdan\b)\s*/i).forEach(function (x) { const b = bulanDariTeks(x, bulanBayar); if (b && hasil.indexOf(b) < 0) hasil.push(b); });
+    const tambah = function (b) { if (hasil.indexOf(b) < 0) hasil.push(b); };
+    m[1].split(/\s*(?:,|;|&|\bdan\b)\s*/i).forEach(function (x) {
+      const bagian = x.split(RENTANG);
+      if (bagian.length >= 2) {
+        const akhir = bulanDariTeks(bagian[bagian.length - 1], bulanBayar);
+        const awal = akhir ? bulanDariTeks(bagian[0], akhir, true) : '';
+        if (!awal || !akhir) return;
+        let a = noBulan(awal), z = noBulan(akhir);
+        if (a > z) { const t = a; a = z; z = t; }
+        if (z - a >= 60) a = z - 59;
+        for (let n = a; n <= z; n++) tambah(keBulan(n));
+      } else {
+        const b = bulanDariTeks(x, bulanBayar);
+        if (b) tambah(b);
+      }
+    });
     return hasil;
+  }
+  // Bulan berurutan 3 atau lebih ditulis sebagai rentang: "Rapel Sep 25 s.d Okt 26"; sisanya dipisah koma.
+  function teksRapel(daftar) {
+    const urut = daftar.slice().sort();
+    const bagian = [];
+    let i = 0;
+    while (i < urut.length) {
+      let k = i;
+      while (k + 1 < urut.length && noBulan(urut[k + 1]) === noBulan(urut[k]) + 1) k++;
+      if (k - i >= 2) bagian.push(bulanSingkat(urut[i]) + ' s.d ' + bulanSingkat(urut[k]));
+      else for (let n = i; n <= k; n++) bagian.push(bulanSingkat(urut[n]));
+      i = k + 1;
+    }
+    return 'Rapel ' + bagian.join(', ');
   }
   function bulanSingkat(k) { return BLN[+k.slice(5, 7) - 1] + ' ' + k.slice(2, 4); }
 
@@ -392,10 +427,10 @@
     teks.value = awal;
     const susun = function () {
       const p = Object.keys(pilih).filter(function (b) { return pilih[b]; }).sort();
-      return p.length ? 'Rapel ' + p.concat([bln]).map(bulanSingkat).join(', ') : '';
+      return p.length ? teksRapel(p.concat([bln])) : '';
     };
 
-    const daftar = m.bulan.filter(function (b) { return b < bln; }).sort().reverse().slice(0, 12);
+    const daftar = m.bulan.filter(function (b) { return b < bln; }).sort().reverse().slice(0, 24);
     const ul = el('ul', 'iksk-chk');
     const pas = el('li');
     const pl = el('label'); const pc = el('input'); pc.type = 'checkbox'; pc.checked = true; pc.disabled = true;
@@ -414,7 +449,7 @@
       li.append(lb); ul.append(li);
     });
     form.append(ul);
-    form.append(kolomForm('Keterangan di sheet', teks, 'Terisi otomatis dari centang. Boleh diubah; kosongkan untuk menghapus keterangan.'));
+    form.append(kolomForm('Keterangan di sheet', teks, 'Terisi otomatis dari centang. Boleh diketik sendiri, mis. "Rapel Sep 25 s.d Okt 26" untuk beberapa bulan sekaligus. Kosongkan untuk menghapus keterangan.'));
 
     const msg = el('p', 'iksk-err', ''); msg.setAttribute('role', 'alert');
     const row = el('div', 'dlg-actions');

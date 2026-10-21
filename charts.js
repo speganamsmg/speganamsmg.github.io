@@ -253,7 +253,7 @@
     } else if (q.kelompok) {
       const view = { teks: q.teks, n: q.n, opsi: q.kelompok.map(function (k) { return { label: k.nama, jumlah: k.jumlah }; }) };
       body.append(bars(view));
-      body.append(el('p', 'tagline', q.otomatis ? 'kata yang sering muncul · jawaban bisa masuk lebih dari satu' : 'jawaban dikelompokkan · bisa masuk lebih dari satu'));
+      if (!q.otomatis) body.append(el('p', 'tagline', 'jawaban dikelompokkan · bisa masuk lebih dari satu'));
       hasTable = true;
       if (admin && q.kata && q.kata.length) {
         body.append(el('p', 'tagline', 'Saran kata kunci: ' + q.kata.slice(0, 12).map(function (k) { return k.kata + ' (' + k.jumlah + ')'; }).join(', ')));

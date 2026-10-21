@@ -653,7 +653,7 @@
 
     if (q.tipe === 'singkat' || q.tipe === 'paragraf') {
       const kt = input(q, 'kategori', { area: true, rows: 4, max: 2000, ph: 'Redaksi: redaksi, kalimat, bahasa\nSanksi: sanksi, denda' });
-      card.append(field('Pengelompokan jawaban (opsional)', kt, 'Satu kelompok per baris: Nama: kata1, kata2. Jawaban yang memuat salah satu kata masuk ke kelompok itu. Dashboard hanya menampilkan persentase tiap kelompok, bukan isi jawaban. Dikosongkan = dikelompokkan otomatis menurut kata yang sering muncul. Di tab Hasil ada saran kata kunci.'));
+      card.append(field('Pengelompokan jawaban (opsional)', kt, 'Satu kelompok per baris: Nama: kata1, kata2. Jawaban yang memuat salah satu kata masuk ke kelompok itu. Dashboard hanya menampilkan persentase tiap kelompok, bukan isi jawaban. Dikosongkan = grafik hanya membagi "Ada usulan" dan "Tidak ada usulan"; isi jawaban tampil sendiri di bawahnya. Di tab Hasil ada saran kata kunci.'));
     }
 
     const flags = mk('div', 'flags');
