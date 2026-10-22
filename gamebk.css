@@ -1,0 +1,22 @@
+/* SPEGANA — Menu Game BK */
+.gbk-head { margin-bottom: 1.4rem; }
+.gbk-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+.gbk-card { position: relative; display: grid; overflow: hidden; border: 1px solid var(--line); border-radius: 1.6rem; background: var(--surface); box-shadow: var(--shadow); color: var(--ink); text-decoration: none; transition: transform 0.25s var(--ease), box-shadow 0.25s; }
+a.gbk-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-up); }
+a.gbk-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.gbk-art { position: relative; display: grid; place-items: center; min-height: 9rem; font-size: 3.6rem; background: radial-gradient(120% 140% at 12% 0%, #5b2bb5 0%, transparent 60%), radial-gradient(100% 120% at 100% 100%, #0ea5e9 0%, transparent 55%), linear-gradient(160deg, #141a45, #3b1d73); }
+.gbk-art small { position: absolute; left: 0.9rem; bottom: 0.7rem; padding: 0.15rem 0.6rem; border-radius: 99px; background: rgba(255, 255, 255, 0.16); color: #fff; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.03em; }
+.gbk-body { display: grid; gap: 0.5rem; padding: 1.1rem 1.2rem 1.25rem; align-content: start; }
+.gbk-body h2 { margin: 0; font-size: 1.25rem; letter-spacing: -0.02em; line-height: 1.15; }
+.gbk-body p { margin: 0; color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
+.gbk-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.1rem; }
+.gbk-tags span { padding: 0.12rem 0.65rem; border-radius: 99px; background: var(--tint); color: var(--ink); font-size: 0.74rem; font-weight: 700; }
+.gbk-play { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; justify-self: start; margin-top: 0.4rem; padding: 0.55rem 1.2rem; border-radius: 99px; background: var(--ink); color: var(--bg); font-size: 0.9rem; font-weight: 800; }
+.gbk-soon { border-style: dashed; background: transparent; box-shadow: none; }
+.gbk-soon .gbk-art { background: var(--tint); color: var(--muted); font-size: 2.6rem; }
+.gbk-soon .gbk-body h2 { color: var(--muted); }
+@media (min-width: 641px) { .gbk-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; } }
+@media (min-width: 1024px) {
+  .gbk-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .gbk-art { min-height: 11rem; font-size: 4.2rem; }
+}

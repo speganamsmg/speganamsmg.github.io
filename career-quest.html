@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Career Quest — Tangga Masa Depanku | Game BK</title>
+<style>
+:root{
+  --ink:#1d2340; --bg1:#141a45; --bg2:#3b1d73; --gold:#ffd23f; --green:#22c55e; --red:#ef4444;
+  --card:#ffffff; --muted:#6b7280;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:#fff;
+  background:radial-gradient(1200px 700px at 15% -10%,#5b2bb5 0%,transparent 60%),
+             radial-gradient(900px 600px at 100% 110%,#0ea5e9 0%,transparent 55%),
+             linear-gradient(160deg,var(--bg1),var(--bg2));
+  background-attachment:fixed;
+  overflow:hidden;
+}
+button{font-family:inherit;cursor:pointer}
+.hidden{display:none!important}
+
+/* ---------- SETUP ---------- */
+#setup{height:100%;overflow:auto;display:flex;align-items:center;justify-content:center;padding:20px}
+.setup-card{width:min(980px,100%);background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);border-radius:28px;padding:clamp(18px,3vw,38px);box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.logo{display:flex;align-items:center;gap:16px;margin-bottom:6px}
+.logo .em{font-size:clamp(44px,6vw,72px)}
+.logo h1{margin:0;font-size:clamp(30px,5vw,56px);letter-spacing:.5px;line-height:1;font-weight:900}
+.logo h1 span{color:var(--gold)}
+.sub{margin:4px 0 20px;font-size:clamp(15px,1.8vw,22px);opacity:.9}
+.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.panel{background:rgba(0,0,0,.22);border-radius:20px;padding:18px 20px}
+.panel h3{margin:0 0 12px;font-size:18px;color:var(--gold);letter-spacing:.3px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:2px solid rgba(255,255,255,.35);background:transparent;color:#fff;border-radius:14px;padding:10px 18px;font-size:20px;font-weight:800}
+.chip.on{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.tname{display:flex;align-items:center;gap:10px;margin:8px 0}
+.tname .tk{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:22px;border:3px solid #fff;flex:none}
+.tname input{flex:1;font-size:18px;padding:9px 12px;border-radius:12px;border:2px solid transparent;background:#fff;color:var(--ink);font-family:inherit;font-weight:600;min-width:0}
+.tname input:focus{outline:none;border-color:var(--gold)}
+.opt-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:10px 0;font-size:17px}
+.opt-row select{font-size:17px;padding:8px 10px;border-radius:10px;border:none;font-family:inherit}
+.how{font-size:15.5px;line-height:1.5}
+.how li{margin:4px 0}
+.row-btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;align-items:center}
+.btn{border:none;border-radius:16px;padding:14px 26px;font-size:20px;font-weight:800;transition:transform .12s,box-shadow .12s}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:linear-gradient(180deg,#ffe066,#ffb300);color:var(--ink);box-shadow:0 6px 0 #b37d00,0 12px 24px rgba(0,0,0,.3)}
+.btn.primary:hover{transform:translateY(-2px)}
+.btn.ghost{background:rgba(255,255,255,.14);color:#fff;border:2px solid rgba(255,255,255,.4)}
+.btn.small{padding:8px 14px;font-size:15px;border-radius:12px}
+.back{color:#fff;text-decoration:none;opacity:.85;font-weight:700}
+.back:hover{opacity:1;text-decoration:underline}
+
+/* ---------- GAME ---------- */
+#game{height:100%;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:12px;padding:8px 18px;height:62px;background:rgba(0,0,0,.28);flex:none}
+.topbar .ttl{font-weight:900;font-size:22px;letter-spacing:.4px;white-space:nowrap}
+.topbar .ttl span{color:var(--gold)}
+.topbar .sp{flex:1}
+.tb{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:12px;padding:8px 14px;font-size:15px;font-weight:700;text-decoration:none;white-space:nowrap}
+.tb:hover{background:rgba(255,255,255,.25)}
+main{flex:1;display:flex;gap:18px;padding:14px 18px;min-height:0;align-items:center;justify-content:center;--s:min(calc(100vh - 100px),calc(100vw - 440px))}
+.board-wrap{flex:none}
+.board{position:relative;width:var(--s);height:var(--s);display:grid;grid-template:repeat(10,1fr)/repeat(10,1fr);border:6px solid rgba(255,255,255,.85);border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.45);background:#fff}
+.cell{position:relative;display:flex;align-items:center;justify-content:center;font-size:calc(var(--s)*.036);color:var(--ink)}
+.cell.a{background:#fef3c7}.cell.b{background:#e0f2fe}
+.cell.q{background:#fde047}.cell.r{background:#d8b4fe}.cell.c{background:#fda4af}
+.cell.start{background:#86efac;font-weight:900}.cell.end{background:linear-gradient(135deg,#fde047,#fb923c)}
+.cell .n{position:absolute;top:4%;left:7%;font-size:calc(var(--s)*.0185);font-weight:800;opacity:.7}
+.cell .lb{font-size:calc(var(--s)*.014);font-weight:900;position:absolute;bottom:5%;letter-spacing:.3px;opacity:.8}
+.links,.tokens{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.tok{position:absolute;width:calc(var(--s)*.05);height:calc(var(--s)*.05);transform:translate(-50%,-50%);border-radius:50%;border:calc(var(--s)*.004) solid #fff;display:grid;place-items:center;font-size:calc(var(--s)*.03);box-shadow:0 3px 8px rgba(0,0,0,.5);transition:left .26s ease,top .26s ease;z-index:2}
+.tok.slow{transition:left .95s ease-in-out,top .95s ease-in-out}
+.tok.act{animation:bob .7s ease-in-out infinite;z-index:3}
+@keyframes bob{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-62%) scale(1.15)}}
+
+.side{width:390px;flex:none;display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 90px)}
+.turn{border-radius:20px;padding:14px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 24px rgba(0,0,0,.3);color:#fff;transition:background .3s}
+.turn .big{font-size:44px}
+.turn small{display:block;opacity:.9;font-weight:700;letter-spacing:1px;font-size:12px}
+.turn b{font-size:26px;line-height:1.1}
+.dice-box{background:rgba(255,255,255,.12);border-radius:20px;padding:14px;display:flex;align-items:center;gap:16px}
+.die{width:92px;height:92px;flex:none;background:#fff;border-radius:18px;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:11px;box-shadow:0 6px 0 #c9cfe0,0 12px 20px rgba(0,0,0,.35)}
+.die.roll{animation:shake .14s infinite}
+@keyframes shake{0%{transform:rotate(-8deg) translateY(0)}50%{transform:rotate(8deg) translateY(-6px)}100%{transform:rotate(-8deg) translateY(0)}}
+.pip{width:72%;height:72%;margin:auto;border-radius:50%;background:transparent}
+.pip.on{background:var(--ink)}
+#rollBtn{flex:1;font-size:24px;padding:18px 10px}
+#rollBtn:disabled{filter:grayscale(.8);opacity:.6;cursor:not-allowed;transform:none}
+.hint{font-size:12.5px;opacity:.75;margin-top:4px;text-align:center}
+.teams{display:flex;flex-direction:column;gap:7px;overflow:auto;min-height:0}
+.tm{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.12);border-radius:14px;padding:8px 10px;border:2px solid transparent}
+.tm.cur{border-color:var(--gold);background:rgba(255,210,63,.22)}
+.tm .tk{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:20px;border:3px solid #fff;flex:none}
+.tm .nm{flex:1;min-width:0}
+.tm .nm b{display:block;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tm .nm span{font-size:13px;opacity:.85}
+.tm .sc{font-size:22px;font-weight:900;color:var(--gold);min-width:44px;text-align:right}
+.tm .adj{display:flex;flex-direction:column;gap:2px}
+.tm .adj button{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:6px;font-size:12px;font-weight:800;line-height:1;padding:3px 6px}
+.tm .adj button:hover{background:rgba(255,255,255,.4)}
+.pop{animation:pop .6s}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.5)}100%{transform:scale(1)}}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12.5px;opacity:.9;padding:0 4px}
+.log{font-size:13.5px;background:rgba(0,0,0,.22);border-radius:14px;padding:8px 12px;min-height:60px}
+.log div{margin:2px 0;opacity:.85}.log div:first-child{opacity:1;font-weight:700}
+
+/* ---------- MODAL ---------- */
+#modal{position:fixed;inset:0;background:rgba(10,12,40,.72);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+#modal.show{display:flex}
+#mcard{width:min(860px,100%);max-height:94vh;overflow:auto;background:var(--card);color:var(--ink);border-radius:28px;padding:clamp(18px,3vw,34px);box-shadow:0 30px 90px rgba(0,0,0,.55);animation:rise .28s ease-out;border-top:14px solid var(--gold)}
+@keyframes rise{from{transform:translateY(30px) scale(.96);opacity:0}to{transform:none;opacity:1}}
+#mcard.ladder{border-top-color:var(--green)}#mcard.snake{border-top-color:var(--red)}
+#mcard.quiz{border-top-color:#eab308}#mcard.reflect{border-top-color:#a855f7}#mcard.chance{border-top-color:#f43f5e}
+.mtag{display:inline-block;font-weight:900;letter-spacing:.8px;font-size:15px;padding:6px 14px;border-radius:999px;background:#eef2ff;margin-bottom:10px}
+.mtag.g{background:#dcfce7;color:#166534}.mtag.r{background:#fee2e2;color:#991b1b}
+.mtag.y{background:#fef9c3;color:#854d0e}.mtag.p{background:#f3e8ff;color:#6b21a8}.mtag.k{background:#ffe4e6;color:#9f1239}
+#mcard h2{margin:4px 0 8px;font-size:clamp(24px,3.2vw,36px);line-height:1.15}
+#mcard p{font-size:clamp(17px,2vw,24px);line-height:1.5;margin:8px 0}
+.qtext{font-size:clamp(20px,2.5vw,30px)!important;font-weight:700}
+.bigico{font-size:72px;line-height:1}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;background:#f1f5ff;border:3px solid #dbe4ff;border-radius:16px;padding:14px;font-size:clamp(16px,1.9vw,22px);font-weight:600;color:var(--ink);transition:transform .1s,background .15s}
+.opt:hover:not(:disabled){transform:translateY(-2px);background:#e4ebff}
+.opt span{flex:none;width:38px;height:38px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:900}
+.opt.ok{background:#bbf7d0;border-color:#16a34a}.opt.no{background:#fecaca;border-color:#dc2626}
+.opt:disabled{cursor:default}
+.fb{margin-top:6px;padding:12px 16px;border-radius:16px;font-size:clamp(16px,1.9vw,22px);line-height:1.45}
+.fb.ok{background:#dcfce7}.fb.no{background:#fee2e2}
+.timer{position:relative;height:16px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin:8px 0}
+.timer i{position:absolute;inset:0;background:linear-gradient(90deg,#22c55e,#eab308,#ef4444);transform-origin:left;transition:transform 1s linear}
+.timer b{position:absolute;right:8px;top:-3px;font-size:13px}
+.mact{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}
+.mact .btn.ghost{color:var(--ink);border-color:#cbd5e1;background:#f1f5f9}
+.rank{width:100%;border-collapse:collapse;margin:10px 0;font-size:clamp(16px,1.9vw,22px)}
+.rank td{padding:8px 10px;border-bottom:1px solid #e5e7eb}
+.rank tr:first-child td{font-weight:900;background:#fef9c3}
+.rank .dot{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;margin-right:8px;vertical-align:middle;border:2px solid #fff;box-shadow:0 0 0 1px #cbd5e1}
+.conf{position:fixed;top:-20px;width:12px;height:18px;z-index:60;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(112vh) rotate(720deg)}}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:980px){
+  body{overflow:auto}
+  #game{height:auto;min-height:100%}
+  main{flex-direction:column;--s:min(calc(100vw - 24px),calc(100vh - 150px));padding:10px}
+  .side{width:min(100%,640px);max-height:none}
+  .setup-grid{grid-template-columns:1fr}
+  .opts{grid-template-columns:1fr}
+  .topbar .ttl{font-size:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ SETUP ============ -->
+<section id="setup">
+  <div class="setup-card">
+    <div class="logo"><div class="em">🧭</div><h1>CAREER <span>QUEST</span></h1></div>
+    <p class="sub">Tangga Masa Depanku — Game Ular Tangga Karier untuk BK Kelas IX</p>
+    <div class="setup-grid">
+      <div>
+        <div class="panel">
+          <h3>1 · Jumlah kelompok</h3>
+          <div class="chips" id="countChips"></div>
+        </div>
+        <div class="panel" style="margin-top:14px">
+          <h3>2 · Nama kelompok</h3>
+          <div id="nameList"></div>
+        </div>
+      </div>
+      <div>
+        <div class="panel">
+          <h3>3 · Pengaturan</h3>
+          <div class="opt-row"><label for="optTimer">⏱ Batas waktu menjawab kuis</label>
+            <select id="optTimer"><option value="0">Tanpa batas</option><option value="30">30 detik</option><option value="60">60 detik</option></select></div>
+          <div class="opt-row"><label for="optSound">🔊 Efek suara</label><input type="checkbox" id="optSound" checked style="width:22px;height:22px"></div>
+        </div>
+        <div class="panel how" style="margin-top:14px">
+          <h3>Cara bermain</h3>
+          <ul style="margin:0;padding-left:20px">
+            <li>Kelompok bergiliran melempar dadu. Guru menekan tombol dadu.</li>
+            <li>🪜 <b>Tangga</b> = kebiasaan positif, naik! 🐍 <b>Ular</b> = hambatan karier, turun.</li>
+            <li>❓ <b>Kuis</b> benar +10 poin · 💭 <b>Refleksi</b> +5 poin · 🎁 <b>Kartu Kejutan</b>.</li>
+            <li>Sampai kotak 100 lebih dulu = <b>Tim Tercepat</b>. Skor tertinggi = <b>Juara Karier</b>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row-btns">
+      <button class="btn primary" id="startBtn">🚀 Mulai Petualangan</button>
+      <button class="btn ghost hidden" id="resumeBtn">↩ Lanjutkan permainan terakhir</button>
+      <span style="flex:1"></span>
+      <a class="back" href="gamebk.html">← Kembali ke Menu Game BK</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GAME ============ -->
+<section id="game" class="hidden">
+  <div class="topbar">
+    <div class="ttl">🧭 CAREER <span>QUEST</span> · Tangga Masa Depanku</div>
+    <div class="sp"></div>
+    <button class="tb" id="bHelp">❔ Cara bermain</button>
+    <button class="tb" id="bSound">🔊 Suara</button>
+    <button class="tb" id="bFull">⛶ Layar penuh</button>
+    <button class="tb" id="bReset">⟲ Ulang</button>
+    <a class="tb" href="gamebk.html">⌂ Menu BK</a>
+  </div>
+  <main>
+    <div class="board-wrap">
+      <div class="board" id="board">
+        <svg class="links" id="links" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+        <div class="tokens" id="tokens"></div>
+      </div>
+    </div>
+    <aside class="side">
+      <div class="turn" id="turn"></div>
+      <div class="dice-box">
+        <div class="die" id="die"></div>
+        <div style="flex:1">
+          <button class="btn primary" id="rollBtn">🎲 LEMPAR DADU</button>
+          <div class="hint">atau tekan tombol Spasi</div>
+        </div>
+      </div>
+      <div class="teams" id="teams"></div>
+      <div class="legend"><span>🪜 Tangga: naik</span><span>🐍 Ular: turun</span><span>❓ Kuis</span><span>💭 Refleksi</span><span>🎁 Kejutan</span></div>
+      <div class="log" id="log"></div>
+    </aside>
+  </main>
+</section>
+
+<!-- ============ MODAL ============ -->
+<div id="modal"><div id="mcard"><div id="mbody"></div></div></div>
+
+<script>
+"use strict";
+/* =====================================================
+   CAREER QUEST — Tangga Masa Depanku
+   Game BK kelas IX — satu file, tanpa library eksternal
+   ===================================================== */
+const $=(s,r=document)=>r.querySelector(s);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const SAVE_KEY='careerquest_bk_v1';
+
+/* ---------------- DATA: TANGGA & ULAR ---------------- */
+const LADDERS={
+  4:{to:25,t:"Mengikuti tes minat & bakat",m:"Mengenali minat dan bakat membantumu memilih arah yang paling cocok."},
+  9:{to:31,t:"Rajin mencari informasi sekolah lanjutan",m:"Informasi yang lengkap membuat keputusanmu lebih tepat."},
+  21:{to:42,t:"Berani bertanya pada guru BK dan orang tua",m:"Berdiskusi dengan orang yang tepat membuka jalan baru."},
+  28:{to:56,t:"Aktif di ekstrakurikuler & organisasi",m:"Pengalaman berorganisasi melatih kepemimpinan dan kerja sama."},
+  36:{to:57,t:"Menyusun rencana belajar dan target",m:"Tujuan yang jelas membuat usahamu lebih terarah."},
+  51:{to:72,t:"Membangun disiplin & tanggung jawab",m:"Disiplin kecil yang konsisten membawa hasil besar."},
+  71:{to:92,t:"Mengasah keterampilan abad 21",m:"Komunikasi, kolaborasi, berpikir kritis, dan literasi digital dibutuhkan di semua profesi."},
+  80:{to:99,t:"Memiliki rencana cadangan (Plan B)",m:"Rencana alternatif membuatmu tetap tenang dan siap bergerak."}
+};
+const SNAKES={
+  17:{to:7,t:"Menunda-nunda belajar",m:"Mulai dari langkah kecil sekarang, jangan menunggu \"nanti\"."},
+  27:{to:5,t:"Hanya ikut-ikutan pilihan teman",m:"Pilihan temanmu belum tentu cocok untuk minat dan kemampuanmu."},
+  40:{to:19,t:"Mudah menyerah saat gagal",m:"Kegagalan adalah bahan belajar. Evaluasi, lalu coba lagi."},
+  54:{to:34,t:"Terlalu lama bermain gawai",m:"Atur waktu layar agar tidak mengalahkan waktu belajar dan istirahat."},
+  62:{to:18,t:"Memilih karena gengsi atau gaji tanpa mengenal diri",m:"Kenali dulu minat, bakat, dan nilai hidupmu."},
+  64:{to:60,t:"Tidak mau menerima masukan",m:"Masukan yang baik adalah cermin untuk berkembang."},
+  87:{to:24,t:"Mengabaikan persyaratan pendaftaran",m:"Cek jadwal, syarat, dan jalur pendaftaran jauh-jauh hari."},
+  93:{to:73,t:"Terus membandingkan diri dengan orang lain",m:"Setiap orang punya waktu dan jalannya sendiri. Fokus pada kemajuanmu."},
+  95:{to:75,t:"Cemas berlebihan sampai ragu memutuskan",m:"Cemas itu wajar. Bicarakan dengan orang yang kamu percaya, lalu ambil langkah."},
+  98:{to:79,t:"Terburu-buru memutuskan",m:"Keputusan penting perlu dipertimbangkan dari berbagai sisi."}
+};
+const QUIZ_T=new Set([6,11,14,23,26,33,38,44,47,53,58,66,69,74,77,83,86,90,96]);
+const REF_T=new Set([10,20,30,45,60,75,85]);
+const CHA_T=new Set([13,24,34,41,48,59,67,78,89,94]);
+
+/* ---------------- DATA: KUIS (jawaban benar selalu urutan pertama, diacak saat tampil) ---------------- */
+const QUIZ=[
+ {c:"Mengenal Diri",q:"Rasa tertarik dan kecenderungan hati yang tinggi terhadap sesuatu disebut…",o:["Minat","Bakat","Nilai rapor","Gaji"],e:"Minat adalah ketertarikan. Bakat adalah kemampuan dasar bawaan."},
+ {c:"Mengenal Diri",q:"Kemampuan dasar bawaan yang berpotensi berkembang jika dilatih disebut…",o:["Bakat","Minat","Cita-cita","Peluang kerja"],e:"Bakat perlu diasah lewat latihan agar berkembang menjadi keterampilan."},
+ {c:"Mengenal Diri",q:"Hal yang kamu yakini penting dalam hidup, misalnya kejujuran dan keluarga, disebut…",o:["Nilai hidup","Hobi","Bakat","Rapor"],e:"Nilai hidup memengaruhi pilihan karier dan cara kita mengambil keputusan."},
+ {c:"Mengenal Diri",q:"Langkah pertama dalam merencanakan karier adalah…",o:["Mengenali diri (minat, bakat, nilai, kemampuan)","Mengikuti pilihan teman","Memilih gaji terbesar","Menunggu keputusan orang lain"],e:"Perencanaan karier dimulai dari memahami diri sendiri."},
+ {c:"Mengenal Diri",q:"Manakah yang termasuk faktor internal dalam memilih karier?",o:["Minat dan bakat diri","Pendapat teman sebaya","Kondisi ekonomi keluarga","Peluang kerja di daerah"],e:"Faktor internal datang dari dalam diri: minat, bakat, kepribadian, nilai hidup."},
+ {c:"Mengenal Diri",q:"Manakah yang termasuk faktor eksternal dalam memilih karier?",o:["Kondisi ekonomi keluarga","Minat","Bakat","Kepribadian"],e:"Faktor eksternal datang dari luar diri: keluarga, teman, ekonomi, dan lingkungan."},
+ {c:"Mengenal Diri",q:"Orang bertipe Artistik (menyukai kegiatan kreatif) biasanya cocok menjadi…",o:["Desainer grafis","Teknisi mesin","Peneliti laboratorium","Akuntan"],e:"Tipe Artistik menyukai ekspresi kreatif seperti seni, desain, dan musik."},
+ {c:"Jalur Pendidikan",q:"SMK terutama menyiapkan lulusannya untuk…",o:["Siap bekerja di bidang keahlian tertentu","Hanya melanjutkan kuliah","Hanya menjadi guru","Tidak bekerja"],e:"SMK menekankan keterampilan kerja sesuai program keahlian, dan lulusannya tetap bisa melanjutkan studi."},
+ {c:"Jalur Pendidikan",q:"Madrasah Aliyah (MA) adalah sekolah menengah atas yang…",o:["Berciri khas agama Islam di bawah Kementerian Agama","Khusus untuk bekerja","Hanya untuk olahraga","Tidak ada kurikulum umum"],e:"MA setara SMA dengan kekhasan pendidikan agama Islam."},
+ {c:"Jalur Pendidikan",q:"Cara bijak memilih sekolah lanjutan adalah…",o:["Mempertimbangkan minat, kemampuan, informasi sekolah, dan dukungan keluarga","Ikut ke mana teman pergi","Memilih yang paling terkenal saja","Memilih secara acak"],e:"Keputusan yang baik memadukan pemahaman diri dan informasi yang benar."},
+ {c:"Jalur Pendidikan",q:"Pada penerimaan murid baru, jalur afirmasi diperuntukkan bagi…",o:["Calon murid dari keluarga kurang mampu dan penyandang disabilitas","Murid dengan nilai tertinggi saja","Murid yang rumahnya terjauh","Murid pindahan luar negeri"],e:"Jalur afirmasi memberi kesempatan yang adil bagi kelompok yang membutuhkan dukungan."},
+ {c:"Jalur Pendidikan",q:"Jalur domisili pada penerimaan murid baru dinilai berdasarkan…",o:["Jarak tempat tinggal ke sekolah","Jumlah piala","Pekerjaan orang tua","Hasil undian kelas"],e:"Jalur domisili memprioritaskan calon murid yang tinggal dekat sekolah."},
+ {c:"Jalur Pendidikan",q:"Jalur prestasi dinilai berdasarkan…",o:["Prestasi akademik dan non-akademik, misalnya nilai rapor dan lomba","Jarak rumah","Hubungan keluarga","Jumlah saudara"],e:"Prestasi bisa berupa nilai maupun juara lomba dan kegiatan lain."},
+ {c:"Jalur Pendidikan",q:"Beasiswa adalah…",o:["Bantuan biaya pendidikan karena prestasi atau kebutuhan","Pinjaman yang wajib dilunasi dengan bunga tinggi","Hadiah undian","Biaya pendaftaran sekolah"],e:"Beasiswa membantu murid yang berprestasi atau membutuhkan agar tetap bisa belajar."},
+ {c:"Jalur Pendidikan",q:"Sumber informasi sekolah dan karier yang paling dapat dipercaya adalah…",o:["Guru BK, alumni, dan situs resmi sekolah","Rumor di media sosial","Cerita yang belum jelas","Tebakan teman"],e:"Selalu cek kebenaran informasi dari sumber resmi."},
+ {c:"Keterampilan",q:"Manakah contoh soft skill?",o:["Kemampuan bekerja sama dalam tim","Mengoperasikan mesin bubut","Menulis kode program","Mengelas logam"],e:"Soft skill berkaitan dengan sikap dan hubungan antarpribadi, misalnya kerja sama dan komunikasi."},
+ {c:"Keterampilan",q:"Manakah contoh hard skill?",o:["Mengoperasikan aplikasi spreadsheet","Empati","Disiplin","Kerja sama"],e:"Hard skill adalah keterampilan teknis yang bisa diukur dan dipelajari."},
+ {c:"Keterampilan",q:"Menyampaikan pendapat dengan jujur sambil tetap menghormati orang lain disebut…",o:["Komunikasi asertif","Komunikasi agresif","Komunikasi pasif","Diam saja"],e:"Asertif berarti tegas dan sopan, tanpa merugikan orang lain."},
+ {c:"Keterampilan",q:"Percaya bahwa kemampuan bisa berkembang lewat usaha dan belajar disebut…",o:["Growth mindset","Fixed mindset","Pasrah","Gengsi"],e:"Dengan growth mindset, kegagalan dipandang sebagai kesempatan belajar."},
+ {c:"Keterampilan",q:"Cara terbaik mengelola waktu belajar adalah…",o:["Membuat skala prioritas dan jadwal","Belajar hanya saat ujian","Menunda sampai malam","Menghindari tugas sulit"],e:"Prioritas dan jadwal membuat waktu terpakai lebih efektif."},
+ {c:"Keterampilan",q:"Kemampuan bangkit dan bertahan saat menghadapi kesulitan disebut…",o:["Resiliensi","Prokrastinasi","Gengsi","Konformitas"],e:"Resiliensi membantu kita pulih dari kegagalan dan terus melangkah."},
+ {c:"Dunia Kerja",q:"Agar tetap relevan di era teknologi dan AI, kita perlu…",o:["Terus belajar dan mudah beradaptasi","Berhenti belajar setelah lulus","Menghindari teknologi","Hanya mengandalkan ijazah"],e:"Dunia kerja terus berubah, jadi belajar sepanjang hayat sangat penting."},
+ {c:"Dunia Kerja",q:"Wirausaha berarti…",o:["Membuka usaha sendiri dan berani mengambil risiko terukur","Menunggu pekerjaan datang","Menghindari risiko sama sekali","Hanya bekerja di perusahaan besar"],e:"Wirausaha memerlukan kreativitas, keberanian, dan perencanaan."},
+ {c:"Dunia Kerja",q:"Etos kerja yang baik ditandai dengan…",o:["Disiplin, jujur, dan bertanggung jawab","Sering terlambat","Menyalahkan orang lain","Asal selesai"],e:"Etos kerja adalah semangat dan sikap positif dalam bekerja."},
+ {c:"Dunia Kerja",q:"Profesi adalah pekerjaan yang…",o:["Membutuhkan keahlian khusus lewat pendidikan atau pelatihan","Bisa dilakukan tanpa belajar","Hanya untuk orang kaya","Tidak butuh tanggung jawab"],e:"Dokter, guru, dan insinyur adalah contoh profesi."},
+ {c:"Dunia Kerja",q:"Menabung sebagian uang saku untuk tujuan masa depan adalah contoh…",o:["Literasi finansial","Pemborosan","Konsumtif","Gengsi"],e:"Kebiasaan mengelola uang sejak dini mendukung rencana pendidikan dan karier."},
+ {c:"Keputusan",q:"Rencana cadangan (Plan B) berguna untuk…",o:["Alternatif jika rencana utama tidak tercapai","Menunjukkan kita tidak yakin","Menggantikan semua usaha","Membuat malas"],e:"Plan B membuat kita lebih siap dan tidak mudah putus asa."},
+ {c:"Keputusan",q:"Jika gagal masuk sekolah favorit, sikap yang tepat adalah…",o:["Mengevaluasi diri dan memilih alternatif terbaik","Menyalahkan semua orang","Berhenti sekolah","Menyembunyikan diri"],e:"Pilihan alternatif yang baik tetap bisa mengantar pada cita-citamu."},
+ {c:"Keputusan",q:"Cita-cita yang kuat harus disertai…",o:["Rencana dan usaha nyata","Menunggu keberuntungan","Hanya impian","Membandingkan diri"],e:"Cita-cita menjadi nyata melalui langkah-langkah yang konsisten."},
+ {c:"Keputusan",q:"Saat teman mengajak sesuatu yang tidak sesuai tujuanmu, sebaiknya…",o:["Menolak dengan sopan dan tegas","Langsung ikut","Marah-marah","Menghilang"],e:"Berani berkata tidak dengan sopan adalah tanda kedewasaan."},
+ {c:"Keputusan",q:"Sebelum memilih program keahlian di SMK, sebaiknya kamu…",o:["Mencari tahu isi pelajaran dan peluang kerjanya","Memilih yang namanya keren","Memilih tanpa membaca","Ikut pilihan teman sebangku"],e:"Pahami program keahlian agar sesuai minat dan peluang kariermu."}
+];
+
+/* ---------------- DATA: REFLEKSI ---------------- */
+const REFLECT=[
+ "Sebutkan tiga hal yang paling kamu sukai. Profesi apa yang bisa berhubungan dengan hal-hal itu?",
+ "Apa satu kekuatan terbesar yang kamu miliki, dan bagaimana kamu menggunakannya untuk membantu orang lain?",
+ "Apa satu hambatan terbesarmu dalam mencapai cita-cita? Sebutkan satu cara mengatasinya.",
+ "Siapa tokoh yang kamu kagumi? Sifat apa darinya yang ingin kamu tiru?",
+ "Bayangkan dirimu 10 tahun lagi. Seperti apa kegiatanmu sehari-hari?",
+ "Sebutkan dua pilihan sekolah lanjutan yang kamu pertimbangkan, beserta alasannya.",
+ "Apa nilai hidup terpentingmu? Bagaimana nilai itu memengaruhi pilihan masa depanmu?",
+ "Ceritakan satu kegagalan yang pernah kamu alami. Pelajaran apa yang kamu dapat?",
+ "Jika temanmu bingung memilih sekolah, nasihat apa yang akan kamu berikan?",
+ "Keterampilan apa yang ingin kamu latih tahun ini, dan bagaimana caranya?",
+ "Sebutkan dua profesi yang mungkin muncul 10 tahun lagi karena perkembangan teknologi.",
+ "Siapa yang bisa membantumu merencanakan karier? Apa yang akan kamu tanyakan padanya?"
+];
+
+/* ---------------- DATA: KARTU KEJUTAN ---------------- */
+const CHANCE=[
+ {i:"🎓",t:"Mendapat beasiswa prestasi!",d:"Belajarmu membuahkan hasil.",m:3},
+ {i:"🏅",t:"Tim menang lomba antar sekolah!",d:"Kerja sama membuahkan juara.",p:10},
+ {i:"🛠️",t:"Ikut pelatihan keterampilan gratis.",d:"Keterampilan baru membuka peluang.",m:2},
+ {i:"😴",t:"Menunda mengerjakan tugas.",d:"Tugas menumpuk, kamu tertinggal.",m:-2},
+ {i:"🤝",t:"Tim sangat kompak berdiskusi!",d:"Lempar dadu sekali lagi.",x:1},
+ {i:"📄",t:"Salah memahami informasi pendaftaran.",d:"Selalu cek sumber resmi.",m:-3},
+ {i:"🧑‍🏫",t:"Mentoring bersama alumni.",d:"Pengalaman alumni sangat berharga.",p:10},
+ {i:"📚",t:"Tetap belajar mandiri walau sedang berhalangan.",d:"Konsistensi itu hebat.",p:5},
+ {i:"🙌",t:"Membantu teman belajar.",d:"Berbagi ilmu menambah ilmu.",p:5,m:1},
+ {i:"📱",t:"Terlalu lama bermain gawai.",d:"Waktu belajarmu berkurang.",m:-1}
+];
+
+/* ---------------- STATE ---------------- */
+const TEAM_NAMES=["Tim Pelopor","Tim Inspirasi","Tim Visioner","Tim Inovator","Tim Kreator","Tim Mandiri"];
+const TEAM_ICONS=["🚀","🌟","🦅","🎯","💡","🧭"];
+const TEAM_COLORS=["#ef4444","#f59e0b","#16a34a","#2563eb","#9333ea","#db2777"];
+const OFFS=[[-2.2,-2.2],[2.2,-2.2],[-2.2,2.2],[2.2,2.2],[0,-3.2],[0,3.2]];
+let CFG={count:4,names:TEAM_NAMES.slice(),timer:0,sound:true};
+let G=null;
+let resolveModal=null;
+
+/* ---------------- AUDIO ---------------- */
+let ac=null;
+function tone(f,d=.12,type="sine",v=.12,when=0){
+  if(!CFG.sound)return;
+  try{
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.type=type;o.frequency.value=f;
+    const t=ac.currentTime+when;
+    g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);
+    o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+d+.02);
+  }catch(e){}
+}
+const sfx={
+  roll:()=>{for(let i=0;i<6;i++)tone(300+Math.random()*300,.06,"square",.05,i*.1)},
+  step:()=>tone(520,.07,"triangle",.1),
+  up:()=>[523,659,784,1046].forEach((f,i)=>tone(f,.15,"triangle",.12,i*.1)),
+  down:()=>[600,480,360,240].forEach((f,i)=>tone(f,.16,"sawtooth",.08,i*.1)),
+  ok:()=>[659,880].forEach((f,i)=>tone(f,.18,"triangle",.14,i*.12)),
+  bad:()=>[220,180].forEach((f,i)=>tone(f,.25,"square",.08,i*.15)),
+  card:()=>[784,988].forEach((f,i)=>tone(f,.12,"sine",.12,i*.08)),
+  win:()=>[523,659,784,1046,784,1046,1318].forEach((f,i)=>tone(f,.2,"triangle",.14,i*.14))
+};
+
+/* ---------------- BOARD ---------------- */
+function center(n){
+  const i=n-1,r=Math.floor(i/10),c=(r%2===0)?i%10:9-(i%10);
+  return {x:c*10+5,y:(9-r)*10+5};
+}
+function buildBoard(){
+  const b=$("#board");
+  b.querySelectorAll(".cell").forEach(e=>e.remove());
+  const frag=document.createDocumentFragment();
+  for(let r=9;r>=0;r--){
+    for(let c=0;c<10;c++){
+      const n=(r%2===0)?r*10+c+1:r*10+(9-c)+1;
+      const d=document.createElement("div");
+      let cls="cell "+(((r+c)%2)?"a":"b"),icon="",lb="";
+      if(n===1){cls="cell start";icon="🏁";lb="MULAI"}
+      else if(n===100){cls="cell end";icon="🏆";lb="TUJUAN"}
+      else if(QUIZ_T.has(n)){cls="cell q";icon="❓"}
+      else if(REF_T.has(n)){cls="cell r";icon="💭"}
+      else if(CHA_T.has(n)){cls="cell c";icon="🎁"}
+      d.className=cls;
+      d.innerHTML=`<span class="n">${n}</span>${icon}${lb?`<span class="lb">${lb}</span>`:""}`;
+      frag.appendChild(d);
+    }
+  }
+  b.insertBefore(frag,$("#links"));
+  drawLinks();
+}
+function drawLinks(){
+  const svg=$("#links");let h="";
+  for(const k in LADDERS){
+    const a=center(+k),z=center(LADDERS[k].to);
+    const dx=z.x-a.x,dy=z.y-a.y,len=Math.hypot(dx,dy),ux=dx/len,uy=dy/len,px=-uy*1.5,py=ux*1.5;
+    h+=`<g><line x1="${a.x+px}" y1="${a.y+py}" x2="${z.x+px}" y2="${z.y+py}" stroke="#7c4a1d" stroke-width="1.1" stroke-linecap="round"/>`+
+       `<line x1="${a.x-px}" y1="${a.y-py}" x2="${z.x-px}" y2="${z.y-py}" stroke="#7c4a1d" stroke-width="1.1" stroke-linecap="round"/>`;
+    const rungs=Math.max(3,Math.round(len/4.2));
+    for(let i=1;i<rungs;i++){
+      const t=i/rungs,cx=a.x+dx*t,cy=a.y+dy*t;
+      h+=`<line x1="${cx+px}" y1="${cy+py}" x2="${cx-px}" y2="${cy-py}" stroke="#b9772f" stroke-width=".9" stroke-linecap="round"/>`;
+    }
+    h+=`</g>`;
+  }
+  for(const k in SNAKES){
+    const a=center(+k),z=center(SNAKES[k].to);
+    const dx=z.x-a.x,dy=z.y-a.y,len=Math.hypot(dx,dy),nx=-dy/len,ny=dx/len,w=Math.min(11,len*.22);
+    const c1x=a.x+dx*.33+nx*w,c1y=a.y+dy*.33+ny*w,c2x=a.x+dx*.66-nx*w,c2y=a.y+dy*.66-ny*w;
+    const d=`M${a.x},${a.y} C${c1x},${c1y} ${c2x},${c2y} ${z.x},${z.y}`;
+    h+=`<g><path d="${d}" fill="none" stroke="#14532d" stroke-width="2.7" stroke-linecap="round" opacity=".9"/>`+
+       `<path d="${d}" fill="none" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="2.2 1.4"/>`+
+       `<circle cx="${a.x}" cy="${a.y}" r="2.3" fill="#16a34a" stroke="#14532d" stroke-width=".5"/>`+
+       `<circle cx="${a.x-.8}" cy="${a.y-.7}" r=".5" fill="#fff"/><circle cx="${a.x+.8}" cy="${a.y-.7}" r=".5" fill="#fff"/>`+
+       `<circle cx="${a.x-.8}" cy="${a.y-.7}" r=".22" fill="#000"/><circle cx="${a.x+.8}" cy="${a.y-.7}" r=".22" fill="#000"/>`+
+       `<circle cx="${z.x}" cy="${z.y}" r=".9" fill="#14532d"/></g>`;
+  }
+  svg.innerHTML=h;
+}
+function buildTokens(){
+  const L=$("#tokens");L.innerHTML="";
+  G.teams.forEach((t,i)=>{
+    const e=document.createElement("div");
+    e.className="tok";e.id="tok"+i;e.style.background=t.color;e.textContent=t.icon;
+    L.appendChild(e);placeToken(i,t.pos,false);
+  });
+}
+function placeToken(i,n,slow){
+  const e=$("#tok"+i);if(!e)return;
+  const c=center(n),o=OFFS[i];
+  e.classList.toggle("slow",!!slow);
+  e.style.left=(c.x+o[0])+"%";e.style.top=(c.y+o[1])+"%";
+}
+
+/* ---------------- RENDER ---------------- */
+function renderDie(n){
+  const f={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]}[n]||[];
+  $("#die").innerHTML=Array.from({length:9},(_,i)=>`<div class="pip${f.includes(i)?" on":""}"></div>`).join("");
+}
+function renderTurn(){
+  const t=G.teams[G.turn],el=$("#turn");
+  el.style.background=`linear-gradient(135deg,${t.color},${t.color}bb)`;
+  el.innerHTML=`<div class="big">${t.icon}</div><div><small>GILIRAN</small><b>${esc(t.name)}</b></div>`;
+  document.querySelectorAll(".tok").forEach((e,i)=>e.classList.toggle("act",i===G.turn&&!G.over));
+}
+function renderTeams(popIdx){
+  $("#teams").innerHTML=G.teams.map((t,i)=>`
+    <div class="tm${i===G.turn&&!G.over?" cur":""}">
+      <div class="tk" style="background:${t.color}">${t.icon}</div>
+      <div class="nm"><b>${esc(t.name)}</b><span>Kotak ${t.pos}${t.finished?" 🏆":""}</span></div>
+      <div class="sc${i===popIdx?" pop":""}">${t.score}</div>
+      <div class="adj"><button data-a="${i}" data-d="5" title="Tambah 5 poin">+5</button><button data-a="${i}" data-d="-5" title="Kurangi 5 poin">−5</button></div>
+    </div>`).join("");
+}
+function renderLog(){
+  $("#log").innerHTML=G.log.slice(0,5).map(s=>`<div>${s}</div>`).join("");
+}
+function log(s){G.log.unshift(s);renderLog()}
+function renderAll(){renderTurn();renderTeams();renderLog();setRoll()}
+function setRoll(){
+  const b=$("#rollBtn");b.disabled=G.busy||G.over;
+}
+function addScore(i,n){
+  G.teams[i].score=Math.max(0,G.teams[i].score+n);
+  renderTeams(i);
+}
+
+/* ---------------- MODAL ---------------- */
+function openModal(cls,html){
+  $("#mcard").className=cls||"";
+  $("#mbody").innerHTML=html;
+  $("#modal").classList.add("show");
+  $("#mcard").scrollTop=0;
+}
+function closeModal(v){
+  $("#modal").classList.remove("show");
+  const r=resolveModal;resolveModal=null;
+  if(r)r(v);
+}
+function modal(cls,html){
+  return new Promise(res=>{
+    resolveModal=res;
+    openModal(cls,html);
+    $("#mbody").querySelectorAll("[data-v]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.v)));
+  });
+}
+
+/* ---------------- GAMEPLAY ---------------- */
+const cur=()=>G.teams[G.turn];
+
+async function rollDice(){
+  const die=$("#die");
+  die.classList.add("roll");sfx.roll();
+  for(let i=0;i<9;i++){renderDie(1+Math.floor(Math.random()*6));await sleep(90)}
+  die.classList.remove("roll");
+  const n=1+Math.floor(Math.random()*6);
+  renderDie(n);return n;
+}
+async function walkTo(i,target){
+  const t=G.teams[i];
+  while(t.pos!==target){
+    t.pos+=t.pos<target?1:-1;
+    placeToken(i,t.pos,false);sfx.step();renderTeams();
+    await sleep(260);
+  }
+}
+async function slideTo(i,n){
+  const t=G.teams[i];t.pos=n;
+  placeToken(i,n,true);renderTeams();
+  await sleep(1050);
+}
+async function roll(){
+  if(!G||G.busy||G.over||$("#modal").classList.contains("show"))return;
+  G.busy=true;setRoll();
+  const i=G.turn,t=G.teams[i];
+  const d=await rollDice();
+  log(`${t.icon} <b>${esc(t.name)}</b> melempar dadu: <b>${d}</b>`);
+  await sleep(250);
+  await walkTo(i,Math.min(100,t.pos+d));
+  await resolve(i,true);
+  if(!G.over){
+    if(G.extra){G.extra=false;log(`🔁 ${esc(t.name)} mendapat giliran tambahan`)}
+    else G.turn=(G.turn+1)%G.teams.length;
+    save();
+    G.busy=false;renderAll();
+  }
+}
+async function resolve(i,tiles){
+  const t=G.teams[i],n=t.pos;
+  if(n>=100){await win(i);return}
+  const L=LADDERS[n],S=SNAKES[n];
+  if(L){
+    sfx.up();
+    await modal("ladder",`
+      <div class="mtag g">🪜 TANGGA KARIER</div>
+      <div class="bigico">🪜</div>
+      <h2>${esc(L.t)}</h2>
+      <p>${esc(L.m)}</p>
+      <p><b>${esc(t.name)}</b> naik dari kotak ${n} ke kotak <b>${L.to}</b>!</p>
+      <div class="mact"><button class="btn primary" data-v="ok">Naik! 🚀</button></div>`);
+    log(`🪜 ${esc(t.name)} naik ke kotak ${L.to}: ${esc(L.t)}`);
+    await slideTo(i,L.to);
+    if(t.pos>=100)await win(i);
+    return;
+  }
+  if(S){
+    sfx.down();
+    await modal("snake",`
+      <div class="mtag r">🐍 ULAR HAMBATAN</div>
+      <div class="bigico">🐍</div>
+      <h2>${esc(S.t)}</h2>
+      <p><b>Pesan BK:</b> ${esc(S.m)}</p>
+      <p><b>${esc(t.name)}</b> turun dari kotak ${n} ke kotak <b>${S.to}</b>.</p>
+      <div class="mact"><button class="btn primary" data-v="ok">Lanjut 💪</button></div>`);
+    log(`🐍 ${esc(t.name)} turun ke kotak ${S.to}: ${esc(S.t)}`);
+    await slideTo(i,S.to);
+    return;
+  }
+  if(!tiles)return;
+  if(QUIZ_T.has(n)){
+    const ok=await askQuiz(t);
+    if(ok){addScore(i,10);log(`✅ ${esc(t.name)} menjawab benar (+10)`)}
+    else log(`❌ ${esc(t.name)} belum tepat. Tetap semangat!`);
+  }else if(REF_T.has(n)){
+    const done=await askReflect(t);
+    if(done){addScore(i,5);log(`💭 ${esc(t.name)} menyelesaikan refleksi (+5)`)}
+    else log(`💭 ${esc(t.name)} melewati refleksi`);
+  }else if(CHA_T.has(n)){
+    await drawChance(i);
+  }
+}
+function draw(key,len){
+  if(!G[key]||!G[key].length)G[key]=shuffle([...Array(len).keys()]);
+  return G[key].pop();
+}
+function askQuiz(team){
+  return new Promise(res=>{
+    const q=QUIZ[draw("qDeck",QUIZ.length)];
+    const opts=shuffle(q.o.map((t,k)=>({t,ok:k===0})));
+    const L="ABCD";let timer=null,left=G.timer,done=false;
+    sfx.card();
+    openModal("quiz",`
+      <div class="mtag y">❓ KUIS KARIER · ${esc(q.c)}</div>
+      <h2>${team.icon} ${esc(team.name)}, jawab ya!</h2>
+      <p class="qtext">${esc(q.q)}</p>
+      ${G.timer?`<div class="timer"><i id="tbar"></i><b id="tnum">${left}</b></div>`:""}
+      <div class="opts">${opts.map((o,k)=>`<button class="opt" data-k="${k}"><span>${L[k]}</span>${esc(o.t)}</button>`).join("")}</div>
+      <div id="fb"></div>`);
+    const btns=[...$("#mbody").querySelectorAll(".opt")];
+    function finish(k){
+      if(done)return;done=true;clearInterval(timer);
+      btns.forEach((b,j)=>{b.disabled=true;if(opts[j].ok)b.classList.add("ok");else if(j===k)b.classList.add("no")});
+      const ok=k>=0&&opts[k].ok;
+      ok?sfx.ok():sfx.bad();
+      $("#fb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"✅ Benar! +10 poin":(k<0?"⏰ Waktu habis.":"❌ Belum tepat.")}</b><br>${esc(q.e)}</div>
+        <div class="mact"><button class="btn primary" id="qNext">Lanjut ➜</button></div>`;
+      $("#qNext").addEventListener("click",()=>{closeModal();res(ok)});
+      $("#mcard").scrollTop=9999;
+    }
+    btns.forEach((b,k)=>b.addEventListener("click",()=>finish(k)));
+    if(G.timer){
+      const bar=$("#tbar");
+      timer=setInterval(()=>{
+        left--;
+        const tn=$("#tnum");if(tn)tn.textContent=Math.max(left,0);
+        if(bar)bar.style.transform=`scaleX(${Math.max(left,0)/G.timer})`;
+        if(left<=0)finish(-1);
+      },1000);
+    }
+  });
+}
+async function askReflect(team){
+  sfx.card();
+  const p=REFLECT[draw("rDeck",REFLECT.length)];
+  const v=await modal("reflect",`
+    <div class="mtag p">💭 KARTU REFLEKSI</div>
+    <div class="bigico">💭</div>
+    <h2>${team.icon} ${esc(team.name)}</h2>
+    <p class="qtext">${esc(p)}</p>
+    <p style="color:#6b7280;font-size:16px!important">Diskusikan 1 menit, lalu wakil kelompok menyampaikan jawaban.</p>
+    <div class="mact"><button class="btn ghost" data-v="skip">Lewati</button><button class="btn primary" data-v="ok">✅ Sudah dijawab (+5)</button></div>`);
+  return v==="ok";
+}
+async function drawChance(i){
+  const t=G.teams[i],c=CHANCE[draw("cDeck",CHANCE.length)];
+  sfx.card();
+  const parts=[];
+  if(c.m)parts.push(c.m>0?`maju ${c.m} kotak`:`mundur ${-c.m} kotak`);
+  if(c.p)parts.push(`+${c.p} poin`);
+  if(c.x)parts.push("lempar dadu lagi");
+  await modal("chance",`
+    <div class="mtag k">🎁 KARTU KEJUTAN</div>
+    <div class="bigico">${c.i}</div>
+    <h2>${esc(c.t)}</h2>
+    <p>${esc(c.d)}</p>
+    <p><b>${esc(t.name)}:</b> ${parts.join(" dan ")}.</p>
+    <div class="mact"><button class="btn primary" data-v="ok">Terima</button></div>`);
+  log(`🎁 ${esc(t.name)}: ${esc(c.t)}`);
+  if(c.p)addScore(i,c.p);
+  if(c.x)G.extra=true;
+  if(c.m){
+    const target=Math.max(1,Math.min(99,t.pos+c.m));
+    await walkTo(i,target);
+    await resolve(i,false);
+  }
+}
+async function win(i){
+  const t=G.teams[i];
+  t.pos=100;t.finished=true;G.over=true;
+  if(G.first===null||G.first===undefined)G.first=i;
+  placeToken(i,100,false);
+  renderAll();
+  sfx.win();confetti();
+  const rank=G.teams.map((x,k)=>({...x,k})).sort((a,b)=>b.score-a.score||b.pos-a.pos);
+  const champ=rank[0];
+  try{localStorage.removeItem(SAVE_KEY)}catch(e){}
+  await modal("win",`
+    <div class="mtag y">🏆 PERMAINAN SELESAI</div>
+    <div class="bigico">🎉</div>
+    <h2>${t.icon} ${esc(t.name)} sampai di Tujuan lebih dulu!</h2>
+    <p>⚡ <b>Tim Tercepat:</b> ${esc(t.name)} &nbsp;·&nbsp; 🌟 <b>Juara Karier (skor tertinggi):</b> ${champ.icon} ${esc(champ.name)} (${champ.score} poin)</p>
+    <table class="rank">${rank.map((x,r)=>`<tr><td>${r+1}</td><td><span class="dot" style="background:${x.color}">${x.icon}</span>${esc(x.name)}</td><td>Kotak ${x.pos}</td><td><b>${x.score}</b> poin</td></tr>`).join("")}</table>
+    <p style="font-size:clamp(16px,1.9vw,22px)"><b>Pesan BK:</b> Karier adalah perjalanan panjang. Kenali dirimu, cari informasi, ambil keputusan dengan bijak, dan teruslah belajar. Setiap langkah kecil membawamu ke masa depan yang kamu impikan.</p>
+    <div class="mact"><button class="btn ghost" data-v="menu">Pengaturan baru</button><button class="btn primary" data-v="again">🔁 Main lagi (tim sama)</button></div>`).then(v=>{
+      if(v==="again")startGame(G.teams.map(x=>x.name),G.timer);
+      else showSetup();
+    });
+}
+function confetti(){
+  const cols=["#ffd23f","#ef4444","#22c55e","#3b82f6","#a855f7","#ec4899","#fff"];
+  for(let k=0;k<110;k++){
+    const e=document.createElement("div");e.className="conf";
+    e.style.left=Math.random()*100+"vw";
+    e.style.background=cols[k%cols.length];
+    e.style.animationDuration=(2.4+Math.random()*2.6)+"s";
+    e.style.animationDelay=(Math.random()*1.2)+"s";
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(),7500);
+  }
+}
+
+/* ---------------- SIMPAN / LANJUT ---------------- */
+function save(){
+  try{
+    if(!G||G.over)return;
+    const {teams,turn,qDeck,rDeck,cDeck,log,timer}=G;
+    localStorage.setItem(SAVE_KEY,JSON.stringify({teams,turn,qDeck,rDeck,cDeck,log:log.slice(0,8),timer,sound:CFG.sound}));
+  }catch(e){}
+}
+function loadSaved(){
+  try{
+    const s=JSON.parse(localStorage.getItem(SAVE_KEY)||"null");
+    if(s&&Array.isArray(s.teams)&&s.teams.length>=2&&s.teams.length<=6)return s;
+  }catch(e){}
+  return null;
+}
+
+/* ---------------- ALUR LAYAR ---------------- */
+function startGame(names,timer,saved){
+  $("#setup").classList.add("hidden");$("#game").classList.remove("hidden");
+  if(saved){
+    G=Object.assign({busy:false,over:false,extra:false,first:null},saved);
+    G.teams=saved.teams.map(t=>Object.assign({},t));
+  }else{
+    G={
+      teams:names.map((n,i)=>({name:n,icon:TEAM_ICONS[i],color:TEAM_COLORS[i],pos:1,score:0,finished:false})),
+      turn:0,qDeck:null,rDeck:null,cDeck:null,log:[],busy:false,over:false,extra:false,first:null,timer:+timer||0
+    };
+  }
+  buildBoard();buildTokens();renderDie(1);renderAll();
+  if(!saved)log("🧭 Petualangan dimulai! Siapa yang sampai ke Tujuan lebih dulu?");
+  save();
+}
+function showSetup(){
+  $("#game").classList.add("hidden");$("#setup").classList.remove("hidden");
+  document.querySelectorAll(".conf").forEach(e=>e.remove());
+  buildSetup();
+}
+function buildSetup(){
+  $("#countChips").innerHTML=[2,3,4,5,6].map(n=>`<button class="chip${n===CFG.count?" on":""}" data-n="${n}">${n} Tim</button>`).join("");
+  $("#nameList").innerHTML=Array.from({length:CFG.count},(_,i)=>`
+    <div class="tname"><div class="tk" style="background:${TEAM_COLORS[i]}">${TEAM_ICONS[i]}</div>
+    <input type="text" maxlength="22" value="${esc(CFG.names[i]||TEAM_NAMES[i])}" data-i="${i}" aria-label="Nama kelompok ${i+1}"></div>`).join("");
+  $("#optTimer").value=String(CFG.timer);
+  $("#optSound").checked=CFG.sound;
+  $("#resumeBtn").classList.toggle("hidden",!loadSaved());
+}
+
+/* ---------------- EVENT ---------------- */
+$("#countChips").addEventListener("click",e=>{
+  const b=e.target.closest("[data-n]");if(!b)return;
+  CFG.count=+b.dataset.n;buildSetup();
+});
+$("#nameList").addEventListener("input",e=>{
+  const i=e.target.dataset.i;if(i!==undefined)CFG.names[+i]=e.target.value;
+});
+$("#optTimer").addEventListener("change",e=>CFG.timer=+e.target.value);
+$("#optSound").addEventListener("change",e=>{CFG.sound=e.target.checked;syncSoundBtn()});
+$("#startBtn").addEventListener("click",()=>{
+  const names=Array.from({length:CFG.count},(_,i)=>(CFG.names[i]||"").trim()||TEAM_NAMES[i]);
+  startGame(names,CFG.timer);
+});
+$("#resumeBtn").addEventListener("click",()=>{
+  const s=loadSaved();if(!s)return;
+  if(typeof s.sound==="boolean")CFG.sound=s.sound;
+  startGame(null,s.timer,s);
+});
+$("#rollBtn").addEventListener("click",roll);
+$("#teams").addEventListener("click",e=>{
+  const b=e.target.closest("[data-a]");if(!b||!G)return;
+  addScore(+b.dataset.a,+b.dataset.d);save();
+});
+document.addEventListener("keydown",e=>{
+  if((e.code==="Space"||e.code==="Enter")&&G&&!$("#game").classList.contains("hidden")&&!$("#modal").classList.contains("show")){
+    if(document.activeElement&&["BUTTON","INPUT","SELECT","A"].includes(document.activeElement.tagName)&&e.code==="Enter")return;
+    e.preventDefault();roll();
+  }
+});
+function syncSoundBtn(){$("#bSound").textContent=CFG.sound?"🔊 Suara":"🔇 Senyap"}
+$("#bSound").addEventListener("click",()=>{CFG.sound=!CFG.sound;syncSoundBtn()});
+$("#bFull").addEventListener("click",()=>{
+  try{
+    if(!document.fullscreenElement)document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }catch(e){}
+});
+$("#bReset").addEventListener("click",async()=>{
+  if(!G||G.busy&&!G.over)return;
+  const v=await modal("",`
+    <div class="mtag">⟲ ULANG PERMAINAN</div>
+    <h2>Mulai dari awal?</h2>
+    <p>Posisi dan skor semua kelompok akan dihapus.</p>
+    <div class="mact"><button class="btn ghost" data-v="no">Batal</button><button class="btn ghost" data-v="menu">Ke pengaturan</button><button class="btn primary" data-v="yes">Ulang sekarang</button></div>`);
+  if(v==="yes")startGame(G.teams.map(t=>t.name),G.timer);
+  else if(v==="menu"){try{localStorage.removeItem(SAVE_KEY)}catch(e){}showSetup()}
+});
+$("#bHelp").addEventListener("click",()=>{
+  if($("#modal").classList.contains("show"))return;
+  modal("",`
+    <div class="mtag">❔ CARA BERMAIN</div>
+    <h2>Career Quest — Tangga Masa Depanku</h2>
+    <p>1. Setiap kelompok bergiliran melempar dadu (guru menekan tombol atau Spasi).<br>
+    2. 🪜 <b>Tangga</b> = kebiasaan positif, kamu naik. 🐍 <b>Ular</b> = hambatan karier, kamu turun.<br>
+    3. ❓ <b>Kuis</b>: jawaban benar +10 poin. 💭 <b>Refleksi</b>: jawab dan diskusikan, +5 poin. 🎁 <b>Kartu Kejutan</b>: bisa maju, mundur, atau dapat poin.<br>
+    4. Sampai kotak 100 lebih dulu menjadi <b>Tim Tercepat</b>. Kelompok dengan skor tertinggi menjadi <b>Juara Karier</b>.<br>
+    5. Guru bisa menyesuaikan poin dengan tombol +5 / −5 di papan skor.</p>
+    <div class="mact"><button class="btn primary" data-v="ok">Mengerti</button></div>`);
+});
+window.addEventListener("beforeunload",()=>{try{save()}catch(e){}});
+
+buildSetup();
+</script>
+</body>
+</html>

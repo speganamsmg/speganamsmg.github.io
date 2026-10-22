@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Game BK</title>
+  <meta name="description" content="Kumpulan game pembelajaran Bimbingan dan Konseling SMP Negeri 36 Semarang">
+  <script>
+    (function () {
+      try {
+        var p = localStorage.getItem('tema') || localStorage.getItem('tema_def') || 'auto';
+        var dark = p === 'dark' || (p === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" href="assets/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <meta name="theme-color" content="#121a33">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&display=swap">
+  <link rel="stylesheet" href="style.css?v=50">
+  <link rel="stylesheet" href="dashboard.css?v=50">
+  <link rel="stylesheet" href="gamebk.css?v=50">
+</head>
+<body>
+  <main class="wrap">
+    <div class="topbar">
+      <a class="btn-back" href="./" id="home"></a>
+      <button class="icon-btn theme-btn" id="themeBtn" type="button" aria-label="Ganti tema terang atau gelap"></button>
+    </div>
+    <header class="dhead gbk-head" id="dhead">
+      <h1>Game BK</h1>
+      <div class="rich">Game pembelajaran Bimbingan dan Konseling. Pilih satu game untuk dimainkan di kelas.</div>
+    </header>
+    <ul class="gbk-grid" id="games"></ul>
+  </main>
+  <script src="config.js?v=50"></script>
+  <script src="common.js?v=50"></script>
+  <script>
+    (function () {
+      /* Daftar game. Untuk menambah game: simpan file game di folder yang sama, lalu tambahkan satu baris di sini. */
+      var GAMES = [
+        { href: 'career-quest.html', ikon: '🧭', label: 'Kelas IX', judul: 'Career Quest — Tangga Masa Depanku',
+          isi: 'Ular tangga karier digital: lempar dadu, jawab kuis, refleksi, dan hadapi kartu kejutan menuju kotak 100.',
+          tag: ['Perencanaan karier', 'Berkelompok', 'Proyektor / IFP'] }
+      ];
+      var $ = function (id) { return document.getElementById(id); };
+      function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
+
+      var themeBtn = $('themeBtn');
+      themeBtn.append(App.svg('moon', 'moon'), App.svg('sun', 'sun'));
+      themeBtn.addEventListener('click', App.theme.toggle);
+      App.pasangBack('gamebk');
+
+      var ul = $('games');
+      GAMES.forEach(function (g) {
+        var li = el('li');
+        var a = el('a', 'gbk-card'); a.href = g.href;
+        var art = el('div', 'gbk-art', g.ikon); art.setAttribute('aria-hidden', 'true'); art.append(el('small', '', g.label));
+        var b = el('div', 'gbk-body');
+        var tags = el('div', 'gbk-tags'); g.tag.forEach(function (t) { tags.append(el('span', '', t)); });
+        b.append(el('h2', '', g.judul), el('p', '', g.isi), tags, el('span', 'gbk-play', '▶ Mainkan'));
+        a.append(art, b); li.append(a); ul.append(li);
+      });
+      var soon = el('li');
+      var sc = el('div', 'gbk-card gbk-soon');
+      var sa = el('div', 'gbk-art', '🎮'); sa.setAttribute('aria-hidden', 'true');
+      var sb = el('div', 'gbk-body'); sb.append(el('h2', '', 'Game berikutnya'), el('p', '', 'Segera hadir.'));
+      sc.append(sa, sb); soon.append(sc); ul.append(soon);
+    })();
+  </script>
+</body>
+</html>
