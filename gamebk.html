@@ -38,6 +38,7 @@
       <div class="rich">Game pembelajaran Bimbingan dan Konseling. Pilih satu game untuk dimainkan di kelas.</div>
     </header>
     <ul class="gbk-grid" id="games"></ul>
+    <p class="gbk-credit">Dirancang oleh <b>Agung Fahri Husaeni, S.Pd.</b> · Guru BK SMP Negeri 36 Semarang</p>
   </main>
   <script src="config.js?v=50"></script>
   <script src="common.js?v=50"></script>
@@ -45,9 +46,9 @@
     (function () {
       /* Daftar game. Untuk menambah game: simpan file game di folder yang sama, lalu tambahkan satu baris di sini. */
       var GAMES = [
-        { href: 'career-quest.html', ikon: '🧭', label: 'Kelas IX', judul: 'Career Quest — Tangga Masa Depanku',
-          isi: 'Ular tangga karier digital: lempar dadu, jawab kuis, refleksi, dan hadapi kartu kejutan menuju kotak 100.',
-          tag: ['Perencanaan karier', 'Berkelompok', 'Proyektor / IFP'] }
+        { href: 'career-quest.html', ikon: '🧭', gambar: 'career-quest-cover.svg', label: 'Kelas IX', judul: 'Career Quest — Tangga Masa Depanku',
+          isi: 'Ular tangga karier digital bergaya futuristik: kuis, refleksi, kartu kejutan, tim tanpa batas, dan soal yang bisa diatur sendiri oleh guru.',
+          tag: ['Perencanaan karier', 'Berkelompok', 'Bisa diatur guru', 'Proyektor / IFP'] }
       ];
       var $ = function (id) { return document.getElementById(id); };
       function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
@@ -61,7 +62,9 @@
       GAMES.forEach(function (g) {
         var li = el('li');
         var a = el('a', 'gbk-card'); a.href = g.href;
-        var art = el('div', 'gbk-art', g.ikon); art.setAttribute('aria-hidden', 'true'); art.append(el('small', '', g.label));
+        var art = el('div', 'gbk-art' + (g.gambar ? ' has-img' : ''), g.gambar ? '' : g.ikon); art.setAttribute('aria-hidden', 'true');
+        if (g.gambar) { var im = el('img'); im.src = g.gambar; im.alt = ''; im.loading = 'lazy'; im.onerror = function () { im.remove(); art.classList.remove('has-img'); art.insertBefore(document.createTextNode(g.ikon), art.firstChild); }; art.append(im); }
+        art.append(el('small', '', g.label));
         var b = el('div', 'gbk-body');
         var tags = el('div', 'gbk-tags'); g.tag.forEach(function (t) { tags.append(el('span', '', t)); });
         b.append(el('h2', '', g.judul), el('p', '', g.isi), tags, el('span', 'gbk-play', '▶ Mainkan'));
