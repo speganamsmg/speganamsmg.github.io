@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Career Quest — Tangga Masa Depanku | Game BK</title>
 <meta name="description" content="Game ular tangga karier digital untuk Bimbingan dan Konseling. Dirancang oleh Agung Fahri Husaeni, S.Pd., Guru BK SMP Negeri 36 Semarang.">
+<meta name="theme-color" content="#050816">
+<script>try{var _t=localStorage.getItem("tema");document.documentElement.setAttribute("data-theme",_t==="light"||_t==="dark"?_t:(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"))}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400..800&display=swap">
@@ -13,6 +15,7 @@
   --bg0:#050816; --bg1:#0a1030; --bg2:#1a1058;
   --ink:#e8efff; --muted:#93a4cf; --dim:#6b7aa8;
   --cy:#22d3ee; --mg:#e879f9; --gold:#fbbf24; --green:#34d399; --red:#fb7185; --vio:#a78bfa;
+  --panel:#10183f;
   --glass:rgba(255,255,255,.06); --glass2:rgba(255,255,255,.1); --line:rgba(125,211,252,.22);
   --f-head:"Orbitron","Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
   --f-body:"Plus Jakarta Sans","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
@@ -260,6 +263,24 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
 .rule-grid .opt-row small{display:block;color:var(--muted);font-size:12.5px;font-weight:500;margin-top:2px}
 .warn{color:#fde68a;font-size:13.5px;margin:6px 0 0}
 
+/* ---------- LEADERBOARD ---------- */
+.champs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.champ{position:relative;overflow:hidden;border:1px solid var(--line);background:var(--glass);border-radius:14px;padding:8px 11px;min-width:0}
+.champ small{display:block;font-family:var(--f-head);font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--cy)}
+.champ.k small{color:var(--gold)}
+.champ b{display:flex;align-items:center;gap:6px;font-size:15px;line-height:1.25;margin-top:2px}
+.champ b span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.champ em{display:block;font-style:normal;font-size:12px;color:var(--muted);margin-top:1px}
+.seg{display:flex;gap:4px;padding:3px;border:1px solid var(--line);border-radius:12px;background:var(--glass)}
+.seg button{flex:1;font:inherit;font-size:12.5px;font-weight:700;padding:6px 4px;border:0;border-radius:9px;background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap}
+.seg button.on{background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f}
+.tm .rk{flex:none;width:22px;text-align:center;font-family:var(--f-head);font-size:13px;font-weight:800;color:var(--muted)}
+.tm .rk.r1{color:var(--gold)}
+.tm{position:relative}
+.tm .bar{position:absolute;left:10px;right:10px;bottom:3px;height:3px;border-radius:3px;background:rgba(125,150,200,.18);overflow:hidden;pointer-events:none}
+.tm .bar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--cy),var(--mg));transition:width .5s}
+.tm .nm span{white-space:nowrap}
+.tm .nm span b{display:inline;font-size:inherit;color:var(--green)}
 /* ---------- TENTANG GAME ---------- */
 #mcard.about{--ac:var(--cy)}
 .ab-chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}
@@ -276,6 +297,7 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
 .ab-by{margin-top:18px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,rgba(34,211,238,.1),rgba(232,121,249,.1));text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
 .ab-by b{display:block;color:#fff;font-size:18px}
 .ab-empty{color:var(--dim);font-style:italic}
+.lockbox{max-width:520px;margin:30px auto;text-align:center}.lockbox .lk{font-size:44px}.lockbox .btn{margin-top:6px}
 .list-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
 .list-row .fl{flex:1;min-width:0;padding:0}
 .list-row .btn{margin-top:2px}
@@ -289,6 +311,51 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
   #mcard,#mcard *{color:#000!important;background:transparent!important;border-color:#bbb!important}
   .ab-sec li::before{background:#eee!important}
 }
+
+/* ---------- TEMA TERANG ---------- */
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg0:#f4f7ff; --bg1:#e8eefc; --bg2:#f1e6ff;
+  --ink:#10204a; --muted:#44557f; --dim:#667599;
+  --cy:#0891b2; --mg:#c026d3; --gold:#b45309; --green:#047857; --red:#e11d48; --vio:#6d4fd6;
+  --panel:#ffffff;
+  --glass:rgba(255,255,255,.78); --glass2:rgba(255,255,255,.95); --line:rgba(30,64,175,.24);
+}
+[data-theme="light"] body{background:
+  radial-gradient(900px 600px at 8% -10%,rgba(34,211,238,.28),transparent 60%),
+  radial-gradient(900px 700px at 100% 105%,rgba(232,121,249,.22),transparent 60%),
+  linear-gradient(160deg,var(--bg0),var(--bg1) 55%,var(--bg2));background-attachment:fixed}
+[data-theme="light"] body::before{opacity:.35}
+[data-theme="light"] .setup-card{background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(255,255,255,.7));box-shadow:0 24px 60px -24px rgba(30,64,175,.35)}
+[data-theme="light"] .panel{background:rgba(255,255,255,.72)}
+[data-theme="light"] .stepper .val{color:var(--ink);text-shadow:none}
+[data-theme="light"] .field,[data-theme="light"] .tname input,[data-theme="light"] .fl input,[data-theme="light"] .fl textarea,[data-theme="light"] .fl select,[data-theme="light"] .opt-row input[type=number],[data-theme="light"] .opt-row select{background:#fff;color:var(--ink)}
+[data-theme="light"] .opt-row input[type=checkbox]{background:rgba(30,64,175,.22)}
+[data-theme="light"] .topbar{background:rgba(255,255,255,.8)}
+[data-theme="light"] .board{background:#f2f6ff;border-color:rgba(30,64,175,.4);box-shadow:0 22px 50px -18px rgba(30,64,175,.45),0 0 0 4px rgba(255,255,255,.7)}
+[data-theme="light"] .cell{border-color:rgba(30,64,175,.1)}
+[data-theme="light"] .cell.a{background:rgba(30,64,175,.06)}
+[data-theme="light"] .cell.b{background:rgba(255,255,255,.7)}
+[data-theme="light"] .cell .n{color:rgba(40,60,120,.6)}
+[data-theme="light"] .board-wrap::before{opacity:.22}
+[data-theme="light"] .log{background:rgba(255,255,255,.7)}
+[data-theme="light"] #modal{background:rgba(190,205,240,.7)}
+[data-theme="light"] #mcard{background:linear-gradient(165deg,#ffffff,#eef3ff);box-shadow:0 30px 80px -20px rgba(30,64,175,.4)}
+[data-theme="light"] #mcard p,[data-theme="light"] #mcard .ab-sec p,[data-theme="light"] #mcard .ab-sec li{color:#22335f}
+[data-theme="light"] .qtext,[data-theme="light"] .ab-by b{color:var(--ink)!important}
+[data-theme="light"] .ab-by b{color:var(--ink)}
+[data-theme="light"] .timer{background:rgba(30,64,175,.14)}
+[data-theme="light"] #toast{background:#fff;color:var(--ink)}
+[data-theme="light"] #editor{background:linear-gradient(165deg,#f4f7ff,#e8eefc 60%,#f1e6ff)}
+[data-theme="light"] .ed-top{background:rgba(255,255,255,.85)}
+[data-theme="light"] .ed-tabs button.on{color:var(--ink)}
+[data-theme="light"] .mc{background:rgba(30,64,175,.05);color:var(--ink)}
+[data-theme="light"] .mc .to{color:var(--ink)}
+[data-theme="light"] .tm .adj button{background:rgba(30,64,175,.12);color:var(--ink)}
+[data-theme="light"] .tm .adj button:hover{background:rgba(30,64,175,.25)}
+[data-theme="light"] .seg button.on{color:#fff}
+[data-theme="light"] .ab-chips span{color:var(--ink)}
+[data-theme="light"] .gk-box{background:#fff}
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width:980px){
@@ -313,7 +380,7 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
 <section id="setup">
   <div class="setup-card">
     <div class="setup-top">
-      <div class="navrow"><a class="back" href="gamebk.html">← Menu Game BK</a><button class="back" id="aboutBtn" type="button">ℹ Tentang game</button></div>
+      <div class="navrow"><a class="back" href="gamebk.html">← Menu Game BK</a><button class="back" id="aboutBtn" type="button">ℹ Tentang game</button><button class="back" data-gk-theme type="button">☀ Terang</button></div>
       <div class="by">Dirancang oleh <b>Agung Fahri Husaeni, S.Pd.</b><span>Guru BK SMP Negeri 36 Semarang</span></div>
     </div>
     <div class="hero">
@@ -356,7 +423,7 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
             <li>Kelompok bergiliran melempar dadu. Guru menekan tombol dadu.</li>
             <li>🪜 <b>Tangga</b> = kebiasaan positif, naik! 🐍 <b>Ular</b> = hambatan karier, turun.</li>
             <li>❓ <b>Kuis</b> dan 💭 <b>Refleksi</b> memberi poin, 🎁 <b>Kartu Kejutan</b> bisa maju, mundur, atau menambah poin.</li>
-            <li>Sampai kotak 100 lebih dulu = <b>Tim Tercepat</b>. Skor tertinggi = <b>Juara Karier</b>.</li>
+            <li>Sampai kotak 100 lebih dulu = <b>Tim Tercepat</b>. Jawaban kuis benar terbanyak = <b>Juara Karier</b>.</li>
           </ul>
         </div>
       </div>
@@ -376,6 +443,7 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
     <div class="sp"></div>
     <button class="tb" id="bHelp">❔ Cara bermain</button>
     <button class="tb" id="bAbout">ℹ Tentang</button>
+    <button class="tb" data-gk-theme type="button">☀ Terang</button>
     <button class="tb" id="bSound">🔊 Suara</button>
     <button class="tb" id="bFull">⛶ Layar penuh</button>
     <button class="tb" id="bReset">⟲ Ulang</button>
@@ -397,6 +465,8 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
           <div class="hint">atau tekan tombol Spasi</div>
         </div>
       </div>
+      <div class="champs" id="champs"></div>
+      <div class="seg" id="lbSeg" role="tablist" aria-label="Urutan papan skor"><button data-m="turn" class="on" role="tab">👥 Giliran</button><button data-m="fast" role="tab">⚡ Tercepat</button><button data-m="career" role="tab">🌟 Karier</button></div>
       <div class="teams" id="teams"></div>
       <div class="legend"><span>🪜 Tangga: naik</span><span>🐍 Ular: turun</span><span>❓ Kuis</span><span>💭 Refleksi</span><span>🎁 Kejutan</span></div>
       <div class="log" id="log"></div>
@@ -423,6 +493,8 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
 <div id="toast" role="status"></div>
 <input type="file" id="importFile" accept="application/json,.json" class="hidden">
 
+<script src="config.js"></script>
+<script src="gamekit.js"></script>
 <script>
 "use strict";
 /* =====================================================
@@ -552,6 +624,31 @@ function tokenOffsets(n){
 const tokenSize=n=>n<=4?.054:n<=9?.042:n<=16?.033:.027;
 
 /* ---------------- PENGATURAN (bisa diubah guru) ---------------- */
+const ABOUT_ID="career-quest";
+const DEFAULT_ABOUT={
+  deskripsi:"Career Quest adalah permainan ular tangga karier digital untuk layanan Bimbingan dan Konseling. Kelompok peserta didik bergiliran melempar dadu, menjawab kuis, berefleksi, dan menghadapi kartu kejutan sambil bergerak menuju kotak 100.",
+  perancang:"Agung Fahri Husaeni, S.Pd.",
+  jabatan:"Guru BK SMP Negeri 36 Semarang",
+  sasaran:"Peserta didik semua jenjang (soal bawaan disusun untuk kelas IX)",
+  durasi:"30–45 menit",
+  media:"Laptop dengan proyektor/IFP, dimainkan berkelompok",
+  bidang:"Bimbingan karier",
+  capaian:[
+    "Peserta didik mengenali minat, bakat, kepribadian, dan nilai hidupnya sebagai dasar perencanaan karier.",
+    "Peserta didik memahami ragam jalur pendidikan lanjutan dan jalur penerimaan murid baru.",
+    "Peserta didik mengembangkan keterampilan abad 21 dan sikap belajar sepanjang hayat.",
+    "Peserta didik mengenal dunia kerja, profesi, dan kewirausahaan.",
+    "Peserta didik terlatih mengambil keputusan karier secara bijak dan menyiapkan rencana cadangan."
+  ],
+  tujuan:[
+    "Membedakan minat, bakat, nilai hidup, serta faktor internal dan eksternal dalam memilih karier.",
+    "Mengetahui jalur dan sumber informasi pendidikan lanjutan yang dapat dipercaya.",
+    "Mengidentifikasi hambatan karier (menunda, ikut-ikutan teman, cemas berlebihan) dan cara mengatasinya.",
+    "Melatih refleksi diri dan komunikasi asertif melalui diskusi kelompok.",
+    "Menumbuhkan kerja sama, sportivitas, dan tanggung jawab dalam tim."
+  ],
+  catatan:""
+};
 function buildDefault(){
   return {
     v:2,
@@ -562,31 +659,7 @@ function buildDefault(){
     reflect:D_REF.slice(),
     chance:D_CHA.map(c=>({i:c.i,t:c.t,d:c.d,m:c.m||0,p:c.p||0,x:c.x?1:0})),
     rules:{pq:10,pr:5,pw:0,timer:0,pesan:"Karier adalah perjalanan panjang. Kenali dirimu, cari informasi, ambil keputusan dengan bijak, dan teruslah belajar. Setiap langkah kecil membawamu ke masa depan yang kamu impikan."},
-    setup:{count:4,names:TEAM_NAMES6.slice(0,4),sound:true},
-    about:{
-      deskripsi:"Career Quest adalah permainan ular tangga karier digital untuk layanan Bimbingan dan Konseling. Kelompok peserta didik bergiliran melempar dadu, menjawab kuis, berefleksi, dan menghadapi kartu kejutan sambil bergerak menuju kotak 100.",
-      perancang:"Agung Fahri Husaeni, S.Pd.",
-      jabatan:"Guru BK SMP Negeri 36 Semarang",
-      sasaran:"Peserta didik semua jenjang (soal bawaan disusun untuk kelas IX)",
-      durasi:"30–45 menit",
-      media:"Laptop dengan proyektor/IFP, dimainkan berkelompok",
-      bidang:"Bimbingan karier",
-      capaian:[
-        "Peserta didik mengenali minat, bakat, kepribadian, dan nilai hidupnya sebagai dasar perencanaan karier.",
-        "Peserta didik memahami ragam jalur pendidikan lanjutan dan jalur penerimaan murid baru.",
-        "Peserta didik mengembangkan keterampilan abad 21 dan sikap belajar sepanjang hayat.",
-        "Peserta didik mengenal dunia kerja, profesi, dan kewirausahaan.",
-        "Peserta didik terlatih mengambil keputusan karier secara bijak dan menyiapkan rencana cadangan."
-      ],
-      tujuan:[
-        "Membedakan minat, bakat, nilai hidup, serta faktor internal dan eksternal dalam memilih karier.",
-        "Mengetahui jalur dan sumber informasi pendidikan lanjutan yang dapat dipercaya.",
-        "Mengidentifikasi hambatan karier (menunda, ikut-ikutan teman, cemas berlebihan) dan cara mengatasinya.",
-        "Melatih refleksi diri dan komunikasi asertif melalui diskusi kelompok.",
-        "Menumbuhkan kerja sama, sportivitas, dan tanggung jawab dalam tim."
-      ],
-      catatan:""
-    }
+    setup:{count:4,names:TEAM_NAMES6.slice(0,4),sound:true}
   };
 }
 /* Merapikan dan memvalidasi pengaturan (dari penyimpanan, impor berkas, atau editor) */
@@ -632,14 +705,16 @@ function sanitize(c){
   out.rules={pq:int(R.pq,0,100,10),pr:int(R.pr,0,100,5),pw:int(R.pw,0,100,0),timer:int(R.timer,0,600,0),pesan:str(R.pesan,500)||d.rules.pesan};
   const S=c.setup&&typeof c.setup==="object"?c.setup:{};
   out.setup={count:int(S.count,MIN_TEAMS,MAX_TEAMS,4),names:(Array.isArray(S.names)?S.names:[]).slice(0,MAX_TEAMS).map(x=>str(x,22)),sound:S.sound!==false};
-  const A=c.about&&typeof c.about==="object"?c.about:d.about,DA=d.about;
+  return out;
+}
+function cleanAbout(A){
+  A=A&&typeof A==="object"?A:{};const DA=DEFAULT_ABOUT;
   const lst=(v,fb)=>(Array.isArray(v)?v:fb).map(x=>str(x,300)).filter(Boolean).slice(0,15);
-  out.about={
+  return {
     deskripsi:str(A.deskripsi,700),perancang:str(A.perancang,80),jabatan:str(A.jabatan,120),
     sasaran:str(A.sasaran,160),durasi:str(A.durasi,80),media:str(A.media,160),bidang:str(A.bidang,80),
     capaian:lst(A.capaian,DA.capaian),tujuan:lst(A.tujuan,DA.tujuan),catatan:str(A.catatan,700)
   };
-  return out;
 }
 function loadConf(){
   try{const s=JSON.parse(localStorage.getItem(CONF_KEY)||"null");if(s)return sanitize(s)}catch(e){}
@@ -660,17 +735,22 @@ function rebuildMaps(){
 rebuildMaps();
 
 /* ---------------- KREDIT & TENTANG GAME ---------------- */
+const GK=window.GameKit||{info:{cached:(i,d)=>d,load:async(i,d)=>({info:d}),save:async()=>{throw new Error("gamekit.js belum termuat")}},auth:{token:()=>null,ensure:async()=>null,drop(){}}};
+let INFO=cleanAbout(GK.info.cached(ABOUT_ID,DEFAULT_ABOUT));
+function refreshInfo(){
+  return GK.info.load(ABOUT_ID,DEFAULT_ABOUT).then(r=>{INFO=cleanAbout(r.info);applyCredit();return r}).catch(()=>null);
+}
 function creditLine(){
-  const A=CONF.about;if(!A.perancang)return "";
+  const A=INFO;if(!A.perancang)return "";
   return `Dirancang oleh <b>${esc(A.perancang)}</b>${A.jabatan?` · ${esc(A.jabatan)}`:""}`;
 }
 function applyCredit(){
-  const A=CONF.about,by=$(".setup-top .by");
+  const A=INFO,by=$(".setup-top .by");
   if(by)by.innerHTML=A.perancang?`Dirancang oleh <b>${esc(A.perancang)}</b>${A.jabatan?`<span>${esc(A.jabatan)}</span>`:""}`:"";
   const sc=$("#sideCredit");if(sc)sc.innerHTML=creditLine();
 }
 function aboutHtml(){
-  const A=CONF.about;
+  const A=INFO;
   const chips=[["Bidang layanan",A.bidang],["Sasaran",A.sasaran],["Durasi",A.durasi],["Media",A.media]].filter(x=>x[1]).map(x=>`<span><small>${x[0]}</small>${esc(x[1])}</span>`).join("");
   const list=(arr,tag)=>arr.length?`<${tag}>${arr.map(x=>`<li>${esc(x)}</li>`).join("")}</${tag}>`:`<p class="ab-empty">Belum diisi.</p>`;
   return `<div class="mtag">ℹ Tentang game</div>
@@ -685,6 +765,7 @@ function aboutHtml(){
 }
 async function showAbout(){
   if($("#modal").classList.contains("show")||$("#editor").classList.contains("show"))return;
+  refreshInfo();
   const v=await modal("about",aboutHtml());
   if(v==="edit")openEditor("tentang");
   else if(v==="print"){
@@ -824,16 +905,34 @@ function renderTurn(){
   el.innerHTML=`<div class="big">${t.icon}</div><div><small>GILIRAN</small><b>${esc(t.name)}</b></div>`;
   document.querySelectorAll(".tok").forEach((e,i)=>e.classList.toggle("act",i===G.turn&&!G.over));
 }
+let LB="turn";
+function rankFast(){return G.teams.map((t,k)=>k).sort((a,b)=>G.teams[b].pos-G.teams[a].pos||G.teams[b].score-G.teams[a].score||a-b)}
+function rankCareer(){return G.teams.map((t,k)=>k).sort((a,b)=>(G.teams[b].ok||0)-(G.teams[a].ok||0)||G.teams[b].score-G.teams[a].score||G.teams[b].pos-G.teams[a].pos||a-b)}
+function renderChamps(){
+  const f=G.teams[rankFast()[0]],c=G.teams[rankCareer()[0]];
+  const moved=G.teams.some(t=>t.pos>1),answered=G.teams.some(t=>(t.ok||0)>0);
+  $("#champs").innerHTML=`
+    <div class="champ"><small>⚡ Tercepat</small><b>${moved?`${f.icon}<span>${esc(f.name)}</span>`:"—"}</b><em>${moved?`Kotak ${f.pos} · sisa ${100-f.pos}`:"Belum ada yang melangkah"}</em></div>
+    <div class="champ k"><small>🌟 Juara Karier</small><b>${answered?`${c.icon}<span>${esc(c.name)}</span>`:"—"}</b><em>${answered?`${c.ok} jawaban benar`:"Belum ada jawaban benar"}</em></div>`;
+}
 function renderTeams(popIdx){
   const box=$("#teams"),st=box.scrollTop;
-  box.innerHTML=G.teams.map((t,i)=>`
+  const order=LB==="fast"?rankFast():LB==="career"?rankCareer():G.teams.map((t,k)=>k);
+  const maxOk=Math.max(1,...G.teams.map(t=>t.ok||0));
+  box.innerHTML=order.map((i,r)=>{const t=G.teams[i];
+    const w=LB==="career"?Math.round((t.ok||0)/maxOk*100):t.pos;
+    return `
     <div class="tm${i===G.turn&&!G.over?" cur":""}">
+      ${LB==="turn"?"":`<div class="rk${r===0?" r1":""}">${r+1}</div>`}
       <div class="tk" style="background:${t.color}">${t.icon}</div>
-      <div class="nm"><b>${esc(t.name)}</b><span>Kotak ${t.pos}${t.finished?" 🏆":""}</span></div>
+      <div class="nm"><b>${esc(t.name)}</b><span>Kotak ${t.pos}${t.finished?" 🏆":""} · <b>✔ ${t.ok||0}</b></span></div>
       <div class="sc${i===popIdx?" pop":""}">${t.score}</div>
       <div class="adj"><button data-a="${i}" data-d="5" title="Tambah 5 poin">+5</button><button data-a="${i}" data-d="-5" title="Kurangi 5 poin">−5</button></div>
-    </div>`).join("");
+      <div class="bar"><i style="width:${w}%"></i></div>
+    </div>`}).join("");
   box.scrollTop=st;
+  renderChamps();
+  $("#lbSeg").querySelectorAll("button").forEach(b=>{const on=b.dataset.m===LB;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
 }
 function renderLog(){
   $("#log").innerHTML=G.log.slice(0,5).map(s=>`<div>${s}</div>`).join("");
@@ -945,7 +1044,7 @@ async function resolve(i,tiles){
   if(QT.has(n)){
     const ok=await askQuiz(t);
     if(ok===null)log(`❓ Bank soal kosong, kotak kuis dilewati`);
-    else if(ok){addScore(i,R.pq);log(`✅ ${esc(t.name)} menjawab benar (+${R.pq})`)}
+    else if(ok){t.ok=(t.ok||0)+1;addScore(i,R.pq);log(`✅ ${esc(t.name)} menjawab benar (+${R.pq})`)}
     else{if(R.pw)addScore(i,-R.pw);log(`❌ ${esc(t.name)} belum tepat${R.pw?` (−${R.pw})`:""}. Tetap semangat!`)}
   }else if(RT.has(n)){
     const done=await askReflect(t);
@@ -1047,15 +1146,15 @@ async function win(i){
   placeToken(i,100,false);
   renderAll();
   sfx.win();confetti();
-  const rank=G.teams.map((x,k)=>({...x,k})).sort((a,b)=>b.score-a.score||b.pos-a.pos);
+  const rank=rankCareer().map(k=>({...G.teams[k],k}));
   const champ=rank[0];
   try{localStorage.removeItem(SAVE_KEY)}catch(e){}
   await modal("win",`
     <div class="mtag">🏆 Permainan selesai</div>
     <div class="bigico">🎉</div>
     <h2>${t.icon} ${esc(t.name)} sampai di Tujuan lebih dulu!</h2>
-    <p>⚡ <b>Tim Tercepat:</b> ${esc(t.name)} &nbsp;·&nbsp; 🌟 <b>Juara Karier (skor tertinggi):</b> ${champ.icon} ${esc(champ.name)} (${champ.score} poin)</p>
-    <div class="rankwrap"><table class="rank">${rank.map((x,r)=>`<tr><td>${r+1}</td><td><span class="dot" style="background:${x.color}">${x.icon}</span>${esc(x.name)}</td><td>Kotak ${x.pos}</td><td><b>${x.score}</b> poin</td></tr>`).join("")}</table></div>
+    <p>⚡ <b>Tim Tercepat:</b> ${esc(t.name)} &nbsp;·&nbsp; 🌟 <b>Juara Karier (jawaban benar terbanyak):</b> ${champ.icon} ${esc(champ.name)} (${champ.ok||0} benar · ${champ.score} poin)</p>
+    <div class="rankwrap"><table class="rank">${rank.map((x,r)=>`<tr><td>${r+1}</td><td><span class="dot" style="background:${x.color}">${x.icon}</span>${esc(x.name)}</td><td>Kotak ${x.pos}</td><td>✔ ${x.ok||0}</td><td><b>${x.score}</b> poin</td></tr>`).join("")}</table></div>
     <p style="font-size:clamp(15px,1.8vw,20px)"><b>Pesan BK:</b> ${esc(CONF.rules.pesan)}</p>
     <div class="mact"><button class="btn ghost" data-v="menu">Pengaturan baru</button><button class="btn primary" data-v="again">🔁 Main lagi (tim sama)</button></div>
     ${creditLine()?`<div class="mcredit">${creditLine()}</div>`:""}`).then(v=>{
@@ -1101,7 +1200,7 @@ function startGame(names,saved){
     G.timer=+saved.timer||0;
   }else{
     G={
-      teams:names.map((n,i)=>({name:n,icon:TEAM_ICONS[i%TEAM_ICONS.length],color:TEAM_COLORS[i%TEAM_COLORS.length],pos:1,score:0,finished:false})),
+      teams:names.map((n,i)=>({name:n,icon:TEAM_ICONS[i%TEAM_ICONS.length],color:TEAM_COLORS[i%TEAM_COLORS.length],pos:1,score:0,ok:0,finished:false})),
       turn:0,qDeck:null,rDeck:null,cDeck:null,log:[],busy:false,over:false,extra:false,first:null,timer:+CFG.timer||0
     };
   }
@@ -1156,10 +1255,10 @@ const ED_TABS=[
   ["tentang","ℹ Tentang game",()=>""],
   ["cadangan","💾 Cadangan",()=>""]
 ];
-function padED(o){o.quiz.forEach(q=>{while(q.o.length<4)q.o.push("")});return o}
+function padED(o){o.quiz.forEach(q=>{while(q.o.length<4)q.o.push("")});if(!o.about)o.about=clone(ED&&ED.about?ED.about:INFO);return o}
 function edDirty(){return JSON.stringify(ED)!==edSnap}
 function openEditor(tab){
-  ED=padED(clone(CONF));edSnap=JSON.stringify(ED);edSel=0;
+  ED=null;ED=padED(clone(CONF));edSnap=JSON.stringify(ED);edSel=0;
   if(typeof tab==="string")edTab=tab;
   $("#editor").classList.add("show");
   renderEd();updateState();
@@ -1332,9 +1431,12 @@ function aboutList(k,label,help){
     <button class="btn ghost sm" data-act="addAL" data-k="${k}">+ Tambah</button></div>`;
 }
 function edTentang(){
+  if(!GK.auth.token())return `<div class="ed-wrap"><div class="panel lockbox"><div class="lk">🔒</div><h3>Info game dikunci</h3>
+    <p class="ed-help">Kredit perancang, capaian layanan BK, dan tujuan khusus hanya bisa diubah dengan <b>password admin Speganam</b>. Perubahan tersimpan di server, sehingga semua perangkat dan pengunjung melihat info yang sama.</p>
+    <button class="btn primary" data-act="unlock">🔓 Buka dengan password</button></div></div>`;
   const A=ED.about;
   const inp=(f,l,max)=>`<label>${l}<input data-g="ab" data-f="${f}" value="${esc(A[f])}" maxlength="${max}"></label>`;
-  return `<div class="ed-wrap"><p class="ed-help">Info ini tampil di tombol <b>ℹ Tentang game</b> (layar awal dan saat bermain) dan bisa dicetak. <b>Nama perancang</b> dan keterangannya juga dipakai sebagai kredit di seluruh game. Isi bawaan adalah rancangan awal: silakan sesuaikan dengan program layanan BK Anda. Bisa diubah kapan saja.</p>
+  return `<div class="ed-wrap"><p class="ed-help">Info ini tampil di tombol <b>ℹ Tentang game</b> dan bisa dicetak. Tersimpan di server, jadi berlaku di semua perangkat. Perubahan baru tersimpan saat Anda menekan <b>Simpan pengaturan</b>. <b>Nama perancang</b> dan keterangannya juga dipakai sebagai kredit di seluruh game. Isi bawaan adalah rancangan awal: silakan sesuaikan dengan program layanan BK Anda. Bisa diubah kapan saja.</p>
     <div class="rule-grid">
       <div class="panel"><h3>👤 Kredit perancang</h3><div class="fl">${inp("perancang","Nama perancang",80)}${inp("jabatan","Jabatan dan sekolah",120)}</div></div>
       <div class="panel"><h3>📌 Info singkat</h3><div class="fl">${inp("bidang","Bidang layanan BK",80)}${inp("sasaran","Sasaran peserta",160)}${inp("durasi","Durasi",80)}${inp("media","Media / alat",160)}</div></div>
@@ -1368,9 +1470,20 @@ function edValidate(){
   }
   return null;
 }
-function edSave(){
+async function edSave(){
   const bad=edValidate();
   if(bad){edTab=bad[0];renderEd(bad[1]);toast(bad[2],true);return}
+  const newInfo=cleanAbout(ED.about);
+  if(JSON.stringify(newInfo)!==JSON.stringify(INFO)){
+    const b=$("#edSave");b.disabled=true;
+    try{INFO=cleanAbout(await GK.info.save(ABOUT_ID,newInfo));applyCredit()}
+    catch(e){
+      b.disabled=false;
+      if(e&&e.code==="CANCEL"){edTab="tentang";renderEd();toast("Info game belum tersimpan (password dibatalkan)",true);return}
+      toast("Info game gagal disimpan: "+(e&&e.message||"galat"),true);return;
+    }
+    b.disabled=false;
+  }
   const clean=sanitize(ED);
   clean.setup={count:CFG.count,names:CFG.names.slice(0,MAX_TEAMS),sound:CFG.sound};
   CONF=clean;CFG.timer=CONF.rules.timer;
@@ -1412,7 +1525,7 @@ $("#importFile").addEventListener("change",e=>{
       const data=JSON.parse(rd.result);
       if(!data||typeof data!=="object"||Array.isArray(data))throw 0;
       const clean=sanitize(data);
-      clean.setup=ED.setup;
+      clean.setup=ED.setup;clean.about=ED.about;
       ED=padED(clean);renderEd();updateState();
       toast("Berkas dimuat. Tekan “Simpan pengaturan” untuk memakainya.");
     }catch(err){toast("Berkas tidak valid. Pilih berkas .json hasil unduhan Career Quest.",true)}
@@ -1480,13 +1593,14 @@ $("#edBody").addEventListener("click",async e=>{
   else if(a==="addC"){ED.chance.push({i:"🎁",t:"",d:"",m:0,p:0,x:0});renderEd(ED.chance.length-1)}
   else if(a==="dupC"){ED.chance.splice(i+1,0,clone(ED.chance[i]));renderEd(i+1)}
   else if(a==="delC"){if(await confirmDel("kartu kejutan no. "+(i+1))){ED.chance.splice(i,1);renderEd()}}
+  else if(a==="unlock"){GK.auth.ensure().then(t=>{if(t&&ED)renderEd()})}
   else if(a==="addAL"){ED.about[b.dataset.k].push("");renderEd();const ts=$("#edBody").querySelectorAll(`textarea[data-k="${b.dataset.k}"]`);if(ts.length){ts[ts.length-1].focus();ts[ts.length-1].scrollIntoView({block:"center"})}}
   else if(a==="delAL"){ED.about[b.dataset.k].splice(i,1);renderEd()}
   else if(a==="export")edExport();
   else if(a==="import")$("#importFile").click();
   else if(a==="reset"){
     if(await confirmDel("semua pengaturan dan kembali ke isi bawaan")){
-      const keep=ED.setup;ED=padED(buildDefault());ED.setup=keep;edSel=0;renderEd();toast("Dikembalikan ke bawaan. Tekan “Simpan pengaturan” untuk memakainya.");
+      const keep=ED.setup,keepA=ED.about;ED=padED(buildDefault());ED.setup=keep;ED.about=keepA;edSel=0;renderEd();toast("Dikembalikan ke bawaan. Tekan “Simpan pengaturan” untuk memakainya.");
     }
   }
   updateState();renderTabs();
@@ -1558,7 +1672,7 @@ $("#bHelp").addEventListener("click",()=>{
     <p>1. Setiap kelompok bergiliran melempar dadu (guru menekan tombol atau Spasi).<br>
     2. 🪜 <b>Tangga</b> = kebiasaan positif, kamu naik. 🐍 <b>Ular</b> = hambatan karier, kamu turun.<br>
     3. ❓ <b>Kuis</b>: jawaban benar +${R.pq} poin${R.pw?` (salah −${R.pw})`:""}. 💭 <b>Refleksi</b>: jawab dan diskusikan, +${R.pr} poin. 🎁 <b>Kartu Kejutan</b>: bisa maju, mundur, atau dapat poin.<br>
-    4. Sampai kotak 100 lebih dulu menjadi <b>Tim Tercepat</b>. Kelompok dengan skor tertinggi menjadi <b>Juara Karier</b>.<br>
+    4. Sampai kotak 100 lebih dulu menjadi <b>Tim Tercepat</b>. Kelompok dengan jawaban kuis benar terbanyak menjadi <b>Juara Karier</b> (seri: skor lebih tinggi). Papan skor di samping menampilkan keduanya secara langsung.<br>
     5. Guru bisa menyesuaikan poin dengan tombol +5 / −5 di papan skor.</p>
     <div class="mact"><button class="btn primary" data-v="ok">Mengerti</button></div>
     ${creditLine()?`<div class="mcredit">${creditLine()}</div>`:""}`);
@@ -1566,9 +1680,11 @@ $("#bHelp").addEventListener("click",()=>{
 window.addEventListener("beforeunload",()=>{try{save()}catch(e){}});
 
 $("#aboutBtn").addEventListener("click",showAbout);
+$("#lbSeg").addEventListener("click",e=>{const b=e.target.closest("button[data-m]");if(!b)return;LB=b.dataset.m;renderTeams()});
 $("#bAbout").addEventListener("click",showAbout);
 syncSoundBtn();
 applyCredit();
+refreshInfo();
 buildSetup();
 if(location.hash==="#tentang")setTimeout(showAbout,200);
 </script>
