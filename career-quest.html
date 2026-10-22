@@ -94,8 +94,10 @@ button{cursor:pointer}
 .how ul{margin:0;padding-left:20px}.how li{margin:4px 0}.how b{color:var(--ink)}
 .row-btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;align-items:center}
 .row-btns .grow{flex:1}
-a.back{display:inline-flex;align-items:center;gap:6px;color:var(--ink);text-decoration:none;font-weight:700;font-size:14.5px;padding:8px 16px;border:1px solid var(--line);border-radius:99px;background:var(--glass);white-space:nowrap}
-a.back:hover{border-color:var(--cy);color:var(--cy)}
+button.back{font-family:inherit;cursor:pointer}
+.navrow{display:flex;gap:8px;flex-wrap:wrap}
+a.back,button.back{display:inline-flex;align-items:center;gap:6px;color:var(--ink);text-decoration:none;font-weight:700;font-size:14.5px;padding:8px 16px;border:1px solid var(--line);border-radius:99px;background:var(--glass);white-space:nowrap}
+a.back:hover,button.back:hover{border-color:var(--cy);color:var(--cy)}
 .setup-top{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--line)}
 .by{text-align:right;font-size:14px;line-height:1.45;color:var(--muted)}
 .by b{display:block;color:var(--ink);font-size:15.5px}
@@ -258,6 +260,36 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
 .rule-grid .opt-row small{display:block;color:var(--muted);font-size:12.5px;font-weight:500;margin-top:2px}
 .warn{color:#fde68a;font-size:13.5px;margin:6px 0 0}
 
+/* ---------- TENTANG GAME ---------- */
+#mcard.about{--ac:var(--cy)}
+.ab-chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}
+.ab-chips span{display:inline-flex;flex-direction:column;gap:1px;padding:7px 14px;border:1px solid var(--line);border-radius:14px;background:var(--glass);font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.3}
+.ab-chips small{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--cy);font-family:var(--f-head);font-weight:700}
+.ab-sec{margin-top:16px}
+.ab-sec h3{margin:0 0 8px;font-family:var(--f-head);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--cy)}
+#mcard .ab-sec p,#mcard .ab-sec li{font-size:clamp(15px,1.7vw,19px);line-height:1.55;color:#dbe5ff}
+.ab-sec ul,.ab-sec ol{margin:0;padding:0;list-style:none;display:grid;gap:8px;counter-reset:n}
+.ab-sec li{position:relative;padding:9px 12px 9px 44px;background:var(--glass);border:1px solid var(--line);border-radius:12px;margin:0}
+.ab-sec ul li::before{content:"✔";position:absolute;left:12px;top:9px;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-size:13px;background:rgba(52,211,153,.2);color:var(--green)}
+.ab-sec ol li{counter-increment:n}
+.ab-sec ol li::before{content:counter(n);position:absolute;left:12px;top:9px;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-size:12px;font-family:var(--f-head);font-weight:800;background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f}
+.ab-by{margin-top:18px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,rgba(34,211,238,.1),rgba(232,121,249,.1));text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
+.ab-by b{display:block;color:#fff;font-size:18px}
+.ab-empty{color:var(--dim);font-style:italic}
+.list-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+.list-row .fl{flex:1;min-width:0;padding:0}
+.list-row .btn{margin-top:2px}
+@media print{
+  body{background:#fff!important;color:#000!important;overflow:visible!important;height:auto!important}
+  body::before{display:none!important}
+  #setup,#game,#editor,#toast,.conf,.mact{display:none!important}
+  #modal{position:static!important;display:block!important;background:none!important;padding:0!important;backdrop-filter:none!important}
+  #mcard{max-height:none!important;overflow:visible!important;box-shadow:none!important;border:none!important;background:#fff!important;width:100%!important;animation:none!important}
+  #mcard::before{display:none}
+  #mcard,#mcard *{color:#000!important;background:transparent!important;border-color:#bbb!important}
+  .ab-sec li::before{background:#eee!important}
+}
+
 /* ---------- RESPONSIVE ---------- */
 @media (max-width:980px){
   body{overflow:auto}
@@ -281,7 +313,7 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
 <section id="setup">
   <div class="setup-card">
     <div class="setup-top">
-      <a class="back" href="gamebk.html">← Menu Game BK</a>
+      <div class="navrow"><a class="back" href="gamebk.html">← Menu Game BK</a><button class="back" id="aboutBtn" type="button">ℹ Tentang game</button></div>
       <div class="by">Dirancang oleh <b>Agung Fahri Husaeni, S.Pd.</b><span>Guru BK SMP Negeri 36 Semarang</span></div>
     </div>
     <div class="hero">
@@ -343,6 +375,7 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
     <div class="ttl">Career <span>Quest</span><small>Tangga Masa Depanku</small></div>
     <div class="sp"></div>
     <button class="tb" id="bHelp">❔ Cara bermain</button>
+    <button class="tb" id="bAbout">ℹ Tentang</button>
     <button class="tb" id="bSound">🔊 Suara</button>
     <button class="tb" id="bFull">⛶ Layar penuh</button>
     <button class="tb" id="bReset">⟲ Ulang</button>
@@ -367,7 +400,7 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
       <div class="teams" id="teams"></div>
       <div class="legend"><span>🪜 Tangga: naik</span><span>🐍 Ular: turun</span><span>❓ Kuis</span><span>💭 Refleksi</span><span>🎁 Kejutan</span></div>
       <div class="log" id="log"></div>
-      <div class="sidecredit">Dirancang oleh Agung Fahri Husaeni, S.Pd. · Guru BK SMP Negeri 36 Semarang</div>
+      <div class="sidecredit" id="sideCredit"></div>
     </aside>
   </main>
 </section>
@@ -529,7 +562,31 @@ function buildDefault(){
     reflect:D_REF.slice(),
     chance:D_CHA.map(c=>({i:c.i,t:c.t,d:c.d,m:c.m||0,p:c.p||0,x:c.x?1:0})),
     rules:{pq:10,pr:5,pw:0,timer:0,pesan:"Karier adalah perjalanan panjang. Kenali dirimu, cari informasi, ambil keputusan dengan bijak, dan teruslah belajar. Setiap langkah kecil membawamu ke masa depan yang kamu impikan."},
-    setup:{count:4,names:TEAM_NAMES6.slice(0,4),sound:true}
+    setup:{count:4,names:TEAM_NAMES6.slice(0,4),sound:true},
+    about:{
+      deskripsi:"Career Quest adalah permainan ular tangga karier digital untuk layanan Bimbingan dan Konseling. Kelompok peserta didik bergiliran melempar dadu, menjawab kuis, berefleksi, dan menghadapi kartu kejutan sambil bergerak menuju kotak 100.",
+      perancang:"Agung Fahri Husaeni, S.Pd.",
+      jabatan:"Guru BK SMP Negeri 36 Semarang",
+      sasaran:"Peserta didik semua jenjang (soal bawaan disusun untuk kelas IX)",
+      durasi:"30–45 menit",
+      media:"Laptop dengan proyektor/IFP, dimainkan berkelompok",
+      bidang:"Bimbingan karier",
+      capaian:[
+        "Peserta didik mengenali minat, bakat, kepribadian, dan nilai hidupnya sebagai dasar perencanaan karier.",
+        "Peserta didik memahami ragam jalur pendidikan lanjutan dan jalur penerimaan murid baru.",
+        "Peserta didik mengembangkan keterampilan abad 21 dan sikap belajar sepanjang hayat.",
+        "Peserta didik mengenal dunia kerja, profesi, dan kewirausahaan.",
+        "Peserta didik terlatih mengambil keputusan karier secara bijak dan menyiapkan rencana cadangan."
+      ],
+      tujuan:[
+        "Membedakan minat, bakat, nilai hidup, serta faktor internal dan eksternal dalam memilih karier.",
+        "Mengetahui jalur dan sumber informasi pendidikan lanjutan yang dapat dipercaya.",
+        "Mengidentifikasi hambatan karier (menunda, ikut-ikutan teman, cemas berlebihan) dan cara mengatasinya.",
+        "Melatih refleksi diri dan komunikasi asertif melalui diskusi kelompok.",
+        "Menumbuhkan kerja sama, sportivitas, dan tanggung jawab dalam tim."
+      ],
+      catatan:""
+    }
   };
 }
 /* Merapikan dan memvalidasi pengaturan (dari penyimpanan, impor berkas, atau editor) */
@@ -575,6 +632,13 @@ function sanitize(c){
   out.rules={pq:int(R.pq,0,100,10),pr:int(R.pr,0,100,5),pw:int(R.pw,0,100,0),timer:int(R.timer,0,600,0),pesan:str(R.pesan,500)||d.rules.pesan};
   const S=c.setup&&typeof c.setup==="object"?c.setup:{};
   out.setup={count:int(S.count,MIN_TEAMS,MAX_TEAMS,4),names:(Array.isArray(S.names)?S.names:[]).slice(0,MAX_TEAMS).map(x=>str(x,22)),sound:S.sound!==false};
+  const A=c.about&&typeof c.about==="object"?c.about:d.about,DA=d.about;
+  const lst=(v,fb)=>(Array.isArray(v)?v:fb).map(x=>str(x,300)).filter(Boolean).slice(0,15);
+  out.about={
+    deskripsi:str(A.deskripsi,700),perancang:str(A.perancang,80),jabatan:str(A.jabatan,120),
+    sasaran:str(A.sasaran,160),durasi:str(A.durasi,80),media:str(A.media,160),bidang:str(A.bidang,80),
+    capaian:lst(A.capaian,DA.capaian),tujuan:lst(A.tujuan,DA.tujuan),catatan:str(A.catatan,700)
+  };
   return out;
 }
 function loadConf(){
@@ -594,6 +658,41 @@ function rebuildMaps(){
   QT=new Set(CONF.tiles.quiz);RT=new Set(CONF.tiles.ref);CT=new Set(CONF.tiles.cha);
 }
 rebuildMaps();
+
+/* ---------------- KREDIT & TENTANG GAME ---------------- */
+function creditLine(){
+  const A=CONF.about;if(!A.perancang)return "";
+  return `Dirancang oleh <b>${esc(A.perancang)}</b>${A.jabatan?` · ${esc(A.jabatan)}`:""}`;
+}
+function applyCredit(){
+  const A=CONF.about,by=$(".setup-top .by");
+  if(by)by.innerHTML=A.perancang?`Dirancang oleh <b>${esc(A.perancang)}</b>${A.jabatan?`<span>${esc(A.jabatan)}</span>`:""}`:"";
+  const sc=$("#sideCredit");if(sc)sc.innerHTML=creditLine();
+}
+function aboutHtml(){
+  const A=CONF.about;
+  const chips=[["Bidang layanan",A.bidang],["Sasaran",A.sasaran],["Durasi",A.durasi],["Media",A.media]].filter(x=>x[1]).map(x=>`<span><small>${x[0]}</small>${esc(x[1])}</span>`).join("");
+  const list=(arr,tag)=>arr.length?`<${tag}>${arr.map(x=>`<li>${esc(x)}</li>`).join("")}</${tag}>`:`<p class="ab-empty">Belum diisi.</p>`;
+  return `<div class="mtag">ℹ Tentang game</div>
+    <h2>Career Quest — Tangga Masa Depanku</h2>
+    ${chips?`<div class="ab-chips">${chips}</div>`:""}
+    ${A.deskripsi?`<div class="ab-sec"><h3>Deskripsi</h3><p>${esc(A.deskripsi)}</p></div>`:""}
+    <div class="ab-sec"><h3>Capaian layanan BK</h3>${list(A.capaian,"ul")}</div>
+    <div class="ab-sec"><h3>Tujuan khusus</h3>${list(A.tujuan,"ol")}</div>
+    ${A.catatan?`<div class="ab-sec"><h3>Catatan</h3><p>${esc(A.catatan)}</p></div>`:""}
+    ${A.perancang?`<div class="ab-by">Dirancang oleh<b>${esc(A.perancang)}</b>${esc(A.jabatan)}</div>`:""}
+    <div class="mact"><button class="btn ghost" data-v="edit">✎ Edit info</button><button class="btn ghost" data-v="print">🖨 Cetak</button><button class="btn primary" data-v="ok">Tutup</button></div>`;
+}
+async function showAbout(){
+  if($("#modal").classList.contains("show")||$("#editor").classList.contains("show"))return;
+  const v=await modal("about",aboutHtml());
+  if(v==="edit")openEditor("tentang");
+  else if(v==="print"){
+    openModal("about",aboutHtml().replace(/<div class="mact">[\s\S]*$/,'<div class="mact"><button class="btn primary" data-v="ok">Tutup</button></div>'));
+    $("#mbody").querySelectorAll("[data-v]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.v)));
+    setTimeout(()=>{try{window.print()}catch(e){}},150);
+  }
+}
 
 /* ---------------- STATE ---------------- */
 let CFG={count:CONF.setup.count,names:CONF.setup.names.slice(),timer:CONF.rules.timer,sound:CONF.setup.sound};
@@ -959,7 +1058,7 @@ async function win(i){
     <div class="rankwrap"><table class="rank">${rank.map((x,r)=>`<tr><td>${r+1}</td><td><span class="dot" style="background:${x.color}">${x.icon}</span>${esc(x.name)}</td><td>Kotak ${x.pos}</td><td><b>${x.score}</b> poin</td></tr>`).join("")}</table></div>
     <p style="font-size:clamp(15px,1.8vw,20px)"><b>Pesan BK:</b> ${esc(CONF.rules.pesan)}</p>
     <div class="mact"><button class="btn ghost" data-v="menu">Pengaturan baru</button><button class="btn primary" data-v="again">🔁 Main lagi (tim sama)</button></div>
-    <div class="mcredit">Dirancang oleh <b>Agung Fahri Husaeni, S.Pd.</b> · Guru BK SMP Negeri 36 Semarang</div>`).then(v=>{
+    ${creditLine()?`<div class="mcredit">${creditLine()}</div>`:""}`).then(v=>{
       if(v==="again")startGame(G.teams.map(x=>x.name));
       else showSetup();
     });
@@ -1054,12 +1153,14 @@ const ED_TABS=[
   ["kejutan","🎁 Kejutan",()=>ED.chance.length],
   ["papan","🪜 Papan",()=>ED.ladders.length+ED.snakes.length],
   ["aturan","🎯 Poin & waktu",()=>""],
+  ["tentang","ℹ Tentang game",()=>""],
   ["cadangan","💾 Cadangan",()=>""]
 ];
 function padED(o){o.quiz.forEach(q=>{while(q.o.length<4)q.o.push("")});return o}
 function edDirty(){return JSON.stringify(ED)!==edSnap}
-function openEditor(){
+function openEditor(tab){
   ED=padED(clone(CONF));edSnap=JSON.stringify(ED);edSel=0;
+  if(typeof tab==="string")edTab=tab;
   $("#editor").classList.add("show");
   renderEd();updateState();
 }
@@ -1074,7 +1175,7 @@ function renderTabs(){
 function renderEd(openIdx){
   renderTabs();
   const body=$("#edBody");
-  const fn={kuis:edKuis,refleksi:edRefleksi,kejutan:edKejutan,papan:edPapan,aturan:edAturan,cadangan:edCadangan}[edTab];
+  const fn={kuis:edKuis,refleksi:edRefleksi,kejutan:edKejutan,papan:edPapan,aturan:edAturan,tentang:edTentang,cadangan:edCadangan}[edTab];
   body.innerHTML=fn(openIdx);
   if(typeof openIdx==="number"){
     const d=body.querySelector(`details[data-i="${openIdx}"]`);
@@ -1223,6 +1324,26 @@ function edAturan(){
       <div class="fl"><label>Ditampilkan di layar akhir permainan<textarea data-g="rule" data-f="pesan" maxlength="500" style="min-height:90px">${esc(R.pesan)}</textarea></label></div>
     </div></div></div>`;
 }
+/* ---- Tentang game ---- */
+function aboutList(k,label,help){
+  const arr=ED.about[k];
+  return `<div class="panel" style="grid-column:1/-1"><h3>${label}</h3><p class="ed-help" style="margin:0 0 10px">${help}</p>
+    ${arr.map((t,i)=>`<div class="list-row"><div class="fl"><textarea data-g="al" data-k="${k}" data-i="${i}" maxlength="300" aria-label="${esc(label)} ${i+1}" style="min-height:52px">${esc(t)}</textarea></div><button class="btn danger sm" data-act="delAL" data-k="${k}" data-i="${i}" aria-label="Hapus">🗑</button></div>`).join("")||'<p class="ed-help">Belum ada isi.</p>'}
+    <button class="btn ghost sm" data-act="addAL" data-k="${k}">+ Tambah</button></div>`;
+}
+function edTentang(){
+  const A=ED.about;
+  const inp=(f,l,max)=>`<label>${l}<input data-g="ab" data-f="${f}" value="${esc(A[f])}" maxlength="${max}"></label>`;
+  return `<div class="ed-wrap"><p class="ed-help">Info ini tampil di tombol <b>ℹ Tentang game</b> (layar awal dan saat bermain) dan bisa dicetak. <b>Nama perancang</b> dan keterangannya juga dipakai sebagai kredit di seluruh game. Isi bawaan adalah rancangan awal: silakan sesuaikan dengan program layanan BK Anda. Bisa diubah kapan saja.</p>
+    <div class="rule-grid">
+      <div class="panel"><h3>👤 Kredit perancang</h3><div class="fl">${inp("perancang","Nama perancang",80)}${inp("jabatan","Jabatan dan sekolah",120)}</div></div>
+      <div class="panel"><h3>📌 Info singkat</h3><div class="fl">${inp("bidang","Bidang layanan BK",80)}${inp("sasaran","Sasaran peserta",160)}${inp("durasi","Durasi",80)}${inp("media","Media / alat",160)}</div></div>
+      <div class="panel" style="grid-column:1/-1"><h3>📝 Deskripsi</h3><div class="fl"><textarea data-g="ab" data-f="deskripsi" maxlength="700" style="min-height:90px">${esc(A.deskripsi)}</textarea></div></div>
+      ${aboutList("capaian","🎯 Capaian layanan BK","Capaian yang ingin dicapai peserta didik lewat layanan ini. Satu butir per baris.")}
+      ${aboutList("tujuan","✅ Tujuan khusus","Tujuan khusus permainan. Satu butir per baris.")}
+      <div class="panel" style="grid-column:1/-1"><h3>🗒 Catatan (opsional)</h3><div class="fl"><textarea data-g="ab" data-f="catatan" maxlength="700" style="min-height:70px" placeholder="mis. rujukan program, saran fasilitasi, atau refleksi akhir bagi guru">${esc(A.catatan)}</textarea></div></div>
+    </div></div>`;
+}
 /* ---- Cadangan ---- */
 function edCadangan(){
   return `<div class="ed-wrap"><p class="ed-help">Pengaturan disimpan di <b>peramban komputer ini</b>. Agar bisa dipakai di komputer atau proyektor lain, <b>unduh cadangan</b> lalu <b>buka berkas</b> itu di perangkat tujuan.</p>
@@ -1253,7 +1374,7 @@ function edSave(){
   const clean=sanitize(ED);
   clean.setup={count:CFG.count,names:CFG.names.slice(0,MAX_TEAMS),sound:CFG.sound};
   CONF=clean;CFG.timer=CONF.rules.timer;
-  rebuildMaps();saveConf();
+  rebuildMaps();saveConf();applyCredit();
   closeEditor();buildSetup();
   toast(storageOk?"✅ Pengaturan disimpan":"Pengaturan dipakai, tetapi peramban tidak mengizinkan penyimpanan",!storageOk);
 }
@@ -1330,7 +1451,9 @@ $("#edBody").addEventListener("input",e=>{
       const n=Math.round(Number(val)),up=f2.t==="ladder";
       if(Number.isFinite(n)&&(up?(n>edSel&&n<=100):(n<edSel&&n>=1))){f2.o.to=n;refreshPapan(false)}
     }else f2.o[f]=val;
-  }else if(g==="rule"){
+  }else if(g==="ab"){ED.about[f]=val}
+  else if(g==="al"){ED.about[t.dataset.k][i]=val}
+  else if(g==="rule"){
     if(f==="pesan")ED.rules.pesan=val;
     else ED.rules[f]=Math.max(0,Math.min(f==="timer"?600:100,Math.round(Number(val))||0));
   }
@@ -1357,6 +1480,8 @@ $("#edBody").addEventListener("click",async e=>{
   else if(a==="addC"){ED.chance.push({i:"🎁",t:"",d:"",m:0,p:0,x:0});renderEd(ED.chance.length-1)}
   else if(a==="dupC"){ED.chance.splice(i+1,0,clone(ED.chance[i]));renderEd(i+1)}
   else if(a==="delC"){if(await confirmDel("kartu kejutan no. "+(i+1))){ED.chance.splice(i,1);renderEd()}}
+  else if(a==="addAL"){ED.about[b.dataset.k].push("");renderEd();const ts=$("#edBody").querySelectorAll(`textarea[data-k="${b.dataset.k}"]`);if(ts.length){ts[ts.length-1].focus();ts[ts.length-1].scrollIntoView({block:"center"})}}
+  else if(a==="delAL"){ED.about[b.dataset.k].splice(i,1);renderEd()}
   else if(a==="export")edExport();
   else if(a==="import")$("#importFile").click();
   else if(a==="reset"){
@@ -1436,12 +1561,16 @@ $("#bHelp").addEventListener("click",()=>{
     4. Sampai kotak 100 lebih dulu menjadi <b>Tim Tercepat</b>. Kelompok dengan skor tertinggi menjadi <b>Juara Karier</b>.<br>
     5. Guru bisa menyesuaikan poin dengan tombol +5 / −5 di papan skor.</p>
     <div class="mact"><button class="btn primary" data-v="ok">Mengerti</button></div>
-    <div class="mcredit">Dirancang oleh <b>Agung Fahri Husaeni, S.Pd.</b> · Guru BK SMP Negeri 36 Semarang</div>`);
+    ${creditLine()?`<div class="mcredit">${creditLine()}</div>`:""}`);
 });
 window.addEventListener("beforeunload",()=>{try{save()}catch(e){}});
 
+$("#aboutBtn").addEventListener("click",showAbout);
+$("#bAbout").addEventListener("click",showAbout);
 syncSoundBtn();
+applyCredit();
 buildSetup();
+if(location.hash==="#tentang")setTimeout(showAbout,200);
 </script>
 </body>
 </html>

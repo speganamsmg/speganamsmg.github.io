@@ -24,3 +24,7 @@ a.gbk-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px
 .gbk-art.has-img { padding: 0; min-height: 0; aspect-ratio: 2 / 1; }
 .gbk-art.has-img img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .gbk-credit { margin: 1.6rem 0 0; text-align: center; color: var(--muted); font-size: 0.82rem; }
+
+.gbk-grid > li { display: grid; gap: 0.5rem; align-content: start; }
+.gbk-about { justify-self: start; padding: 0.4rem 0.9rem; border: 1px solid var(--line); border-radius: 99px; background: var(--surface); color: var(--ink); font-size: 0.82rem; font-weight: 700; text-decoration: none; }
+.gbk-about:hover { border-color: var(--accent); color: var(--accent); }

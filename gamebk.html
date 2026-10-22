@@ -48,7 +48,8 @@
       var GAMES = [
         { href: 'career-quest.html', ikon: '🧭', gambar: 'career-quest-cover.svg', label: 'Semua jenjang', judul: 'Career Quest — Tangga Masa Depanku',
           isi: 'Ular tangga karier digital bergaya futuristik: kuis, refleksi, kartu kejutan, tim tanpa batas, dan soal yang bisa diatur sendiri oleh guru.',
-          tag: ['Perencanaan karier', 'Berkelompok', 'Bisa diatur guru', 'Proyektor / IFP'] }
+          tag: ['Perencanaan karier', 'Berkelompok', 'Bisa diatur guru', 'Proyektor / IFP'],
+          tentang: 'career-quest.html#tentang' }
       ];
       var $ = function (id) { return document.getElementById(id); };
       function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
@@ -68,7 +69,9 @@
         var b = el('div', 'gbk-body');
         var tags = el('div', 'gbk-tags'); g.tag.forEach(function (t) { tags.append(el('span', '', t)); });
         b.append(el('h2', '', g.judul), el('p', '', g.isi), tags, el('span', 'gbk-play', '▶ Mainkan'));
-        a.append(art, b); li.append(a); ul.append(li);
+        a.append(art, b); li.append(a);
+        if (g.tentang) { var ab = el('a', 'gbk-about', 'ℹ Tentang game · capaian & tujuan BK'); ab.href = g.tentang; li.append(ab); }
+        ul.append(li);
       });
       var soon = el('li');
       var sc = el('div', 'gbk-card gbk-soon');
