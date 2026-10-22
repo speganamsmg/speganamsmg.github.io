@@ -131,7 +131,15 @@ main{flex:1;display:flex;gap:18px;padding:14px 18px;min-height:0;align-items:cen
 .cell .n{position:absolute;top:5%;left:8%;font-family:var(--f-head);font-size:calc(var(--s)*.016);font-weight:700;color:rgba(200,225,255,.55)}
 .cell .lb{font-size:calc(var(--s)*.0125);font-weight:900;position:absolute;bottom:5%;letter-spacing:.12em;opacity:.9;font-family:var(--f-head)}
 .links,.tokens{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.links{filter:drop-shadow(0 0 3px rgba(34,211,238,.55))}
+.links{filter:drop-shadow(0 0 1.5px rgba(255,200,60,.45))}
+.snk,.lad{transition:opacity .25s}
+.snk{opacity:.55}
+.board.f-ladder .snk{opacity:.1}
+.board.f-snake .snk{opacity:1}
+.board.f-snake .lad{opacity:.12}
+.legend button{font:inherit;font-size:12px;color:var(--muted);background:transparent;border:1px solid transparent;border-radius:99px;padding:1px 6px;cursor:pointer;white-space:nowrap}
+.legend button:hover{border-color:var(--line)}
+.legend button.on{border-color:var(--cy);color:var(--ink);background:var(--glass)}
 .tokens{--tw:.054}
 .tok{position:absolute;width:calc(var(--s)*var(--tw));height:calc(var(--s)*var(--tw));transform:translate(-50%,-50%);border-radius:50%;border:calc(var(--s)*.004) solid #fff;display:grid;place-items:center;font-size:calc(var(--s)*var(--tw)*.58);box-shadow:0 0 0 1px rgba(0,0,0,.4),0 0 calc(var(--s)*.02) var(--glow,#fff),0 4px 10px rgba(0,0,0,.5);transition:left .26s ease,top .26s ease;z-index:2}
 .tok.slow{transition:left .95s ease-in-out,top .95s ease-in-out}
@@ -468,7 +476,7 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
       <div class="champs" id="champs"></div>
       <div class="seg" id="lbSeg" role="tablist" aria-label="Urutan papan skor"><button data-m="turn" class="on" role="tab">👥 Giliran</button><button data-m="fast" role="tab">⚡ Tercepat</button><button data-m="career" role="tab">🌟 Karier</button></div>
       <div class="teams" id="teams"></div>
-      <div class="legend"><span>🪜 Tangga: naik</span><span>🐍 Ular: turun</span><span>❓ Kuis</span><span>💭 Refleksi</span><span>🎁 Kejutan</span></div>
+      <div class="legend"><button type="button" data-f="ladder" title="Tonjolkan tangga">🪜 Tangga: naik</button><button type="button" data-f="snake" title="Tonjolkan ular">🐍 Ular: turun</button><span>❓ Kuis</span><span>💭 Refleksi</span><span>🎁 Kejutan</span></div>
       <div class="log" id="log"></div>
       <div class="sidecredit" id="sideCredit"></div>
     </aside>
@@ -848,33 +856,39 @@ function buildBoard(){
   drawLinks();
 }
 function drawLinks(){
-  const svg=$("#links");let h="";
-  CONF.ladders.forEach(L=>{
-    const a=center(L.a),z=center(L.to);
-    const dx=z.x-a.x,dy=z.y-a.y,len=Math.hypot(dx,dy),ux=dx/len,uy=dy/len,px=-uy*1.5,py=ux*1.5;
-    h+=`<g><line x1="${a.x+px}" y1="${a.y+py}" x2="${z.x+px}" y2="${z.y+py}" stroke="#fbbf24" stroke-width="1.15" stroke-linecap="round"/>`+
-       `<line x1="${a.x-px}" y1="${a.y-py}" x2="${z.x-px}" y2="${z.y-py}" stroke="#fbbf24" stroke-width="1.15" stroke-linecap="round"/>`;
-    const rungs=Math.max(3,Math.round(len/4.2));
-    for(let i=1;i<rungs;i++){
-      const t=i/rungs,cx=a.x+dx*t,cy=a.y+dy*t;
-      h+=`<line x1="${cx+px}" y1="${cy+py}" x2="${cx-px}" y2="${cy-py}" stroke="#fff3c4" stroke-width=".8" stroke-linecap="round"/>`;
-    }
-    h+=`</g>`;
-  });
+  const svg=$("#links");let sn="",ld="";
+  /* Ular digambar lebih dulu, lebih tipis dan lebih pudar. Tangga di atasnya, tebal dan terang. */
   CONF.snakes.forEach(S=>{
     const a=center(S.a),z=center(S.to);
-    const dx=z.x-a.x,dy=z.y-a.y,len=Math.hypot(dx,dy),nx=-dy/len,ny=dx/len,w=Math.min(11,len*.22);
+    const dx=z.x-a.x,dy=z.y-a.y,len=Math.hypot(dx,dy),nx=-dy/len,ny=dx/len,w=Math.min(6,len*.13);
     const c1x=a.x+dx*.33+nx*w,c1y=a.y+dy*.33+ny*w,c2x=a.x+dx*.66-nx*w,c2y=a.y+dy*.66-ny*w;
     const d=`M${a.x},${a.y} C${c1x},${c1y} ${c2x},${c2y} ${z.x},${z.y}`;
-    h+=`<g><path d="${d}" fill="none" stroke="#052e2b" stroke-width="2.4" stroke-linecap="round" opacity=".95"/>`+
-       `<path d="${d}" fill="none" stroke="#a3e635" stroke-width="1.55" stroke-linecap="round"/>`+
-       `<path d="${d}" fill="none" stroke="#ecfccb" stroke-width=".5" stroke-linecap="round" stroke-dasharray="1.4 2.4"/>`+
-       `<circle cx="${a.x}" cy="${a.y}" r="2.5" fill="#bef264" stroke="#052e2b" stroke-width=".5"/>`+
-       `<circle cx="${a.x-.9}" cy="${a.y-.8}" r=".6" fill="#fff"/><circle cx="${a.x+.9}" cy="${a.y-.8}" r=".6" fill="#fff"/>`+
-       `<circle cx="${a.x-.9}" cy="${a.y-.8}" r=".26" fill="#000"/><circle cx="${a.x+.9}" cy="${a.y-.8}" r=".26" fill="#000"/>`+
-       `<circle cx="${z.x}" cy="${z.y}" r=".9" fill="#052e2b"/></g>`;
+    sn+=`<g class="snk"><path d="${d}" fill="none" stroke="#052e2b" stroke-width="1.5" stroke-linecap="round"/>`+
+       `<path d="${d}" fill="none" stroke="#9fd83a" stroke-width=".9" stroke-linecap="round"/>`+
+       `<circle cx="${a.x}" cy="${a.y}" r="1.7" fill="#bef264" stroke="#052e2b" stroke-width=".4"/>`+
+       `<circle cx="${a.x-.6}" cy="${a.y-.5}" r=".42" fill="#fff"/><circle cx="${a.x+.6}" cy="${a.y-.5}" r=".42" fill="#fff"/>`+
+       `<circle cx="${a.x-.6}" cy="${a.y-.5}" r=".18" fill="#000"/><circle cx="${a.x+.6}" cy="${a.y-.5}" r=".18" fill="#000"/>`+
+       `<circle cx="${z.x}" cy="${z.y}" r=".7" fill="#052e2b"/></g>`;
   });
-  svg.innerHTML=h;
+  CONF.ladders.forEach(L=>{
+    const a=center(L.a),z=center(L.to);
+    const dx=z.x-a.x,dy=z.y-a.y,len=Math.hypot(dx,dy),ux=dx/len,uy=dy/len,px=-uy*1.25,py=ux*1.25;
+    ld+=`<g class="lad"><line x1="${a.x+px}" y1="${a.y+py}" x2="${z.x+px}" y2="${z.y+py}" stroke="#3b2400" stroke-width="1.75" stroke-linecap="round"/>`+
+       `<line x1="${a.x-px}" y1="${a.y-py}" x2="${z.x-px}" y2="${z.y-py}" stroke="#3b2400" stroke-width="1.75" stroke-linecap="round"/>`+
+       `<line x1="${a.x+px}" y1="${a.y+py}" x2="${z.x+px}" y2="${z.y+py}" stroke="#ffc933" stroke-width="1.0" stroke-linecap="round"/>`+
+       `<line x1="${a.x-px}" y1="${a.y-py}" x2="${z.x-px}" y2="${z.y-py}" stroke="#ffc933" stroke-width="1.0" stroke-linecap="round"/>`;
+    const rungs=Math.max(3,Math.round(len/4.6));
+    for(let k=1;k<rungs;k++){
+      const t=k/rungs,cx=a.x+dx*t,cy=a.y+dy*t;
+      ld+=`<line x1="${cx+px}" y1="${cy+py}" x2="${cx-px}" y2="${cy-py}" stroke="#3b2400" stroke-width="1.15" stroke-linecap="round"/>`+
+          `<line x1="${cx+px}" y1="${cy+py}" x2="${cx-px}" y2="${cy-py}" stroke="#fff3c4" stroke-width=".6" stroke-linecap="round"/>`;
+    }
+    /* lencana di kaki tangga: panah naik + kotak tujuan */
+    const bx=a.x,by=a.y;
+    ld+=`<rect x="${bx-4.3}" y="${by-1.7}" width="8.6" height="3.4" rx="1.7" fill="#16a34a" stroke="#fff" stroke-width=".35"/>`+
+        `<text x="${bx}" y="${by+.95}" text-anchor="middle" font-size="2.5" font-weight="800" fill="#fff" font-family="Orbitron,Arial,sans-serif">▲${L.to}</text></g>`;
+  });
+  svg.innerHTML=sn+ld;
 }
 function buildTokens(){
   const L=$("#tokens");L.innerHTML="";
@@ -1680,6 +1694,13 @@ $("#bHelp").addEventListener("click",()=>{
 window.addEventListener("beforeunload",()=>{try{save()}catch(e){}});
 
 $("#aboutBtn").addEventListener("click",showAbout);
+$(".legend").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-f]");if(!b)return;
+  const f=b.dataset.f,bd=$("#board"),on=!bd.classList.contains("f-"+f);
+  bd.classList.remove("f-ladder","f-snake");
+  document.querySelectorAll(".legend button").forEach(x=>x.classList.remove("on"));
+  if(on){bd.classList.add("f-"+f);b.classList.add("on")}
+});
 $("#lbSeg").addEventListener("click",e=>{const b=e.target.closest("button[data-m]");if(!b)return;LB=b.dataset.m;renderTeams()});
 $("#bAbout").addEventListener("click",showAbout);
 syncSoundBtn();
