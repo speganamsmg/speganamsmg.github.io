@@ -131,12 +131,15 @@ main{flex:1;display:flex;gap:18px;padding:14px 18px;min-height:0;align-items:cen
 .cell .n{position:absolute;top:5%;left:8%;font-family:var(--f-head);font-size:calc(var(--s)*.016);font-weight:700;color:rgba(200,225,255,.55)}
 .cell .lb{font-size:calc(var(--s)*.0125);font-weight:900;position:absolute;bottom:5%;letter-spacing:.12em;opacity:.9;font-family:var(--f-head)}
 .links,.tokens{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.links{filter:drop-shadow(0 0 1.5px rgba(255,200,60,.45))}
-.snk,.lad{transition:opacity .25s}
-.snk{opacity:.55}
-.board.f-ladder .snk{opacity:.1}
-.board.f-snake .snk{opacity:1}
-.board.f-snake .lad{opacity:.12}
+.cell.lad{background:radial-gradient(circle at 50% 55%,rgba(52,211,153,.5),rgba(52,211,153,.12) 72%);box-shadow:inset 0 0 0 calc(var(--s)*.0025) rgba(52,211,153,.9)}
+.cell.snk{background:radial-gradient(circle at 50% 55%,rgba(251,113,133,.42),rgba(251,113,133,.1) 72%);box-shadow:inset 0 0 0 calc(var(--s)*.0025) rgba(251,113,133,.85)}
+.cell .lk{position:absolute;left:0;right:0;bottom:7%;display:flex;flex-direction:column;align-items:center;line-height:1.05;pointer-events:none;transition:opacity .25s}
+.cell .lk i{font-style:normal;font-size:calc(var(--s)*.034)}
+.cell .lk b{font-family:var(--f-head);font-size:calc(var(--s)*.0185);font-weight:800;padding:0 .35em;border-radius:99px;margin-top:2%}
+.cell .lk.up b{background:#16a34a;color:#fff}
+.cell .lk.dn b{background:#e11d48;color:#fff}
+.board.f-ladder .cell.snk,.board.f-snake .cell.lad{opacity:.28}
+.cell.lad,.cell.snk{transition:opacity .25s}
 .legend button{font:inherit;font-size:12px;color:var(--muted);background:transparent;border:1px solid transparent;border-radius:99px;padding:1px 6px;cursor:pointer;white-space:nowrap}
 .legend button:hover{border-color:var(--line)}
 .legend button.on{border-color:var(--cy);color:var(--ink);background:var(--glass)}
@@ -476,7 +479,7 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
       <div class="champs" id="champs"></div>
       <div class="seg" id="lbSeg" role="tablist" aria-label="Urutan papan skor"><button data-m="turn" class="on" role="tab">👥 Giliran</button><button data-m="fast" role="tab">⚡ Tercepat</button><button data-m="career" role="tab">🌟 Karier</button></div>
       <div class="teams" id="teams"></div>
-      <div class="legend"><button type="button" data-f="ladder" title="Tonjolkan tangga">🪜 Tangga: naik</button><button type="button" data-f="snake" title="Tonjolkan ular">🐍 Ular: turun</button><span>❓ Kuis</span><span>💭 Refleksi</span><span>🎁 Kejutan</span></div>
+      <div class="legend"><button type="button" data-f="ladder" title="Tonjolkan tangga">🪜 Tangga ▲ naik</button><button type="button" data-f="snake" title="Tonjolkan ular">🐍 Ular ▼ turun</button><span>❓ Kuis</span><span>💭 Refleksi</span><span>🎁 Kejutan</span></div>
       <div class="log" id="log"></div>
       <div class="sidecredit" id="sideCredit"></div>
     </aside>
@@ -847,7 +850,7 @@ function buildBoard(){
       else if(k==="q"){cls="cell q";icon="❓"}
       else if(k==="r"){cls="cell r";icon="💭"}
       else if(k==="c"){cls="cell c";icon="🎁"}
-      d.className=cls;
+      d.className=cls;d.dataset.n=n;
       d.innerHTML=`<span class="n">${n}</span>${icon}${lb?`<span class="lb">${lb}</span>`:""}`;
       frag.appendChild(d);
     }
@@ -856,39 +859,21 @@ function buildBoard(){
   drawLinks();
 }
 function drawLinks(){
-  const svg=$("#links");let sn="",ld="";
-  /* Ular digambar lebih dulu, lebih tipis dan lebih pudar. Tangga di atasnya, tebal dan terang. */
-  CONF.snakes.forEach(S=>{
-    const a=center(S.a),z=center(S.to);
-    const dx=z.x-a.x,dy=z.y-a.y,len=Math.hypot(dx,dy),nx=-dy/len,ny=dx/len,w=Math.min(6,len*.13);
-    const c1x=a.x+dx*.33+nx*w,c1y=a.y+dy*.33+ny*w,c2x=a.x+dx*.66-nx*w,c2y=a.y+dy*.66-ny*w;
-    const d=`M${a.x},${a.y} C${c1x},${c1y} ${c2x},${c2y} ${z.x},${z.y}`;
-    sn+=`<g class="snk"><path d="${d}" fill="none" stroke="#052e2b" stroke-width="1.5" stroke-linecap="round"/>`+
-       `<path d="${d}" fill="none" stroke="#9fd83a" stroke-width=".9" stroke-linecap="round"/>`+
-       `<circle cx="${a.x}" cy="${a.y}" r="1.7" fill="#bef264" stroke="#052e2b" stroke-width=".4"/>`+
-       `<circle cx="${a.x-.6}" cy="${a.y-.5}" r=".42" fill="#fff"/><circle cx="${a.x+.6}" cy="${a.y-.5}" r=".42" fill="#fff"/>`+
-       `<circle cx="${a.x-.6}" cy="${a.y-.5}" r=".18" fill="#000"/><circle cx="${a.x+.6}" cy="${a.y-.5}" r=".18" fill="#000"/>`+
-       `<circle cx="${z.x}" cy="${z.y}" r=".7" fill="#052e2b"/></g>`;
-  });
-  CONF.ladders.forEach(L=>{
-    const a=center(L.a),z=center(L.to);
-    const dx=z.x-a.x,dy=z.y-a.y,len=Math.hypot(dx,dy),ux=dx/len,uy=dy/len,px=-uy*1.25,py=ux*1.25;
-    ld+=`<g class="lad"><line x1="${a.x+px}" y1="${a.y+py}" x2="${z.x+px}" y2="${z.y+py}" stroke="#3b2400" stroke-width="1.75" stroke-linecap="round"/>`+
-       `<line x1="${a.x-px}" y1="${a.y-py}" x2="${z.x-px}" y2="${z.y-py}" stroke="#3b2400" stroke-width="1.75" stroke-linecap="round"/>`+
-       `<line x1="${a.x+px}" y1="${a.y+py}" x2="${z.x+px}" y2="${z.y+py}" stroke="#ffc933" stroke-width="1.0" stroke-linecap="round"/>`+
-       `<line x1="${a.x-px}" y1="${a.y-py}" x2="${z.x-px}" y2="${z.y-py}" stroke="#ffc933" stroke-width="1.0" stroke-linecap="round"/>`;
-    const rungs=Math.max(3,Math.round(len/4.6));
-    for(let k=1;k<rungs;k++){
-      const t=k/rungs,cx=a.x+dx*t,cy=a.y+dy*t;
-      ld+=`<line x1="${cx+px}" y1="${cy+py}" x2="${cx-px}" y2="${cy-py}" stroke="#3b2400" stroke-width="1.15" stroke-linecap="round"/>`+
-          `<line x1="${cx+px}" y1="${cy+py}" x2="${cx-px}" y2="${cy-py}" stroke="#fff3c4" stroke-width=".6" stroke-linecap="round"/>`;
-    }
-    /* lencana di kaki tangga: panah naik + kotak tujuan */
-    const bx=a.x,by=a.y;
-    ld+=`<rect x="${bx-4.3}" y="${by-1.7}" width="8.6" height="3.4" rx="1.7" fill="#16a34a" stroke="#fff" stroke-width=".35"/>`+
-        `<text x="${bx}" y="${by+.95}" text-anchor="middle" font-size="2.5" font-weight="800" fill="#fff" font-family="Orbitron,Arial,sans-serif">▲${L.to}</text></g>`;
-  });
-  svg.innerHTML=sn+ld;
+  /* Tanpa gambar tangga/ular: setiap kotak awal diberi ikon, panah, dan nomor tujuan. */
+  $("#links").innerHTML="";
+  document.querySelectorAll("#board .cell .lk").forEach(e=>e.remove());
+  document.querySelectorAll("#board .cell.lad,#board .cell.snk").forEach(e=>e.classList.remove("lad","snk"));
+  const put=(n,to,up)=>{
+    const c=$(`#board .cell[data-n="${n}"]`);if(!c)return;
+    c.classList.add(up?"lad":"snk");
+    [...c.childNodes].forEach(x=>{if(x.nodeType===3)x.remove()}); /* ikon kuis/kejutan tidak berlaku di kotak tangga/ular */
+    const b=document.createElement("span");b.className="lk "+(up?"up":"dn");
+    b.innerHTML=`<i>${up?"🪜":"🐍"}</i><b>${up?"▲":"▼"} ${to}</b>`;
+    b.title=(up?"Tangga: naik ke kotak ":"Ular: turun ke kotak ")+to;
+    c.appendChild(b);
+  };
+  CONF.snakes.forEach(S=>put(S.a,S.to,false));
+  CONF.ladders.forEach(L=>put(L.a,L.to,true));
 }
 function buildTokens(){
   const L=$("#tokens");L.innerHTML="";
