@@ -436,6 +436,7 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
           <ul>
             <li>Kelompok bergiliran melempar dadu. Guru menekan tombol dadu.</li>
             <li>🪜 <b>Tangga</b> = kebiasaan positif, naik! 🐍 <b>Ular</b> = hambatan karier, turun.</li>
+            <li>Kotak <b>polos</b> = tempat mendarat setelah tangga atau ular. Di sana tidak ada kuis, refleksi, atau kejutan.</li>
             <li>❓ <b>Kuis</b> dan 💭 <b>Refleksi</b> memberi poin, 🎁 <b>Kartu Kejutan</b> bisa maju, mundur, atau menambah poin.</li>
             <li>Sampai kotak 100 lebih dulu = <b>Tim Tercepat</b>. Jawaban kuis benar terbanyak = <b>Juara Karier</b>.</li>
           </ul>
@@ -560,9 +561,9 @@ const D_SNK={
   98:{to:2,t:"Terburu-buru memutuskan",m:"Keputusan penting perlu dipertimbangkan dari berbagai sisi. Jatuh sampai ke bawah, tetapi kamu bisa bangkit!"}
 };
 
-const D_QT=new Set([2,5,9,11,14,16,20,23,24,26,32,33,35,38,42,46,47,50,55,56,59,61,64,66,71,73,78,79,80,85,89,97]);
-const D_RT=new Set([6,13,22,28,37,44,52,60,68,76]);
-const D_CT=new Set([8,18,31,41,51,63,75,82,84,87,90,92,94,99]);
+const D_QT=new Set([4,7,11,13,16,20,25,28,34,37,42,43,48,51,60,63,68,76,82,87,94]);
+const D_RT=new Set([8,15,22,31,38,47,56,67,79]);
+const D_CT=new Set([5,9,14,18,23,29,35,39,46,50,59,64,73,80,84,85,90,92,99]);
 
 /* ---------------- DATA: KUIS (jawaban benar selalu urutan pertama, diacak saat tampil) ---------------- */
 const D_QUIZ=[
@@ -1765,7 +1766,7 @@ $("#bHelp").addEventListener("click",()=>{
     <div class="mtag">❔ Cara bermain</div>
     <h2>Career Quest — Tangga Masa Depanku</h2>
     <p>1. Setiap kelompok bergiliran melempar dadu (guru menekan tombol atau Spasi).<br>
-    2. 🪜 <b>Tangga</b> = kebiasaan positif, kamu naik. 🐍 <b>Ular</b> = hambatan karier, kamu turun.<br>
+    2. 🪜 <b>Tangga</b> = kebiasaan positif, kamu naik. 🐍 <b>Ular</b> = hambatan karier, kamu turun. Kotak tempat mendarat setelah tangga atau ular adalah kotak polos: tidak ada kuis, refleksi, atau kejutan di sana.<br>
     3. ❓ <b>Kuis</b>: jawaban benar +${R.pq} poin${R.pw?` (salah −${R.pw})`:""}. 💭 <b>Refleksi</b>: jawab dan diskusikan, +${R.pr} poin. 🎁 <b>Kartu Kejutan</b>: bisa maju, mundur, atau dapat poin.<br>
     4. Sampai kotak 100 lebih dulu menjadi <b>Tim Tercepat</b>. Kelompok dengan jawaban kuis benar terbanyak menjadi <b>Juara Karier</b> (seri: skor lebih tinggi). Papan skor di samping menampilkan keduanya secara langsung.<br>
     5. Guru bisa menyesuaikan poin dengan tombol +5 / −5 di papan skor.</p>
