@@ -118,6 +118,28 @@
   };
 
   /* ---------------- INFO GAME ---------------- */
+  // Panggilan admin dengan token; sesi habis => minta password lagi satu kali.
+  async function adminCall(action, payload, dlg) {
+    for (var n = 0; n < 2; n++) {
+      var tok = await GK.auth.ensure(dlg);
+      if (!tok) throw err('Penyimpanan dibatalkan.', 'CANCEL');
+      try { return await call(Object.assign({ action: action, token: tok }, payload), true); }
+      catch (e) { if (e.code === 'AUTH') { GK.auth.drop(); continue; } throw e; }
+    }
+    throw err('Sesi berakhir. Coba lagi.', 'AUTH');
+  }
+  /* ---------------- PENGATURAN GAME (soal, papan, aturan) ---------------- */
+  GK.conf = {
+    // { conf: objek|null, error?: Error }. null = belum pernah disimpan ke server.
+    load: async function (id) {
+      try { var d = await call({ action: 'gameconfig', id: id }, false); return { conf: d && d.conf || null }; }
+      catch (e) { return { conf: null, error: e }; }
+    },
+    save: function (id, conf) {
+      return adminCall('admin.game.saveconfig', { id: id, conf: conf }, { title: '🔒 Simpan pengaturan', text: 'Masukkan password admin Speganam agar pengaturan tersimpan di server dan dipakai di semua perangkat.' });
+    }
+  };
+
   var KEY = function (id) { return 'gk_info_' + id; };
   function merge(defaults, got) {
     var out = JSON.parse(JSON.stringify(defaults));
@@ -143,19 +165,9 @@
     },
     // Simpan ke server. Perlu token admin; sesi habis => minta password lagi satu kali.
     save: async function (id, info) {
-      for (var n = 0; n < 2; n++) {
-        var tok = await GK.auth.ensure({ title: '🔒 Simpan info game', text: 'Masukkan password admin Speganam untuk menyimpan perubahan.' });
-        if (!tok) throw err('Penyimpanan dibatalkan.', 'CANCEL');
-        try {
-          var d = await call({ action: 'admin.game.save', token: tok, id: id, info: info }, true);
-          lsSet(KEY(id), JSON.stringify(d.info));
-          return d.info;
-        } catch (e) {
-          if (e.code === 'AUTH') { GK.auth.drop(); continue; }
-          throw e;
-        }
-      }
-      throw err('Sesi berakhir. Coba lagi.', 'AUTH');
+      var d = await adminCall('admin.game.save', { id: id, info: info }, { title: '🔒 Simpan info game', text: 'Masukkan password admin Speganam untuk menyimpan perubahan.' });
+      lsSet(KEY(id), JSON.stringify(d.info));
+      return d.info;
     }
   };
 })();

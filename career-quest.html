@@ -308,6 +308,8 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
 .ab-by{margin-top:18px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,rgba(34,211,238,.1),rgba(232,121,249,.1));text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
 .ab-by b{display:block;color:#fff;font-size:18px}
 .ab-empty{color:var(--dim);font-style:italic}
+.syncstate{margin-top:8px;font-size:12.5px;font-weight:700;color:var(--muted)}.syncstate.ok{color:var(--green)}.syncstate.warn{color:var(--gold)}
+.linkbtn{font:inherit;font-size:12.5px;font-weight:800;color:var(--cy);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
 .lockbox{max-width:520px;margin:30px auto;text-align:center}.lockbox .lk{font-size:44px}.lockbox .btn{margin-top:6px}
 .list-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
 .list-row .fl{flex:1;min-width:0;padding:0}
@@ -426,6 +428,7 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
             <input type="number" id="optTimer" min="0" max="600" step="5" value="0"></div>
           <div class="opt-row"><label for="optSound">🔊 Efek suara</label><input type="checkbox" id="optSound" checked></div>
           <div class="summary" id="confSummary" style="margin-top:12px"></div>
+          <div class="syncstate" id="syncState" aria-live="polite"></div>
           <div class="row-btns" style="margin-top:12px"><button class="btn ghost sm" id="editBtn">⚙ Atur soal, papan &amp; poin</button></div>
         </div>
         <div class="panel how">
@@ -493,7 +496,8 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
     <span class="sp"></span>
     <span id="edState" style="font-size:13px;color:var(--muted)"></span>
     <button class="btn ghost sm" id="edCancel">Batal</button>
-    <button class="btn primary sm" id="edSave">💾 Simpan pengaturan</button>
+    <button class="btn primary sm" id="edSave" title="Berlaku di perangkat ini saja">💾 Simpan di perangkat ini</button>
+    <button class="btn ghost sm" id="edPublish" title="Perlu password admin">☁ Jadikan default semua</button>
   </div>
   <div class="ed-tabs" id="edTabs" role="tablist"></div>
   <div id="edBody"></div>
@@ -1435,7 +1439,7 @@ function edTentang(){
     <button class="btn primary" data-act="unlock">🔓 Buka dengan password</button></div></div>`;
   const A=ED.about;
   const inp=(f,l,max)=>`<label>${l}<input data-g="ab" data-f="${f}" value="${esc(A[f])}" maxlength="${max}"></label>`;
-  return `<div class="ed-wrap"><p class="ed-help">Info ini tampil di tombol <b>ℹ Tentang game</b> dan bisa dicetak. Tersimpan di server, jadi berlaku di semua perangkat. Perubahan baru tersimpan saat Anda menekan <b>Simpan pengaturan</b>. <b>Nama perancang</b> dan keterangannya juga dipakai sebagai kredit di seluruh game. Isi bawaan adalah rancangan awal: silakan sesuaikan dengan program layanan BK Anda. Bisa diubah kapan saja.</p>
+  return `<div class="ed-wrap"><p class="ed-help">Info ini tampil di tombol <b>ℹ Tentang game</b> dan bisa dicetak. Tersimpan di server, jadi berlaku di semua perangkat. Info game tersimpan ke server saat Anda menekan tombol simpan mana pun. <b>Nama perancang</b> dan keterangannya juga dipakai sebagai kredit di seluruh game. Isi bawaan adalah rancangan awal: silakan sesuaikan dengan program layanan BK Anda. Bisa diubah kapan saja.</p>
     <div class="rule-grid">
       <div class="panel"><h3>👤 Kredit perancang</h3><div class="fl">${inp("perancang","Nama perancang",80)}${inp("jabatan","Jabatan dan sekolah",120)}</div></div>
       <div class="panel"><h3>📌 Info singkat</h3><div class="fl">${inp("bidang","Bidang layanan BK",80)}${inp("sasaran","Sasaran peserta",160)}${inp("durasi","Durasi",80)}${inp("media","Media / alat",160)}</div></div>
@@ -1447,11 +1451,12 @@ function edTentang(){
 }
 /* ---- Cadangan ---- */
 function edCadangan(){
-  return `<div class="ed-wrap"><p class="ed-help">Pengaturan disimpan di <b>peramban komputer ini</b>. Agar bisa dipakai di komputer atau proyektor lain, <b>unduh cadangan</b> lalu <b>buka berkas</b> itu di perangkat tujuan.</p>
+  return `<div class="ed-wrap"><p class="ed-help"><b>Simpan di perangkat ini</b> berlaku untuk Anda sendiri (tanpa password). <b>Jadikan default semua</b> hanya bisa dilakukan admin dengan password dan menjadi pengaturan awal bagi semua perangkat. <b>Cadangan</b> di bawah adalah berkas milik Anda sendiri: pakai untuk memindahkan pengaturan pribadi ke komputer atau proyektor lain, atau membagikannya ke rekan guru.</p>
     <div class="rule-grid">
+      <div class="panel" style="grid-column:1/-1"><h3>☁ Jadikan default semua (admin)</h3><p class="ed-help">Khusus admin: mengirim pengaturan yang <b>sudah tersimpan di perangkat ini</b> ke server sebagai default semua perangkat, misalnya pengaturan lama yang dibuat sebelum fitur server ada. Default di server akan diganti.</p><button class="btn primary sm" data-act="push">☁ Jadikan pengaturan perangkat ini sebagai default</button></div>
       <div class="panel"><h3>⬇ Unduh cadangan</h3><p class="ed-help">Menyimpan semua soal, kartu, papan, dan aturan ke satu berkas.</p><button class="btn primary sm" data-act="export">Unduh pengaturan (.json)</button></div>
-      <div class="panel"><h3>⬆ Buka cadangan</h3><p class="ed-help">Memuat berkas pengaturan. Hasilnya baru berlaku setelah menekan “Simpan pengaturan”.</p><button class="btn ghost sm" data-act="import">Pilih berkas…</button></div>
-      <div class="panel" style="grid-column:1/-1"><h3>↺ Kembalikan ke bawaan</h3><p class="ed-help">Mengembalikan seluruh soal, kartu, papan, dan aturan ke isi awal Career Quest. Hasilnya baru berlaku setelah “Simpan pengaturan”.</p><button class="btn danger sm" data-act="reset">Kembalikan ke bawaan</button></div>
+      <div class="panel"><h3>⬆ Buka cadangan</h3><p class="ed-help">Memuat berkas pengaturan. Hasilnya baru berlaku setelah menekan “Simpan di perangkat ini”.</p><button class="btn ghost sm" data-act="import">Pilih berkas…</button></div>
+      <div class="panel" style="grid-column:1/-1"><h3>↺ Kembalikan ke bawaan</h3><p class="ed-help">Mengembalikan seluruh soal, kartu, papan, dan aturan ke isi awal Career Quest. Hasilnya baru berlaku setelah “Simpan di perangkat ini”.</p><button class="btn danger sm" data-act="reset">Kembalikan ke bawaan</button></div>
     </div></div>`;
 }
 /* ---- Validasi & simpan ---- */
@@ -1469,7 +1474,59 @@ function edValidate(){
   }
   return null;
 }
-async function edSave(){
+/* ---------------- SINKRON PENGATURAN KE SERVER ---------------- */
+const UNSYNC_KEY="careerquest_bk_unsynced";
+let SYNC="cek";
+const lsGet2=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+function setSync(st){
+  SYNC=st;const e=$("#syncState");if(!e)return;
+  const t={cek:["☁ Memeriksa server…",""],server:["☁ Memakai pengaturan default dari server","ok"],bawaan:["Pengaturan bawaan Career Quest",""],
+    pribadi:["✏ Memakai pengaturan pribadi di perangkat ini (tidak mengubah default server)","warn"],
+    lokal:["⚠ Pengaturan ini baru ada di perangkat ini. Admin: buka ⚙ Atur, lalu ☁ Jadikan default semua.","warn"],
+    offline:["⚠ Server tidak terjangkau. Memakai pengaturan di perangkat ini.","warn"]}[st];
+  e.className="syncstate "+t[1];e.textContent=t[0];
+  if(st==="pribadi"){
+    const b=document.createElement("button");b.type="button";b.id="useServer";b.className="linkbtn";b.textContent="↩ Pakai default server";e.appendChild(document.createTextNode(" "));e.appendChild(b);
+  }
+}
+async function useServerConf(){
+  const v=await modal("",`<div class="mtag">Default server</div><h2>Pakai pengaturan default?</h2><p>Pengaturan pribadi di perangkat ini diganti dengan pengaturan default dari server.</p>
+    <div class="mact"><button class="btn ghost" data-v="no">Batal</button><button class="btn primary" data-v="yes">Pakai default</button></div>`);
+  if(v!=="yes")return;
+  const r=await GK.conf.load(ABOUT_ID);
+  if(r.error){toast("Server tidak terjangkau, pengaturan pribadi tetap dipakai",true);return}
+  try{localStorage.removeItem(UNSYNC_KEY)}catch(e){}
+  const c=r.conf?sanitize(r.conf):buildDefault();c.setup=CONF.setup;
+  CONF=c;CFG.timer=CONF.rules.timer;rebuildMaps();saveConf();buildSetup();
+  setSync(r.conf?"server":"bawaan");toast("Memakai pengaturan default");
+}
+function confForServer(){const c=JSON.parse(JSON.stringify(CONF));delete c.setup;return c}
+async function pushConf(){
+  try{
+    await GK.conf.save(ABOUT_ID,confForServer());
+    try{localStorage.removeItem(UNSYNC_KEY)}catch(e){}
+    setSync("server");return true;
+  }catch(e){
+    try{localStorage.setItem(UNSYNC_KEY,"1")}catch(_){}
+    setSync("lokal");
+    toast(e&&e.code==="CANCEL"?"Tersimpan di perangkat ini saja (password dibatalkan)":"Belum tersimpan ke server: "+(e&&e.message||"galat"),true);
+    return false;
+  }
+}
+async function syncConf(){
+  const r=await GK.conf.load(ABOUT_ID);
+  if(r.error){setSync("offline");return}
+  const hasLocal=lsGet2(CONF_KEY)!==null,unsynced=lsGet2(UNSYNC_KEY)==="1";
+  if(r.conf&&!unsynced){
+    if(!$("#game").classList.contains("hidden")){setSync("server");return} // jangan ubah papan saat game berjalan
+    const c=sanitize(r.conf);c.setup=CONF.setup;
+    CONF=c;CFG.timer=CONF.rules.timer;
+    rebuildMaps();saveConf();buildSetup();setSync("server");
+  }else if(unsynced)setSync(r.conf?"pribadi":"lokal");
+  else if(!r.conf&&hasLocal)setSync("lokal");
+  else setSync(r.conf?"server":"bawaan");
+}
+async function edSave(publish){
   const bad=edValidate();
   if(bad){edTab=bad[0];renderEd(bad[1]);toast(bad[2],true);return}
   const newInfo=cleanAbout(ED.about);
@@ -1485,10 +1542,25 @@ async function edSave(){
   }
   const clean=sanitize(ED);
   clean.setup={count:CFG.count,names:CFG.names.slice(0,MAX_TEAMS),sound:CFG.sound};
+  const before=JSON.stringify(confForServer());
   CONF=clean;CFG.timer=CONF.rules.timer;
   rebuildMaps();saveConf();applyCredit();
+  const changed=before!==JSON.stringify(confForServer());
+  buildSetup();
+  let res=null;
+  if(publish===true){
+    if(SYNC==="offline"){toast("Server tidak terjangkau. Pengaturan baru tersimpan di perangkat ini saja.",true);res=false}
+    else res=await pushConf();
+  }else if(changed||SYNC==="pribadi"||SYNC==="lokal"){
+    /* simpan pribadi: tidak menyentuh server, dan tidak ditimpa default server saat dibuka lagi */
+    try{localStorage.setItem(UNSYNC_KEY,"1")}catch(e){}
+    setSync(SYNC==="lokal"||SYNC==="offline"?SYNC:"pribadi");
+    res="pribadi";
+  }
   closeEditor();buildSetup();
-  toast(storageOk?"✅ Pengaturan disimpan":"Pengaturan dipakai, tetapi peramban tidak mengizinkan penyimpanan",!storageOk);
+  if(res===true)toast("✅ Dijadikan default: berlaku di semua perangkat");
+  else if(res==="pribadi")toast(storageOk?"✅ Disimpan di perangkat ini (pribadi)":"Pengaturan dipakai, tetapi peramban tidak mengizinkan penyimpanan",!storageOk);
+  else if(res===null)toast(storageOk?"✅ Pengaturan disimpan":"Pengaturan dipakai, tetapi peramban tidak mengizinkan penyimpanan",!storageOk);
 }
 function closeEditor(){$("#editor").classList.remove("show");ED=null}
 async function edCancel(){
@@ -1526,7 +1598,7 @@ $("#importFile").addEventListener("change",e=>{
       const clean=sanitize(data);
       clean.setup=ED.setup;clean.about=ED.about;
       ED=padED(clean);renderEd();updateState();
-      toast("Berkas dimuat. Tekan “Simpan pengaturan” untuk memakainya.");
+      toast("Berkas dimuat. Tekan “Simpan di perangkat ini” untuk memakainya.");
     }catch(err){toast("Berkas tidak valid. Pilih berkas .json hasil unduhan Career Quest.",true)}
   };
   rd.onerror=()=>toast("Berkas tidak bisa dibaca",true);
@@ -1592,6 +1664,7 @@ $("#edBody").addEventListener("click",async e=>{
   else if(a==="addC"){ED.chance.push({i:"🎁",t:"",d:"",m:0,p:0,x:0});renderEd(ED.chance.length-1)}
   else if(a==="dupC"){ED.chance.splice(i+1,0,clone(ED.chance[i]));renderEd(i+1)}
   else if(a==="delC"){if(await confirmDel("kartu kejutan no. "+(i+1))){ED.chance.splice(i,1);renderEd()}}
+  else if(a==="push"){b.disabled=true;pushConf().then(ok=>{b.disabled=false;if(ok)toast("✅ Pengaturan dikirim ke server")})}
   else if(a==="unlock"){GK.auth.ensure().then(t=>{if(t&&ED)renderEd()})}
   else if(a==="addAL"){ED.about[b.dataset.k].push("");renderEd();const ts=$("#edBody").querySelectorAll(`textarea[data-k="${b.dataset.k}"]`);if(ts.length){ts[ts.length-1].focus();ts[ts.length-1].scrollIntoView({block:"center"})}}
   else if(a==="delAL"){ED.about[b.dataset.k].splice(i,1);renderEd()}
@@ -1599,12 +1672,14 @@ $("#edBody").addEventListener("click",async e=>{
   else if(a==="import")$("#importFile").click();
   else if(a==="reset"){
     if(await confirmDel("semua pengaturan dan kembali ke isi bawaan")){
-      const keep=ED.setup,keepA=ED.about;ED=padED(buildDefault());ED.setup=keep;ED.about=keepA;edSel=0;renderEd();toast("Dikembalikan ke bawaan. Tekan “Simpan pengaturan” untuk memakainya.");
+      const keep=ED.setup,keepA=ED.about;ED=padED(buildDefault());ED.setup=keep;ED.about=keepA;edSel=0;renderEd();toast("Dikembalikan ke bawaan. Tekan “Simpan di perangkat ini” untuk memakainya.");
     }
   }
   updateState();renderTabs();
 });
-$("#edSave").addEventListener("click",edSave);
+$("#edSave").addEventListener("click",()=>edSave(false));
+$("#edPublish").addEventListener("click",()=>edSave(true));
+$("#syncState").addEventListener("click",e=>{if(e.target.id==="useServer")useServerConf()});
 $("#edCancel").addEventListener("click",edCancel);
 
 /* ---------------- EVENT ---------------- */
@@ -1692,6 +1767,8 @@ syncSoundBtn();
 applyCredit();
 refreshInfo();
 buildSetup();
+setSync("cek");
+syncConf();
 if(location.hash==="#tentang")setTimeout(showAbout,200);
 </script>
 </body>
