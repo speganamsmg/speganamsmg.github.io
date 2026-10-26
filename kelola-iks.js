@@ -354,7 +354,7 @@
   function keBulan(n) { return Math.floor(n / 12) + '-' + ('0' + (n % 12 + 1)).slice(-2); }
   // Daftar bulan yang dilunasi menurut keterangan (koma atau "s.d"); null bila bukan rapel.
   function parseRapel(teks, bulanBayar) {
-    const m = /^(?:rapel|pembayaran|dibayar|bayaran|bayar|disetor|setoran|setor)\b[\s:.\-–]*(.*)$/i.exec(String(teks || '').trim());
+    const m = /^(?:rapel|pembayaran|dibayar|bayaran|bayar|disetor|setoran|setor)\b[\s:.\-–]*(.*)$/i.exec(String(teks || '').replace(/\(\s*[-−–][^)]*\)/g, ' ').trim());
     if (!m) return null;
     const hasil = [];
     const tambah = function (b) { if (hasil.indexOf(b) < 0) hasil.push(b); };
