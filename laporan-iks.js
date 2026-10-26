@@ -7,7 +7,7 @@
   const KEY = 'laporan';
   const BLN = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
   const BLN_PENUH = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-  const state = { tab: 'sosial', q: '', bln: '', reset: false };
+  const state = { tab: 'sosial', q: '', bln: '', reset: false, hanya: false };
   let last = '';
   let timer = 0;
 
@@ -71,7 +71,8 @@
   }
 
   // Tabel iuran satu bulan: NAMA | IURAN. Yang belum membayar diberi warna merah muda.
-  function tabel(x, daftar) {
+  // opsional = iuran sukarela (Pensiun): yang tidak membayar tidak diberi warna merah dan tidak disebut "belum".
+  function tabel(x, daftar, opsional) {
     const c = el('section', 'card dsec iks-sheetcard');
     c.append(pilihBulan(daftar));
     const i = x.bulan.indexOf(state.bln);
@@ -80,9 +81,16 @@
     const rapelDi = function (o) { return (o.rapel && o.rapel[i]) || ''; };
     const nBayar = x.orang.filter(function (o) { return o.bayar[i] > 0 || rapelDi(o); }).length;
     const nRapel = x.orang.filter(function (o) { return rapelDi(o); }).length;
-    c.append(el('p', 'hint iks-ring', nBayar + ' dari ' + x.orang.length + ' sudah membayar · ' + bulanPenuh(state.bln) + (nRapel ? ' · ' + nRapel + ' lewat rapel' : '')));
+    c.append(el('p', 'hint iks-ring', (opsional ? nBayar + ' orang menitip · ' : nBayar + ' dari ' + x.orang.length + ' sudah membayar · ') + bulanPenuh(state.bln) + (nRapel ? ' · ' + nRapel + ' lewat rapel' : '')));
     const q = el('input', 'input iks-q'); q.type = 'search'; q.placeholder = 'Cari nama…'; q.setAttribute('aria-label', 'Cari nama');
     q.value = state.q;
+    let hanyaBox = null;
+    if (opsional) {
+      hanyaBox = el('label', 'iks-only');
+      const cb = el('input'); cb.type = 'checkbox'; cb.checked = state.hanya;
+      cb.addEventListener('change', function () { state.hanya = cb.checked; gambarBaris(); });
+      hanyaBox.append(cb, el('span', '', 'Tampilkan yang menitip saja'));
+    }
     const box = el('div', 'iks-sheet'); box.tabIndex = 0; box.setAttribute('role', 'region'); box.setAttribute('aria-label', 'Tabel iuran per anggota');
     const t = el('table', 'iks-tbl');
     const hd = el('thead'); const hr = el('tr');
@@ -97,17 +105,18 @@
       let n = 0, jml = 0;
       x.orang.forEach(function (o) {
         if (s && o.nama.toLowerCase().indexOf(s) < 0) return;
-        n++;
         const v = o.bayar[i];
-        jml += v;
         const rd = rapelDi(o);
+        if (opsional && state.hanya && !(v > 0 || rd)) return;
+        n++;
+        jml += v;
         const ket = (o.ket && o.ket[i]) || '';
-        const tr = el('tr', rd ? 'rapel' : (v > 0 ? '' : 'belum'));
+        const tr = el('tr', rd ? 'rapel' : (v > 0 ? (opsional ? 'menitip' : '') : (opsional ? 'opsional' : 'belum')));
         const td = el('td', 'c-num' + (v > 0 || rd ? '' : ' kosong'));
         if (v > 0) td.append(el('span', 'iks-v', angka(v)));
         else if (rd && rd !== state.bln) td.append(el('span', 'iks-v iks-rapel', 'Rapel ' + bulanPendek(rd, true)));   // dibayar di bulan lain
         else if (rd) td.append(el('span', 'iks-v', '–'));
-        else td.append(el('span', 'iks-v', 'Belum'));
+        else td.append(el('span', 'iks-v', opsional ? '–' : 'Belum'));
         if (v > 0 && rd && rd !== state.bln) td.append(el('span', 'iks-note', 'Rapel ' + bulanPendek(rd, true)));
         if (ket) td.append(el('span', 'iks-note', ket));
         tr.append(el('th', 'c-nama', o.nama), td);
@@ -124,21 +133,23 @@
     t.append(body, ft);
     box.append(t);
     q.addEventListener('input', function () { state.q = q.value; gambarBaris(); });
-    c.append(q, box);
+    c.append(q);
+    if (hanyaBox) c.append(hanyaBox);
+    c.append(box);
     gambarBaris();
     return c;
   }
 
-  function tabelView(x, daftar) {
+  function tabelView(x, daftar, opsional) {
     const f = document.createDocumentFragment();
     if (!x.ok) { f.append(note('Data belum tersedia', x.pesan)); return f; }
     if (!x.bulan.length || !x.orang.length) { f.append(note('Belum ada data iuran', 'Daftar anggota atau judul bulan belum diisi.')); return f; }
-    f.append(tabel(x, daftar));
+    f.append(tabel(x, daftar, opsional));
     return f;
   }
 
   // ── Rincian keuangan: total kas + pemasukan/pengeluaran per bulan terpilih ──
-  function rincianDana(x, nama, bln) {
+  function rincianDana(x, nama, bln, opsional) {
     const c = el('section', 'card dsec');
     c.append(el('h2', '', nama));
     if (!x.ok) { c.append(el('p', 'hint', x.pesan)); return c; }
@@ -152,7 +163,7 @@
     t(rp(pb.keluar), 'Pengeluaran');
     c.append(grid);
     const sel = pb.masuk - pb.keluar;
-    c.append(el('p', 'hint iks-sel', 'Selisih bulan ini ' + (sel > 0 ? '+' : '') + rp(sel) + (i >= 0 ? ' · ' + pb.n_bayar + ' dari ' + x.n_anggota + ' orang membayar' : '')));
+    c.append(el('p', 'hint iks-sel', 'Selisih bulan ini ' + (sel > 0 ? '+' : '') + rp(sel) + (i >= 0 ? ' · ' + (opsional ? pb.n_bayar + ' orang menitip' : pb.n_bayar + ' dari ' + x.n_anggota + ' orang membayar') : '')));
     const daftar = x.keluar.filter(function (k) { return k.tgl && k.tgl.slice(0, 7) === bln; });
     c.append(el('h3', 'iks-sub', 'Pengeluaran bulan ini'));
     if (!daftar.length) { c.append(el('p', 'hint', 'Tidak ada pengeluaran.')); return c; }
@@ -188,7 +199,7 @@
     if (!bulan.length) { f.append(note('Belum ada data bulanan', 'Judul bulan di sheet iuran belum diisi.')); return f; }
     const pick = el('section', 'card dsec');
     pick.append(el('h2', '', 'Per bulan'), pilihBulan(bulan));
-    f.append(pick, rincianDana(s, 'Sosial', state.bln), rincianDana(p, 'Pensiun', state.bln));
+    f.append(pick, rincianDana(s, 'Sosial', state.bln, false), rincianDana(p, 'Pensiun', state.bln, true));
     return f;
   }
 
@@ -218,7 +229,7 @@
     state.reset = false;
     const frag = document.createDocumentFragment();
     const daftar = pastikanBulan(d);
-    frag.append(tabs, state.tab === 'rincian' ? rincianView(d) : tabelView(d[state.tab], daftar));
+    frag.append(tabs, state.tab === 'rincian' ? rincianView(d) : tabelView(d[state.tab], daftar, state.tab === 'pensiun'));
     stage.replaceChildren(frag);
     const baru = stage.querySelector('.iks-sheet');
     if (pos && baru) { baru.scrollLeft = pos.l; baru.scrollTop = pos.t; }
