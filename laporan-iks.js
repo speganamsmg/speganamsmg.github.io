@@ -80,15 +80,19 @@
       return l.replace(/^([^a-z]*)([a-z])/, function (_, p, c) { return p + c.toUpperCase(); });
     }).join(' ');
   }
-  // [2026-07, 2026-08] -> "Juli 2026 dan Agustus 2026"; 3 bulan berurutan atau lebih -> "Januari 2026 s.d Agustus 2026".
+  // Penulisan bulan di Ket maksimal dua sebutan:
+  //   2 bulan -> "Jul 26 dan Agu 26"; berurutan 3+ -> "Jan 26 s.d Sep 26"; loncat, satu tahun, sampai 3 -> "Jul, Agu, dan Okt 26";
+  //   selain itu -> "awal s.d akhir".
   function daftarBulan(L) {
     const no = function (b) { return +b.slice(0, 4) * 12 + +b.slice(5, 7); };
     const n = L.length;
+    const pd = function (b) { return bulanPendek(b, true); };
+    if (n === 1) return pd(L[0]);
     const urut = L.every(function (b, k) { return k === 0 || no(b) === no(L[k - 1]) + 1; });
-    if (n === 1) return bulanPenuh(L[0]);
-    if (urut && n >= 3) return bulanPenuh(L[0]) + ' s.d ' + bulanPenuh(L[n - 1]);
-    if (n === 2) return bulanPenuh(L[0]) + ' dan ' + bulanPenuh(L[1]);
-    return L.slice(0, -1).map(bulanPenuh).join(', ') + ', dan ' + bulanPenuh(L[n - 1]);
+    if (n === 2) return pd(L[0]) + ' dan ' + pd(L[1]);
+    const setahun = L.every(function (b) { return b.slice(0, 4) === L[0].slice(0, 4); });
+    if (!urut && setahun && n === 3) return bulanPendek(L[0]) + ', ' + bulanPendek(L[1]) + ', dan ' + pd(L[2]);
+    return pd(L[0]) + ' s.d ' + pd(L[n - 1]);
   }
 
   // Tabel iuran satu bulan: NAMA | IURAN | KET. Yang belum membayar diberi warna merah muda.
@@ -104,10 +108,10 @@
     // Kolom Ket dibuat sendiri dari nominal dan keterangan di sheet.
     const ketBaris = function (o, v, rd, ops) {
       const L = o.lunas && o.lunas[i];
-      if (L && L.length) return { teks: 'Pembayaran ' + (L.length > 1 ? L.length + ' ' : '') + 'Bulan ' + daftarBulan(L), kurang: (o.kurang && o.kurang[i]) || 0 };
+      if (L && L.length) return { teks: 'Bayar ' + (L.length > 1 ? L.length + ' ' : '') + 'Bulan' + (L.length > 1 ? ': ' : ' ') + daftarBulan(L), kurang: (o.kurang && o.kurang[i]) || 0 };
       if (rd && rd !== state.bln) {
         const Lp = o.lunas && o.lunas[x.bulan.indexOf(rd)];
-        return { teks: Lp && Lp.length > 1 ? 'Dibayar Rapel pada ' + bulanPenuh(rd) : 'Dibayar Bulan ' + bulanPenuh(rd), kurang: 0 };
+        return { teks: (Lp && Lp.length > 1 ? 'Rapel, ' : '') + 'Dibayar ' + bulanPendek(rd, true), kurang: 0 };
       }
       const raw = (o.ket && o.ket[i]) || '';
       if (raw) return { teks: judul(raw.replace(/\(\s*[-−–][^)]*\)/g, ' ')), kurang: (o.kurang && o.kurang[i]) || 0 };

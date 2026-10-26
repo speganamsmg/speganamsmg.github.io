@@ -138,9 +138,23 @@ select.input { appearance: auto; }
 .iks-tbl tbody tr.rapel td.c-ket { color: color-mix(in srgb, #1b7a43 78%, var(--ink)); }
 .iks-tbl .iks-pil { display: inline-block; margin-top: 0.25rem; padding: 0.1rem 0.55rem; border-radius: 999px; font-size: 0.72rem; font-weight: 800; }
 .iks-tbl .iks-pil.kurang { background: #d6336c; color: #fff; }
+/* Ponsel: tiap orang dua baris. Nama satu baris penuh, di bawahnya Iuran (kiri) dan Ket (kanan). */
 @media (max-width: 640px) {
-  .iks-tbl .c-nama { min-width: 6.6rem; max-width: 7.4rem; font-size: 0.8rem; }
-  .iks-tbl .c-num { min-width: 4.4rem; font-size: 0.8rem; }
-  .iks-tbl .c-ket { min-width: 6.4rem; max-width: 8rem; font-size: 0.7rem; }
-  .iks-tbl th, .iks-tbl td { padding-left: 0.45rem; padding-right: 0.45rem; }
+  .iks-tbl, .iks-tbl tbody, .iks-tbl tfoot { display: block; width: 100%; }
+  .iks-tbl thead { display: none; }
+  .iks-tbl tbody tr, .iks-tbl tfoot tr { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 0.6rem; align-items: center; border-bottom: 1px solid var(--line); }
+  .iks-tbl tbody tr th.c-nama, .iks-tbl tfoot tr th.c-nama { grid-column: 1 / -1; position: static; min-width: 0; max-width: none; border: 0; padding: 0.55rem 0.8rem 0.05rem; font-size: 0.95rem; }
+  .iks-tbl tbody tr td, .iks-tbl tfoot tr td { display: block; border: 0; padding: 0.05rem 0.8rem 0.55rem; }
+  .iks-tbl td.c-num { min-width: 0; text-align: left; font-size: 0.85rem; }
+  .iks-tbl td.c-ket { min-width: 0; max-width: none; text-align: right; font-size: 0.72rem; }
+  .iks-tbl tfoot tr { position: sticky; bottom: 0; }
+  .iks-tbl td.iks-none { grid-column: 1 / -1; text-align: center; }
+  /* Warna baris dipindah ke baris itu sendiri supaya tidak ada sambungan antar sel */
+  .iks-tbl tbody tr th, .iks-tbl tbody tr td, .iks-tbl tfoot tr th, .iks-tbl tfoot tr td { background: transparent !important; }
+  .iks-tbl tbody tr { background: var(--surface); }
+  .iks-tbl tbody tr:nth-child(even) { background: var(--tint); }
+  .iks-tbl tbody tr.belum { background: color-mix(in srgb, #ff5c8a 16%, var(--surface)); }
+  .iks-tbl tbody tr.rapel { background: color-mix(in srgb, #2ecc71 20%, var(--surface)); }
+  .iks-tbl tbody tr.menitip { background: color-mix(in srgb, var(--accent, #3b82f6) 9%, var(--surface)); }
+  .iks-tbl tfoot tr { background: var(--tint); }
 }
