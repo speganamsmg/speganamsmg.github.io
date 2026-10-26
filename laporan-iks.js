@@ -79,12 +79,14 @@
     if (i < 0) { c.append(el('p', 'hint', 'Bulan ini belum ada di sheet iuran.')); return c; }
     // Rapel: bulan yang dilunasi lewat pembayaran di bulan lain (keterangan "Rapel Sep 26, Okt 26") dihitung sudah membayar.
     const rapelDi = function (o) { return (o.rapel && o.rapel[i]) || ''; };
+    // Pembayaran susulan satu bulan = "Dibayar Agu 26"; dua bulan atau lebih sekaligus = "Rapel Agu 26".
+    const susul = function (o, rd) { return ((o.rapel_n && o.rapel_n[i]) || 0) >= 2 ? 'Rapel ' : 'Dibayar '; };
     // Sudah pensiun (tercatat di PENSIUN_OUT) dan tidak membayar: tidak dihitung dan tidak disebut "Belum".
     const pensiunDi = function (o) { return !!(o.pensiun && state.bln >= o.pensiun && !(o.bayar[i] > 0 || rapelDi(o))); };
     const nAktif = x.orang.filter(function (o) { return !pensiunDi(o); }).length;
     const nBayar = x.orang.filter(function (o) { return o.bayar[i] > 0 || rapelDi(o); }).length;
     const nRapel = x.orang.filter(function (o) { return rapelDi(o); }).length;
-    c.append(el('p', 'hint iks-ring', (opsional ? nBayar + ' orang menitip · ' : nBayar + ' dari ' + nAktif + ' sudah membayar · ') + bulanPenuh(state.bln) + (nRapel ? ' · ' + nRapel + ' lewat rapel' : '')));
+    c.append(el('p', 'hint iks-ring', (opsional ? nBayar + ' orang menitip · ' : nBayar + ' dari ' + nAktif + ' sudah membayar · ') + bulanPenuh(state.bln) + (nRapel ? ' · ' + nRapel + ' dibayar susulan' : '')));
     const q = el('input', 'input iks-q'); q.type = 'search'; q.placeholder = 'Cari nama…'; q.setAttribute('aria-label', 'Cari nama');
     q.value = state.q;
     let hanyaBox = null;
@@ -119,11 +121,11 @@
         const tr = el('tr', pens ? 'opsional pensiun' : rd ? 'rapel' : (v > 0 ? (opsional ? 'menitip' : '') : (opsional ? 'opsional' : 'belum')));
         const td = el('td', 'c-num' + (v > 0 || rd ? '' : ' kosong'));
         if (v > 0) td.append(el('span', 'iks-v', angka(v)));
-        else if (rd && rd !== state.bln) td.append(el('span', 'iks-v iks-rapel', 'Rapel ' + bulanPendek(rd, true)));   // dibayar di bulan lain
+        else if (rd && rd !== state.bln) td.append(el('span', 'iks-v iks-rapel', susul(o, rd) + bulanPendek(rd, true)));   // dibayar di bulan lain
         else if (rd) td.append(el('span', 'iks-v', '–'));
         else if (pens) td.append(el('span', 'iks-v', 'Pensiun'));
         else td.append(el('span', 'iks-v', opsional ? '–' : 'Belum'));
-        if (v > 0 && rd && rd !== state.bln) td.append(el('span', 'iks-note', 'Rapel ' + bulanPendek(rd, true)));
+        if (v > 0 && rd && rd !== state.bln) td.append(el('span', 'iks-note', susul(o, rd) + bulanPendek(rd, true)));
         if (ket) td.append(el('span', 'iks-note', ket));
         tr.append(el('th', 'c-nama', o.nama), td);
         body.append(tr);

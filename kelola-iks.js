@@ -354,7 +354,7 @@
   function keBulan(n) { return Math.floor(n / 12) + '-' + ('0' + (n % 12 + 1)).slice(-2); }
   // Daftar bulan yang dilunasi menurut keterangan (koma atau "s.d"); null bila bukan rapel.
   function parseRapel(teks, bulanBayar) {
-    const m = /^rapel\b[\s:.\-–]*(.*)$/i.exec(String(teks || '').trim());
+    const m = /^(?:rapel|pembayaran|dibayar|bayaran|bayar|disetor|setoran|setor)\b[\s:.\-–]*(.*)$/i.exec(String(teks || '').trim());
     if (!m) return null;
     const hasil = [];
     const tambah = function (b) { if (hasil.indexOf(b) < 0) hasil.push(b); };
@@ -395,7 +395,7 @@
   function pilRapel(j, o, bln, i) {
     const wrap = el('div', 'iksk-pills');
     const ket = ketEfektif(j, o, i, bln);
-    const b = el('button', 'iksk-pill' + (ket ? (/^\s*rapel\b/i.test(ket) ? ' on' : ' has') : ''), ket || '+ Rapel'); b.type = 'button';
+    const b = el('button', 'iksk-pill' + (ket ? (/^\s*(?:rapel|pembayaran|dibayar|bayaran|bayar|disetor|setoran|setor)\b/i.test(ket) ? ' on' : ' has') : ''), ket || '+ Rapel'); b.type = 'button';
     b.setAttribute('aria-label', 'Keterangan rapel ' + o.nama);
     b.addEventListener('click', function () {
       const m = S.d[j].masuk;
@@ -407,7 +407,7 @@
     });
     wrap.append(b);
     const rd = (o.rapel && o.rapel[i]) || '';
-    if (rd && rd !== bln) wrap.append(el('span', 'iksk-pill cov', 'Rapel ' + bulanSingkat(rd)));
+    if (rd && rd !== bln) wrap.append(el('span', 'iksk-pill cov', (((o.rapel_n && o.rapel_n[i]) || 0) >= 2 ? 'Rapel ' : 'Dibayar ') + bulanSingkat(rd)));
     return wrap;
   }
 
