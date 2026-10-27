@@ -76,6 +76,7 @@
     return String(t || '').trim().split(/\s+/).filter(Boolean).map(function (w, k) {
       const l = w.toLowerCase();
       if (/^s\.?d\.?$/.test(l)) return 's.d';
+      if (/[A-Z]/.test(w.slice(1))) return w;   // sudah bercampur huruf (S.Pd., BPJS, McD): biarkan
       if (k > 0 && KATA_KECIL[l]) return l;
       return l.replace(/^([^a-z]*)([a-z])/, function (_, p, c) { return p + c.toUpperCase(); });
     }).join(' ');
@@ -212,9 +213,13 @@
     daftar.forEach(function (k) {
       const li = el('li');
       const kiri = el('div', 'o-l');
-      kiri.append(el('strong', '', k.jenis || 'Pengeluaran'));
-      const info = [k.penerima, k.catatan].filter(Boolean).join(' · ');
-      if (info) kiri.append(el('span', '', info));
+      kiri.append(el('strong', '', judul(k.jenis) || 'Pengeluaran'));
+      if (k.penerima || k.catatan) {
+        const pil = el('div', 'o-pills');
+        if (k.penerima) { const pn = el('span', 'o-pill o-pen'); pn.append(el('small', '', 'Penerima'), document.createTextNode(judul(k.penerima))); pil.append(pn); }
+        if (k.catatan) pil.append(el('span', 'o-pill ' + (/tersalur|selesai|lunas|diterima/i.test(k.catatan) ? 'o-ok' : 'o-cat'), judul(k.catatan)));
+        kiri.append(pil);
+      }
       kiri.append(el('span', 'o-d', tglPendek(k.tgl)));
       li.append(kiri, el('div', 'o-r', rp(k.nominal)));
       list.append(li);
