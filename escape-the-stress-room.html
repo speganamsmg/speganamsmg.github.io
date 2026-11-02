@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escape the Stress Room | Game BK</title>
+<meta name="description" content="Game escape room digital untuk Bimbingan dan Konseling: kelola stres, selesaikan konflik, bekerja sama, tolak tekanan teman, dan berempati. Rancangan siswa Kelompok 2, versi digital oleh Agung Fahri Husaeni, S.Pd., Guru BK SMP Negeri 36 Semarang.">
+<meta name="theme-color" content="#050816">
+<script>try{var _t=localStorage.getItem("tema");document.documentElement.setAttribute("data-theme",_t==="light"||_t==="dark"?_t:(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"))}catch(e){}</script>
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400..800&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --bg0:#050816; --bg1:#0a1030; --bg2:#1a1058;
+  --ink:#e8efff; --muted:#93a4cf; --dim:#6b7aa8;
+  --cy:#22d3ee; --mg:#e879f9; --gold:#fbbf24; --green:#34d399; --red:#fb7185; --vio:#a78bfa;
+  --panel:#10183f; --panel2:rgba(2,6,23,.4); --field:rgba(2,6,23,.55); --mbg:rgba(2,4,18,.78);
+  --glass:rgba(255,255,255,.06); --glass2:rgba(255,255,255,.11); --line:rgba(125,211,252,.22);
+  --card:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));
+  --mcard:linear-gradient(165deg,rgba(18,26,70,.96),rgba(8,12,38,.98));
+  --okbg:rgba(52,211,153,.16); --nobg:rgba(251,113,133,.16); --hintbg:rgba(251,191,36,.12);
+  --shadow:0 22px 60px -18px rgba(0,0,0,.6);
+  --f-head:"Orbitron","Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
+  --f-body:"Plus Jakarta Sans","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  --stress:0;
+}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg0:#f4f7ff; --bg1:#e8eefc; --bg2:#f1e6ff;
+  --ink:#10204a; --muted:#44557f; --dim:#667599;
+  --cy:#0891b2; --mg:#c026d3; --gold:#b45309; --green:#047857; --red:#e11d48; --vio:#6d4fd6;
+  --panel:#ffffff; --panel2:rgba(255,255,255,.74); --field:#ffffff; --mbg:rgba(190,205,240,.72);
+  --glass:rgba(255,255,255,.78); --glass2:rgba(255,255,255,.96); --line:rgba(30,64,175,.24);
+  --card:linear-gradient(160deg,rgba(255,255,255,.92),rgba(255,255,255,.72));
+  --mcard:linear-gradient(165deg,#ffffff,#eef3ff);
+  --okbg:rgba(4,120,87,.12); --nobg:rgba(225,29,72,.11); --hintbg:rgba(180,83,9,.1);
+  --shadow:0 24px 60px -24px rgba(30,64,175,.38);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  font-family:var(--f-body);color:var(--ink);
+  background:
+    radial-gradient(900px 600px at 8% -10%,rgba(34,211,238,.22),transparent 60%),
+    radial-gradient(900px 700px at 100% 105%,rgba(232,121,249,.22),transparent 60%),
+    linear-gradient(160deg,var(--bg0),var(--bg1) 55%,var(--bg2));
+  background-attachment:fixed;
+  -webkit-text-size-adjust:100%;
+}
+[data-theme="light"] body{background:
+    radial-gradient(900px 600px at 8% -10%,rgba(34,211,238,.28),transparent 60%),
+    radial-gradient(900px 700px at 100% 105%,rgba(232,121,249,.22),transparent 60%),
+    linear-gradient(160deg,var(--bg0),var(--bg1) 55%,var(--bg2));background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(125,211,252,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(125,211,252,.05) 1px,transparent 1px);
+  background-size:44px 44px;mask-image:radial-gradient(ellipse at center,#000 35%,transparent 85%);-webkit-mask-image:radial-gradient(ellipse at center,#000 35%,transparent 85%)}
+[data-theme="light"] body::before{opacity:.4}
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse at center,transparent 50%,rgba(239,68,68,calc(var(--stress)*.5)) 100%);transition:background .6s}
+button,input,select,textarea{font-family:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+::selection{background:var(--cy);color:#04111f}
+*{scrollbar-width:thin;scrollbar-color:rgba(125,211,252,.35) transparent}
+:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
+h1,h2,h3{margin:0}
+
+/* ---------- tombol ---------- */
+.btn{border:1px solid transparent;border-radius:14px;padding:13px 24px;font-size:clamp(16px,1.6vw,19px);font-weight:800;color:#04111f;transition:transform .12s,box-shadow .2s,filter .2s;letter-spacing:.2px;line-height:1.2}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:linear-gradient(135deg,var(--cy),#38bdf8 45%,var(--mg));box-shadow:0 0 0 1px rgba(255,255,255,.25) inset,0 8px 28px -6px rgba(34,211,238,.55)}
+.btn.primary:hover:not(:disabled){filter:brightness(1.08);box-shadow:0 0 0 1px rgba(255,255,255,.35) inset,0 10px 34px -4px rgba(232,121,249,.6)}
+.btn.ghost{background:var(--glass);color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{background:var(--glass2);border-color:var(--cy)}
+.btn.good{background:linear-gradient(135deg,#34d399,#22d3ee);box-shadow:0 8px 24px -8px rgba(52,211,153,.6)}
+.btn.sm{padding:8px 14px;font-size:14px;border-radius:11px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+a.back,button.back{display:inline-flex;align-items:center;gap:6px;color:var(--ink);text-decoration:none;font-weight:700;font-size:14.5px;padding:8px 16px;border:1px solid var(--line);border-radius:99px;background:var(--glass);white-space:nowrap}
+a.back:hover,button.back:hover{border-color:var(--cy);color:var(--cy)}
+.tb{background:var(--glass);border:1px solid var(--line);color:var(--ink);border-radius:11px;padding:7px 12px;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.tb:hover{background:var(--glass2);border-color:var(--cy)}
+
+/* ---------- pintu ---------- */
+.door-scene{--w:var(--dw,clamp(170px,26vh,280px));perspective:1100px;display:flex;justify-content:center}
+.door-frame{position:relative;width:var(--w);aspect-ratio:3/4;border:9px solid #38477f;border-bottom-width:5px;border-radius:14px 14px 0 0;background:#0a0e26;box-shadow:0 20px 50px -10px rgba(0,0,0,.55),0 0 40px -8px rgba(34,211,238,.35)}
+.exit-light{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 50% 55%,#fffbe0 0%,#fde68a 35%,#f59e0b 100%);opacity:0;transition:opacity 1s .3s}
+.exit-light span{background:#16a34a;color:#fff;font-family:var(--f-head);font-weight:800;letter-spacing:2px;padding:5px 11px;border-radius:8px;font-size:calc(var(--w)*.06);box-shadow:0 0 18px #4ade80}
+.open .exit-light{opacity:1}
+.door{position:absolute;inset:0;transform-origin:left center;transition:transform 1.6s cubic-bezier(.3,.8,.3,1);background:linear-gradient(160deg,#7a4d27,#4a2d14);border-right:3px solid #2e1b0b;display:flex;flex-direction:column;align-items:center;padding:calc(var(--w)*.04) 6px;gap:calc(var(--w)*.02)}
+.open .door{transform:rotateY(72deg)}
+.door-top{font-family:var(--f-head);font-size:calc(var(--w)*.045);font-weight:800;letter-spacing:1.4px;color:#fde68a;opacity:.9;text-align:center}
+.locks{display:flex;flex-direction:column;gap:calc(var(--w)*.03);margin:auto 0;align-items:center}
+.lock{width:calc(var(--w)*.15);height:calc(var(--w)*.15);border-radius:50%;display:grid;place-items:center;font-size:calc(var(--w)*.075);background:#241405;border:3px solid #9a6b2f;box-shadow:inset 0 3px 6px rgba(0,0,0,.6);transition:all .4s}
+.lock.on{background:#166534;border-color:#4ade80;box-shadow:0 0 14px #4ade80}
+.knob{position:absolute;right:9px;top:52%;width:calc(var(--w)*.05);height:calc(var(--w)*.05);border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff3b0,#d89b14)}
+
+/* ---------- layar awal ---------- */
+#setup{position:relative;z-index:2;min-height:100vh;display:flex;justify-content:center;padding:clamp(12px,3vw,32px)}
+.setup-card{margin:auto;width:min(1120px,100%);background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:28px;padding:clamp(16px,2.6vw,34px);box-shadow:var(--shadow)}
+.setup-top{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.navrow{display:flex;gap:8px;flex-wrap:wrap}
+.by{text-align:right;font-size:13.5px;line-height:1.45;color:var(--muted);max-width:min(460px,100%)}
+.by b{display:block;color:var(--ink);font-size:15px}
+.by span{display:block}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(14px,2.4vw,30px);align-items:center;margin-bottom:22px}
+.hero .cover{border-radius:20px;overflow:hidden;border:1px solid var(--line);box-shadow:0 18px 50px -12px rgba(34,211,238,.35);aspect-ratio:2/1;background:#0a1030}
+.hero .cover img{display:block;width:100%;height:100%;object-fit:cover}
+.chipline{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border:1px solid var(--line);border-radius:99px;background:var(--glass);font-size:12.5px;font-weight:700;color:var(--cy);letter-spacing:.14em;text-transform:uppercase}
+.chipline i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.hero h1{margin:12px 0 8px;font-family:var(--f-head);font-weight:900;font-size:clamp(30px,5vw,58px);line-height:1.02;letter-spacing:.02em;text-transform:uppercase}
+.grad{background:linear-gradient(90deg,var(--cy),var(--mg));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .sub{margin:0;font-size:clamp(15px,1.6vw,19px);color:var(--muted);line-height:1.55}
+.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.panel{background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:16px 18px}
+.panel+.panel{margin-top:14px}
+.panel h3{margin:0 0 12px;font-family:var(--f-head);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--cy);display:flex;align-items:center;gap:8px}
+.panel h3 b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f;font-size:13px}
+.field{width:100%;font-size:16px;padding:10px 13px;border-radius:12px;border:1px solid var(--line);background:var(--field);color:var(--ink);font-weight:600}
+.field:focus{outline:none;border-color:var(--cy);box-shadow:0 0 0 3px rgba(34,211,238,.2)}
+.lbl{display:block;font-size:13px;font-weight:700;color:var(--muted);margin:0 0 6px}
+.stepper{display:flex;align-items:center;gap:12px}
+.stepper .sbtn{width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--glass);color:var(--ink);font-size:24px;font-weight:700;line-height:1}
+.stepper .sbtn:hover{background:var(--glass2);border-color:var(--cy)}
+.stepper .val{min-width:80px;text-align:center;font-family:var(--f-head);font-size:30px;font-weight:800}
+.stepper .val small{display:block;font-family:var(--f-body);font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.06em}
+.modes{display:grid;gap:10px}
+.mode{display:grid;gap:3px;text-align:left;border:1px solid var(--line);border-radius:16px;background:var(--glass);color:var(--ink);padding:12px 14px;transition:border-color .2s,background .2s,transform .12s}
+.mode:hover{background:var(--glass2)}
+.mode b{font-size:16px}.mode span{font-size:13.5px;color:var(--muted);line-height:1.4}
+.mode em{font-style:normal;font-family:var(--f-head);font-size:11px;letter-spacing:.1em;color:var(--cy);font-weight:800}
+.mode.on{border-color:var(--cy);background:linear-gradient(135deg,rgba(34,211,238,.18),rgba(232,121,249,.14));box-shadow:0 0 0 1px var(--cy) inset}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:12px;padding:8px 14px;font-size:14.5px;font-weight:700}
+.chip.on{background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f;border-color:transparent}
+.opt-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0 0;font-size:15.5px}
+.sw{width:46px;height:26px;appearance:none;-webkit-appearance:none;border-radius:99px;background:rgba(127,140,180,.35);position:relative;cursor:pointer;border:1px solid var(--line);padding:0;transition:background .2s;flex:none}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.35)}
+.sw:checked{background:linear-gradient(135deg,var(--cy),var(--mg))}
+.sw:checked::after{transform:translateX(20px)}
+.how{font-size:14.5px;line-height:1.55;color:var(--muted)}
+.how ul{margin:0;padding-left:20px}.how li{margin:4px 0}.how b{color:var(--ink)}
+.tribute{display:flex;gap:12px;align-items:flex-start;margin-top:14px;padding:14px 16px;border:1px solid color-mix(in srgb,var(--cy) 50%,transparent);border-radius:18px;background:linear-gradient(135deg,rgba(34,211,238,.12),rgba(232,121,249,.1))}
+.tribute i{font-style:normal;font-size:26px;line-height:1}
+.tribute p{margin:0;font-size:14.5px;line-height:1.55;color:var(--muted)}
+.tribute b{color:var(--ink)}
+.row-btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;align-items:center}
+.recap{margin-top:16px;font-size:14px;overflow:auto}
+.recap table{width:100%;border-collapse:collapse;min-width:520px}
+.recap td,.recap th{padding:7px 9px;text-align:left;border-bottom:1px solid var(--line)}
+.recap th{font-size:11px;color:var(--muted);letter-spacing:.1em;font-family:var(--f-head)}
+.recap h3{margin:0 0 8px;font-family:var(--f-head);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--cy)}
+.foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);text-align:center;font-size:13px;color:var(--muted);line-height:1.6}
+.foot b{color:var(--ink)}
+
+/* ---------- permainan ---------- */
+#game{position:relative;z-index:2;min-height:100vh}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:9px clamp(12px,2vw,22px);background:color-mix(in srgb,var(--panel) 78%,transparent);border-bottom:1px solid var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.topbar .ttl{font-family:var(--f-head);font-weight:900;font-size:clamp(14px,1.6vw,19px);letter-spacing:.06em;white-space:nowrap;text-transform:uppercase}
+.topbar .ttl span{color:var(--cy)}
+.topbar .sp{flex:1}
+.stage{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;max-width:1320px;margin:0 auto;padding:clamp(12px,2vw,22px)}
+.side{display:none}
+.hud{display:flex;flex-wrap:wrap;gap:10px}
+.hbox{flex:0 0 auto;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:9px 14px;display:flex;flex-direction:column;justify-content:center;min-width:0;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.hbox small{font-family:var(--f-head);font-size:10px;letter-spacing:.14em;color:var(--muted);font-weight:700}
+.hbox b{font-size:clamp(17px,1.9vw,24px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbox.score b{font-family:var(--f-head);color:var(--gold);font-size:clamp(22px,2.6vw,32px)}
+.hbox.score i{font-style:normal;font-size:12.5px;color:var(--muted);font-weight:700;margin-left:4px}
+.hbox.team{flex:1 1 140px}
+.hbox.wide{flex:2 1 280px}
+.hbox.score{min-width:128px}
+.pop{animation:pop .6s}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.3)}100%{transform:scale(1)}}
+.keys{display:flex;gap:6px;margin-top:2px}
+.kslot{width:clamp(30px,3.2vw,40px);height:clamp(30px,3.2vw,40px);border-radius:11px;display:grid;place-items:center;font-size:clamp(16px,1.8vw,22px);background:var(--glass);border:1px dashed var(--line);filter:grayscale(1);opacity:.5;transition:all .4s}
+.kslot.on{background:rgba(52,211,153,.22);border:1px solid var(--green);filter:none;opacity:1;box-shadow:0 0 16px -2px var(--green);animation:pop .6s}
+.dots{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.dot{width:9px;height:9px;border-radius:50%;background:rgba(127,140,180,.35)}
+.dot.cur{background:var(--gold);box-shadow:0 0 8px var(--gold)}.dot.k{background:var(--green)}.dot.n{background:#f97316}
+.dot.sep{margin-right:5px}
+#timer{flex-direction:row;align-items:center;gap:12px;min-width:150px}
+#timer small{display:block}
+#timer.off{display:none}
+#timer svg{flex:none;width:52px;height:52px}
+#timer .trk{fill:none;stroke:rgba(127,140,180,.3);stroke-width:6}
+#timer .prg{fill:none;stroke:var(--cy);stroke-width:6;stroke-linecap:round;stroke-dasharray:169.6;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke .3s}
+#timer.low .prg{stroke:var(--red)}
+#timer.low b{color:var(--red);animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.4}}
+#timer b{font-family:var(--f-head)}
+
+.qcard{background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:26px;padding:clamp(18px,2.8vw,36px);box-shadow:var(--shadow);position:relative;overflow:hidden;animation:rise .3s ease-out}
+.qcard::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--cy),var(--mg))}
+.qcard.boss::before{background:linear-gradient(90deg,var(--gold),var(--mg))}
+.qcard.reflect::before{background:linear-gradient(90deg,var(--vio),var(--mg))}
+@keyframes rise{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
+.mtag{display:inline-block;font-family:var(--f-head);font-weight:800;letter-spacing:.1em;font-size:clamp(11px,1.2vw,13px);padding:6px 14px;border-radius:999px;background:color-mix(in srgb,var(--ac,var(--cy)) 16%,transparent);color:var(--ac,var(--cy));border:1px solid color-mix(in srgb,var(--ac,var(--cy)) 50%,transparent);text-transform:uppercase}
+.mtag.boss{--ac:var(--gold)}.mtag.purple{--ac:var(--vio)}
+.mtitle{display:flex;align-items:center;gap:14px;margin:12px 0 4px}
+.mtitle .ic{font-size:clamp(38px,4.6vw,58px);line-height:1;filter:drop-shadow(0 6px 14px rgba(34,211,238,.35))}
+.mtitle h2{font-family:var(--f-head);font-size:clamp(20px,3vw,38px);line-height:1.1;letter-spacing:.03em;text-transform:uppercase}
+.q{font-size:clamp(20px,2.5vw,32px);font-weight:700;line-height:1.4;margin:12px 0 18px}
+.story2{font-size:clamp(18px,2.2vw,28px);line-height:1.55;margin:12px 0 14px;color:var(--ink)}
+.pills{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 14px}
+.pill{background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:6px 16px;font-weight:700;font-size:clamp(13px,1.5vw,17px)}
+.pill.g{border-color:var(--green);background:var(--okbg)}.pill.y{border-color:var(--gold);background:var(--hintbg)}
+.reflq{background:linear-gradient(135deg,rgba(167,139,250,.2),rgba(232,121,249,.12));border:1px solid color-mix(in srgb,var(--vio) 55%,transparent);border-radius:20px;padding:16px 20px;font-size:clamp(19px,2.3vw,29px);font-weight:700;line-height:1.45;margin:10px 0}
+.opts{display:grid;gap:12px}
+.opt{display:flex;align-items:center;gap:14px;text-align:left;background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:clamp(12px,1.5vw,18px);font-size:clamp(16px,2vw,25px);font-weight:600;color:var(--ink);transition:transform .12s,background .2s,border-color .2s,box-shadow .2s;line-height:1.35}
+.opt:hover:not(:disabled){transform:translateY(-2px);background:var(--glass2);border-color:var(--cy);box-shadow:0 10px 28px -12px rgba(34,211,238,.6)}
+.opt span{flex:none;width:clamp(36px,3.6vw,46px);height:clamp(36px,3.6vw,46px);border-radius:13px;background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f;display:grid;place-items:center;font-family:var(--f-head);font-weight:900;font-size:clamp(16px,1.9vw,22px)}
+.opt:disabled{cursor:default}
+.opt.ok{background:var(--okbg);border-color:var(--green);box-shadow:0 0 0 1px var(--green) inset}
+.opt.no{background:var(--nobg);border-color:var(--red);box-shadow:0 0 0 1px var(--red) inset}
+.hintbar{margin-top:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.kbd{color:var(--dim);font-size:13px}
+.hint{background:var(--hintbg);border:1px solid color-mix(in srgb,var(--gold) 55%,transparent);border-radius:16px;padding:12px 16px;font-size:clamp(15px,1.8vw,21px);line-height:1.5;width:100%}
+.fb{margin-top:16px;border-radius:18px;padding:14px 18px;font-size:clamp(15px,1.85vw,22px);line-height:1.55;border:1px solid transparent}
+.fb.ok{background:var(--okbg);border-color:color-mix(in srgb,var(--green) 55%,transparent)}
+.fb.no{background:var(--nobg);border-color:color-mix(in srgb,var(--red) 55%,transparent)}
+.fb p{margin:6px 0}
+.fb .hd{font-family:var(--f-head);font-size:clamp(16px,2.1vw,26px);font-weight:800;letter-spacing:.02em}
+.judge{margin-top:14px;background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:14px 18px}
+.judge p{margin:0 0 10px;font-size:clamp(15px,1.8vw,20px);font-weight:700}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.nextrow{display:flex;justify-content:flex-end;margin-top:16px;gap:12px;flex-wrap:wrap}
+
+/* ---------- panel samping (desktop) ---------- */
+.side .box{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.side h3{font-family:var(--f-head);font-size:11px;letter-spacing:.14em;color:var(--cy);text-transform:uppercase;margin:0 0 12px}
+.rooms{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.rooms li{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:14px;border:1px solid transparent;font-size:14px;font-weight:700;color:var(--muted)}
+.rooms li .ri{font-size:20px;width:28px;text-align:center}
+.rooms li .rs{margin-left:auto;font-size:15px}
+.rooms li.cur{border-color:var(--cy);background:var(--glass2);color:var(--ink);box-shadow:0 0 18px -6px var(--cy)}
+.rooms li.done{color:var(--ink)}
+.sidecredit{margin-top:12px;font-size:12px;line-height:1.5;color:var(--muted);text-align:center}
+.sidecredit b{color:var(--ink)}
+@media (min-width:1100px){
+  .stage{grid-template-columns:290px minmax(0,1fr);align-items:start}
+  .stage .hud,.stage .qcard{grid-column:2}
+  .side{display:grid;gap:14px;grid-column:1;grid-row:1/span 3;position:sticky;top:72px}
+}
+
+/* ---------- layar akhir ---------- */
+#end{position:relative;z-index:2;min-height:100vh;display:flex;justify-content:center;padding:clamp(12px,3vw,32px)}
+.end-card{margin:auto;width:min(1120px,100%);display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(16px,3vw,40px);align-items:center;background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:28px;padding:clamp(18px,3vw,38px);box-shadow:var(--shadow)}
+.end-card h1{font-family:var(--f-head);font-weight:900;font-size:clamp(24px,4vw,48px);line-height:1.1;text-transform:uppercase;margin:6px 0}
+.gelar{font-family:var(--f-head);font-size:clamp(18px,2.8vw,32px);font-weight:800;margin:6px 0}
+.gelar span{color:var(--gold)}
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:18px;padding:10px 18px;min-width:130px}
+.stat small{display:block;font-family:var(--f-head);font-size:10px;letter-spacing:.14em;color:var(--muted);font-weight:700}
+.stat b{font-family:var(--f-head);font-size:clamp(24px,3.2vw,40px);color:var(--gold)}
+.stat b i{font-style:normal;font-family:var(--f-body);font-size:.4em;color:var(--muted);margin-left:5px}
+.lesson{background:var(--glass);border:1px solid var(--line);border-radius:16px;padding:12px 16px;font-size:clamp(14px,1.5vw,17px);line-height:1.55;margin-top:10px;color:var(--muted)}
+.lesson b{color:var(--ink)}
+.conf{position:fixed;top:-20px;width:11px;height:17px;z-index:300;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(112vh) rotate(720deg)}}
+
+/* ---------- modal & toast ---------- */
+#modal{position:fixed;inset:0;background:var(--mbg);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:16px;z-index:100}
+#modal.show{display:flex}
+#mcard{width:min(820px,100%);max-height:92vh;overflow:auto;background:var(--mcard);color:var(--ink);border-radius:26px;padding:clamp(18px,3vw,32px);box-shadow:0 30px 90px rgba(0,0,0,.55),0 0 60px -10px var(--cy);border:1px solid color-mix(in srgb,var(--cy) 55%,transparent);animation:rise .28s}
+#mcard h2{font-family:var(--f-head);font-size:clamp(18px,2.4vw,26px);line-height:1.2;margin:10px 0 8px;text-transform:uppercase;letter-spacing:.03em}
+#mcard p,#mcard li{font-size:clamp(15px,1.7vw,18px);line-height:1.6;color:var(--muted)}
+#mcard b{color:var(--ink)}
+.mact{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:18px}
+.ab-chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.ab-chips span{display:inline-flex;flex-direction:column;gap:1px;padding:7px 14px;border:1px solid var(--line);border-radius:14px;background:var(--glass);font-size:14px;font-weight:700;color:var(--ink);line-height:1.3}
+.ab-chips small{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--cy);font-family:var(--f-head);font-weight:700}
+.ab-sec{margin-top:16px}
+.ab-sec h3{margin:0 0 8px;font-family:var(--f-head);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cy)}
+.ab-sec ul,.ab-sec ol{margin:0;padding:0;list-style:none;display:grid;gap:8px;counter-reset:n}
+.ab-sec li{position:relative;padding:9px 12px 9px 44px;background:var(--glass);border:1px solid var(--line);border-radius:12px;color:var(--ink)}
+.ab-sec ul li::before{content:"✔";position:absolute;left:12px;top:9px;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-size:13px;background:var(--okbg);color:var(--green)}
+.ab-sec ol li{counter-increment:n}
+.ab-sec ol li::before{content:counter(n);position:absolute;left:12px;top:9px;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-size:12px;font-family:var(--f-head);font-weight:800;background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f}
+.ab-by{margin-top:18px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,rgba(34,211,238,.1),rgba(232,121,249,.1));text-align:center;font-size:14.5px;color:var(--muted);line-height:1.5}
+.ab-by b{display:block;color:var(--ink);font-size:17px}
+.ab-empty{color:var(--dim);font-style:italic}
+.ed-grid{display:grid;gap:12px;margin-top:8px}
+.ed-grid label{display:grid;gap:5px;font-size:13px;font-weight:700;color:var(--muted)}
+.ed-grid textarea{min-height:84px;resize:vertical}
+.ed-msg{min-height:20px;margin-top:8px;font-size:14px;font-weight:700;color:var(--red)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:400;background:var(--panel);color:var(--ink);border:1px solid var(--cy);border-radius:14px;padding:10px 18px;font-weight:700;font-size:14.5px;box-shadow:0 14px 40px -10px rgba(0,0,0,.5);max-width:calc(100vw - 32px)}
+.toast.err{border-color:var(--red)}
+
+/* ---------- responsif ---------- */
+@media (max-width:860px){
+  .hero,.setup-grid,.end-card{grid-template-columns:1fr}
+  .by{text-align:left}
+  .end-card .door-scene{margin-bottom:4px}
+}
+@media (max-width:640px){
+  .topbar .tb .tx{display:none}
+  .topbar .tb{padding:8px 11px;font-size:16px}
+  .hud{gap:8px}
+  .hbox{padding:8px 12px;border-radius:16px}
+  .hbox.team{flex:1 1 55%}
+  .hbox.score{flex:1 1 auto;min-width:0}
+  .hbox.wide{flex:1 1 100%}
+  .hbox.keysbox{flex:1 1 auto}
+  #timer{flex:1 1 auto;min-width:0;gap:8px}
+  #timer svg{width:40px;height:40px}
+  .kslot{width:28px;height:28px;font-size:15px}
+  .opt{padding:12px}
+  .nextrow .btn,.judge .btn,.hintbar .btn{flex:1 1 100%;text-align:center}
+  .btn{padding:13px 18px}
+  .row-btns .btn{flex:1 1 100%}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="vignette"></div>
+
+<!-- ===================== LAYAR AWAL ===================== -->
+<section id="setup">
+  <div class="setup-card">
+    <div class="setup-top">
+      <div class="navrow">
+        <a class="back" href="gamebk.html">← Menu Game BK</a>
+        <button class="back" id="aboutBtn" type="button">ℹ Tentang game</button>
+        <button class="back" data-gk-theme type="button">☀ Terang</button>
+      </div>
+      <div class="by" id="byline"></div>
+    </div>
+
+    <div class="hero">
+      <div>
+        <span class="chipline"><i></i>Game BK · Rancangan siswa</span>
+        <h1>Escape the <span class="grad">Stress Room</span></h1>
+        <p class="sub">Pintu terkunci dan jam terus berdetak. Lewati lima ruangan, selesaikan tantangan BK, kumpulkan lima kunci, lalu buka pintu keluar. Pilih tindakan yang paling sehat dan bertanggung jawab.</p>
+      </div>
+      <div class="cover"><img src="escape-stress-room-cover.svg" alt="Pintu dengan lima gembok kunci bergaya futuristik"></div>
+    </div>
+
+    <div class="setup-grid">
+      <div>
+        <div class="panel">
+          <h3><b>1</b>Tim</h3>
+          <label class="lbl" for="inTeam">Nama tim</label>
+          <input class="field" id="inTeam" type="text" maxlength="24" placeholder="Contoh: Tim Cahaya" autocomplete="off">
+          <div class="lbl" style="margin-top:14px">Jumlah pemain</div>
+          <div class="stepper"><button class="sbtn" id="plMinus" type="button" aria-label="Kurangi pemain">−</button><div class="val" id="plVal">4<small>orang</small></div><button class="sbtn" id="plPlus" type="button" aria-label="Tambah pemain">+</button></div>
+        </div>
+        <div class="panel">
+          <h3><b>2</b>Mode permainan</h3>
+          <div class="modes" role="radiogroup" aria-label="Mode permainan">
+            <button class="mode on" type="button" data-mode="full" role="radio" aria-checked="true"><em>LENGKAP · ±45–55 MENIT</em><b>5 ruangan, 15 kasus</b><span>Tiap ruangan: 2 kasus, 1 Misi Kunci, dan Ruang Jeda refleksi.</span></button>
+            <button class="mode" type="button" data-mode="short" role="radio" aria-checked="false"><em>SINGKAT · ±15 MENIT</em><b>5 Misi Kunci</b><span>Hanya 5 misi asli rancangan Kelompok 2.</span></button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="panel">
+          <h3><b>3</b>Pengaturan</h3>
+          <div class="lbl">Waktu diskusi per kasus</div>
+          <div class="chips" id="timeChips"><button class="chip on" type="button" data-t="180">3 menit</button><button class="chip" type="button" data-t="0">Tanpa batas</button></div>
+          <div class="opt-row"><label for="inSound">🔊 Efek suara</label><input class="sw" id="inSound" type="checkbox" checked></div>
+        </div>
+        <div class="panel how">
+          <h3>Cara bermain</h3>
+          <ul>
+            <li>Tim 2–5 orang membaca kasus, berdiskusi, lalu memilih solusi terbaik.</li>
+            <li>Jawaban tepat <b>20 poin</b>; Misi Kunci yang tepat juga memberi <b>🔑 1 kunci</b>.</li>
+            <li>Jawaban kurang tepat tetapi beralasan baik (dinilai guru): <b>10 poin</b>.</li>
+            <li>Memakai petunjuk mengurangi <b>5 poin</b>.</li>
+            <li>Kumpulkan <b>5 kunci</b> untuk membuka pintu keluar.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="tribute" id="tribute"><i>🌟</i><p></p></div>
+
+    <div class="row-btns">
+      <button class="btn primary" id="btnStart" type="button">🚪 Mulai permainan</button>
+      <button class="btn ghost" id="btnHelp" type="button">❔ Cara bermain</button>
+    </div>
+    <div class="recap" id="recapStart"></div>
+    <p class="foot" id="foot"></p>
+  </div>
+</section>
+
+<!-- ===================== LAYAR PERMAINAN ===================== -->
+<section id="game" class="hidden">
+  <div class="topbar">
+    <div class="ttl">Escape <span>Stress Room</span></div>
+    <div class="sp"></div>
+    <button class="tb" id="bHelp" type="button" aria-label="Cara bermain">❔<span class="tx"> Cara bermain</span></button>
+    <button class="tb" id="bAbout" type="button" aria-label="Tentang game">ℹ<span class="tx"> Tentang</span></button>
+    <button class="tb" data-gk-theme type="button">☀ Terang</button>
+    <button class="tb" id="bSound" type="button" aria-label="Suara">🔊<span class="tx"> Suara</span></button>
+    <button class="tb" id="bFull" type="button" aria-label="Layar penuh">⛶<span class="tx"> Layar penuh</span></button>
+    <button class="tb" id="bReset" type="button" aria-label="Ulang">⟲<span class="tx"> Ulang</span></button>
+    <a class="tb" href="gamebk.html" aria-label="Menu Game BK">⌂<span class="tx"> Menu BK</span></a>
+  </div>
+  <div class="stage">
+    <div class="hud">
+      <div class="hbox team"><small>TIM</small><b id="hTeam">-</b></div>
+      <div class="hbox wide"><small id="hMissionLbl">KASUS</small><b id="hMission">1 / 15</b><div class="dots" id="hDots"></div></div>
+      <div class="hbox score"><small>SKOR</small><div><b id="hScore">0</b><i id="hMax"></i></div></div>
+      <div class="hbox keysbox"><small>KUNCI</small><div class="keys" id="hKeys"></div></div>
+      <div class="hbox" id="timer"><svg viewBox="0 0 64 64" aria-hidden="true"><circle class="trk" cx="32" cy="32" r="27"/><circle class="prg" id="ringP" cx="32" cy="32" r="27" transform="rotate(-90 32 32)"/></svg><div><small id="tLbl">WAKTU</small><b id="tnum">3:00</b></div></div>
+    </div>
+    <div id="card" role="region" aria-live="polite"></div>
+    <aside class="side" aria-label="Peta ruangan">
+      <div class="box"><h3>Pintu keluar</h3><div id="sideDoor" style="--dw:clamp(150px,18vh,200px)"></div></div>
+      <div class="box"><h3>Peta ruangan</h3><ul class="rooms" id="roomList"></ul><p class="sidecredit" id="sideCredit"></p></div>
+    </aside>
+  </div>
+</section>
+
+<!-- ===================== LAYAR AKHIR ===================== -->
+<section id="end" class="hidden">
+  <div class="end-card">
+    <div id="endDoor"></div>
+    <div id="endInfo"></div>
+  </div>
+</section>
+
+<div id="modal" role="dialog" aria-modal="true"><div id="mcard"><div id="mbody"></div></div></div>
+
+<script src="config.js"></script>
+<script src="gamekit.js"></script>
+<script>
+"use strict";
+/* =========================================================
+   ESCAPE THE STRESS ROOM — Game BK
+   Rancangan permainan: Kelompok 2 (siswa).
+   Versi digital: Agung Fahri Husaeni, S.Pd., Guru BK SMP Negeri 36 Semarang.
+   Lima misi asli Kelompok 2 menjadi "Misi Kunci" di tiap ruangan.
+   Tema terang/gelap dan info "Tentang game" memakai gamekit.js (sama dengan game lain).
+   ========================================================= */
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const SAVE_KEY="escape_stress_room_bk_v2";
+const ABOUT_ID="escape-stress-room";
+const GK=window.GameKit||{theme:{toggle(){}},info:{cached:(i,d)=>d,load:async(i,d)=>({info:d}),save:async()=>{throw new Error("gamekit.js belum termuat")}},auth:{token:()=>null,ensure:async()=>null,drop(){}}};
+
+/* ---------------- DATA ----------------
+   boss = misi asli dari rancangan Kelompok 2 (soal, pilihan, dan pembahasan sesuai PDF).
+   warm = kasus pemanasan tambahan untuk versi Lengkap.                                   */
+const ROOMS=[
+ {name:"Bom Waktu Stres",icon:"⏳",
+  intro:"Jam dinding berdetak makin keras. Tumpukan tugas menjulang di atas meja. Ruang Stres mulai menekan kalian!",
+  reflect:"Apa tanda dari tubuh dan pikiranmu saat mulai stres? Sebutkan satu cara sehat yang akan kamu coba minggu ini.",
+  warm:[
+   {q:"Kamu deg-degan dan sulit tidur menjelang ujian besok. Apa yang paling membantu?",
+    o:[{t:"Mengatur napas dalam-dalam, tidur cukup, dan mengulang materi secukupnya.",ok:true},
+       {t:"Begadang semalaman sampai pagi agar semua materi terbaca.",ok:false,why:"Kurang tidur membuat sulit berkonsentrasi dan stres makin terasa."},
+       {t:"Menyalahkan diri sendiri dan berpikir pasti akan gagal.",ok:false,why:"Pikiran negatif membuat rasa cemas bertambah, bukan berkurang."}],
+    e:"Napas dalam, tidur cukup, dan belajar terencana membantu tubuh serta pikiran lebih tenang.",
+    hint:"Tubuh yang lelah dan pikiran yang tegang sama-sama perlu ditenangkan. Cara mana yang menenangkan keduanya?"},
+   {q:"Nilai ulanganmu turun dan kamu merasa sangat kecewa. Sikap yang paling tepat adalah…",
+    o:[{t:"Menganggap diri bodoh lalu berhenti berusaha.",ok:false,why:"Satu nilai bukan penentu kemampuanmu. Berhenti berusaha membuat hasil makin buruk."},
+       {t:"Mengevaluasi bagian yang salah, lalu bertanya pada guru atau teman untuk memperbaikinya.",ok:true},
+       {t:"Menyembunyikan hasil dan menyalahkan guru.",ok:false,why:"Menyalahkan orang lain tidak membantumu memperbaiki diri."}],
+    e:"Kegagalan adalah bahan belajar. Evaluasi dan minta bantuan agar hasilmu berikutnya lebih baik.",
+    hint:"Orang yang berkembang melihat nilai yang turun sebagai informasi. Informasi itu dipakai untuk apa?"}
+  ]},
+ {name:"Chat Misterius",icon:"💬",
+  intro:"Ponsel-ponsel di dinding berbunyi bersamaan. Pesan-pesan yang salah paham beterbangan ke segala arah!",
+  reflect:"Ceritakan satu salah paham yang pernah terjadi lewat chat. Apa yang akan kamu lakukan jika itu terulang?",
+  warm:[
+   {q:"Temanmu mengunggah foto kelompok di media sosial tanpa izin dan kamu merasa tidak nyaman. Apa yang sebaiknya kamu lakukan?",
+    o:[{t:"Mengunggah foto memalukan temanmu sebagai balasan.",ok:false,why:"Membalas dengan cara yang menyakiti hanya memperbesar masalah."},
+       {t:"Menyampaikan dengan sopan bahwa kamu keberatan dan meminta fotonya diturunkan.",ok:true},
+       {t:"Memendam kesal lalu menjauhinya tanpa penjelasan.",ok:false,why:"Temanmu tidak tahu apa salahnya dan perasaanmu tetap tidak terselesaikan."}],
+    e:"Menyampaikan perasaan dengan sopan dan jelas adalah komunikasi asertif yang menjaga pertemanan.",
+    hint:"Kamu berhak merasa keberatan. Cara apa yang jujur tentang perasaanmu tetapi tetap menghargai temanmu?"},
+   {q:"Kamu dan sahabatmu bertengkar karena hal kecil dan kalian berdua sedang emosi. Langkah awal yang baik adalah…",
+    o:[{t:"Terus berdebat sampai ada yang mengaku salah.",ok:false,why:"Berdebat saat emosi biasanya membuat kata-kata yang menyakiti terucap."},
+       {t:"Menceritakan ke banyak teman agar mendapat dukungan.",ok:false,why:"Menyebarkan cerita bisa memperluas konflik dan merusak kepercayaan."},
+       {t:"Menenangkan diri dahulu, lalu berbicara baik-baik saat emosi mereda.",ok:true}],
+    e:"Mengendalikan emosi lebih dulu membuat percakapan lebih jernih dan masalah lebih mudah selesai.",
+    hint:"Saat emosi memuncak, otak sulit berpikir jernih. Apa yang sebaiknya dilakukan sebelum mulai bicara?"}
+  ]},
+ {name:"Tim Terpecah",icon:"🧩",
+  intro:"Meja kerja besar dipenuhi potongan puzzle yang berserakan. Semua orang bicara, tidak ada yang mau saling mendengar.",
+  reflect:"Peran apa yang biasanya kamu ambil dalam kelompok? Apa satu hal yang bisa kamu lakukan agar kerja sama makin baik?",
+  warm:[
+   {q:"Dalam kerja kelompok, ada satu teman yang pendiam dan jarang menyumbang ide. Apa yang sebaiknya dilakukan?",
+    o:[{t:"Mengabaikannya karena dianggap tidak mau membantu.",ok:false,why:"Bisa jadi dia ragu atau belum diberi kesempatan, bukan tidak mau."},
+       {t:"Mengerjakan semuanya sendiri tanpa memberi tahu siapa pun.",ok:false,why:"Beban jadi tidak adil dan temanmu tidak belajar apa pun."},
+       {t:"Mengajaknya bicara dan memberi kesempatan menyampaikan pendapat.",ok:true}],
+    e:"Memberi ruang dan mengajak anggota yang pendiam membuat semua merasa dihargai dan ikut berkontribusi.",
+    hint:"Teman yang pendiam sering menunggu diajak. Apa yang bisa kamu lakukan agar dia merasa aman untuk bicara?"},
+   {q:"Ketua kelompok mengambil semua keputusan tanpa bertanya. Anggota lain mulai kesal. Cara terbaik adalah…",
+    o:[{t:"Mogok dan tidak mengerjakan bagian sendiri.",ok:false,why:"Mogok merugikan seluruh kelompok, termasuk dirimu."},
+       {t:"Membicarakan ketua di belakangnya.",ok:false,why:"Membicarakan di belakang menambah ketegangan dan tidak menyelesaikan masalah."},
+       {t:"Menyampaikan keberatan dengan sopan dan mengusulkan musyawarah bersama.",ok:true}],
+    e:"Musyawarah dan komunikasi yang sopan membuat keputusan kelompok lebih adil.",
+    hint:"Kalau ada yang kurang pas dalam kelompok, sampaikan langsung dan baik-baik. Apa bentuk keputusan yang melibatkan semua?"}
+  ]},
+ {name:"Tekanan Teman",icon:"🫂",
+  intro:"Lorong gelap dengan bisikan ajakan dari balik pintu-pintu. Hanya yang teguh pada pendirian yang bisa lewat.",
+  reflect:"Kalimat apa yang bisa kamu pakai untuk menolak ajakan yang tidak tepat dengan sopan? Coba ucapkan bersama-sama.",
+  warm:[
+   {q:"Teman-teman mengajakmu bolos pelajaran terakhir untuk nongkrong. Kamu tahu itu melanggar aturan. Apa tindakanmu?",
+    o:[{t:"Ikut karena ingin dianggap setia kawan.",ok:false,why:"Setia kawan tidak berarti ikut melanggar aturan yang bisa merugikan dirimu."},
+       {t:"Menyindir dan mengejek mereka di depan banyak orang.",ok:false,why:"Mengejek merusak pertemanan dan tidak diperlukan untuk menolak."},
+       {t:"Menolak dengan sopan dan menawarkan kegiatan lain yang aman sepulang sekolah.",ok:true}],
+    e:"Menolak dengan sopan sambil menawarkan alternatif membuatmu tetap berteman dan tetap aman.",
+    hint:"Kamu bisa menolak tanpa kehilangan teman. Apa yang bisa kamu tawarkan sebagai pengganti ajakan mereka?"},
+   {q:"Kamu diejek \"cupu\" karena tidak mau mencoba hal berbahaya yang diajak teman. Kamu merasa tidak enak. Apa yang tepat?",
+    o:[{t:"Mencoba saja supaya tidak diejek lagi.",ok:false,why:"Mengikuti tekanan demi diterima bisa berakibat buruk bagi kesehatan dan masa depanmu."},
+       {t:"Tetap pada pendirian, tidak terpancing, dan mencari teman yang saling mendukung.",ok:true},
+       {t:"Membalas dengan mengejek mereka lebih keras.",ok:false,why:"Membalas ejekan hanya memicu pertengkaran baru."}],
+    e:"Berani berbeda itu kuat. Teman yang baik tidak memaksamu melakukan hal yang membahayakan.",
+    hint:"Ejekan tidak menentukan harga dirimu. Pilihan mana yang menjaga keselamatanmu dan harga dirimu sekaligus?"}
+  ]},
+ {name:"Kunci Terakhir",icon:"🗝️",
+  intro:"Satu pintu terakhir. Di pojok ruangan ada kursi kosong yang menunggu seseorang yang peduli.",
+  reflect:"Siapa orang dewasa tepercaya yang bisa kamu hubungi jika kamu atau temanmu butuh bantuan? Bagaimana caramu menghubunginya?",
+  warm:[
+   {q:"Temanmu bercerita sedang sedih karena orang tuanya sibuk dan jarang di rumah. Apa yang kamu lakukan?",
+    o:[{t:"Menyuruhnya berhenti mengeluh karena masih banyak yang lebih susah.",ok:false,why:"Meremehkan perasaan membuat teman merasa tidak dimengerti."},
+       {t:"Menceritakan masalahnya ke teman lain sebagai bahan obrolan.",ok:false,why:"Membocorkan cerita pribadi melanggar kepercayaan."},
+       {t:"Mendengarkan dengan penuh perhatian tanpa menghakimi dan menyemangatinya.",ok:true}],
+    e:"Mendengarkan tanpa menghakimi adalah bentuk empati yang membuat teman merasa tidak sendirian.",
+    hint:"Kadang teman tidak butuh nasihat panjang. Sikap apa yang paling dibutuhkan orang yang sedang sedih?"},
+   {q:"Kamu melihat unggahan temanmu berisi kalimat putus asa dan merasa dia sedang tidak baik-baik saja. Apa langkah yang tepat?",
+    o:[{t:"Mengabaikannya karena mungkin hanya mencari perhatian.",ok:false,why:"Tanda-tanda seperti ini perlu ditanggapi serius, jangan diabaikan."},
+       {t:"Mengambil tangkapan layar dan membagikannya ke grup sebagai bahan candaan.",ok:false,why:"Menjadikan masalah teman sebagai candaan menyakiti dan bisa memperburuk keadaannya."},
+       {t:"Menghubunginya dengan peduli dan segera memberi tahu guru BK atau orang dewasa tepercaya.",ok:true}],
+    e:"Tanggapi dengan serius. Tunjukkan kepedulian dan libatkan orang dewasa tepercaya seperti guru BK, karena kamu tidak harus menolong sendirian.",
+    hint:"Menolong teman tidak harus sendirian. Siapa yang punya kemampuan untuk membantu dengan tepat?"}
+  ]}
+];
+/* Misi Kunci asli Kelompok 2 */
+const BOSS=[
+ {title:"BOM WAKTU STRES",q:"Besok ada ujian dan tiga tugas belum selesai. Apa yang sebaiknya kamu lakukan?",
+  o:[{t:"Panik dan tidak mengerjakan apa pun.",ok:false,why:"Panik tidak menyelesaikan tugas dan membuat stres makin besar."},
+     {t:"Membuat daftar prioritas dan mengerjakan tugas satu per satu.",ok:true},
+     {t:"Menyalin semua tugas teman.",ok:false,why:"Menyalin itu tidak jujur dan tidak membuatmu paham materi untuk ujian."}],
+  e:"Membagi tugas dan menentukan prioritas membantu mengatur waktu serta mengurangi stres.",
+  hint:"Stres mereda kalau kamu tahu apa yang dikerjakan lebih dulu. Cara apa yang membuat tiga tugas terasa lebih kecil dan teratur?"},
+ {title:"CHAT MISTERIUS",q:"Teman salah memahami pesanmu di grup kelas dan mengira kamu sedang marah. Apa tindakanmu?",
+  o:[{t:"Membalas dengan kata-kata kasar.",ok:false,why:"Kata kasar membuat salah paham berubah menjadi pertengkaran."},
+     {t:"Menjelaskan maksud pesan dengan tenang.",ok:true},
+     {t:"Mengajak teman lain memusuhinya.",ok:false,why:"Mengajak orang lain memusuhi hanya memperluas masalah dan melukai perasaan."}],
+  e:"Komunikasi yang tenang membantu mencegah kesalahpahaman menjadi konflik.",
+  hint:"Pesan tertulis tidak punya nada suara, jadi mudah disalahartikan. Apa yang paling efektif untuk meluruskannya?"},
+ {title:"TIM TERPECAH",q:"Anggota kelompok saling menyalahkan karena tugas belum selesai. Apa solusi terbaik?",
+  o:[{t:"Mendengarkan pendapat semua anggota dan membagi tugas dengan adil.",ok:true},
+     {t:"Menyalahkan satu orang saja.",ok:false,why:"Menyalahkan satu orang tidak adil dan tidak menyelesaikan tugas."},
+     {t:"Meninggalkan kelompok.",ok:false,why:"Pergi membuat tugas makin tertunda dan teman lain makin terbebani."}],
+  e:"Mendengarkan dan membagi tugas secara adil memperbaiki kerja sama.",
+  hint:"Tugas kelompok selesai kalau semua anggota merasa didengar dan mendapat bagian yang jelas."},
+ {title:"TEKANAN TEMAN",q:"Teman mengajakmu melakukan sesuatu yang melanggar aturan sekolah. Apa yang kamu lakukan?",
+  o:[{t:"Ikut agar tidak dijauhi.",ok:false,why:"Ikut-ikutan demi diterima bisa membuatmu terkena masalah dan menyesal."},
+     {t:"Menolak dengan sopan dan memilih tindakan yang aman.",ok:true},
+     {t:"Memarahi semua teman.",ok:false,why:"Marah-marah bisa merusak pertemanan, padahal kamu bisa menolak tanpa bermusuhan."}],
+  e:"Kamu bisa tetap berteman sambil berani menolak ajakan yang tidak tepat.",
+  hint:"Berani berkata \"tidak\" tidak harus dengan marah. Bagaimana cara menolak yang tegas tapi tetap menghargai teman?"},
+ {title:"KUNCI TERAKHIR",q:"Kamu melihat seorang teman dikucilkan. Apa yang dapat kamu lakukan?",
+  o:[{t:"Ikut menjauhinya.",ok:false,why:"Ikut menjauhi berarti ikut menyakiti perasaannya."},
+     {t:"Mengabaikannya.",ok:false,why:"Mengabaikan membuat teman itu merasa sendirian dan tidak dibela."},
+     {t:"Menyapa, mengajaknya bergabung, dan meminta bantuan guru jika pengucilan berlanjut.",ok:true}],
+  e:"Tindakan yang ramah menunjukkan empati. Jika masalah terus terjadi, mintalah bantuan orang dewasa tepercaya.",
+  hint:"Pikirkan langkah yang menunjukkan empati lebih dulu, lalu siapa yang bisa dimintai tolong jika keadaannya tidak membaik."}
+];
+ROOMS.forEach((r,i)=>r.boss=BOSS[i]);
+
+const TITLES=[
+ {min:80,name:"Escape Master BK",icon:"👑"},
+ {min:50,name:"Pejuang Tangguh",icon:"🛡️"},
+ {min:0,name:"Calon Master BK",icon:"🌱"}
+];
+const titleFor=pct=>TITLES.find(t=>pct>=t.min);   // ambang 80 / 50 dari rancangan, dihitung dalam persen
+const PTS_OK=20,PTS_REASON=10,HINT_COST=5,REFLECT_SEC=120,RING=169.6;
+
+/* ---------------- INFO "TENTANG GAME" (dikunci password lewat gamekit.js) ---------------- */
+const DEFAULT_ABOUT={
+  deskripsi:"Escape the Stress Room adalah permainan edukasi BK bergaya escape room. Tim terjebak di Ruang Stres dan harus menyelesaikan tantangan tentang mengelola stres, menyelesaikan konflik, bekerja sama, menolak tekanan teman, dan berempati untuk mengumpulkan lima kunci. Rancangan permainan dibuat oleh siswa Kelompok 2, lalu dikembangkan menjadi versi digital sebagai bentuk apresiasi.",
+  perancang:"Kelompok 2: Raihan, Althaf, Desta, Embun, Aldo, Fateh, Khana, dan Zeta",
+  jabatan:"Rancangan siswa · versi digital oleh Agung Fahri Husaeni, S.Pd., Guru BK SMP Negeri 36 Semarang",
+  sasaran:"Peserta didik semua jenjang (kasus bawaan bernuansa SMP)",
+  durasi:"Lengkap 45–55 menit · Singkat ±15 menit",
+  media:"Laptop dengan proyektor/IFP, dimainkan berkelompok 2–5 orang",
+  bidang:"Bimbingan pribadi dan sosial",
+  capaian:[
+    "Peserta didik mampu mengelola stres dan emosi dengan cara yang sehat.",
+    "Peserta didik mampu berkomunikasi dan menyelesaikan konflik pertemanan dengan baik.",
+    "Peserta didik mampu bekerja sama dan menghargai pendapat orang lain dalam kelompok.",
+    "Peserta didik berani menolak tekanan teman sebaya yang tidak sesuai aturan dan nilai baik.",
+    "Peserta didik menunjukkan empati dan tahu kepada siapa harus meminta bantuan."
+  ],
+  tujuan:[
+    "Menyusun prioritas dan langkah sehat saat menghadapi tugas dan ujian.",
+    "Meluruskan kesalahpahaman dengan komunikasi asertif yang tenang.",
+    "Membagi tugas secara adil dan mendengarkan semua anggota kelompok.",
+    "Menolak ajakan yang tidak tepat dengan sopan dan memilih tindakan yang aman.",
+    "Menyapa, mendampingi, dan melibatkan orang dewasa tepercaya saat ada teman yang dikucilkan atau membutuhkan bantuan."
+  ],
+  catatan:"Rancangan asli permainan (5 misi, aturan skor, dan gelar) dibuat oleh Kelompok 2. Kasus pemanasan dan Ruang Jeda ditambahkan pada versi digital agar permainan berlangsung 45–55 menit. Isi capaian dan tujuan di atas adalah rancangan awal: silakan sesuaikan dengan program layanan BK."
+};
+const str=(v,max)=>String(v==null?"":v).trim().slice(0,max);
+function cleanAbout(A){
+  A=A&&typeof A==="object"?A:{};const D=DEFAULT_ABOUT;
+  const lst=(v,fb)=>(Array.isArray(v)?v:fb).map(x=>str(x,300)).filter(Boolean).slice(0,15);
+  return {deskripsi:str(A.deskripsi,700),perancang:str(A.perancang,160),jabatan:str(A.jabatan,200),sasaran:str(A.sasaran,160),
+    durasi:str(A.durasi,80),media:str(A.media,160),bidang:str(A.bidang,80),capaian:lst(A.capaian,D.capaian),tujuan:lst(A.tujuan,D.tujuan),catatan:str(A.catatan,700)};
+}
+let INFO=cleanAbout(GK.info.cached(ABOUT_ID,DEFAULT_ABOUT));
+function refreshInfo(){return GK.info.load(ABOUT_ID,DEFAULT_ABOUT).then(r=>{INFO=cleanAbout(r.info);applyCredit();return r}).catch(()=>null)}
+function applyCredit(){
+  const A=INFO;
+  $("#byline").innerHTML=A.perancang?`Dirancang oleh <b>${esc(A.perancang)}</b>${A.jabatan?`<span>${esc(A.jabatan)}</span>`:""}`:"";
+  $("#tribute p").innerHTML=A.perancang?`<b>Apresiasi untuk karya siswa.</b> Permainan ini dirancang oleh <b>${esc(A.perancang)}</b>. Terima kasih sudah membuat game yang bermanfaat untuk teman-teman!`:"";
+  $("#foot").innerHTML=A.jabatan?esc(A.jabatan):"";
+  const sc=$("#sideCredit");if(sc)sc.innerHTML=A.perancang?`Dirancang oleh <b>${esc(A.perancang)}</b>`:"";
+}
+function aboutHtml(){
+  const A=INFO;
+  const chips=[["Bidang layanan",A.bidang],["Sasaran",A.sasaran],["Durasi",A.durasi],["Media",A.media]].filter(x=>x[1]).map(x=>`<span><small>${x[0]}</small>${esc(x[1])}</span>`).join("");
+  const list=(arr,tag)=>arr.length?`<${tag}>${arr.map(x=>`<li>${esc(x)}</li>`).join("")}</${tag}>`:`<p class="ab-empty">Belum diisi.</p>`;
+  return `<span class="mtag">ℹ Tentang game</span>
+    <h2>Escape the Stress Room</h2>
+    ${chips?`<div class="ab-chips">${chips}</div>`:""}
+    ${A.deskripsi?`<div class="ab-sec"><h3>Deskripsi</h3><p>${esc(A.deskripsi)}</p></div>`:""}
+    <div class="ab-sec"><h3>Capaian layanan BK</h3>${list(A.capaian,"ul")}</div>
+    <div class="ab-sec"><h3>Tujuan khusus</h3>${list(A.tujuan,"ol")}</div>
+    ${A.catatan?`<div class="ab-sec"><h3>Catatan</h3><p>${esc(A.catatan)}</p></div>`:""}
+    ${A.perancang?`<div class="ab-by">Dirancang oleh<b>${esc(A.perancang)}</b>${esc(A.jabatan)}</div>`:""}
+    <div class="mact"><button class="btn ghost" data-v="edit" type="button">✎ Edit info</button><button class="btn primary" data-v="ok" type="button">Tutup</button></div>`;
+}
+async function showAbout(){
+  if($("#modal").classList.contains("show"))return;
+  refreshInfo();
+  const v=await modal(aboutHtml());
+  if(v==="edit")openAboutEditor();
+}
+async function openAboutEditor(){
+  const tok=await GK.auth.ensure({title:"🔒 Info game dikunci",text:"Kredit perancang, capaian, dan tujuan hanya bisa diubah dengan password admin Speganam."});
+  if(!tok){showAbout();return}
+  const A=INFO;
+  const inp=(f,l,max)=>`<label>${l}<input class="field" data-f="${f}" value="${esc(A[f])}" maxlength="${max}"></label>`;
+  const ta=(f,l,max,rows)=>`<label>${l}<textarea class="field" data-f="${f}" maxlength="${max}" style="min-height:${rows}px">${esc(A[f])}</textarea></label>`;
+  const tl=(f,l)=>`<label>${l} (satu butir per baris)<textarea class="field" data-l="${f}" style="min-height:130px">${esc(A[f].join("\n"))}</textarea></label>`;
+  openModal(`<span class="mtag">✎ Edit info game</span><h2>Tentang game</h2>
+    <p>Nama perancang dan keterangannya juga tampil sebagai kredit di seluruh halaman game. Perubahan tersimpan di server dan berlaku di semua perangkat.</p>
+    <div class="ed-grid">
+      ${inp("perancang","Nama perancang",160)}${inp("jabatan","Keterangan / jabatan dan sekolah",200)}
+      ${inp("bidang","Bidang layanan BK",80)}${inp("sasaran","Sasaran peserta",160)}${inp("durasi","Durasi",80)}${inp("media","Media / alat",160)}
+      ${ta("deskripsi","Deskripsi",700,90)}${tl("capaian","Capaian layanan BK")}${tl("tujuan","Tujuan khusus")}${ta("catatan","Catatan (opsional)",700,70)}
+    </div>
+    <div class="ed-msg" id="edMsg" role="alert"></div>
+    <div class="mact"><button class="btn ghost" data-act="edCancel" type="button">Batal</button><button class="btn primary" data-act="edSave" id="edSave" type="button">💾 Simpan</button></div>`);
+}
+async function saveAbout(){
+  const root=$("#mbody"),next=Object.assign({},INFO);
+  root.querySelectorAll("[data-f]").forEach(e=>next[e.dataset.f]=e.value);
+  root.querySelectorAll("[data-l]").forEach(e=>next[e.dataset.l]=e.value.split("\n"));
+  const clean=cleanAbout(next),msg=$("#edMsg"),btn=$("#edSave");
+  if(!clean.perancang){msg.textContent="Nama perancang tidak boleh kosong.";return}
+  btn.disabled=true;msg.textContent="";
+  try{INFO=cleanAbout(await GK.info.save(ABOUT_ID,clean));applyCredit();closeModal();toast("Info game tersimpan")}
+  catch(e){
+    btn.disabled=false;
+    if(e&&e.code==="CANCEL")msg.textContent="Penyimpanan dibatalkan (password tidak diisi).";
+    else msg.textContent="Gagal menyimpan: "+(e&&e.message||"galat");
+  }
+}
+
+/* ---------------- MODAL & TOAST ---------------- */
+let modalRes=null;
+function openModal(html){$("#mbody").innerHTML=html;$("#modal").classList.add("show");$("#mcard").scrollTop=0}
+function closeModal(v){
+  $("#modal").classList.remove("show");
+  const r=modalRes;modalRes=null;if(r)r(v);
+}
+function modal(html){return new Promise(res=>{modalRes=res;openModal(html)})}
+$("#mbody").addEventListener("click",e=>{
+  const v=e.target.closest("[data-v]");if(v){closeModal(v.dataset.v);return}
+  const a=e.target.closest("[data-act]");if(!a)return;
+  if(a.dataset.act==="edCancel"){closeModal();showAbout()}
+  else if(a.dataset.act==="edSave")saveAbout();
+});
+$("#modal").addEventListener("mousedown",e=>{if(e.target.id==="modal")closeModal(null)});
+let toastT=null;
+function toast(t,err){
+  let el=$(".toast");if(el)el.remove();
+  el=document.createElement("div");el.className="toast"+(err?" err":"");el.setAttribute("role","status");el.textContent=t;
+  document.body.appendChild(el);clearTimeout(toastT);toastT=setTimeout(()=>el.remove(),3200);
+}
+
+/* ---------------- STATE & AUDIO ---------------- */
+let CFG={players:4,mode:"full",time:180,sound:true};
+let S=null,timerId=null;
+let recap=[];
+try{recap=JSON.parse(localStorage.getItem(SAVE_KEY)||"[]");if(!Array.isArray(recap))recap=[]}catch(e){recap=[]}
+function saveRecap(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(recap.slice(-30)))}catch(e){}}
+let ac=null;
+function tone(f,d=.12,type="sine",v=.12,when=0){
+  if(!CFG.sound)return;
+  try{
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+when;
+    o.type=type;o.frequency.value=f;
+    g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);
+    o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+d+.02);
+  }catch(e){}
+}
+const sfx={
+  click:()=>tone(520,.06,"triangle",.09),
+  ok:()=>[659,880,1175].forEach((f,i)=>tone(f,.16,"triangle",.14,i*.1)),
+  bad:()=>[220,170].forEach((f,i)=>tone(f,.24,"square",.08,i*.14)),
+  key:()=>[988,1319].forEach((f,i)=>tone(f,.2,"sine",.14,i*.09)),
+  tick:()=>tone(880,.05,"square",.05),
+  room:()=>[330,440,554].forEach((f,i)=>tone(f,.2,"triangle",.1,i*.12)),
+  open:()=>[392,523,659,784,1046,1319].forEach((f,i)=>tone(f,.22,"triangle",.14,i*.13))
+};
+
+/* ---------------- TAMPILAN UMUM ---------------- */
+function setStress(v){document.documentElement.style.setProperty("--stress",String(Math.max(0,Math.min(1,v))))}
+function show(id){
+  ["setup","game","end"].forEach(x=>$("#"+x).classList.toggle("hidden",x!==id));
+  if(id!=="game"){clearTimer();setStress(0)}
+  window.scrollTo(0,0);
+}
+function doorHTML(keys,open){
+  const locks=keys.map(k=>`<div class="lock${k?" on":""}">${k?"🔑":"🔒"}</div>`).join("");
+  return `<div class="door-scene${open?" open":""}"><div class="door-frame">
+    <div class="exit-light"><span>KELUAR</span></div>
+    <div class="door"><div class="door-top">PINTU KELUAR</div><div class="locks">${locks}</div><div class="knob"></div></div>
+  </div></div>`;
+}
+function recapHTML(){
+  if(!recap.length)return "";
+  const rows=recap.slice().sort((a,b)=>(b.score/b.max)-(a.score/a.max)||b.score-a.score).map((r,i)=>
+    `<tr><td>${i+1}</td><td>${esc(r.team)}</td><td>${r.players} org</td><td>${r.full?"Lengkap":"Singkat"}</td><td>🔑 ${r.keys}/5</td><td><b>${r.score}</b>/${r.max}</td><td>${r.icon} ${esc(r.title)}</td></tr>`).join("");
+  return `<h3>🏅 Papan skor kelas</h3><table><thead><tr><th>#</th><th>TIM</th><th>PEMAIN</th><th>MODE</th><th>KUNCI</th><th>SKOR</th><th>GELAR</th></tr></thead><tbody>${rows}</tbody></table>
+    <button class="btn ghost sm" data-clear type="button" style="margin-top:10px">Hapus papan skor</button>`;
+}
+function renderSetup(){
+  $("#recapStart").innerHTML=recapHTML();
+  $("#plVal").innerHTML=`${CFG.players}<small>orang</small>`;
+  document.querySelectorAll(".mode").forEach(b=>{const on=b.dataset.mode===CFG.mode;b.classList.toggle("on",on);b.setAttribute("aria-checked",on)});
+  document.querySelectorAll("#timeChips .chip").forEach(b=>b.classList.toggle("on",+b.dataset.t===CFG.time));
+  $("#inSound").checked=CFG.sound;syncSound();
+}
+function syncSound(){const b=$("#bSound");b.innerHTML=(CFG.sound?"🔊":"🔇")+`<span class="tx"> ${CFG.sound?"Suara":"Senyap"}</span>`}
+
+/* ---------------- MEMBANGUN ALUR ---------------- */
+function buildSteps(full){
+  const steps=[];let id=0;
+  ROOMS.forEach((R,ri)=>{
+    if(full){
+      steps.push({type:"intro",room:ri});
+      R.warm.forEach((c,wi)=>steps.push({type:"case",room:ri,c,kind:"warm",n:wi+1,id:id++}));
+    }
+    steps.push({type:"case",room:ri,c:R.boss,kind:"boss",n:full?3:1,id:id++});
+    if(full)steps.push({type:"reflect",room:ri});
+  });
+  return {steps,count:id};
+}
+function newGame(){
+  const team=($("#inTeam").value||"").trim()||("Tim "+(recap.length+1));
+  const full=CFG.mode==="full";
+  const B=buildSteps(full);
+  S={
+    team,players:CFG.players,limit:CFG.time,full,
+    steps:B.steps,count:B.count,max:B.count*PTS_OK,step:0,cur:null,done:0,
+    keys:[0,0,0,0,0],pts:Array(B.count).fill(0),hints:Array(B.count).fill(0),res:[],orders:[],bossOf:[],roomEnd:[],
+    mode:"main",queue:[],phase:"",picked:null,correct:false,timeout:false,decided:null,
+    hintShown:false,left:0,tmax:0,rec:null,celebrated:false
+  };
+  B.steps.forEach((s,i)=>{S.roomEnd[s.room]=i;if(s.type==="case"&&s.kind==="boss")S.bossOf[s.room]=s});
+  sfx.click();
+  show("game");
+  loadStep();
+}
+const total=()=>S.pts.reduce((a,b)=>a+b,0);
+const keyCount=()=>S.keys.reduce((a,b)=>a+b,0);
+function loadStep(){
+  const st=S.mode==="retry"?S.bossOf[S.queue[0]]:S.steps[S.step];
+  S.cur=st;
+  if(st.type==="intro")return showIntro(st);
+  if(st.type==="reflect")return showReflect(st);
+  loadCase();
+}
+
+/* ---------------- HUD & PANEL SAMPING ---------------- */
+function renderHud(popScore){
+  const st=S.cur,ri=st?st.room:0;
+  $("#hTeam").textContent=S.team;
+  if(S.mode==="retry"){
+    $("#hMissionLbl").textContent="CARI KUNCI";
+    $("#hMission").textContent="Ruang "+(ri+1)+" · "+ROOMS[ri].name;
+  }else{
+    $("#hMissionLbl").textContent=(S.full?"KASUS":"MISI")+" · RUANG "+(ri+1)+" / 5";
+    const n=Math.min(S.done+(st&&st.type==="case"?1:0),S.count);
+    $("#hMission").textContent=n+" / "+S.count;
+  }
+  let dots="";
+  for(let id=0;id<S.count;id++){
+    let c="dot";
+    if(S.mode==="main"&&st&&st.type==="case"&&st.id===id)c+=" cur";
+    else if(S.res[id]==="ok")c+=" k";else if(S.res[id]==="bad")c+=" n";
+    if(S.full&&id%3===2&&id<S.count-1)c+=" sep";
+    dots+=`<div class="${c}"></div>`;
+  }
+  $("#hDots").innerHTML=dots;
+  const sc=$("#hScore");sc.textContent=total();
+  $("#hMax").textContent="/ "+S.max;
+  if(popScore){sc.classList.remove("pop");void sc.offsetWidth;sc.classList.add("pop")}
+  $("#hKeys").innerHTML=S.keys.map(k=>`<div class="kslot${k?" on":""}">🔑</div>`).join("");
+  renderSide();
+}
+function renderSide(){
+  $("#sideDoor").innerHTML=doorHTML(S.keys,false);
+  const ri=S.cur?S.cur.room:0;
+  $("#roomList").innerHTML=ROOMS.map((R,i)=>{
+    const done=S.mode==="retry"||S.step>S.roomEnd[i];
+    const cur=S.mode==="main"&&i===ri&&!done;
+    const status=S.keys[i]?"🔑":(done?"✖":(cur?"▶":"🔒"));
+    return `<li class="${cur?"cur":""}${done?" done":""}"><span class="ri">${R.icon}</span>${esc(R.name)}<span class="rs">${status}</span></li>`;
+  }).join("");
+}
+
+/* ---------------- TIMER ---------------- */
+function clearTimer(){if(timerId){clearInterval(timerId);timerId=null}}
+function startTimer(){
+  clearTimer();updateTimer();
+  if(!S.tmax)return;
+  timerId=setInterval(()=>{
+    S.left--;updateTimer();
+    if(S.phase==="answer"&&S.left>0&&S.left<=5)sfx.tick();
+    if(S.left<=0){clearTimer();onTimeout()}
+  },1000);
+}
+function updateTimer(){
+  const box=$("#timer");
+  if(!S.tmax){box.classList.add("off");setStress(0);return}
+  box.classList.remove("off");
+  $("#tLbl").textContent=S.phase==="reflect"?"DISKUSI":"WAKTU";
+  const left=Math.max(0,S.left),m=Math.floor(left/60),s=left%60;
+  $("#tnum").textContent=m+":"+String(s).padStart(2,"0");
+  const f=Math.max(0,S.left/S.tmax);
+  $("#ringP").style.strokeDashoffset=String(RING*(1-f));
+  box.classList.toggle("low",S.phase==="answer"&&S.left<=30);
+  setStress(S.phase==="answer"?1-f:0);
+}
+function setCard(cls,html){
+  const card=$("#card");card.className="qcard "+cls;card.innerHTML=html;
+  card.style.animation="none";void card.offsetWidth;card.style.animation="";
+}
+
+/* ---------------- PENGANTAR RUANGAN ---------------- */
+function showIntro(st){
+  const R=ROOMS[st.room];
+  S.phase="intro";S.tmax=0;clearTimer();setStress(0);
+  sfx.room();
+  renderHud();updateTimer();
+  setCard("boss",`
+    <span class="mtag boss">Ruang ${st.room+1} dari 5</span>
+    <div class="mtitle"><div class="ic">${R.icon}</div><h2>${esc(R.name)}</h2></div>
+    <p class="story2">${esc(R.intro)}</p>
+    <div class="pills"><span class="pill">3 kasus dalam ruangan ini</span><span class="pill y">🔑 Kunci ada di Misi Kunci terakhir</span><span class="pill g">💭 Ada jeda refleksi di akhir</span></div>
+    <div class="nextrow"><button class="btn primary" data-act="next" type="button">🚪 Masuk ruangan</button></div>`);
+}
+
+/* ---------------- KASUS ---------------- */
+function loadCase(){
+  const st=S.cur;
+  if(!S.orders[st.id])S.orders[st.id]=shuffle(st.c.o.map((_,i)=>i));
+  S.phase="answer";S.picked=null;S.correct=false;S.timeout=false;S.decided=null;S.hintShown=false;
+  S.tmax=S.limit;S.left=S.tmax;
+  renderHud();renderCard();startTimer();
+}
+function caseHeading(st){
+  const R=ROOMS[st.room];
+  if(S.mode==="retry")return {tag:"🔑 Misi kunci tertinggal",cls:"boss",title:`Misi ${st.room+1} — ${st.c.title}`,icon:R.icon};
+  if(st.kind==="boss"){
+    return S.full
+      ?{tag:`Ruang ${st.room+1} · Misi Kunci 🔑`,cls:"boss",title:`Misi ${st.room+1} — ${st.c.title}`,icon:R.icon}
+      :{tag:`Misi ${st.room+1} dari 5`,cls:"boss",title:`Misi ${st.room+1} — ${st.c.title}`,icon:R.icon};
+  }
+  return {tag:`Ruang ${st.room+1} · Kasus ${st.n} dari 3`,cls:"",title:`${R.name} · Kasus ${st.n}`,icon:R.icon};
+}
+function renderCard(){
+  const st=S.cur,m=st.c,ord=S.orders[st.id],L="ABC",rev=S.phase==="review";
+  const opts=ord.map((oi,k)=>{
+    const o=m.o[oi];let c="opt";
+    if(rev){if(o.ok)c+=" ok";else if(k===S.picked)c+=" no"}
+    return `<button class="${c}" data-k="${k}" type="button"${rev?" disabled":""}><span>${L[k]}</span>${esc(o.t)}</button>`;
+  }).join("");
+  let extra="";
+  if(!rev){
+    const cost=S.mode==="main"?` (−${HINT_COST} poin)`:"";
+    extra=`<div class="hintbar">${S.hintShown
+      ?`<div class="hint">💡 <b>Petunjuk:</b> ${esc(m.hint)}</div>`
+      :`<button class="btn ghost sm" data-act="hint" type="button">💡 Petunjuk${cost}</button>`}
+      <span class="kbd">Tekan A, B, atau C untuk memilih</span></div>`;
+  }else extra=reviewHTML(st);
+  const h=caseHeading(st);
+  setCard(h.cls,`
+    <span class="mtag ${h.cls}">${h.tag}</span>
+    <div class="mtitle"><div class="ic">${h.icon}</div><h2>${esc(h.title)}</h2></div>
+    <div class="q">${esc(m.q)}</div>
+    <div class="opts">${opts}</div>
+    ${extra}`);
+}
+function reviewHTML(st){
+  const m=st.c,ok=S.correct,retry=S.mode==="retry",boss=st.kind==="boss";
+  const picked=S.picked!==null?m.o[S.orders[st.id][S.picked]]:null;
+  const p=S.pts[st.id];
+  let head,cls=ok?"ok":"no";
+  if(ok){
+    if(retry)head="✅ Tepat! 🔑 Kunci didapat!";
+    else head=`✅ Tepat! +${p} poin${boss?" dan 🔑 satu kunci":""}!`;
+  }else if(S.timeout)head="⏰ Waktu habis.";
+  else head="❌ Belum tepat.";
+  if(!ok&&S.decided==="good")head+=` Alasan tim baik: +${p} poin.`;
+  if(!ok&&S.decided==="none")head+=" 0 poin.";
+  let body=`<p><b>Pembahasan:</b> ${esc(m.e)}</p>`;
+  if(!ok&&picked&&picked.why)body+=`<p><b>Mengapa kurang tepat:</b> ${esc(picked.why)}</p>`;
+  if(!ok&&boss&&!retry)body+=`<p>🔑 Kunci ruangan ini belum didapat. Kalian bisa mencarinya lagi di akhir permainan.</p>`;
+  let act="";
+  const needJudge=!ok&&!retry&&S.picked!==null&&S.decided===null;
+  if(needJudge){
+    const g=Math.max(0,PTS_REASON-HINT_COST*S.hints[st.id]);
+    act=`<div class="judge"><p>👩‍🏫 Penilaian guru: apakah tim menyampaikan alasan yang masuk akal dan baik?</p>
+      <div class="row"><button class="btn good" data-act="judge" data-v="good" type="button">Ya, alasan baik (+${g})</button>
+      <button class="btn ghost" data-act="judge" data-v="none" type="button">Belum (0 poin)</button></div></div>`;
+  }else if(!ok&&retry){
+    act=`<div class="nextrow"><button class="btn primary" data-act="again" type="button">🔁 Coba lagi</button></div>`;
+  }else{
+    let label;
+    if(retry)label=S.queue.length>1?"Kunci berikutnya ➜":"Buka pintu keluar 🚪";
+    else{
+      const nx=S.steps[S.step+1];
+      if(!nx)label="Lihat hasil dan buka pintu 🚪";
+      else if(nx.type==="reflect")label="Ke Ruang Jeda ➜";
+      else label=S.full?"Kasus berikutnya ➜":`Lanjut ke Misi ${st.room+2} ➜`;
+    }
+    act=`<div class="nextrow"><button class="btn primary" data-act="next" type="button">${label}</button></div>`;
+  }
+  return `<div class="fb ${cls}"><div class="hd">${head}</div>${body}</div>${act}`;
+}
+function pick(k){
+  if(!S||S.phase!=="answer")return;
+  const o=S.cur.c.o[S.orders[S.cur.id][k]];
+  clearTimer();setStress(0);
+  S.picked=k;S.correct=o.ok;S.timeout=false;S.phase="review";
+  finishAnswer();
+}
+function onTimeout(){
+  if(!S)return;
+  if(S.phase==="reflect"){updateTimer();return}
+  if(S.phase!=="answer")return;
+  S.picked=null;S.correct=false;S.timeout=true;S.phase="review";
+  finishAnswer();
+}
+function finishAnswer(){
+  const st=S.cur;setStress(0);
+  let pop=false;
+  if(S.mode==="main")S.res[st.id]=S.correct?"ok":"bad";
+  if(S.correct){
+    if(st.kind==="boss")S.keys[st.room]=1;
+    if(S.mode==="main"){S.pts[st.id]=Math.max(0,PTS_OK-HINT_COST*S.hints[st.id]);pop=true}
+    sfx.ok();if(st.kind==="boss")setTimeout(sfx.key,350);
+  }else sfx.bad();
+  renderHud(pop);renderCard();
+  $("#card").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function showHint(){
+  if(S.phase!=="answer"||S.hintShown)return;
+  S.hintShown=true;
+  if(S.mode==="main")S.hints[S.cur.id]=1;
+  sfx.click();renderCard();
+}
+function judge(v){
+  if(S.phase!=="review"||S.decided!==null)return;
+  S.decided=v;
+  if(v==="good"){S.pts[S.cur.id]=Math.max(0,PTS_REASON-HINT_COST*S.hints[S.cur.id]);sfx.ok()}
+  renderHud(v==="good");renderCard();
+}
+function again(){
+  S.orders[S.cur.id]=shuffle(S.cur.c.o.map((_,i)=>i));
+  sfx.click();loadCase();
+}
+
+/* ---------------- RUANG JEDA (REFLEKSI) ---------------- */
+function showReflect(st){
+  const R=ROOMS[st.room];
+  const ids=S.steps.filter(x=>x.type==="case"&&x.room===st.room).map(x=>x.id);
+  const okc=ids.filter(i=>S.res[i]==="ok").length;
+  const pts=ids.reduce((a,i)=>a+S.pts[i],0);
+  const key=S.keys[st.room];
+  S.phase="reflect";S.tmax=S.limit?REFLECT_SEC:0;S.left=S.tmax;
+  renderHud();startTimer();
+  const last=st.room===ROOMS.length-1;
+  setCard("reflect",`
+    <span class="mtag purple">💭 Ruang Jeda · Ruang ${st.room+1} selesai</span>
+    <div class="mtitle"><div class="ic">${R.icon}</div><h2>${esc(R.name)} — selesai!</h2></div>
+    <div class="pills">
+      <span class="pill g">Kasus tepat: ${okc} / ${ids.length}</span>
+      <span class="pill">Poin ruangan ini: ${pts}</span>
+      <span class="pill ${key?"g":"y"}">${key?"🔑 Kunci didapat":"🔑 Kunci belum didapat"}</span>
+    </div>
+    <div class="reflq">💭 ${esc(R.reflect)}</div>
+    <p class="kbd" style="font-size:15px">Diskusikan sekitar 2 menit. Tidak ada poin di jeda ini; tujuannya merenung dan berbagi.</p>
+    <div class="nextrow"><button class="btn primary" data-act="next" type="button">${last?"Menuju pintu keluar 🚪":"Ruang berikutnya ➜"}</button></div>`);
+  sfx.room();
+}
+
+/* ---------------- LANJUT ---------------- */
+function next(){
+  sfx.click();
+  if(S.mode==="main"){
+    if(S.cur.type==="case")S.done++;
+    S.step++;
+    if(S.step>=S.steps.length)endGame();
+    else loadStep();
+  }else{
+    S.queue.shift();
+    if(S.queue.length)loadStep();
+    else{
+      if(S.rec){S.rec.keys=keyCount();saveRecap()}
+      renderEnd();
+    }
+  }
+}
+function startRetry(){
+  S.queue=S.keys.map((k,i)=>k?-1:i).filter(i=>i>=0);
+  if(!S.queue.length)return;
+  S.mode="retry";
+  show("game");loadStep();
+}
+
+/* ---------------- AKHIR ---------------- */
+function endGame(){
+  clearTimer();S.mode="main";
+  const sc=total(),t=titleFor(sc/S.max*100);
+  S.rec={team:S.team,players:S.players,full:S.full,score:sc,max:S.max,keys:keyCount(),title:t.name,icon:t.icon};
+  recap.push(S.rec);saveRecap();
+  renderEnd();
+}
+function renderEnd(){
+  show("end");
+  const sc=total(),t=titleFor(sc/S.max*100),keys=keyCount(),all=keys===5,missing=5-keys;
+  $("#endDoor").innerHTML=doorHTML(S.keys,false);
+  $("#endInfo").innerHTML=`
+    <span class="chipline"><i></i>${all?"Pintu terbuka!":"Hampir keluar"}</span>
+    <h1>${all?'Kalian berhasil <span class="grad">keluar!</span>':'Pintu belum <span class="grad">terbuka</span>'}</h1>
+    <div class="gelar">${t.icon} Gelar: <span>${esc(t.name)}</span></div>
+    <div class="stats">
+      <div class="stat"><small>TOTAL POIN</small><b>${sc}<i>dari ${S.max}</i></b></div>
+      <div class="stat"><small>KUNCI TERKUMPUL</small><b>${keys} / 5</b></div>
+      <div class="stat"><small>TIM</small><b style="font-size:clamp(17px,2vw,24px);color:var(--ink)">${esc(S.team)}</b></div>
+    </div>
+    ${all?"":`<p style="font-size:clamp(15px,1.7vw,19px);margin:6px 0;color:var(--muted)">Masih ada <b style="color:var(--ink)">${missing} kunci</b> yang belum didapat. Cari kunci yang tertinggal (tanpa poin tambahan) untuk membuka pintu.</p>`}
+    <div class="lesson"><b>Pelajaran yang didapat:</b> mengelola stres, berkomunikasi dengan baik, bekerja sama, berani menolak tekanan teman, dan menunjukkan empati. Poin hanyalah bagian dari permainan; tujuan utamanya adalah belajar memilih solusi yang sehat dan bertanggung jawab.</div>
+    <div class="tribute" style="margin-top:10px"><i>🌟</i><p><b>Beri tepuk tangan!</b> Game ini dirancang oleh <b>${esc(INFO.perancang)}</b>.</p></div>
+    <div class="row" style="margin-top:16px">
+      ${all?"":`<button class="btn primary" data-act="retry" type="button">🔑 Cari kunci yang tertinggal</button>`}
+      <button class="btn ${all?"primary":"ghost"}" data-act="nextteam" type="button">👥 Tim berikutnya</button>
+      <button class="btn ghost" data-act="replay" type="button">🔁 Main lagi (tim sama)</button>
+      <a class="back" href="gamebk.html">← Menu Game BK</a>
+    </div>
+    <div class="recap" id="recapEnd">${recapHTML()}</div>`;
+  if(all){
+    setTimeout(()=>{
+      const d=$("#endDoor .door-scene");if(d)d.classList.add("open");
+      if(!S.celebrated){S.celebrated=true;sfx.open();confetti()}
+    },500);
+  }
+}
+function confetti(){
+  const cols=["#fbbf24","#fb7185","#34d399","#38bdf8","#a78bfa","#22d3ee","#e879f9"];
+  for(let k=0;k<100;k++){
+    const e=document.createElement("div");e.className="conf";
+    e.style.left=Math.random()*100+"vw";e.style.background=cols[k%cols.length];
+    e.style.animationDuration=(2.4+Math.random()*2.6)+"s";e.style.animationDelay=(Math.random()*1.2)+"s";
+    document.body.appendChild(e);setTimeout(()=>e.remove(),7500);
+  }
+}
+
+/* ---------------- BANTUAN ---------------- */
+function helpModal(){
+  if($("#modal").classList.contains("show"))return;
+  modal(`<span class="mtag">❔ Cara bermain</span><h2>Escape the Stress Room</h2>
+    <ol style="padding-left:22px;margin:0">
+      <li>Bentuk tim berisi <b>2–5 orang</b>.</li>
+      <li>Mode <b>Lengkap</b>: 5 ruangan. Tiap ruangan berisi 2 kasus, 1 <b>Misi Kunci</b>, lalu jeda refleksi. Mode <b>Singkat</b>: hanya 5 Misi Kunci.</li>
+      <li>Baca kasus, diskusikan solusi terbaik maksimal <b>3 menit</b>, lalu pilih jawaban.</li>
+      <li>Jawaban tepat: <b>20 poin</b>. Jawaban Misi Kunci yang tepat juga memberi <b>1 kunci</b>.</li>
+      <li>Jawaban kurang tepat tetapi alasannya masuk akal dan baik (dinilai guru): <b>10 poin</b>. Jawaban tidak sesuai: 0 poin.</li>
+      <li>Memakai petunjuk mengurangi <b>5 poin</b>.</li>
+      <li>Kumpulkan lima kunci untuk membuka pintu keluar. Kunci yang tertinggal bisa dicari lagi di akhir.</li>
+    </ol>
+    <p><b>Gelar</b> (dari persentase poin): 80–100% Escape Master BK · 50–79% Pejuang Tangguh · 0–49% Calon Master BK.</p>
+    <div class="mact"><button class="btn primary" data-v="ok" type="button">Mengerti</button></div>`);
+}
+
+/* ---------------- EVENT ---------------- */
+$("#aboutBtn").addEventListener("click",showAbout);
+$("#bAbout").addEventListener("click",showAbout);
+$("#btnHelp").addEventListener("click",helpModal);
+$("#bHelp").addEventListener("click",helpModal);
+$("#btnStart").addEventListener("click",newGame);
+$("#inTeam").addEventListener("keydown",e=>{if(e.key==="Enter")newGame()});
+$("#plMinus").addEventListener("click",()=>{CFG.players=Math.max(2,CFG.players-1);renderSetup()});
+$("#plPlus").addEventListener("click",()=>{CFG.players=Math.min(5,CFG.players+1);renderSetup()});
+document.querySelectorAll(".mode").forEach(b=>b.addEventListener("click",()=>{CFG.mode=b.dataset.mode;renderSetup()}));
+$("#timeChips").addEventListener("click",e=>{const b=e.target.closest("[data-t]");if(b){CFG.time=+b.dataset.t;renderSetup()}});
+$("#inSound").addEventListener("change",e=>{CFG.sound=e.target.checked;syncSound()});
+$("#bSound").addEventListener("click",()=>{CFG.sound=!CFG.sound;$("#inSound").checked=CFG.sound;syncSound()});
+$("#bFull").addEventListener("click",()=>{try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen()}catch(e){}});
+$("#bReset").addEventListener("click",async()=>{
+  if(!S||$("#modal").classList.contains("show"))return;
+  const v=await modal(`<span class="mtag">⟲ Ulang permainan</span><h2>Mulai dari awal?</h2>
+    <p>Posisi, poin, dan kunci tim ini akan dihapus.</p>
+    <div class="mact"><button class="btn ghost" data-v="no" type="button">Batal</button><button class="btn ghost" data-v="menu" type="button">Ke pengaturan</button><button class="btn primary" data-v="yes" type="button">Ulang sekarang</button></div>`);
+  if(v==="yes")newGame();
+  else if(v==="menu"){clearTimer();renderSetup();show("setup")}
+});
+document.addEventListener("click",e=>{
+  if(e.target.closest("[data-clear]")){recap=[];saveRecap();renderSetup();const r=$("#recapEnd");if(r)r.innerHTML=""}
+});
+$("#card").addEventListener("click",e=>{
+  const o=e.target.closest(".opt");
+  if(o&&!o.disabled){pick(+o.dataset.k);return}
+  const a=e.target.closest("[data-act]");if(!a)return;
+  const act=a.dataset.act;
+  if(act==="hint")showHint();
+  else if(act==="judge")judge(a.dataset.v);
+  else if(act==="next")next();
+  else if(act==="again")again();
+});
+$("#end").addEventListener("click",e=>{
+  const a=e.target.closest("[data-act]");if(!a)return;
+  const act=a.dataset.act;
+  if(act==="retry")startRetry();
+  else if(act==="nextteam"){$("#inTeam").value="";renderSetup();show("setup")}
+  else if(act==="replay")newGame();
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&$("#modal").classList.contains("show")){closeModal(null);return}
+  if(!S||$("#game").classList.contains("hidden")||$("#modal").classList.contains("show")||document.querySelector(".gk-ov"))return;
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  const k=e.key.toLowerCase();
+  if(S.phase==="answer"){
+    const i="abc".indexOf(k),j="123".indexOf(k);
+    if(i>=0&&k.length===1)pick(i);
+    else if(j>=0&&k.length===1)pick(j);
+    else if(k==="h")showHint();
+  }else if(["review","intro","reflect"].includes(S.phase)&&(k==="enter"||k===" ")){
+    const b=$("#card [data-act=next],#card [data-act=again]");
+    if(b){e.preventDefault();b.click()}
+  }
+});
+
+applyCredit();
+renderSetup();
+refreshInfo();
+if(location.hash==="#tentang")setTimeout(showAbout,250);
+</script>
+</body>
+</html>
