@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 320" role="img" aria-label="Kaca pembesar menyorot dua teman, dengan kartu bukti dan benang merah">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070b24"/><stop offset="0.55" stop-color="#1a1058"/><stop offset="1" stop-color="#3b1d8f"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.12" cy="0.1" r="0.7"><stop offset="0" stop-color="#22d3ee" stop-opacity="0.45"/><stop offset="1" stop-color="#22d3ee" stop-opacity="0"/></radialGradient>
+    <radialGradient id="g2" cx="0.95" cy="0.95" r="0.7"><stop offset="0" stop-color="#e879f9" stop-opacity="0.5"/><stop offset="1" stop-color="#e879f9" stop-opacity="0"/></radialGradient>
+    <radialGradient id="lens" cx="0.35" cy="0.3" r="0.9"><stop offset="0" stop-color="#1e2a6b" stop-opacity="0.95"/><stop offset="1" stop-color="#0a1030" stop-opacity="0.95"/></radialGradient>
+    <linearGradient id="ttl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fbbf24"/><stop offset="1" stop-color="#e879f9"/></linearGradient>
+    <linearGradient id="handle" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fde68a"/><stop offset="1" stop-color="#d97706"/></linearGradient>
+    <clipPath id="clipLens"><circle cx="178" cy="136" r="76"/></clipPath>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#67e8f9" stroke-opacity="0.07" stroke-width="1"/></pattern>
+  </defs>
+  <rect width="640" height="320" fill="url(#bg)"/><rect width="640" height="320" fill="url(#grid)"/>
+  <rect width="640" height="320" fill="url(#g1)"/><rect width="640" height="320" fill="url(#g2)"/>
+  <g fill="#fff" opacity="0.7"><circle cx="40" cy="42" r="1.2"/><circle cx="120" cy="24" r="1"/><circle cx="318" cy="22" r="1.3"/><circle cx="470" cy="18" r="1"/><circle cx="600" cy="38" r="1.4"/><circle cx="618" cy="170" r="1"/><circle cx="24" cy="200" r="1.1"/><circle cx="300" cy="300" r="1"/></g>
+
+  <!-- gagang kaca pembesar -->
+  <line x1="232" y1="192" x2="290" y2="252" stroke="url(#handle)" stroke-width="20" stroke-linecap="round"/>
+  <line x1="232" y1="192" x2="290" y2="252" stroke="#7c4a0a" stroke-width="3" stroke-linecap="round" opacity="0.5" transform="translate(5 -3)"/>
+
+  <!-- lensa -->
+  <circle cx="178" cy="136" r="76" fill="url(#lens)"/>
+  <g clip-path="url(#clipLens)">
+    <!-- dua teman -->
+    <g>
+      <circle cx="140" cy="128" r="17" fill="#22d3ee"/>
+      <path d="M104 190c0-26 15-40 36-40s36 14 36 40z" fill="#22d3ee" opacity="0.92"/>
+      <circle cx="216" cy="128" r="17" fill="#e879f9"/>
+      <path d="M180 190c0-26 15-40 36-40s36 14 36 40z" fill="#e879f9" opacity="0.92"/>
+    </g>
+    <!-- hati retak di tengah -->
+    <g transform="translate(178 104)" filter="url(#glow)">
+      <path d="M0 14C-20 0-22-18-10-20c6-1 10 2 10 7 0-5 4-8 10-7 12 2 10 20-10 34z" fill="#fb7185" transform="translate(0 -4)"/>
+      <path d="M-1 -16l6 9-6 7 6 8" fill="none" stroke="#0a1030" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <path d="M118 92 A76 76 0 0 1 178 72" fill="none" stroke="#fff" stroke-opacity="0.35" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <circle cx="178" cy="136" r="76" fill="none" stroke="#22d3ee" stroke-width="9" filter="url(#glow)"/>
+
+  <!-- benang merah + kartu bukti -->
+  <path d="M262 92 C 300 70, 338 60, 372 70 S 450 96, 500 78 S 560 120, 520 168" fill="none" stroke="#fb7185" stroke-width="3" stroke-dasharray="1 0" stroke-linecap="round" filter="url(#glow)"/>
+  <g transform="translate(340 44) rotate(-6)">
+    <rect width="118" height="78" rx="8" fill="#f8fafc" opacity="0.95"/>
+    <rect width="118" height="18" rx="8" fill="#22d3ee"/><rect y="10" width="118" height="8" fill="#22d3ee"/>
+    <text x="10" y="13" font-family="Orbitron,Segoe UI,Arial,sans-serif" font-size="9" font-weight="800" fill="#04111f" letter-spacing="1.4">BUKTI A</text>
+    <g stroke="#94a3b8" stroke-width="4" stroke-linecap="round"><line x1="12" y1="36" x2="100" y2="36"/><line x1="12" y1="49" x2="86" y2="49"/><line x1="12" y1="62" x2="94" y2="62"/></g>
+    <circle cx="59" cy="-1" r="5" fill="#ef4444"/>
+  </g>
+  <g transform="translate(476 64) rotate(6)">
+    <rect width="112" height="78" rx="8" fill="#f8fafc" opacity="0.95"/>
+    <rect width="112" height="18" rx="8" fill="#e879f9"/><rect y="10" width="112" height="8" fill="#e879f9"/>
+    <text x="10" y="13" font-family="Orbitron,Segoe UI,Arial,sans-serif" font-size="9" font-weight="800" fill="#2a0a33" letter-spacing="1.4">BUKTI B</text>
+    <g stroke="#94a3b8" stroke-width="4" stroke-linecap="round"><line x1="12" y1="36" x2="94" y2="36"/><line x1="12" y1="49" x2="78" y2="49"/><line x1="12" y1="62" x2="88" y2="62"/></g>
+    <circle cx="56" cy="-1" r="5" fill="#ef4444"/>
+  </g>
+  <g transform="translate(404 134) rotate(-3)">
+    <rect width="106" height="70" rx="8" fill="#fffbeb" opacity="0.96"/>
+    <rect width="106" height="18" rx="8" fill="#fbbf24"/><rect y="10" width="106" height="8" fill="#fbbf24"/>
+    <text x="10" y="13" font-family="Orbitron,Segoe UI,Arial,sans-serif" font-size="9" font-weight="800" fill="#3b2100" letter-spacing="1.4">SAKSI</text>
+    <g stroke="#a8a29e" stroke-width="4" stroke-linecap="round"><line x1="12" y1="36" x2="88" y2="36"/><line x1="12" y1="49" x2="70" y2="49"/></g>
+    <circle cx="53" cy="-1" r="5" fill="#ef4444"/>
+  </g>
+
+  <text x="498" y="258" text-anchor="middle" font-family="Orbitron,Segoe UI,Arial,sans-serif" font-weight="900" font-size="21" fill="url(#ttl)">DETEKTIF KONFLIK</text>
+  <text x="498" y="281" text-anchor="middle" font-family="Orbitron,Segoe UI,Arial,sans-serif" font-weight="700" font-size="11" letter-spacing="3" fill="#a5b4fc">BK SOSIAL · GAME BK</text>
+</svg>
