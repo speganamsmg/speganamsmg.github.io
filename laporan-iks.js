@@ -191,18 +191,33 @@
   }
 
   // ── Rincian keuangan: total kas + pemasukan/pengeluaran per bulan terpilih ──
+  // Saldo awal dan akhir sebuah bulan: saldo awal sheet + pemasukan − pengeluaran sampai bulan itu (berantai antarbulan).
+  function saldoBulan(x, bln) {
+    let awal = x.saldo_awal || 0, masuk = 0, keluar = 0;
+    x.per_bulan.forEach(function (m) { if (m.bln < bln) awal += m.masuk; else if (m.bln === bln) masuk = m.masuk; });
+    x.keluar.forEach(function (k) {
+      if (!k.tgl) return;
+      const b = k.tgl.slice(0, 7);
+      if (b < bln) awal -= k.nominal; else if (b === bln) keluar += k.nominal;
+    });
+    return { awal: awal, masuk: masuk, keluar: keluar, akhir: awal + masuk - keluar };
+  }
+
   function rincianDana(x, nama, bln, opsional) {
     const c = el('section', 'card dsec');
     c.append(el('h2', '', nama));
     if (!x.ok) { c.append(el('p', 'hint', x.pesan)); return c; }
     const i = x.bulan.indexOf(bln);
     const pb = i >= 0 ? x.per_bulan[i] : { masuk: 0, keluar: 0, n_bayar: 0 };
-    const grid = el('div', 'iks-kpis');
-    const t = function (value, label) {
-      const kp = el('div', 'kpi'); kp.append(el('strong', '', value), el('span', '', label)); grid.append(kp);
+    const sb = saldoBulan(x, bln);
+    const grid = el('div', 'iks-kpis iks-bulan');
+    const t = function (value, label, cls) {
+      const kp = el('div', 'kpi' + (cls ? ' ' + cls : '')); kp.append(el('strong', '', value), el('span', '', label)); grid.append(kp);
     };
-    t(rp(pb.masuk), 'Pemasukan');
-    t(rp(pb.keluar), 'Pengeluaran');
+    t(rp(sb.awal), 'Saldo Awal Bulan');
+    t(rp(sb.akhir), 'Saldo Akhir Bulan', 'akhir');
+    t(rp(sb.masuk), 'Pemasukan');
+    t(rp(sb.keluar), 'Pengeluaran');
     c.append(grid);
     const sel = pb.masuk - pb.keluar;
     c.append(el('p', 'hint iks-sel', 'Selisih bulan ini ' + (sel > 0 ? '+' : '') + rp(sel) + (i >= 0 ? ' · ' + (opsional ? pb.n_bayar + ' orang menitip' : pb.n_bayar + ' dari ' + (pb.n_anggota != null ? pb.n_anggota : x.n_anggota) + ' orang membayar') : '')));
@@ -245,6 +260,13 @@
     if (!bulan.length) { f.append(note('Belum ada data bulanan', 'Judul bulan di sheet iuran belum diisi.')); return f; }
     const pick = el('section', 'card dsec');
     pick.append(el('h2', '', 'Per bulan'), pilihBulan(bulan));
+    // Saldo gabungan Sosial + Pensiun untuk bulan terpilih
+    const gs = s.ok ? saldoBulan(s, state.bln) : { awal: 0, akhir: 0 }, gp = p.ok ? saldoBulan(p, state.bln) : { awal: 0, akhir: 0 };
+    const gab = el('div', 'iks-gab');
+    [['Saldo Awal', gs.awal + gp.awal], ['Saldo Akhir', gs.akhir + gp.akhir]].forEach(function (r) {
+      const kp = el('div', 'kpi'); kp.append(el('strong', '', rp(r[1])), el('span', '', r[0] + ' ' + bulanPenuh(state.bln) + ' (Sosial + Pensiun)')); gab.append(kp);
+    });
+    pick.append(gab);
     f.append(pick, rincianDana(s, 'Sosial', state.bln, false), rincianDana(p, 'Pensiun', state.bln, true));
     return f;
   }

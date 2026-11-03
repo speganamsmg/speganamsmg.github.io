@@ -166,3 +166,11 @@ select.input { appearance: auto; }
 .iks-out .o-pen { background: color-mix(in srgb, var(--accent, #3b82f6) 16%, var(--surface)); color: var(--ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent, #3b82f6) 35%, transparent); }
 .iks-out .o-ok { background: color-mix(in srgb, #2ecc71 22%, var(--surface)); color: color-mix(in srgb, #1b7a43 80%, var(--ink)); }
 .iks-out .o-cat { background: var(--tint); color: var(--muted); }
+
+/* Saldo awal/akhir per bulan */
+.iks-kpis.iks-bulan .kpi.akhir { background: var(--ink, #141b34); color: #fff; }
+.iks-kpis.iks-bulan .kpi.akhir span { color: color-mix(in srgb, #fff 78%, transparent); }
+.iks-gab { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 0.8rem; }
+.iks-gab .kpi { min-width: 0; margin: 0; }
+.iks-gab .kpi strong { font-size: clamp(1rem, 4.4vw, 1.25rem); overflow-wrap: anywhere; }
+.iks-gab .kpi span { font-size: 0.72rem; }
