@@ -402,6 +402,32 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
 @media (max-width:1180px){.topbar{height:auto;min-height:60px;flex-wrap:wrap;row-gap:6px;padding:8px 12px}.topbar .ttl{flex:none}}
 @media (max-width:980px){main{overflow-x:clip}}
 
+
+/* ---------- LAYOUT SEIMBANG, DADU, JAM, ZONA ---------- */
+.side{height:var(--s);max-height:none}
+.dice{display:flex;gap:8px;flex:none}
+#die2{display:none}
+.dice.two #die2{display:grid}
+.dice.two .die{width:66px;height:66px;padding:8px;border-radius:16px}
+.turn{flex-wrap:wrap;row-gap:8px}
+.turn .tn{flex:1;min-width:0}
+.turn b{overflow-wrap:break-word;word-break:normal;font-size:clamp(18px,1.7vw,26px)}
+.turn .zn{display:block;font-size:12px;font-weight:700;opacity:.92;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.clk{flex:1 1 100%;display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--f-head);font-weight:800;font-size:18px;background:rgba(0,0,0,.28);border-radius:12px;padding:6px 10px;text-align:center;line-height:1.1}
+.clk small{display:inline;font-family:var(--f-body);font-size:10px;font-weight:700;opacity:.9}
+.clk.hot{background:rgba(220,38,38,.65);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.06)}}
+.estline{font-size:13px;color:var(--cy);background:rgba(34,211,238,.08);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin:2px 0 10px}
+.opt-row.col{flex-direction:column;align-items:flex-start;gap:6px}
+.cell.zt{border-top:3px solid var(--zc)}
+.zlegend{display:flex;flex-wrap:wrap;gap:3px 10px;font-size:11.5px;color:var(--muted);padding:0 4px}
+.zlegend span{white-space:nowrap}
+.zlegend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+@media (min-width:1700px) and (min-height:900px){
+  main{--sw:340px;--s:min(calc(100vh - 104px),calc(100vw - 2.4*var(--sw) - 96px))}
+  .side{zoom:1.2;height:calc(var(--s)/1.2)}
+}
+
 /* ---------- RESPONSIVE ---------- */
 @media (max-width:980px){
   body{overflow:auto}
@@ -409,6 +435,8 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
   main{flex-direction:column;--s:min(calc(100vw - 24px),calc(100vh - 150px));padding:10px}
   .side{width:min(100%,640px);max-height:none}
   .board-wrap{order:1}.side.sl{order:2}.side.sr{order:3}
+  .side{height:auto;zoom:1}
+  main{--s:min(calc(100vw - 24px),calc(100vh - 150px))}
   .lb .rows{max-height:none}
   .setup-grid,.hero,.rule-grid{grid-template-columns:1fr}
   .opts{grid-template-columns:1fr}
@@ -458,6 +486,9 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
       <div>
         <div class="panel">
           <h3><b>3</b> Pengaturan</h3>
+          <div class="opt-row col"><label>🎲 Jumlah dadu<small style="display:block;color:var(--muted);font-weight:500;font-size:12.5px">2 dadu membuat permainan jauh lebih cepat</small></label><div class="quick" id="diceChips"></div></div>
+          <div class="opt-row col"><label>⏳ Lama permainan<small style="display:block;color:var(--muted);font-weight:500;font-size:12.5px">Habis waktu: putaran diselesaikan, tim terdepan jadi Juara Tercepat</small></label><div class="quick" id="limChips"></div></div>
+          <div class="estline" id="estLine"></div>
           <div class="opt-row"><label for="optTimer">⏱ Batas waktu kuis (detik)<small style="display:block;color:var(--muted);font-weight:500;font-size:12.5px">0 = tanpa batas</small></label>
             <input type="number" id="optTimer" min="0" max="600" step="5" value="0"></div>
           <div class="opt-row"><label for="optSound">🔊 Efek suara</label><input type="checkbox" id="optSound" checked></div>
@@ -468,10 +499,11 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
         <div class="panel how">
           <h3>Cara bermain</h3>
           <ul>
-            <li>Kelompok bergiliran melempar dadu. Guru menekan tombol dadu.</li>
+            <li>Kelompok bergiliran melempar dadu (1 atau 2 dadu, bisa diatur). Guru menekan tombol dadu.</li>
             <li>🪜 <b>Tangga</b> = kebiasaan positif, naik! 🐍 <b>Ular</b> = hambatan karier, turun.</li>
-            <li>Semua kotak berisi. Setelah naik tangga atau turun ular, isi kotak tujuan tetap berlaku (kuis, refleksi, atau kejutan).</li>
-            <li>Dadu berlebih? Jika langkah melewati kotak 100, pion <b>mundur</b> sebanyak kelebihannya (97 + 4 → 99).</li>
+            <li>Papan terbagi 5 <b>zona</b>; kuis mengikuti tema zonanya. Setelah naik tangga atau turun ular, isi kotak tujuan tetap berlaku.</li>
+            <li>Dua <b>tangga ekspres</b> (88 dan 93) langsung ke Tujuan. Jangan lewat kotak 100: pion akan mundur.</li>
+            <li>Waktu habis? Putaran diselesaikan, lalu tim terdepan menjadi Juara Tercepat.</li>
             <li>❓ <b>Kuis</b> dan 💭 <b>Refleksi</b> memberi poin, 🎁 <b>Kartu Kejutan</b> bisa maju, mundur, atau menambah poin.</li>
             <li>Dua juara: <b>⚡ Juara Tercepat</b> (sampai kotak 100 lebih dulu) dan <b>🌟 Juara Kuis</b> (total poin terbanyak). Tim yang kalah mendapat <b>tantangan semangat</b>.</li>
           </ul>
@@ -496,6 +528,7 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
     <button class="tb" data-gk-theme type="button">☀ Terang</button>
     <button class="tb" id="bSound">🔊 Suara</button>
     <button class="tb" id="bFull">⛶ Layar penuh</button>
+    <button class="tb" id="bEnd" title="Akhiri sekarang dan umumkan juara">🏁 Akhiri</button>
     <button class="tb" id="bReset">⟲ Ulang</button>
     <a class="tb" href="gamebk.html">⌂ Menu BK</a>
   </div>
@@ -503,14 +536,13 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
     <aside class="side sl">
       <div class="turn" id="turn"></div>
       <div class="dice-box">
-        <div class="die" id="die"></div>
+        <div class="dice" id="dice"><div class="die" id="die"></div><div class="die" id="die2"></div></div>
         <div style="flex:1">
           <button class="btn primary" id="rollBtn" style="width:100%">🎲 LEMPAR DADU</button>
           <div class="hint">atau tekan tombol Spasi</div>
         </div>
       </div>
       <div class="lb f"><h4>⚡ Juara Tercepat <em>posisi di papan</em></h4><div class="rows" id="lbFast"></div></div>
-      <div class="legend"><button type="button" data-f="ladder" title="Tonjolkan tangga">🪜 Tangga ▲ naik</button><button type="button" data-f="snake" title="Tonjolkan ular">🐍 Ular ▼ turun</button><span>❓ Kuis</span><span>💭 Refleksi</span><span>🎁 Kejutan</span></div>
     </aside>
     <div class="board-wrap">
       <div class="board" id="board">
@@ -520,6 +552,8 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
     </div>
     <aside class="side sr">
       <div class="lb k"><h4>🌟 Juara Kuis <em>urut total poin</em></h4><div class="rows" id="lbQuiz"></div></div>
+      <div class="zlegend" id="zlegend"><span><i style="background:#22d3ee"></i>1. Kenali Diri</span><span><i style="background:#34d399"></i>2. Jelajah Karier</span><span><i style="background:#fbbf24"></i>3. Ambil Keputusan</span><span><i style="background:#f472b6"></i>4. Bangun Diri</span><span><i style="background:#a78bfa"></i>5. Siap Melangkah</span></div>
+      <div class="legend"><button type="button" data-f="ladder" title="Tonjolkan tangga">🪜 Tangga ▲ naik</button><button type="button" data-f="snake" title="Tonjolkan ular">🐍 Ular ▼ turun</button><span>❓ Kuis</span><span>💭 Refleksi</span><span>🎁 Kejutan</span></div>
       <div class="log" id="log"></div>
       <div class="sidecredit" id="sideCredit"></div>
     </aside>
@@ -562,46 +596,48 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const clone=o=>JSON.parse(JSON.stringify(o));
 const int=(v,lo,hi,d)=>{v=Math.round(Number(v));return Number.isFinite(v)?Math.min(hi,Math.max(lo,v)):d};
 const str=(v,max)=>String(v==null?"":v).trim().slice(0,max);
+const ZONES=[
+  {n:"Kenali Diri",c:["Mengenal Diri"]},
+  {n:"Jelajah Karier",c:["Informasi Karier"]},
+  {n:"Ambil Keputusan",c:["Pengambilan Keputusan"]},
+  {n:"Bangun Diri",c:["Keterampilan Diri"]},
+  {n:"Siap Melangkah",c:["Kesehatan Mental","Literasi Digital","Dukungan & Sikap"]}];
+const ZCOL=["#22d3ee","#34d399","#fbbf24","#f472b6","#a78bfa"];
+const zoneOf=n=>Math.max(0,Math.min(4,Math.floor((n-1)/20)));
 const SAVE_KEY='careerquest_bk_v2';
 const CONF_KEY='careerquest_bk_conf_v2';
 const MAX_TEAMS=24,MIN_TEAMS=2;
-const CONF_REV=3; /* naikkan angka ini bila isi bawaan (soal, papan, poin) diperbarui: pengaturan lama otomatis diganti */
+const CONF_REV=4; /* naikkan angka ini bila isi bawaan (soal, papan, poin) diperbarui: pengaturan lama otomatis diganti */
 const UNSYNC_LS="careerquest_bk_unsynced";
 
 /* ---------------- DATA: TANGGA & ULAR ---------------- */
 const D_LAD={
-  3:{to:24,t:"Mengikuti tes minat & bakat",m:"Mengenali minat dan bakat membantumu memilih arah yang paling cocok."},
-  10:{to:32,t:"Rajin mencari informasi sekolah lanjutan",m:"Informasi yang lengkap membuat keputusanmu lebih tepat."},
-  19:{to:41,t:"Berani bertanya pada guru BK dan orang tua",m:"Berdiskusi dengan orang yang tepat membuka jalan baru."},
-  30:{to:53,t:"Aktif di ekstrakurikuler & organisasi",m:"Pengalaman berorganisasi melatih kepemimpinan dan kerja sama."},
-  40:{to:62,t:"Menyusun rencana belajar dan target",m:"Tujuan yang jelas membuat usahamu lebih terarah."},
-  49:{to:71,t:"Membangun disiplin & tanggung jawab",m:"Disiplin kecil yang konsisten membawa hasil besar."},
-  58:{to:77,t:"Mengasah keterampilan abad 21",m:"Komunikasi, kolaborasi, berpikir kritis, dan literasi digital dibutuhkan di semua profesi."},
-  69:{to:89,t:"Memiliki rencana cadangan (Plan B)",m:"Rencana alternatif membuatmu tetap tenang dan siap bergerak."},
-  81:{to:97,t:"Berkonsultasi sebelum memutuskan",m:"Berbicara dengan guru BK dan orang tua membuat keputusanmu matang. Kamu nyaris sampai!"}
+  5:{to:29,t:"Mengikuti tes minat & bakat",m:"Mengenali minat dan bakat membantumu memilih arah yang paling cocok."},
+  13:{to:37,t:"Rajin mencari informasi sekolah lanjutan",m:"Informasi yang lengkap membuat keputusanmu lebih tepat."},
+  24:{to:38,t:"Berani bertanya pada guru BK dan orang tua",m:"Berdiskusi dengan orang yang tepat membuka jalan baru."},
+  33:{to:57,t:"Aktif di ekstrakurikuler & organisasi",m:"Pengalaman berorganisasi melatih kepemimpinan dan kerja sama."},
+  47:{to:67,t:"Menyusun rencana belajar dan target",m:"Tujuan yang jelas membuat usahamu lebih terarah."},
+  55:{to:65,t:"Membangun disiplin & tanggung jawab",m:"Disiplin kecil yang konsisten membawa hasil besar."},
+  69:{to:91,t:"Mengasah keterampilan abad 21",m:"Komunikasi, kolaborasi, berpikir kritis, dan literasi digital dibutuhkan di semua profesi."},
+  75:{to:90,t:"Memiliki rencana cadangan (Plan B)",m:"Rencana alternatif membuatmu tetap tenang dan siap bergerak."},
+  82:{to:94,t:"Berkonsultasi sebelum memutuskan",m:"Berbicara dengan guru BK dan orang tua membuat keputusanmu matang. Kamu nyaris sampai!"},
+  88:{to:100,t:"Rajin mengevaluasi diri",m:"Evaluasi berkala membuat langkahmu tepat. Jalan tol menuju Tujuan!"},
+  93:{to:100,t:"Mantap dengan keputusan sendiri",m:"Keputusan yang kamu ambil dengan sadar dan bertanggung jawab membawamu langsung ke Tujuan!"}
 };
 const D_SNK={
-  17:{to:6,t:"Menunda-nunda belajar",m:"Mulai dari langkah kecil sekarang, jangan menunggu \"nanti\"."},
-  27:{to:12,t:"Hanya ikut-ikutan pilihan teman",m:"Pilihan temanmu belum tentu cocok untuk minat dan kemampuanmu."},
-  36:{to:21,t:"Mudah menyerah saat gagal",m:"Kegagalan adalah bahan belajar. Evaluasi, lalu coba lagi."},
-  45:{to:26,t:"Terlalu lama bermain gawai",m:"Atur waktu layar agar tidak mengalahkan waktu belajar dan istirahat."},
-  54:{to:33,t:"Memilih karena gengsi atau gaji tanpa mengenal diri",m:"Kenali dulu minat, bakat, dan nilai hidupmu."},
-  65:{to:44,t:"Tidak mau menerima masukan",m:"Masukan yang baik adalah cermin untuk berkembang."},
-  70:{to:55,t:"Percaya informasi hoaks tentang sekolah dan pekerjaan",m:"Periksa kebenaran informasi lewat sumber resmi sebelum mengambil keputusan."},
-  74:{to:57,t:"Mengabaikan persyaratan pendaftaran",m:"Cek jadwal, syarat, dan jalur pendaftaran jauh-jauh hari."},
-  83:{to:62,t:"Tidak punya rencana cadangan",m:"Rencana B membuatmu tetap tenang saat rencana A tidak berjalan."},
-  86:{to:66,t:"Terus membandingkan diri dengan orang lain",m:"Setiap orang punya waktu dan jalannya sendiri. Fokus pada kemajuanmu."},
-  88:{to:72,t:"Terlalu lelah dan mengabaikan istirahat",m:"Tubuh dan pikiran yang sehat adalah modal utama meraih cita-cita."},
-  91:{to:75,t:"Cemas berlebihan sampai ragu memutuskan",m:"Cemas itu wajar. Bicarakan dengan orang yang kamu percaya, lalu ambil langkah."},
-  93:{to:78,t:"Mengandalkan keberuntungan tanpa persiapan",m:"Keberuntungan datang kepada mereka yang sudah mempersiapkan diri."},
-  95:{to:61,t:"Menyalahkan keadaan dan orang lain",m:"Fokus pada hal yang bisa kamu kendalikan dan perbaiki."},
-  96:{to:52,t:"Ingin hasil instan tanpa proses",m:"Karier dibangun sedikit demi sedikit, bukan dalam semalam."},
-  98:{to:2,t:"Terburu-buru memutuskan",m:"Keputusan penting perlu dipertimbangkan dari berbagai sisi. Jatuh sampai ke bawah, tetapi kamu bisa bangkit!"}
+  27:{to:17,t:"Menunda-nunda belajar",m:"Mulai dari langkah kecil sekarang, jangan menunggu \"nanti\"."},
+  49:{to:34,t:"Hanya ikut-ikutan pilihan teman",m:"Pilihan temanmu belum tentu cocok untuk minat dan kemampuanmu."},
+  68:{to:57,t:"Tidak mau menerima masukan",m:"Masukan yang baik adalah cermin untuk berkembang."},
+  72:{to:62,t:"Terlalu lama bermain gawai",m:"Atur waktu layar agar tidak mengalahkan waktu belajar dan istirahat."},
+  84:{to:64,t:"Tidak punya rencana cadangan",m:"Rencana B membuatmu tetap tenang saat rencana A tidak berjalan."},
+  86:{to:65,t:"Terus membandingkan diri dengan orang lain",m:"Setiap orang punya waktu dan jalannya sendiri. Fokus pada kemajuanmu."},
+  89:{to:70,t:"Percaya informasi hoaks tentang sekolah dan pekerjaan",m:"Periksa kebenaran informasi lewat sumber resmi sebelum mengambil keputusan."},
+  98:{to:30,t:"Terburu-buru memutuskan",m:"Keputusan penting perlu dipertimbangkan dari berbagai sisi. Jatuh cukup jauh, tetapi kamu bisa bangkit!"}
 };
 
-const D_QT=new Set([4, 6, 7, 11, 12, 13, 16, 20, 21, 24, 25, 28, 32, 33, 34, 37, 41, 42, 43, 44, 48, 51, 52, 53, 55, 57, 60, 61, 63, 66, 68, 71, 72, 75, 76, 77, 78, 82, 87, 94]);
-const D_RT=new Set([2, 8, 15, 22, 26, 31, 38, 47, 56, 62, 67, 79]);
-const D_CT=new Set([5, 9, 14, 18, 23, 29, 35, 39, 46, 50, 59, 64, 73, 80, 84, 85, 89, 90, 92, 97, 99]);
+const D_QT=new Set([2, 4, 7, 9, 10, 11, 15, 16, 18, 20, 22, 23, 25, 29, 30, 32, 35, 37, 38, 39, 42, 43, 45, 48, 51, 52, 53, 57, 58, 60, 62, 64, 65, 66, 71, 73, 76, 78, 80, 83, 90, 94, 97]);
+const D_RT=new Set([6, 12, 19, 26, 34, 40, 46, 54, 61, 67, 77, 87, 96]);
+const D_CT=new Set([3, 8, 14, 17, 21, 28, 31, 36, 41, 44, 50, 56, 59, 63, 70, 74, 79, 81, 85, 91, 92, 95, 99]);
 /* Setiap kotak 2–99 berisi: tangga, ular, kuis, refleksi, atau kejutan (tanpa kotak polos). */
 
 /* ---------------- DATA: KUIS (jawaban benar selalu urutan pertama, diacak saat tampil) ---------------- */
@@ -757,7 +793,7 @@ function buildDefault(){
     reflect:D_REF.slice(),
     chance:D_CHA.map(c=>({i:c.i,t:c.t,d:c.d,m:c.m||0,p:c.p||0,x:c.x?1:0})),
     rules:{pq:10,pr:5,pw:10,timer:0,tantangan:D_CHAL.join("\n"),pesan:"Karier adalah perjalanan panjang. Kenali dirimu, cari informasi, ambil keputusan dengan bijak, dan teruslah belajar. Setiap langkah kecil membawamu ke masa depan yang kamu impikan."},
-    setup:{count:4,names:TEAM_NAMES6.slice(0,4),sound:true}
+    setup:{count:4,names:TEAM_NAMES6.slice(0,4),sound:true,dice:2,limit:45}
   };
 }
 /* Merapikan dan memvalidasi pengaturan (dari penyimpanan, impor berkas, atau editor) */
@@ -802,7 +838,7 @@ function sanitize(c){
   const R=c.rules&&typeof c.rules==="object"?c.rules:{};
   out.rules={pq:int(R.pq,0,100,10),pr:int(R.pr,0,100,5),pw:int(R.pw,0,100,10),timer:int(R.timer,0,600,0),tantangan:String(R.tantangan==null?d.rules.tantangan:R.tantangan).split("\n").map(x=>x.trim().slice(0,220)).filter(Boolean).slice(0,30).join("\n"),pesan:str(R.pesan,500)||d.rules.pesan};
   const S=c.setup&&typeof c.setup==="object"?c.setup:{};
-  out.setup={count:int(S.count,MIN_TEAMS,MAX_TEAMS,4),names:(Array.isArray(S.names)?S.names:[]).slice(0,MAX_TEAMS).map(x=>str(x,22)),sound:S.sound!==false};
+  out.setup={dice:int(S.dice,1,2,2),limit:[0,30,45,60].includes(+S.limit)?+S.limit:45,count:int(S.count,MIN_TEAMS,MAX_TEAMS,4),names:(Array.isArray(S.names)?S.names:[]).slice(0,MAX_TEAMS).map(x=>str(x,22)),sound:S.sound!==false};
   return out;
 }
 function cleanAbout(A){
@@ -883,7 +919,7 @@ async function showAbout(){
 }
 
 /* ---------------- STATE ---------------- */
-let CFG={count:CONF.setup.count,names:CONF.setup.names.slice(),timer:CONF.rules.timer,sound:CONF.setup.sound};
+let CFG={count:CONF.setup.count,names:CONF.setup.names.slice(),timer:CONF.rules.timer,sound:CONF.setup.sound,dice:CONF.setup.dice,limit:CONF.setup.limit};
 let G=null;
 let resolveModal=null;
 
@@ -946,7 +982,7 @@ function buildBoard(){
       else if(k==="q"){cls="cell q";icon="❓"}
       else if(k==="r"){cls="cell r";icon="💭"}
       else if(k==="c"){cls="cell c";icon="🎁"}
-      d.className=cls;d.dataset.n=n;
+      d.className=cls+(r%2===0&&r>0&&r%2===0&&[2,4,6,8].includes(r)?" zt":"");d.dataset.n=n;d.style.setProperty("--zc",ZCOL[zoneOf(n)]);
       d.innerHTML=`<span class="n">${n}</span>${icon}${lb?`<span class="lb">${lb}</span>`:""}`;
       frag.appendChild(d);
     }
@@ -990,14 +1026,34 @@ function placeToken(i,n,slow){
 }
 
 /* ---------------- RENDER ---------------- */
-function renderDie(n){
+function renderDie(n,id){
   const f={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]}[n]||[];
-  $("#die").innerHTML=Array.from({length:9},(_,i)=>`<div class="pip${f.includes(i)?" on":""}"></div>`).join("");
+  $(id||"#die").innerHTML=Array.from({length:9},(_,i)=>`<div class="pip${f.includes(i)?" on":""}"></div>`).join("");
+}
+const fmtClock=s=>{s=Math.max(0,Math.round(s));return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
+function updateClock(){
+  const e=$("#clock");if(!e||!G)return;
+  if(!G.limit){e.innerHTML=`⏱ ${fmtClock(G.elapsed)}`;e.classList.remove("hot");return}
+  const left=G.limit*60-G.elapsed;
+  e.innerHTML=left>0?`⏳ ${fmtClock(left)}`:`⏰ habis<small>selesaikan putaran</small>`;
+  e.classList.toggle("hot",left<=300);
+}
+let clockT=null;
+function startClock(){
+  clearInterval(clockT);let last=Date.now();
+  clockT=setInterval(()=>{
+    const now=Date.now(),dt=Math.min(3,(now-last)/1000);last=now;
+    if(!G||G.over||$("#game").classList.contains("hidden")||document.hidden)return;
+    G.elapsed+=dt;updateClock();
+    if(G.limit&&!G.timeUp&&G.elapsed>=G.limit*60){G.timeUp=true;toast("⏰ Waktu habis! Permainan berakhir setelah putaran ini selesai.")}
+    else if(G.limit&&!G.warn5&&G.limit*60-G.elapsed<=300&&G.limit>=15){G.warn5=true;toast("⏳ Sisa waktu 5 menit")}
+  },1000);
 }
 function renderTurn(){
-  const t=G.teams[G.turn],el=$("#turn");
+  const t=G.teams[G.turn],el=$("#turn"),z=zoneOf(t.pos);
   el.style.background=`linear-gradient(135deg,${t.color},${t.color}99)`;
-  el.innerHTML=`<div class="big">${t.icon}</div><div><small>GILIRAN</small><b>${esc(t.name)}</b></div>`;
+  el.innerHTML=`<div class="big">${t.icon}</div><div class="tn"><small>GILIRAN</small><b>${esc(t.name)}</b><span class="zn">🗺️ Zona ${z+1} · ${ZONES[z].n}</span></div><div class="clk" id="clock"></div>`;
+  updateClock();
   document.querySelectorAll(".tok").forEach((e,i)=>e.classList.toggle("act",i===G.turn&&!G.over));
 }
 function rankFast(){return G.teams.map((t,k)=>k).sort((a,b)=>G.teams[b].pos-G.teams[a].pos||G.teams[b].score-G.teams[a].score||a-b)}
@@ -1065,12 +1121,13 @@ function modal(cls,html){
 
 /* ---------------- GAMEPLAY ---------------- */
 async function rollDice(){
-  const die=$("#die");
-  die.classList.add("roll");sfx.roll();
-  for(let i=0;i<9;i++){renderDie(1+Math.floor(Math.random()*6));await sleep(90)}
-  die.classList.remove("roll");
-  const n=1+Math.floor(Math.random()*6);
-  renderDie(n);return n;
+  const two=(G.dice||1)===2,ds=two?["#die","#die2"]:["#die"];
+  ds.forEach(s=>$(s).classList.add("roll"));sfx.roll();
+  for(let i=0;i<9;i++){ds.forEach(s=>renderDie(1+Math.floor(Math.random()*6),s));await sleep(90)}
+  ds.forEach(s=>$(s).classList.remove("roll"));
+  const v=ds.map(()=>1+Math.floor(Math.random()*6));
+  ds.forEach((s,k)=>renderDie(v[k],s));
+  return v.reduce((a,b)=>a+b,0);
 }
 async function walkTo(i,target){
   const t=G.teams[i];
@@ -1104,7 +1161,10 @@ async function roll(){
   await resolve(i,0);
   if(!G.over){
     if(G.extra){G.extra=false;log(`🔁 ${esc(t.name)} mendapat giliran tambahan`)}
-    else G.turn=(G.turn+1)%G.teams.length;
+    else{
+      G.turn=(G.turn+1)%G.teams.length;
+      if(G.turn===0&&G.timeUp){G.busy=false;await finishGame(0,true);return}
+    }
     save();
     G.busy=false;renderAll();
   }
@@ -1145,7 +1205,7 @@ async function resolve(i,depth){
   }
   const R=CONF.rules;
   if(QT.has(n)){
-    const ok=await askQuiz(t);
+    const ok=await askQuiz(t,zoneOf(n));
     if(ok===null)log(`❓ Bank soal kosong, kotak kuis dilewati`);
     else if(ok){t.ok=(t.ok||0)+1;addScore(i,R.pq);log(`✅ ${esc(t.name)} menjawab benar (+${R.pq})`)}
     else{t.bad=(t.bad||0)+1;if(R.pw)addScore(i,-R.pw);log(`❌ ${esc(t.name)} belum tepat${R.pw?` (−${R.pw})`:""}. Tetap semangat!`)}
@@ -1158,22 +1218,34 @@ async function resolve(i,depth){
     await drawChance(i,depth);
   }
 }
+function drawFrom(key,pool){
+  if(!pool.length)return -1;
+  if(G[key])G[key]=G[key].filter(k=>pool.includes(k));
+  if(!G[key]||!G[key].length)G[key]=shuffle(pool.slice());
+  return G[key].pop();
+}
+function quizPool(z){
+  const known=new Set(ZONES.flatMap(x=>x.c)),all=CONF.quiz.map((q,k)=>k);
+  const p=all.filter(k=>ZONES[z].c.includes(CONF.quiz[k].c)||!known.has(CONF.quiz[k].c));
+  return p.length?p:all;
+}
 function draw(key,len){
   if(!len)return -1;
   if(G[key])G[key]=G[key].filter(k=>k<len);
   if(!G[key]||!G[key].length)G[key]=shuffle([...Array(len).keys()]);
   return G[key].pop();
 }
-function askQuiz(team){
+function askQuiz(team,z){
+  z=z||0;
   return new Promise(res=>{
-    const qi=draw("qDeck",CONF.quiz.length);
+    const qi=drawFrom("qz"+z,quizPool(z));
     if(qi<0){res(null);return}
     const q=CONF.quiz[qi],R=CONF.rules;
     const opts=shuffle(q.o.map((t,k)=>({t,ok:k===0})));
     const L="ABCD";let timer=null,left=G.timer,done=false;
     sfx.card();
     openModal("quiz",`
-      <div class="mtag">❓ Kuis karier · ${esc(q.c)}</div>
+      <div class="mtag">❓ Kuis · Zona ${z+1}: ${ZONES[z].n}</div>
       <h2>${team.icon} ${esc(team.name)}, jawab ya!</h2>
       <p class="qtext">${esc(q.q)}</p>
       ${G.timer?`<div class="timer"><i id="tbar"></i><b id="tnum">${left}</b></div>`:""}
@@ -1249,6 +1321,12 @@ async function win(i){
   t.pos=100;t.finished=true;G.over=true;
   if(G.first===null||G.first===undefined)G.first=i;
   placeToken(i,100,false);
+  await finishGame(i,false);
+}
+async function finishGame(i,byTime){
+  G.over=true;
+  if(byTime){i=rankFast()[0];if(G.first===null||G.first===undefined)G.first=i}
+  const t=G.teams[i];
   renderAll();
   sfx.win();confetti();
   const fast=rankFast().map(k=>({...G.teams[k],k})),kuis=rankCareer().map(k=>({...G.teams[k],k}));
@@ -1265,9 +1343,9 @@ async function win(i){
   const html=`
     <div class="mtag">🏆 Permainan selesai</div>
     <div class="bigico">🎉</div>
-    <h2>${t.icon} ${esc(t.name)} sampai di Tujuan lebih dulu!</h2>
+    <h2>${byTime?`⏱ Waktu habis! ${t.icon} ${esc(t.name)} paling dekat dengan Tujuan (kotak ${t.pos})`:`${t.icon} ${esc(t.name)} sampai di Tujuan lebih dulu!`}</h2>
     <div class="twolb">
-      <div class="lbcol"><h3>⚡ Juara Tercepat</h3>
+      <div class="lbcol"><h3>⚡ Juara Tercepat${byTime?" <small>(terdepan saat waktu habis)</small>":""}</h3>
         <div class="rankwrap"><table class="rank">${fast.map((x,r)=>`<tr><td>${r+1}</td><td>${dot(x)}${esc(x.name)}</td><td class="big">Kotak ${x.pos}</td></tr>`).join("")}</table></div></div>
       <div class="lbcol k"><h3>🌟 Juara Kuis <small>(urut total poin)</small></h3>
         <div class="rankwrap"><table class="rank">${kuis.map((x,r)=>`<tr><td>${r+1}</td><td>${dot(x)}${esc(x.name)}<br><small>${sub(x)}</small></td><td class="big">${x.score||0}<small> poin</small></td></tr>`).join("")}</table></div></div>
@@ -1299,8 +1377,9 @@ function confetti(){
 function save(){
   try{
     if(!G||G.over)return;
-    const {teams,turn,qDeck,rDeck,cDeck,log,timer}=G;
-    localStorage.setItem(SAVE_KEY,JSON.stringify({teams,turn,qDeck,rDeck,cDeck,log:log.slice(0,8),timer,sound:CFG.sound}));
+    const {teams,turn,qDeck,rDeck,cDeck,log,timer,dice,limit,elapsed}=G;
+    const zd={};Object.keys(G).filter(k=>/^qz\d$/.test(k)).forEach(k=>zd[k]=G[k]);
+    localStorage.setItem(SAVE_KEY,JSON.stringify(Object.assign({teams,turn,qDeck,rDeck,cDeck,log:log.slice(0,8),timer,dice,limit,elapsed,sound:CFG.sound},zd)));
   }catch(e){}
 }
 function loadSaved(){
@@ -1317,15 +1396,15 @@ function startGame(names,saved){
   if(saved){
     G=Object.assign({busy:false,over:false,extra:false,first:null},saved);
     G.teams=saved.teams.map(t=>Object.assign({},t));
-    G.timer=+saved.timer||0;
+    G.timer=+saved.timer||0;G.dice=saved.dice===1?1:2;G.limit=+saved.limit||0;G.elapsed=+saved.elapsed||0;G.timeUp=false;
   }else{
     G={
       teams:names.map((n,i)=>({name:n,icon:TEAM_ICONS[i%TEAM_ICONS.length],color:TEAM_COLORS[i%TEAM_COLORS.length],pos:1,score:0,ok:0,bad:0,rf:0,bonus:0,finished:false})),
-      turn:0,qDeck:null,rDeck:null,cDeck:null,log:[],busy:false,over:false,extra:false,first:null,timer:+CFG.timer||0
+      turn:0,qDeck:null,rDeck:null,cDeck:null,log:[],busy:false,over:false,extra:false,first:null,timer:+CFG.timer||0,dice:CFG.dice||2,limit:+CFG.limit||0,elapsed:0,timeUp:false
     };
   }
-  buildBoard();buildTokens();renderDie(1);renderAll();
-  if(!saved)log("🧭 Petualangan dimulai! Siapa yang sampai ke Tujuan lebih dulu?");
+  buildBoard();buildTokens();renderDie(1);renderDie(1,"#die2");$("#dice").classList.toggle("two",G.dice===2);renderAll();startClock();
+  if(!saved)log(`🧭 Petualangan dimulai! ${G.dice} dadu${G.limit?" · batas waktu "+G.limit+" menit":""}`);
   save();
 }
 function showSetup(){
@@ -1336,11 +1415,19 @@ function showSetup(){
 function confSummary(){
   const C=CONF;
   return `Bank soal: <b>${C.quiz.length}</b> kuis · <b>${C.reflect.length}</b> refleksi · <b>${C.chance.length}</b> kejutan<br>
-    Papan: <b>${C.ladders.length}</b> tangga · <b>${C.snakes.length}</b> ular · <b>${C.tiles.quiz.length}</b> kotak kuis · <b>${C.tiles.ref.length}</b> refleksi · <b>${C.tiles.cha.length}</b> kejutan<br>
+    Papan: <b>5</b> zona · <b>${C.ladders.length}</b> tangga · <b>${C.snakes.length}</b> ular · <b>${C.tiles.quiz.length}</b> kotak kuis · <b>${C.tiles.ref.length}</b> refleksi · <b>${C.tiles.cha.length}</b> kejutan<br>
     Poin: kuis benar <b>+${C.rules.pq}</b>${C.rules.pw?` · salah <b>−${C.rules.pw}</b>`:""} · refleksi <b>+${C.rules.pr}</b>`;
 }
+/* perkiraan lama main (hasil simulasi: sekitar 70 detik per giliran, termasuk diskusi) */
+const EST={1:[64,79,92,106,119,134,149],2:[42,52,64,72,82,91,100]}; /* untuk 2..8 kelompok, tanpa batas waktu */
+function estFree(d,n){const a=EST[d];return n<=8?a[Math.max(0,n-2)]:Math.round(a[6]+(n-8)*(a[6]-a[5]))}
+function estText(){
+  const f=estFree(CFG.dice,CFG.count),L=CFG.limit;
+  const m=L?Math.min(L+3,f):f;
+  return `⏱ Perkiraan lama main (${CFG.count} kelompok, ${CFG.dice} dadu): <b>±${m} menit</b>${L&&f>L+3?" (dibatasi waktu)":""}`;
+}
 function persistSetup(){
-  CONF.setup={count:CFG.count,names:CFG.names.slice(0,MAX_TEAMS),sound:CFG.sound};
+  CONF.setup={count:CFG.count,names:CFG.names.slice(0,MAX_TEAMS),sound:CFG.sound,dice:CFG.dice,limit:CFG.limit};
   CONF.rules.timer=CFG.timer;
   saveConf();
 }
@@ -1352,6 +1439,9 @@ function buildSetup(){
   $("#nameList").innerHTML=Array.from({length:CFG.count},(_,i)=>`
     <div class="tname"><div class="tk" style="background:${TEAM_COLORS[i%TEAM_COLORS.length]}">${TEAM_ICONS[i%TEAM_ICONS.length]}</div>
     <input type="text" maxlength="22" value="${esc(CFG.names[i]||defName(i))}" data-i="${i}" aria-label="Nama kelompok ${i+1}"></div>`).join("");
+  $("#diceChips").innerHTML=[1,2].map(n=>`<button class="chip${n===CFG.dice?" on":""}" data-d="${n}">${n} dadu</button>`).join("");
+  $("#limChips").innerHTML=[[0,"Tanpa batas"],[30,"30 mnt"],[45,"45 mnt"],[60,"60 mnt"]].map(([m,l])=>`<button class="chip${m===CFG.limit?" on":""}" data-l="${m}">${l}</button>`).join("");
+  $("#estLine").innerHTML=estText();
   $("#optTimer").value=String(CFG.timer);
   $("#optSound").checked=CFG.sound;
   $("#confSummary").innerHTML=confSummary();
@@ -1664,7 +1754,7 @@ async function edSave(publish){
     b.disabled=false;
   }
   const clean=sanitize(ED);
-  clean.setup={count:CFG.count,names:CFG.names.slice(0,MAX_TEAMS),sound:CFG.sound};
+  clean.setup={count:CFG.count,names:CFG.names.slice(0,MAX_TEAMS),sound:CFG.sound,dice:CFG.dice,limit:CFG.limit};
   const before=JSON.stringify(confForServer());
   CONF=clean;CFG.timer=CONF.rules.timer;
   rebuildMaps();saveConf();applyCredit();
@@ -1818,6 +1908,8 @@ $("#nameList").addEventListener("input",e=>{
 $("#optTimer").addEventListener("change",e=>{
   CFG.timer=int(e.target.value,0,600,0);e.target.value=CFG.timer;persistSetup();
 });
+$("#diceChips").addEventListener("click",e=>{const b=e.target.closest("[data-d]");if(!b)return;CFG.dice=+b.dataset.d;persistSetup();buildSetup()});
+$("#limChips").addEventListener("click",e=>{const b=e.target.closest("[data-l]");if(!b)return;CFG.limit=+b.dataset.l;persistSetup();buildSetup()});
 $("#optSound").addEventListener("change",e=>{CFG.sound=e.target.checked;syncSoundBtn();persistSetup()});
 $("#editBtn").addEventListener("click",openEditor);
 $("#startBtn").addEventListener("click",()=>{
@@ -1850,6 +1942,12 @@ $("#bFull").addEventListener("click",()=>{
     else document.exitFullscreen();
   }catch(e){}
 });
+$("#bEnd").addEventListener("click",async()=>{
+  if(!G||G.over||$("#modal").classList.contains("show"))return;
+  const v=await modal("",`<div class="mtag">🏁 Akhiri</div><h2>Akhiri permainan sekarang?</h2><p>Juara diumumkan berdasarkan posisi dan poin saat ini.</p>
+    <div class="mact"><button class="btn ghost" data-v="no">Lanjut main</button><button class="btn primary" data-v="yes">Akhiri sekarang</button></div>`);
+  if(v==="yes"&&G&&!G.over&&!G.busy)await finishGame(0,true);
+});
 $("#bReset").addEventListener("click",async()=>{
   if(!G||G.busy&&!G.over)return;
   const v=await modal("",`
@@ -1867,9 +1965,9 @@ $("#bHelp").addEventListener("click",()=>{
     <div class="mtag">❔ Cara bermain</div>
     <h2>Career Quest — Tangga Masa Depanku</h2>
     <p>1. Setiap kelompok bergiliran melempar dadu (guru menekan tombol atau Spasi).<br>
-    2. 🪜 <b>Tangga</b> = kebiasaan positif, kamu naik. 🐍 <b>Ular</b> = hambatan karier, kamu turun. Setelah naik atau turun, isi kotak tujuan tetap berlaku. Jika langkah melewati kotak 100, pion mundur sebanyak kelebihannya (97 + 4 → 99).<br>
+    2. 🪜 <b>Tangga</b> = kebiasaan positif, kamu naik (tangga di kotak 88 dan 93 langsung ke Tujuan). 🐍 <b>Ular</b> = hambatan karier, kamu turun. Setelah naik atau turun, isi kotak tujuan tetap berlaku. Jika langkah melewati kotak 100, pion mundur sebanyak kelebihannya (97 + 4 → 99).<br>
     3. ❓ <b>Kuis</b>: jawaban benar +${R.pq} poin${R.pw?` (salah −${R.pw})`:""}. 💭 <b>Refleksi</b>: jawab dan diskusikan, +${R.pr} poin. 🎁 <b>Kartu Kejutan</b>: bisa maju, mundur, atau dapat poin.<br>
-    4. Sampai kotak 100 lebih dulu menjadi <b>⚡ Juara Tercepat</b>; total poin terbanyak menjadi <b>🌟 Juara Kuis</b>. Kedua papan juara ada di kiri dan kanan papan permainan. Tim yang kalah mendapat <b>tantangan semangat</b>.<br>
+    4. Sampai kotak 100 lebih dulu menjadi <b>⚡ Juara Tercepat</b> (jika waktu habis, tim terdepan); total poin terbanyak menjadi <b>🌟 Juara Kuis</b>. Kedua papan juara ada di kiri dan kanan papan permainan. Tim yang kalah mendapat <b>tantangan semangat</b>.<br>
     5. Guru bisa menyesuaikan poin dengan tombol +5 / −5 di papan Juara Kuis (dihitung sebagai bonus).</p>
     <div class="mact"><button class="btn primary" data-v="ok">Mengerti</button></div>
     ${creditLine()?`<div class="mcredit">${creditLine()}</div>`:""}`);
