@@ -493,7 +493,7 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
       <div>
         <div class="panel">
           <h3><b>3</b> Pengaturan</h3>
-          <div class="opt-row col"><label>🎲 Jumlah dadu<small style="display:block;color:var(--muted);font-weight:500;font-size:12.5px">2 dadu membuat permainan jauh lebih cepat</small></label><div class="quick" id="diceChips"></div></div>
+          <div class="opt-row col"><label>🎲 Jumlah dadu<small style="display:block;color:var(--muted);font-weight:500;font-size:12.5px">2 dadu lebih cepat, dan angka kembar = main lagi</small></label><div class="quick" id="diceChips"></div></div>
           <div class="opt-row col"><label>⏳ Lama permainan<small style="display:block;color:var(--muted);font-weight:500;font-size:12.5px">Habis waktu: putaran diselesaikan, tim terdepan jadi Juara Tercepat</small></label><div class="quick" id="limChips"></div></div>
           <div class="estline" id="estLine"></div>
           <div class="opt-row"><label for="optTimer">⏱ Batas waktu kuis (detik)<small style="display:block;color:var(--muted);font-weight:500;font-size:12.5px">0 = tanpa batas</small></label>
@@ -506,7 +506,7 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
         <div class="panel how">
           <h3>Cara bermain</h3>
           <ul>
-            <li>Kelompok bergiliran melempar dadu (1 atau 2 dadu, bisa diatur). Guru menekan tombol dadu.</li>
+            <li>Kelompok bergiliran melempar dadu (1 atau 2 dadu, bisa diatur). Guru menekan tombol dadu. Pada mode 2 dadu, <b>angka kembar</b> (mis. 4 + 4) berarti <b>main lagi</b>.</li>
             <li>🪜 <b>Tangga</b> = kebiasaan positif, naik! 🐍 <b>Ular</b> = hambatan karier, turun.</li>
             <li>Papan terbagi 5 <b>zona</b>; kuis mengikuti tema zonanya. Setelah naik tangga atau turun ular, isi kotak tujuan tetap berlaku.</li>
             <li>Dua <b>tangga ekspres</b> (88 dan 93) langsung ke 🏁 finish. Jangan lewat kotak 100: pion akan mundur.</li>
@@ -616,7 +616,7 @@ const zoneOf=n=>Math.max(0,Math.min(4,Math.floor((n-1)/20)));
 const SAVE_KEY='careerquest_bk_v2';
 const CONF_KEY='careerquest_bk_conf_v2';
 const MAX_TEAMS=24,MIN_TEAMS=2;
-const CONF_REV=5; /* naikkan angka ini bila isi bawaan (soal, papan, poin) diperbarui: pengaturan lama otomatis diganti */
+const CONF_REV=6; /* naikkan angka ini bila isi bawaan (soal, papan, poin) diperbarui: pengaturan lama otomatis diganti */
 const UNSYNC_LS="careerquest_bk_unsynced";
 
 /* ---------------- DATA: TANGGA & ULAR ---------------- */
@@ -641,12 +641,18 @@ const D_SNK={
   84:{to:64,t:"Tidak punya rencana cadangan",m:"Rencana B membuatmu tetap tenang saat rencana A tidak berjalan."},
   86:{to:65,t:"Terus membandingkan diri dengan orang lain",m:"Setiap orang punya waktu dan jalannya sendiri. Fokus pada kemajuanmu."},
   89:{to:70,t:"Percaya informasi hoaks tentang sekolah dan pekerjaan",m:"Periksa kebenaran informasi lewat sumber resmi sebelum mengambil keputusan."},
-  98:{to:30,t:"Terburu-buru memutuskan",m:"Keputusan penting perlu dipertimbangkan dari berbagai sisi. Jatuh cukup jauh, tetapi kamu bisa bangkit!"}
+  98:{to:30,t:"Terburu-buru memutuskan",m:"Keputusan penting perlu dipertimbangkan dari berbagai sisi. Jatuh cukup jauh, tetapi kamu bisa bangkit!"},
+  19:{to:8,t:"Malu bertanya saat bingung",m:"Bertanya bukan tanda lemah. Guru BK dan orang tua siap membantumu."},
+  36:{to:25,t:"Meremehkan kemampuan diri sendiri",m:"Kamu punya kekuatan yang belum kamu sadari. Percayalah dan terus berlatih."},
+  43:{to:30,t:"Takut mencoba hal baru",m:"Mencoba pengalaman baru membantumu menemukan minat yang sesungguhnya."},
+  61:{to:48,t:"Menyerah saat mengalami kegagalan",m:"Kegagalan adalah bahan belajar. Bangkit dan coba lagi dengan cara yang lebih baik."},
+  77:{to:63,t:"Mengabaikan nasihat guru BK dan orang tua",m:"Mendengarkan orang yang peduli padamu membuat keputusan lebih matang."},
+  92:{to:79,t:"Merasa sudah pasti, lalu berhenti belajar",m:"Kamu hampir sampai! Tetap rendah hati dan terus mempersiapkan diri."}
 };
 
-const D_QT=new Set([1, 3, 6, 8, 9, 10, 14, 15, 17, 19, 21, 22, 23, 28, 29, 31, 34, 36, 37, 38, 41, 42, 44, 46, 50, 51, 52, 56, 57, 59, 61, 63, 64, 65, 70, 71, 74, 77, 79, 80, 83, 90, 94, 97]);
+const D_QT=new Set([1, 3, 6, 8, 9, 10, 14, 15, 17, 21, 22, 23, 28, 29, 31, 34, 37, 38, 41, 42, 44, 46, 50, 51, 52, 56, 57, 59, 63, 64, 65, 70, 71, 74, 79, 80, 83, 90, 94, 97]);
 const D_RT=new Set([4, 11, 18, 25, 32, 39, 45, 53, 60, 66, 76, 87, 96]);
-const D_CT=new Set([2, 7, 12, 16, 20, 26, 30, 35, 40, 43, 48, 54, 58, 62, 67, 73, 78, 81, 85, 91, 92, 95, 99]);
+const D_CT=new Set([2, 7, 12, 16, 20, 26, 30, 35, 40, 48, 54, 58, 62, 67, 73, 78, 81, 85, 91, 95, 99]);
 /* Setiap kotak 1–99 berisi: tangga, ular, kuis, refleksi, atau kejutan (tanpa kotak polos). */
 
 /* ---------------- DATA: KUIS (jawaban benar selalu urutan pertama, diacak saat tampil) ---------------- */
@@ -1134,6 +1140,7 @@ async function rollDice(){
   for(let i=0;i<9;i++){ds.forEach(s=>renderDie(1+Math.floor(Math.random()*6),s));await sleep(90)}
   ds.forEach(s=>$(s).classList.remove("roll"));
   const v=ds.map(()=>1+Math.floor(Math.random()*6));
+  G.last=v;
   ds.forEach((s,k)=>renderDie(v[k],s));
   return v.reduce((a,b)=>a+b,0);
 }
@@ -1157,6 +1164,11 @@ async function roll(){
   const d=await rollDice();
   log(`${t.icon} <b>${esc(t.name)}</b> melempar dadu: <b>${d}</b>`);
   await sleep(250);
+  if(G.dice===2&&G.last&&G.last[0]===G.last[1]){ /* dadu kembar: main lagi (maks. 3 kali beruntun) */
+    G.dbl=(G.dbl||0)+1;
+    if(G.dbl>=3){G.dbl=0;log(`🎲 Dadu kembar tiga kali beruntun, tidak ada giliran tambahan`)}
+    else{G.extra=true;sfx.up&&sfx.up();log(`🎲🎲 <b>Dadu kembar (${G.last[0]}+${G.last[1]})!</b> ${esc(t.name)} main lagi`);toast(`🎲🎲 Dadu kembar! ${t.name} main lagi`,true)}
+  }else G.dbl=0;
   const raw=t.pos+d;
   if(raw>100){ /* kelebihan: maju sampai 100 lalu mundur sebanyak kelebihannya */
     const back=200-raw;
@@ -1170,6 +1182,7 @@ async function roll(){
   if(!G.over){
     if(G.extra){G.extra=false;log(`🔁 ${esc(t.name)} mendapat giliran tambahan`)}
     else{
+      G.dbl=0;
       G.turn=(G.turn+1)%G.teams.length;
       if(G.turn===0&&G.timeUp){G.busy=false;await finishGame(0,true);return}
     }
@@ -1441,7 +1454,7 @@ function confSummary(){
     Poin: kuis benar <b>+${C.rules.pq}</b>${C.rules.pw?` · salah <b>−${C.rules.pw}</b>`:""} · refleksi <b>+${C.rules.pr}</b>`;
 }
 /* perkiraan lama main (hasil simulasi: sekitar 70 detik per giliran, termasuk diskusi) */
-const EST={1:[61,78,104,119,143,169,187],2:[41,55,69,85,99,111,127]}; /* untuk 2..8 kelompok, tanpa batas waktu */
+const EST={1:[85,109,142,164,187,214,244],2:[48,65,77,93,109,119,134]}; /* untuk 2..8 kelompok, tanpa batas waktu */
 function estFree(d,n){const a=EST[d];return n<=8?a[Math.max(0,n-2)]:Math.round(a[6]+(n-8)*(a[6]-a[5]))}
 function estText(){
   const f=estFree(CFG.dice,CFG.count),L=CFG.limit;
@@ -1986,7 +1999,7 @@ $("#bHelp").addEventListener("click",()=>{
   modal("",`
     <div class="mtag">❔ Cara bermain</div>
     <h2>Career Quest — Tangga Masa Depanku</h2>
-    <p>1. Setiap kelompok bergiliran melempar dadu (guru menekan tombol atau Spasi).<br>
+    <p>1. Setiap kelompok bergiliran melempar dadu (guru menekan tombol atau Spasi). Pada mode 2 dadu, angka kembar (mis. 4 + 4) berarti main lagi. Mendarat di kotak yang sedang ditempati kelompok lain membuat kelompok itu kembali ke 🚩 Start.<br>
     2. 🪜 <b>Tangga</b> = kebiasaan positif, kamu naik (tangga di kotak 88 dan 93 langsung ke 🏁 finish). 🐍 <b>Ular</b> = hambatan karier, kamu turun. Setelah naik atau turun, isi kotak tujuan tetap berlaku. Jika langkah melewati kotak 100, pion mundur sebanyak kelebihannya (97 + 4 → 99). Mendarat di kotak yang ditempati kelompok lain membuat kelompok itu kembali ke 🚩 Start.<br>
     3. ❓ <b>Kuis</b>: jawaban benar +${R.pq} poin${R.pw?` (salah −${R.pw})`:""}. 💭 <b>Refleksi</b>: jawab dan diskusikan, +${R.pr} poin. 🎁 <b>Kartu Kejutan</b>: bisa maju, mundur, atau dapat poin.<br>
     4. Sampai kotak 100 lebih dulu menjadi <b>⚡ Juara Tercepat</b> (jika waktu habis, tim terdepan); total poin terbanyak menjadi <b>🌟 Juara Kuis</b>. Kedua papan juara ada di kiri dan kanan papan permainan. Tim yang kalah mendapat <b>tantangan semangat</b>.<br>
