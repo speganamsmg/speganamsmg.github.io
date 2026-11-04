@@ -117,7 +117,7 @@ a.back:hover,button.back:hover{border-color:var(--cy);color:var(--cy)}
 .topbar .sp{flex:1}
 .tb{background:var(--glass);border:1px solid var(--line);color:var(--ink);border-radius:11px;padding:7px 13px;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap}
 .tb:hover{background:var(--glass2);border-color:var(--cy)}
-main{flex:1;display:flex;gap:18px;padding:14px 18px;min-height:0;align-items:center;justify-content:center;--sw:clamp(250px,22vw,330px);--s:min(calc(100vh - 104px),calc(100vw - 2*var(--sw) - 96px))}
+main{flex:1;display:flex;gap:18px;padding:14px 18px;min-height:0;align-items:center;justify-content:center;--sw:clamp(250px,22vw,330px);--s:min(calc(100vh - 104px),calc((100vw - 2*var(--sw) - 96px)/1.1))}
 .board-wrap{flex:none;position:relative}
 .board-wrap::before{content:"";position:absolute;inset:-14px;border-radius:30px;background:conic-gradient(from 210deg,rgba(34,211,238,.5),rgba(232,121,249,.5),rgba(34,211,238,.5));filter:blur(22px);opacity:.38}
 .board{position:relative;width:var(--s);height:var(--s);display:grid;grid-template:repeat(10,1fr)/repeat(10,1fr);border:1px solid rgba(125,211,252,.5);border-radius:20px;overflow:hidden;box-shadow:0 22px 60px rgba(0,0,0,.55),0 0 0 4px rgba(2,6,23,.6);background:rgba(6,10,36,.92)}
@@ -424,19 +424,26 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
 .zlegend span{white-space:nowrap}
 .zlegend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:-1px}
 @media (min-width:1700px) and (min-height:900px){
-  main{--sw:340px;--s:min(calc(100vh - 104px),calc(100vw - 2.4*var(--sw) - 96px))}
+  main{--sw:340px;--s:min(calc(100vh - 104px),calc((100vw - 2.4*var(--sw) - 96px)/1.1))}
   .side{zoom:1.2;height:calc(var(--s)/1.2)}
 }
+
+
+/* ---------- START (di luar papan) ---------- */
+.board-wrap{margin-left:calc(var(--s)*.1)}
+.startpad{position:absolute;left:calc(var(--s)*-.1);bottom:calc(var(--s)*.005);width:calc(var(--s)*.1);height:calc(var(--s)*.1);display:grid;place-items:center;font-size:calc(var(--s)*.05);border-radius:50%;background:radial-gradient(circle at 40% 35%,rgba(52,211,153,.6),rgba(34,211,238,.25));border:2px dashed rgba(52,211,153,.85);box-shadow:0 0 22px -4px rgba(52,211,153,.7)}
+.tokens{overflow:visible;z-index:5}
+.cell.end{font-size:calc(var(--s)*.06)}
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width:980px){
   body{overflow:auto}
   #game{height:auto;min-height:100%}
-  main{flex-direction:column;--s:min(calc(100vw - 24px),calc(100vh - 150px));padding:10px}
+  main{flex-direction:column;--s:min(calc((100vw - 24px)/1.1),calc(100vh - 150px));padding:10px}
   .side{width:min(100%,640px);max-height:none}
   .board-wrap{order:1}.side.sl{order:2}.side.sr{order:3}
   .side{height:auto;zoom:1}
-  main{--s:min(calc(100vw - 24px),calc(100vh - 150px))}
+  main{--s:min(calc((100vw - 24px)/1.1),calc(100vh - 150px))}
   .lb .rows{max-height:none}
   .setup-grid,.hero,.rule-grid{grid-template-columns:1fr}
   .opts{grid-template-columns:1fr}
@@ -502,7 +509,8 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
             <li>Kelompok bergiliran melempar dadu (1 atau 2 dadu, bisa diatur). Guru menekan tombol dadu.</li>
             <li>🪜 <b>Tangga</b> = kebiasaan positif, naik! 🐍 <b>Ular</b> = hambatan karier, turun.</li>
             <li>Papan terbagi 5 <b>zona</b>; kuis mengikuti tema zonanya. Setelah naik tangga atau turun ular, isi kotak tujuan tetap berlaku.</li>
-            <li>Dua <b>tangga ekspres</b> (88 dan 93) langsung ke Tujuan. Jangan lewat kotak 100: pion akan mundur.</li>
+            <li>Dua <b>tangga ekspres</b> (88 dan 93) langsung ke 🏁 finish. Jangan lewat kotak 100: pion akan mundur.</li>
+            <li>Mendarat di kotak yang sudah ditempati kelompok lain? Kelompok itu <b>kembali ke 🚩 Start</b>.</li>
             <li>Waktu habis? Putaran diselesaikan, lalu tim terdepan menjadi Juara Tercepat.</li>
             <li>❓ <b>Kuis</b> dan 💭 <b>Refleksi</b> memberi poin, 🎁 <b>Kartu Kejutan</b> bisa maju, mundur, atau menambah poin.</li>
             <li>Dua juara: <b>⚡ Juara Tercepat</b> (sampai kotak 100 lebih dulu) dan <b>🌟 Juara Kuis</b> (total poin terbanyak). Tim yang kalah mendapat <b>tantangan semangat</b>.</li>
@@ -545,10 +553,11 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
       <div class="lb f"><h4>⚡ Juara Tercepat <em>posisi di papan</em></h4><div class="rows" id="lbFast"></div></div>
     </aside>
     <div class="board-wrap">
+      <div class="startpad" id="startpad" title="Start">🚩</div>
       <div class="board" id="board">
         <svg class="links" id="links" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
-        <div class="tokens" id="tokens"></div>
       </div>
+      <div class="tokens" id="tokens"></div>
     </div>
     <aside class="side sr">
       <div class="lb k"><h4>🌟 Juara Kuis <em>urut total poin</em></h4><div class="rows" id="lbQuiz"></div></div>
@@ -607,7 +616,7 @@ const zoneOf=n=>Math.max(0,Math.min(4,Math.floor((n-1)/20)));
 const SAVE_KEY='careerquest_bk_v2';
 const CONF_KEY='careerquest_bk_conf_v2';
 const MAX_TEAMS=24,MIN_TEAMS=2;
-const CONF_REV=4; /* naikkan angka ini bila isi bawaan (soal, papan, poin) diperbarui: pengaturan lama otomatis diganti */
+const CONF_REV=5; /* naikkan angka ini bila isi bawaan (soal, papan, poin) diperbarui: pengaturan lama otomatis diganti */
 const UNSYNC_LS="careerquest_bk_unsynced";
 
 /* ---------------- DATA: TANGGA & ULAR ---------------- */
@@ -635,10 +644,10 @@ const D_SNK={
   98:{to:30,t:"Terburu-buru memutuskan",m:"Keputusan penting perlu dipertimbangkan dari berbagai sisi. Jatuh cukup jauh, tetapi kamu bisa bangkit!"}
 };
 
-const D_QT=new Set([2, 4, 7, 9, 10, 11, 15, 16, 18, 20, 22, 23, 25, 29, 30, 32, 35, 37, 38, 39, 42, 43, 45, 48, 51, 52, 53, 57, 58, 60, 62, 64, 65, 66, 71, 73, 76, 78, 80, 83, 90, 94, 97]);
-const D_RT=new Set([6, 12, 19, 26, 34, 40, 46, 54, 61, 67, 77, 87, 96]);
-const D_CT=new Set([3, 8, 14, 17, 21, 28, 31, 36, 41, 44, 50, 56, 59, 63, 70, 74, 79, 81, 85, 91, 92, 95, 99]);
-/* Setiap kotak 2–99 berisi: tangga, ular, kuis, refleksi, atau kejutan (tanpa kotak polos). */
+const D_QT=new Set([1, 3, 6, 8, 9, 10, 14, 15, 17, 19, 21, 22, 23, 28, 29, 31, 34, 36, 37, 38, 41, 42, 44, 46, 50, 51, 52, 56, 57, 59, 61, 63, 64, 65, 70, 71, 74, 77, 79, 80, 83, 90, 94, 97]);
+const D_RT=new Set([4, 11, 18, 25, 32, 39, 45, 53, 60, 66, 76, 87, 96]);
+const D_CT=new Set([2, 7, 12, 16, 20, 26, 30, 35, 40, 43, 48, 54, 58, 62, 67, 73, 78, 81, 85, 91, 92, 95, 99]);
+/* Setiap kotak 1–99 berisi: tangga, ular, kuis, refleksi, atau kejutan (tanpa kotak polos). */
 
 /* ---------------- DATA: KUIS (jawaban benar selalu urutan pertama, diacak saat tampil) ---------------- */
 const D_QUIZ=[
@@ -817,7 +826,7 @@ function sanitize(c){
   out.snakes=links(Array.isArray(c.snakes)?c.snakes:d.snakes,false);
   const tl=arr=>{
     const r=[];
-    (Array.isArray(arr)?arr:[]).forEach(n=>{n=int(n,2,99,0);if(n&&!taken.has(n)){taken.add(n);r.push(n)}});
+    (Array.isArray(arr)?arr:[]).forEach(n=>{n=int(n,1,99,0);if(n&&!taken.has(n)){taken.add(n);r.push(n)}});
     return r.sort((a,b)=>a-b);
   };
   const T=c.tiles&&typeof c.tiles==="object"?c.tiles:d.tiles;
@@ -954,11 +963,11 @@ function toast(msg,bad){
 
 /* ---------------- BOARD ---------------- */
 function center(n){
+  if(n<=0)return {x:-5.5,y:95};
   const i=n-1,r=Math.floor(i/10),c=(r%2===0)?i%10:9-(i%10);
   return {x:c*10+5,y:(9-r)*10+5};
 }
 function cellKind(n){
-  if(n===1)return "start";
   if(n===100)return "end";
   if(LAD[n])return "l";
   if(SNK[n])return "s";
@@ -977,8 +986,7 @@ function buildBoard(){
       const d=document.createElement("div");
       const k=cellKind(n);
       let cls="cell "+(((r+c)%2)?"a":"b"),icon="",lb="";
-      if(k==="start"){cls="cell start";icon="🏁";lb="MULAI"}
-      else if(k==="end"){cls="cell end";icon="🏆";lb="TUJUAN"}
+      if(k==="end"){cls="cell end";icon="🏁"}
       else if(k==="q"){cls="cell q";icon="❓"}
       else if(k==="r"){cls="cell r";icon="💭"}
       else if(k==="c"){cls="cell c";icon="🎁"}
@@ -1061,13 +1069,13 @@ function rankCareer(){return G.teams.map((t,k)=>k).sort((a,b)=>G.teams[b].score-
 const sgn=n=>n>0?"+"+n:String(n);
 function renderTeams(popIdx){
   const fb=$("#lbFast"),kb=$("#lbQuiz"),fs=fb.scrollTop,ks=kb.scrollTop;
-  const moved=G.teams.some(t=>t.pos>1),maxS=Math.max(1,...G.teams.map(t=>t.score||0));
+  const moved=G.teams.some(t=>t.pos>0),maxS=Math.max(1,...G.teams.map(t=>t.score||0));
   fb.innerHTML=rankFast().map((i,r)=>{const t=G.teams[i];return `
     <div class="tm f${i===G.turn&&!G.over?" cur":""}">
       <div class="rk${r===0&&moved?" r1":""}">${r+1}</div>
       <div class="tk" style="background:${t.color}">${t.icon}</div>
       <div class="nm"><b>${esc(t.name)}</b><span>${t.finished?"🏆 Sampai tujuan":"sisa "+(100-t.pos)+" kotak"}</span></div>
-      <div class="sc">${t.pos}<small>KOTAK</small></div>
+      <div class="sc">${t.pos?`${t.pos}<small>KOTAK</small>`:"🚩"}</div>
       <div class="bar"><i style="width:${t.pos}%"></i></div>
     </div>`}).join("");
   kb.innerHTML=rankCareer().map((i,r)=>{const t=G.teams[i],b=t.bonus||0;return `
@@ -1169,10 +1177,24 @@ async function roll(){
     G.busy=false;renderAll();
   }
 }
+async function bump(i){
+  const t=G.teams[i],n=t.pos;
+  if(n<=0||n>=100)return;
+  const hit=G.teams.map((x,j)=>j).filter(j=>j!==i&&G.teams[j].pos===n&&!G.teams[j].finished);
+  if(!hit.length)return;
+  sfx.down();
+  const names=hit.map(j=>G.teams[j].icon+" "+esc(G.teams[j].name)).join(", ");
+  log(`💥 ${esc(t.name)} mendarat di kotak ${n}. ${names} kembali ke Start`);
+  toast(`💥 ${hit.map(j=>G.teams[j].name).join(", ")} tersundul, kembali ke Start!`,true);
+  hit.forEach(j=>{G.teams[j].pos=0;placeToken(j,0,true)});
+  renderTeams();
+  await sleep(1200);
+}
 async function resolve(i,depth){
   depth=depth||0;
   const t=G.teams[i],n=t.pos;
   if(n>=100){await win(i);return}
+  await bump(i);
   if(depth>4)return;
   const L=LAD[n],S=SNK[n];
   if(L){
@@ -1343,10 +1365,10 @@ async function finishGame(i,byTime){
   const html=`
     <div class="mtag">🏆 Permainan selesai</div>
     <div class="bigico">🎉</div>
-    <h2>${byTime?`⏱ Waktu habis! ${t.icon} ${esc(t.name)} paling dekat dengan Tujuan (kotak ${t.pos})`:`${t.icon} ${esc(t.name)} sampai di Tujuan lebih dulu!`}</h2>
+    <h2>${byTime?`⏱ Waktu habis! ${t.icon} ${esc(t.name)} paling dekat dengan 🏁${t.pos?` (kotak ${t.pos})`:""}`:`${t.icon} ${esc(t.name)} sampai di Tujuan lebih dulu!`}</h2>
     <div class="twolb">
       <div class="lbcol"><h3>⚡ Juara Tercepat${byTime?" <small>(terdepan saat waktu habis)</small>":""}</h3>
-        <div class="rankwrap"><table class="rank">${fast.map((x,r)=>`<tr><td>${r+1}</td><td>${dot(x)}${esc(x.name)}</td><td class="big">Kotak ${x.pos}</td></tr>`).join("")}</table></div></div>
+        <div class="rankwrap"><table class="rank">${fast.map((x,r)=>`<tr><td>${r+1}</td><td>${dot(x)}${esc(x.name)}</td><td class="big">${x.pos?"Kotak "+x.pos:"🚩"}</td></tr>`).join("")}</table></div></div>
       <div class="lbcol k"><h3>🌟 Juara Kuis <small>(urut total poin)</small></h3>
         <div class="rankwrap"><table class="rank">${kuis.map((x,r)=>`<tr><td>${r+1}</td><td>${dot(x)}${esc(x.name)}<br><small>${sub(x)}</small></td><td class="big">${x.score||0}<small> poin</small></td></tr>`).join("")}</table></div></div>
     </div>
@@ -1399,7 +1421,7 @@ function startGame(names,saved){
     G.timer=+saved.timer||0;G.dice=saved.dice===1?1:2;G.limit=+saved.limit||0;G.elapsed=+saved.elapsed||0;G.timeUp=false;
   }else{
     G={
-      teams:names.map((n,i)=>({name:n,icon:TEAM_ICONS[i%TEAM_ICONS.length],color:TEAM_COLORS[i%TEAM_COLORS.length],pos:1,score:0,ok:0,bad:0,rf:0,bonus:0,finished:false})),
+      teams:names.map((n,i)=>({name:n,icon:TEAM_ICONS[i%TEAM_ICONS.length],color:TEAM_COLORS[i%TEAM_COLORS.length],pos:0,score:0,ok:0,bad:0,rf:0,bonus:0,finished:false})),
       turn:0,qDeck:null,rDeck:null,cDeck:null,log:[],busy:false,over:false,extra:false,first:null,timer:+CFG.timer||0,dice:CFG.dice||2,limit:+CFG.limit||0,elapsed:0,timeUp:false
     };
   }
@@ -1419,7 +1441,7 @@ function confSummary(){
     Poin: kuis benar <b>+${C.rules.pq}</b>${C.rules.pw?` · salah <b>−${C.rules.pw}</b>`:""} · refleksi <b>+${C.rules.pr}</b>`;
 }
 /* perkiraan lama main (hasil simulasi: sekitar 70 detik per giliran, termasuk diskusi) */
-const EST={1:[64,79,92,106,119,134,149],2:[42,52,64,72,82,91,100]}; /* untuk 2..8 kelompok, tanpa batas waktu */
+const EST={1:[61,78,104,119,143,169,187],2:[41,55,69,85,99,111,127]}; /* untuk 2..8 kelompok, tanpa batas waktu */
 function estFree(d,n){const a=EST[d];return n<=8?a[Math.max(0,n-2)]:Math.round(a[6]+(n-8)*(a[6]-a[5]))}
 function estText(){
   const f=estFree(CFG.dice,CFG.count),L=CFG.limit;
@@ -1564,7 +1586,7 @@ function miniCells(){
   for(let r=9;r>=0;r--)for(let c=0;c<10;c++){
     const n=(r%2===0)?r*10+c+1:r*10+(9-c)+1;
     let cls="mc",ic="",to="";
-    if(n===1){cls+=" fix";ic="🏁"}else if(n===100){cls+=" fix";ic="🏆"}
+    if(n===100){cls+=" fix";ic="🏁"}
     else{
       const f=edFind(n);
       if(f.t==="quiz"){cls+=" q";ic="❓"}else if(f.t==="ref"){cls+=" r";ic="💭"}else if(f.t==="cha"){cls+=" c";ic="🎁"}
@@ -1582,7 +1604,7 @@ function edCounts(){
 function cellForm(){
   const n=edSel;
   if(!n)return `<div class="cellbox"><h4>Pilih kotak</h4><p class="ed-help" style="margin:0">Klik salah satu kotak di papan untuk mengubah isinya: kuis, refleksi, kejutan, tangga, atau ular (kotak biasa tidak disarankan).</p></div>`;
-  if(n===1||n===100)return `<div class="cellbox"><h4>Kotak ${n}</h4><p class="ed-help" style="margin:0">Kotak ${n===1?"MULAI":"TUJUAN"} tidak dapat diubah.</p></div>`;
+  if(n===100)return `<div class="cellbox"><h4>Kotak ${n}</h4><p class="ed-help" style="margin:0">Kotak finish tidak dapat diubah.</p></div>`;
   const f=edFind(n),T=f.t;
   const types=[["none","Biasa"],["quiz","❓ Kuis"],["ref","💭 Refleksi"],["cha","🎁 Kejutan"],["ladder","🪜 Tangga"],["snake","🐍 Ular"]];
   let extra="";
@@ -1965,7 +1987,7 @@ $("#bHelp").addEventListener("click",()=>{
     <div class="mtag">❔ Cara bermain</div>
     <h2>Career Quest — Tangga Masa Depanku</h2>
     <p>1. Setiap kelompok bergiliran melempar dadu (guru menekan tombol atau Spasi).<br>
-    2. 🪜 <b>Tangga</b> = kebiasaan positif, kamu naik (tangga di kotak 88 dan 93 langsung ke Tujuan). 🐍 <b>Ular</b> = hambatan karier, kamu turun. Setelah naik atau turun, isi kotak tujuan tetap berlaku. Jika langkah melewati kotak 100, pion mundur sebanyak kelebihannya (97 + 4 → 99).<br>
+    2. 🪜 <b>Tangga</b> = kebiasaan positif, kamu naik (tangga di kotak 88 dan 93 langsung ke 🏁 finish). 🐍 <b>Ular</b> = hambatan karier, kamu turun. Setelah naik atau turun, isi kotak tujuan tetap berlaku. Jika langkah melewati kotak 100, pion mundur sebanyak kelebihannya (97 + 4 → 99). Mendarat di kotak yang ditempati kelompok lain membuat kelompok itu kembali ke 🚩 Start.<br>
     3. ❓ <b>Kuis</b>: jawaban benar +${R.pq} poin${R.pw?` (salah −${R.pw})`:""}. 💭 <b>Refleksi</b>: jawab dan diskusikan, +${R.pr} poin. 🎁 <b>Kartu Kejutan</b>: bisa maju, mundur, atau dapat poin.<br>
     4. Sampai kotak 100 lebih dulu menjadi <b>⚡ Juara Tercepat</b> (jika waktu habis, tim terdepan); total poin terbanyak menjadi <b>🌟 Juara Kuis</b>. Kedua papan juara ada di kiri dan kanan papan permainan. Tim yang kalah mendapat <b>tantangan semangat</b>.<br>
     5. Guru bisa menyesuaikan poin dengan tombol +5 / −5 di papan Juara Kuis (dihitung sebagai bonus).</p>
