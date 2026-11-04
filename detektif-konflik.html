@@ -113,6 +113,7 @@ a.back:hover,button.back:hover{border-color:var(--cy);color:var(--cy)}
 .stepper .sbtn{width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--glass);color:var(--ink);font-size:24px;font-weight:700;line-height:1}
 .stepper .sbtn:hover{background:var(--glass2);border-color:var(--cy)}
 .stepper .val{min-width:80px;text-align:center;font-family:var(--f-head);font-size:30px;font-weight:800}
+#timeStep .sbtn:disabled{opacity:.35;cursor:not-allowed}
 .stepper .val small{display:block;font-family:var(--f-body);font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.06em}
 .modes{display:grid;gap:10px}
 .mode{display:grid;gap:3px;text-align:left;border:1px solid var(--line);border-radius:16px;background:var(--glass);color:var(--ink);padding:12px 14px;transition:border-color .2s,background .2s,transform .12s}
@@ -476,7 +477,9 @@ button.ev:disabled:not(.open){opacity:.45;cursor:not-allowed}
         <div class="panel">
           <h3><b>3</b>Pengaturan</h3>
           <div class="lbl">Waktu diskusi per keputusan</div>
-          <div class="chips" id="timeChips"><button class="chip on" type="button" data-t="120">2 menit</button><button class="chip" type="button" data-t="0">Tanpa batas</button></div>
+          <div class="stepper" id="timeStep"><button class="sbtn" id="tMinus" type="button" aria-label="Kurangi waktu">−</button><div class="val" id="tVal">3:00<small>menit</small></div><button class="sbtn" id="tPlus" type="button" aria-label="Tambah waktu">+</button></div>
+          <div class="chips" id="timeChips" style="margin-top:10px"><button class="chip" type="button" data-t="0" aria-pressed="false">♾️ Tanpa batas</button></div>
+          <div style="font-size:12.5px;color:var(--muted);margin:6px 0 4px">Atur sesuai kebutuhan, kelipatan 30 detik (0:30–15:00).</div>
           <div class="opt-row"><label for="inSound">🔊 Efek suara</label><input class="sw" id="inSound" type="checkbox" checked></div>
         </div>
         <div class="panel how">
@@ -880,7 +883,7 @@ function tone(f,d=.12,type="sine",v=.12,when=0){
 }
 
 /* ---------------- STATE & SUARA ---------------- */
-let CFG={players:4,mode:"full",time:120,sound:true,rot:false,nt:3,names:[]};
+let CFG={players:4,mode:"full",time:120,tlast:120,sound:true,rot:false,nt:3,names:[]};
 const maxNt=()=>CFG.mode==="full"?6:5;
 let S=null,timerId=null;
 let recap=[];
@@ -918,7 +921,11 @@ function renderSetup(){
   $("#recapStart").innerHTML=recapHTML();
   $("#plVal").innerHTML=`${CFG.players}<small>orang</small>`;
   document.querySelectorAll(".mode").forEach(b=>{const on=b.dataset.mode===CFG.mode;b.classList.toggle("on",on);b.setAttribute("aria-checked",on)});
-  document.querySelectorAll("#timeChips .chip").forEach(b=>b.classList.toggle("on",+b.dataset.t===CFG.time));
+  {const un=!CFG.time,tt=CFG.time||CFG.tlast;
+   $("#tVal").innerHTML=un?`∞<small>tanpa batas</small>`:`${Math.floor(tt/60)}:${String(tt%60).padStart(2,"0")}<small>menit</small>`;
+   $("#timeStep").style.opacity=un?".45":"1";
+   const ub=document.querySelector("#timeChips [data-t='0']");ub.classList.toggle("on",un);ub.setAttribute("aria-pressed",un);
+   $("#tMinus").disabled=!un&&tt<=30;$("#tPlus").disabled=!un&&tt>=900;}
   $("#inSound").checked=CFG.sound;syncSound();
   renderRotSetup();
 }
@@ -1360,7 +1367,9 @@ $("#inTeam").addEventListener("keydown",e=>{if(e.key==="Enter")newGame()});
 $("#plMinus").addEventListener("click",()=>{CFG.players=Math.max(1,CFG.players-1);renderSetup()});
 $("#plPlus").addEventListener("click",()=>{CFG.players=Math.min(5,CFG.players+1);renderSetup()});
 document.querySelectorAll(".mode").forEach(b=>b.addEventListener("click",()=>{CFG.mode=b.dataset.mode;renderSetup()}));
-$("#timeChips").addEventListener("click",e=>{const b=e.target.closest("[data-t]");if(b){CFG.time=+b.dataset.t;renderSetup()}});
+$("#timeChips").addEventListener("click",e=>{if(e.target.closest("[data-t]")){CFG.time=CFG.time?0:CFG.tlast;renderSetup()}});
+const stepTime=d=>{const base=CFG.time||CFG.tlast;CFG.tlast=Math.max(30,Math.min(900,base+d));CFG.time=CFG.tlast;renderSetup()};
+$("#tMinus").addEventListener("click",()=>stepTime(-30));$("#tPlus").addEventListener("click",()=>stepTime(30));
 $("#inSound").addEventListener("change",e=>{CFG.sound=e.target.checked;syncSound()});
 $("#bSound").addEventListener("click",()=>{CFG.sound=!CFG.sound;$("#inSound").checked=CFG.sound;syncSound()});
 $("#bFull").addEventListener("click",()=>{try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen()}catch(e){}});
