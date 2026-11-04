@@ -117,7 +117,7 @@ a.back:hover,button.back:hover{border-color:var(--cy);color:var(--cy)}
 .topbar .sp{flex:1}
 .tb{background:var(--glass);border:1px solid var(--line);color:var(--ink);border-radius:11px;padding:7px 13px;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap}
 .tb:hover{background:var(--glass2);border-color:var(--cy)}
-main{flex:1;display:flex;gap:18px;padding:14px 18px;min-height:0;align-items:center;justify-content:center;--s:min(calc(100vh - 104px),calc(100vw - 460px))}
+main{flex:1;display:flex;gap:18px;padding:14px 18px;min-height:0;align-items:center;justify-content:center;--sw:clamp(250px,22vw,330px);--s:min(calc(100vh - 104px),calc(100vw - 2*var(--sw) - 96px))}
 .board-wrap{flex:none;position:relative}
 .board-wrap::before{content:"";position:absolute;inset:-14px;border-radius:30px;background:conic-gradient(from 210deg,rgba(34,211,238,.5),rgba(232,121,249,.5),rgba(34,211,238,.5));filter:blur(22px);opacity:.38}
 .board{position:relative;width:var(--s);height:var(--s);display:grid;grid-template:repeat(10,1fr)/repeat(10,1fr);border:1px solid rgba(125,211,252,.5);border-radius:20px;overflow:hidden;box-shadow:0 22px 60px rgba(0,0,0,.55),0 0 0 4px rgba(2,6,23,.6);background:rgba(6,10,36,.92)}
@@ -149,7 +149,7 @@ main{flex:1;display:flex;gap:18px;padding:14px 18px;min-height:0;align-items:cen
 .tok.act{animation:bob .7s ease-in-out infinite;z-index:4}
 @keyframes bob{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-64%) scale(1.18)}}
 
-.side{width:402px;flex:none;display:flex;flex-direction:column;gap:11px;max-height:calc(100vh - 88px)}
+.side{width:var(--sw);flex:none;display:flex;flex-direction:column;gap:11px;max-height:calc(100vh - 88px)}
 .turn{border-radius:20px;padding:13px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 10px 30px -8px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.18) inset;color:#fff;transition:background .3s;position:relative;overflow:hidden}
 .turn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);transform:translateX(-100%);animation:shine 3.4s ease-in-out infinite}
 @keyframes shine{60%,100%{transform:translateX(100%)}}
@@ -370,12 +370,46 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
 [data-theme="light"] .ab-chips span{color:var(--ink)}
 [data-theme="light"] .gk-box{background:#fff}
 
+
+/* ---------- PAPAN JUARA (kiri & kanan) ---------- */
+.lb{display:flex;flex-direction:column;min-height:120px;flex:1 1 auto;background:rgba(2,6,23,.38);border:1px solid var(--line);border-radius:18px;padding:10px 10px 8px}
+.lb h4{margin:0 0 8px;font-family:var(--f-head);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--cy);display:flex;flex-direction:column;gap:1px}
+.lb h4 em{font-style:normal;font-family:var(--f-body);font-size:11.5px;letter-spacing:0;text-transform:none;font-weight:600;color:var(--muted)}
+.lb.k h4{color:var(--gold)}
+.lb .rows{display:flex;flex-direction:column;gap:6px;overflow:auto;min-height:0;flex:1;padding-right:2px}
+.tm.f .sc{color:var(--cy);text-shadow:0 0 12px rgba(34,211,238,.5)}
+.tm .sc{font-size:26px;line-height:1;min-width:52px;text-align:right}
+.tm .sc small{display:block;font-family:var(--f-body);font-size:9px;font-weight:700;letter-spacing:.12em;color:var(--muted);text-shadow:none;margin-top:2px}
+.tm .nm .stat{display:flex;flex-wrap:wrap;gap:1px 8px;font-style:normal;white-space:normal}
+.tm .nm .stat i{font-style:normal;white-space:nowrap}
+.tm .nm .stat i b{color:var(--ink);display:inline;font-size:inherit}
+.tm.k .nm span.stat{color:var(--muted)}
+.tm{padding-bottom:9px}
+.lb .tm{gap:8px}.lb .tm .nm b{font-size:15px}.lb .tm .sc{min-width:46px}.lb .tm .adj button{padding:3px 5px}
+.twolb{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:10px 0}
+.twolb h3{margin:0 0 4px;font-family:var(--f-head);font-size:clamp(14px,1.5vw,19px);letter-spacing:.08em;text-transform:uppercase;color:var(--cy)}
+.twolb .k h3{color:var(--gold)}
+.twolb h3 small{font-family:var(--f-body);font-size:.7em;letter-spacing:0;text-transform:none;color:var(--muted);font-weight:600}
+.twolb .rankwrap{max-height:40vh}
+.rank .big{font-family:var(--f-head);font-weight:900;font-size:1.35em;text-align:right;white-space:nowrap}
+.rank .big small{font-family:var(--f-body);font-size:.5em;font-weight:600;color:var(--muted)}
+.rank small{color:var(--muted);font-size:.68em;font-weight:600}
+.chal{border:2px dashed var(--gold);border-radius:16px;padding:10px 16px 12px;margin:10px 0;background:rgba(251,191,36,.08)}
+.chal b{color:var(--gold);font-size:clamp(15px,1.8vw,21px)}
+.chal p{margin:6px 0 8px!important}
+@media (max-width:700px){.twolb{grid-template-columns:1fr}}
+[data-theme="light"] .lb{background:rgba(255,255,255,.72)}
+@media (max-width:1180px){.topbar{height:auto;min-height:60px;flex-wrap:wrap;row-gap:6px;padding:8px 12px}.topbar .ttl{flex:none}}
+@media (max-width:980px){main{overflow-x:clip}}
+
 /* ---------- RESPONSIVE ---------- */
 @media (max-width:980px){
   body{overflow:auto}
   #game{height:auto;min-height:100%}
   main{flex-direction:column;--s:min(calc(100vw - 24px),calc(100vh - 150px));padding:10px}
   .side{width:min(100%,640px);max-height:none}
+  .board-wrap{order:1}.side.sl{order:2}.side.sr{order:3}
+  .lb .rows{max-height:none}
   .setup-grid,.hero,.rule-grid{grid-template-columns:1fr}
   .opts{grid-template-columns:1fr}
   .topbar .ttl{font-size:15px}.topbar .ttl small{display:none}
@@ -436,9 +470,10 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
           <ul>
             <li>Kelompok bergiliran melempar dadu. Guru menekan tombol dadu.</li>
             <li>🪜 <b>Tangga</b> = kebiasaan positif, naik! 🐍 <b>Ular</b> = hambatan karier, turun.</li>
-            <li>Kotak <b>polos</b> = tempat mendarat setelah tangga atau ular. Di sana tidak ada kuis, refleksi, atau kejutan.</li>
+            <li>Semua kotak berisi. Setelah naik tangga atau turun ular, isi kotak tujuan tetap berlaku (kuis, refleksi, atau kejutan).</li>
+            <li>Dadu berlebih? Jika langkah melewati kotak 100, pion <b>mundur</b> sebanyak kelebihannya (97 + 4 → 99).</li>
             <li>❓ <b>Kuis</b> dan 💭 <b>Refleksi</b> memberi poin, 🎁 <b>Kartu Kejutan</b> bisa maju, mundur, atau menambah poin.</li>
-            <li>Sampai kotak 100 lebih dulu = <b>Tim Tercepat</b>. Jawaban kuis benar terbanyak = <b>Juara Karier</b>.</li>
+            <li>Dua juara: <b>⚡ Juara Tercepat</b> (sampai kotak 100 lebih dulu) dan <b>🌟 Juara Kuis</b> (total poin terbanyak). Tim yang kalah mendapat <b>tantangan semangat</b>.</li>
           </ul>
         </div>
       </div>
@@ -465,13 +500,7 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
     <a class="tb" href="gamebk.html">⌂ Menu BK</a>
   </div>
   <main>
-    <div class="board-wrap">
-      <div class="board" id="board">
-        <svg class="links" id="links" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
-        <div class="tokens" id="tokens"></div>
-      </div>
-    </div>
-    <aside class="side">
+    <aside class="side sl">
       <div class="turn" id="turn"></div>
       <div class="dice-box">
         <div class="die" id="die"></div>
@@ -480,10 +509,17 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
           <div class="hint">atau tekan tombol Spasi</div>
         </div>
       </div>
-      <div class="champs" id="champs"></div>
-      <div class="seg" id="lbSeg" role="tablist" aria-label="Urutan papan skor"><button data-m="turn" class="on" role="tab">👥 Giliran</button><button data-m="fast" role="tab">⚡ Tercepat</button><button data-m="career" role="tab">🌟 Karier</button></div>
-      <div class="teams" id="teams"></div>
+      <div class="lb f"><h4>⚡ Juara Tercepat <em>posisi di papan</em></h4><div class="rows" id="lbFast"></div></div>
       <div class="legend"><button type="button" data-f="ladder" title="Tonjolkan tangga">🪜 Tangga ▲ naik</button><button type="button" data-f="snake" title="Tonjolkan ular">🐍 Ular ▼ turun</button><span>❓ Kuis</span><span>💭 Refleksi</span><span>🎁 Kejutan</span></div>
+    </aside>
+    <div class="board-wrap">
+      <div class="board" id="board">
+        <svg class="links" id="links" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+        <div class="tokens" id="tokens"></div>
+      </div>
+    </div>
+    <aside class="side sr">
+      <div class="lb k"><h4>🌟 Juara Kuis <em>urut total poin</em></h4><div class="rows" id="lbQuiz"></div></div>
       <div class="log" id="log"></div>
       <div class="sidecredit" id="sideCredit"></div>
     </aside>
@@ -529,6 +565,8 @@ const str=(v,max)=>String(v==null?"":v).trim().slice(0,max);
 const SAVE_KEY='careerquest_bk_v2';
 const CONF_KEY='careerquest_bk_conf_v2';
 const MAX_TEAMS=24,MIN_TEAMS=2;
+const CONF_REV=3; /* naikkan angka ini bila isi bawaan (soal, papan, poin) diperbarui: pengaturan lama otomatis diganti */
+const UNSYNC_LS="careerquest_bk_unsynced";
 
 /* ---------------- DATA: TANGGA & ULAR ---------------- */
 const D_LAD={
@@ -561,88 +599,111 @@ const D_SNK={
   98:{to:2,t:"Terburu-buru memutuskan",m:"Keputusan penting perlu dipertimbangkan dari berbagai sisi. Jatuh sampai ke bawah, tetapi kamu bisa bangkit!"}
 };
 
-const D_QT=new Set([4,7,11,13,16,20,25,28,34,37,42,43,48,51,60,63,68,76,82,87,94]);
-const D_RT=new Set([8,15,22,31,38,47,56,67,79]);
-const D_CT=new Set([5,9,14,18,23,29,35,39,46,50,59,64,73,80,84,85,90,92,99]);
+const D_QT=new Set([4, 6, 7, 11, 12, 13, 16, 20, 21, 24, 25, 28, 32, 33, 34, 37, 41, 42, 43, 44, 48, 51, 52, 53, 55, 57, 60, 61, 63, 66, 68, 71, 72, 75, 76, 77, 78, 82, 87, 94]);
+const D_RT=new Set([2, 8, 15, 22, 26, 31, 38, 47, 56, 62, 67, 79]);
+const D_CT=new Set([5, 9, 14, 18, 23, 29, 35, 39, 46, 50, 59, 64, 73, 80, 84, 85, 89, 90, 92, 97, 99]);
+/* Setiap kotak 2–99 berisi: tangga, ular, kuis, refleksi, atau kejutan (tanpa kotak polos). */
 
 /* ---------------- DATA: KUIS (jawaban benar selalu urutan pertama, diacak saat tampil) ---------------- */
 const D_QUIZ=[
- {c:"Mengenal Diri",q:"Rasa tertarik dan kecenderungan hati yang tinggi terhadap sesuatu disebut…",o:["Minat","Bakat","Nilai rapor","Gaji"],e:"Minat adalah ketertarikan. Bakat adalah kemampuan dasar bawaan."},
- {c:"Mengenal Diri",q:"Kemampuan dasar bawaan yang berpotensi berkembang jika dilatih disebut…",o:["Bakat","Minat","Cita-cita","Peluang kerja"],e:"Bakat perlu diasah lewat latihan agar berkembang menjadi keterampilan."},
- {c:"Mengenal Diri",q:"Hal yang kamu yakini penting dalam hidup, misalnya kejujuran dan keluarga, disebut…",o:["Nilai hidup","Hobi","Bakat","Rapor"],e:"Nilai hidup memengaruhi pilihan karier dan cara kita mengambil keputusan."},
- {c:"Mengenal Diri",q:"Langkah pertama dalam merencanakan karier adalah…",o:["Mengenali diri (minat, bakat, nilai, kemampuan)","Mengikuti pilihan teman","Memilih gaji terbesar","Menunggu keputusan orang lain"],e:"Perencanaan karier dimulai dari memahami diri sendiri."},
- {c:"Mengenal Diri",q:"Manakah yang termasuk faktor internal dalam memilih karier?",o:["Minat dan bakat diri","Pendapat teman sebaya","Kondisi ekonomi keluarga","Peluang kerja di daerah"],e:"Faktor internal datang dari dalam diri: minat, bakat, kepribadian, nilai hidup."},
- {c:"Mengenal Diri",q:"Manakah yang termasuk faktor eksternal dalam memilih karier?",o:["Kondisi ekonomi keluarga","Minat","Bakat","Kepribadian"],e:"Faktor eksternal datang dari luar diri: keluarga, teman, ekonomi, dan lingkungan."},
- {c:"Mengenal Diri",q:"Orang bertipe Artistik (menyukai kegiatan kreatif) biasanya cocok menjadi…",o:["Desainer grafis","Teknisi mesin","Peneliti laboratorium","Akuntan"],e:"Tipe Artistik menyukai ekspresi kreatif seperti seni, desain, dan musik."},
- {c:"Jalur Pendidikan",q:"SMK terutama menyiapkan lulusannya untuk…",o:["Siap bekerja di bidang keahlian tertentu","Hanya melanjutkan kuliah","Hanya menjadi guru","Tidak bekerja"],e:"SMK menekankan keterampilan kerja sesuai program keahlian, dan lulusannya tetap bisa melanjutkan studi."},
- {c:"Jalur Pendidikan",q:"Madrasah Aliyah (MA) adalah sekolah menengah atas yang…",o:["Berciri khas agama Islam di bawah Kementerian Agama","Khusus untuk bekerja","Hanya untuk olahraga","Tidak ada kurikulum umum"],e:"MA setara SMA dengan kekhasan pendidikan agama Islam."},
- {c:"Jalur Pendidikan",q:"Cara bijak memilih sekolah lanjutan adalah…",o:["Mempertimbangkan minat, kemampuan, informasi sekolah, dan dukungan keluarga","Ikut ke mana teman pergi","Memilih yang paling terkenal saja","Memilih secara acak"],e:"Keputusan yang baik memadukan pemahaman diri dan informasi yang benar."},
- {c:"Jalur Pendidikan",q:"Pada penerimaan murid baru, jalur afirmasi diperuntukkan bagi…",o:["Calon murid dari keluarga kurang mampu dan penyandang disabilitas","Murid dengan nilai tertinggi saja","Murid yang rumahnya terjauh","Murid pindahan luar negeri"],e:"Jalur afirmasi memberi kesempatan yang adil bagi kelompok yang membutuhkan dukungan."},
- {c:"Jalur Pendidikan",q:"Jalur domisili pada penerimaan murid baru dinilai berdasarkan…",o:["Jarak tempat tinggal ke sekolah","Jumlah piala","Pekerjaan orang tua","Hasil undian kelas"],e:"Jalur domisili memprioritaskan calon murid yang tinggal dekat sekolah."},
- {c:"Jalur Pendidikan",q:"Jalur prestasi dinilai berdasarkan…",o:["Prestasi akademik dan non-akademik, misalnya nilai rapor dan lomba","Jarak rumah","Hubungan keluarga","Jumlah saudara"],e:"Prestasi bisa berupa nilai maupun juara lomba dan kegiatan lain."},
- {c:"Jalur Pendidikan",q:"Beasiswa adalah…",o:["Bantuan biaya pendidikan karena prestasi atau kebutuhan","Pinjaman yang wajib dilunasi dengan bunga tinggi","Hadiah undian","Biaya pendaftaran sekolah"],e:"Beasiswa membantu murid yang berprestasi atau membutuhkan agar tetap bisa belajar."},
- {c:"Jalur Pendidikan",q:"Sumber informasi sekolah dan karier yang paling dapat dipercaya adalah…",o:["Guru BK, alumni, dan situs resmi sekolah","Rumor di media sosial","Cerita yang belum jelas","Tebakan teman"],e:"Selalu cek kebenaran informasi dari sumber resmi."},
- {c:"Keterampilan",q:"Manakah contoh soft skill?",o:["Kemampuan bekerja sama dalam tim","Mengoperasikan mesin bubut","Menulis kode program","Mengelas logam"],e:"Soft skill berkaitan dengan sikap dan hubungan antarpribadi, misalnya kerja sama dan komunikasi."},
- {c:"Keterampilan",q:"Manakah contoh hard skill?",o:["Mengoperasikan aplikasi spreadsheet","Empati","Disiplin","Kerja sama"],e:"Hard skill adalah keterampilan teknis yang bisa diukur dan dipelajari."},
- {c:"Keterampilan",q:"Menyampaikan pendapat dengan jujur sambil tetap menghormati orang lain disebut…",o:["Komunikasi asertif","Komunikasi agresif","Komunikasi pasif","Diam saja"],e:"Asertif berarti tegas dan sopan, tanpa merugikan orang lain."},
- {c:"Keterampilan",q:"Percaya bahwa kemampuan bisa berkembang lewat usaha dan belajar disebut…",o:["Growth mindset","Fixed mindset","Pasrah","Gengsi"],e:"Dengan growth mindset, kegagalan dipandang sebagai kesempatan belajar."},
- {c:"Keterampilan",q:"Cara terbaik mengelola waktu belajar adalah…",o:["Membuat skala prioritas dan jadwal","Belajar hanya saat ujian","Menunda sampai malam","Menghindari tugas sulit"],e:"Prioritas dan jadwal membuat waktu terpakai lebih efektif."},
- {c:"Keterampilan",q:"Kemampuan bangkit dan bertahan saat menghadapi kesulitan disebut…",o:["Resiliensi","Prokrastinasi","Gengsi","Konformitas"],e:"Resiliensi membantu kita pulih dari kegagalan dan terus melangkah."},
- {c:"Dunia Kerja",q:"Agar tetap relevan di era teknologi dan AI, kita perlu…",o:["Terus belajar dan mudah beradaptasi","Berhenti belajar setelah lulus","Menghindari teknologi","Hanya mengandalkan ijazah"],e:"Dunia kerja terus berubah, jadi belajar sepanjang hayat sangat penting."},
- {c:"Dunia Kerja",q:"Wirausaha berarti…",o:["Membuka usaha sendiri dan berani mengambil risiko terukur","Menunggu pekerjaan datang","Menghindari risiko sama sekali","Hanya bekerja di perusahaan besar"],e:"Wirausaha memerlukan kreativitas, keberanian, dan perencanaan."},
- {c:"Dunia Kerja",q:"Etos kerja yang baik ditandai dengan…",o:["Disiplin, jujur, dan bertanggung jawab","Sering terlambat","Menyalahkan orang lain","Asal selesai"],e:"Etos kerja adalah semangat dan sikap positif dalam bekerja."},
- {c:"Dunia Kerja",q:"Profesi adalah pekerjaan yang…",o:["Membutuhkan keahlian khusus lewat pendidikan atau pelatihan","Bisa dilakukan tanpa belajar","Hanya untuk orang kaya","Tidak butuh tanggung jawab"],e:"Dokter, guru, dan insinyur adalah contoh profesi."},
- {c:"Dunia Kerja",q:"Menabung sebagian uang saku untuk tujuan masa depan adalah contoh…",o:["Literasi finansial","Pemborosan","Konsumtif","Gengsi"],e:"Kebiasaan mengelola uang sejak dini mendukung rencana pendidikan dan karier."},
- {c:"Keputusan",q:"Rencana cadangan (Plan B) berguna untuk…",o:["Alternatif jika rencana utama tidak tercapai","Menunjukkan kita tidak yakin","Menggantikan semua usaha","Membuat malas"],e:"Plan B membuat kita lebih siap dan tidak mudah putus asa."},
- {c:"Keputusan",q:"Jika gagal masuk sekolah favorit, sikap yang tepat adalah…",o:["Mengevaluasi diri dan memilih alternatif terbaik","Menyalahkan semua orang","Berhenti sekolah","Menyembunyikan diri"],e:"Pilihan alternatif yang baik tetap bisa mengantar pada cita-citamu."},
- {c:"Keputusan",q:"Cita-cita yang kuat harus disertai…",o:["Rencana dan usaha nyata","Menunggu keberuntungan","Hanya impian","Membandingkan diri"],e:"Cita-cita menjadi nyata melalui langkah-langkah yang konsisten."},
- {c:"Keputusan",q:"Saat teman mengajak sesuatu yang tidak sesuai tujuanmu, sebaiknya…",o:["Menolak dengan sopan dan tegas","Langsung ikut","Marah-marah","Menghilang"],e:"Berani berkata tidak dengan sopan adalah tanda kedewasaan."},
- {c:"Keputusan",q:"Sebelum memilih program keahlian di SMK, sebaiknya kamu…",o:["Mencari tahu isi pelajaran dan peluang kerjanya","Memilih yang namanya keren","Memilih tanpa membaca","Ikut pilihan teman sebangku"],e:"Pahami program keahlian agar sesuai minat dan peluang kariermu."},
- {c:"Informasi Karier",q:"Cara terbaik memastikan kebenaran info pendaftaran sekolah atau lowongan adalah…",o:["Mengecek situs atau pengumuman resmi penyelenggara","Mengikuti kabar dari grup percakapan","Percaya unggahan yang paling ramai dibagikan","Bertanya pada satu teman saja"],e:"Sumber resmi paling dapat dipercaya. Informasi dari media sosial atau cerita teman perlu diperiksa ulang."}
+ {"c": "Mengenal Diri", "q": "Kemampuan alami yang sudah tampak sejak kecil dan mudah berkembang bila dilatih disebut…", "o": ["Bakat", "Hoaks", "Nilai ujian", "Uang saku"], "e": "Bakat adalah potensi bawaan. Minat adalah ketertarikan, dan keduanya perlu dilatih agar berkembang."},
+ {"c": "Mengenal Diri", "q": "Dina suka menggambar tetapi kurang percaya diri. Langkah pertama yang paling tepat adalah…", "o": ["Berlatih rutin dan meminta masukan dari guru", "Berhenti agar tidak malu", "Menunggu bakatnya muncul sendiri", "Membandingkan diri dengan yang terbaik"], "e": "Latihan rutin dan masukan yang membangun membuat kemampuan dan percaya diri tumbuh."},
+ {"c": "Mengenal Diri", "q": "Mengenali kekuatan dan kelemahan diri berguna untuk…", "o": ["Menentukan langkah pengembangan diri dan pilihan yang cocok", "Menyombongkan diri", "Mencari kesalahan teman", "Menghindari semua tantangan"], "e": "Kenal diri adalah dasar setiap keputusan karier yang tepat."},
+ {"c": "Mengenal Diri", "q": "Nilai hidup (misalnya kejujuran, keluarga, kebebasan) dalam memilih karier berfungsi sebagai…", "o": ["Pedoman agar pilihan terasa bermakna", "Pengganti nilai rapor", "Syarat pendaftaran sekolah", "Tanda bahwa tidak perlu berusaha"], "e": "Karier yang sejalan dengan nilai hidup lebih membuat seseorang bertahan dan bahagia."},
+ {"c": "Mengenal Diri", "q": "Masukan positif dari orang lain tentang dirimu sebaiknya…", "o": ["Dijadikan bahan untuk mengenali kekuatan diri", "Diabaikan begitu saja", "Dipakai untuk meremehkan orang lain", "Disembunyikan dari semua orang"], "e": "Orang lain kadang melihat kelebihan kita lebih jelas daripada kita sendiri."},
+ {"c": "Mengenal Diri", "q": "Hasil tes minat dan bakat sebaiknya dipakai sebagai…", "o": ["Salah satu bahan pertimbangan", "Satu-satunya penentu masa depan", "Alat untuk membandingkan murid", "Keputusan final yang tidak boleh diubah"], "e": "Hasil tes adalah gambaran, bukan vonis. Padukan dengan pengalaman, nilai, dan masukan orang terpercaya."},
+ {"c": "Mengenal Diri", "q": "Pernyataan yang benar tentang minat adalah…", "o": ["Bisa berkembang dan berubah lewat pengalaman baru", "Tidak pernah berubah seumur hidup", "Baru muncul setelah dewasa", "Tidak penting dalam memilih sekolah"], "e": "Mencoba hal baru membantu menemukan dan memperkaya minat."},
+ {"c": "Mengenal Diri", "q": "Kecerdasan emosional berarti…", "o": ["Mengenali dan mengelola emosi diri serta memahami perasaan orang lain", "Tidak pernah merasa marah", "Selalu menang saat berdebat", "Hafal banyak rumus"], "e": "Kemampuan ini sangat dibutuhkan di sekolah, tim, maupun dunia kerja."},
+ {"c": "Informasi Karier", "q": "Sumber informasi yang paling dapat dipercaya untuk memilih sekolah lanjutan adalah…", "o": ["Situs atau pengumuman resmi sekolah dan dinas pendidikan", "Kabar dari grup percakapan yang tidak jelas asalnya", "Cerita “katanya temannya teman”", "Video viral tanpa sumber"], "e": "Cek selalu informasi pendaftaran pada sumber resmi."},
+ {"c": "Informasi Karier", "q": "SMK dirancang untuk…", "o": ["Membekali keterampilan kerja pada bidang keahlian tertentu, tetapi tetap bisa lanjut kuliah", "Hanya untuk murid yang tidak ingin bekerja", "Tanpa pelajaran umum", "Tanpa praktik sama sekali"], "e": "SMK memadukan pelajaran umum dengan praktik sesuai program keahlian."},
+ {"c": "Informasi Karier", "q": "Pilihan melanjutkan pendidikan setelah SMP adalah…", "o": ["SMA, SMK, MA, atau pendidikan kesetaraan sesuai minat dan kondisi", "Hanya SMA", "Hanya sekolah yang paling terkenal", "Tidak perlu melanjutkan"], "e": "Ada banyak jalur. Pilih yang paling sesuai dengan dirimu."},
+ {"c": "Informasi Karier", "q": "Jurusan atau program keahlian sebaiknya dipilih berdasarkan…", "o": ["Minat, kemampuan, dan peluang masa depan", "Ikut-ikutan teman", "Gengsi semata", "Gaji saja tanpa mengenal diri"], "e": "Pertimbangkan ketiganya agar pilihanmu tahan lama."},
+ {"c": "Informasi Karier", "q": "Mengapa perlu mengecek syarat dan jadwal pendaftaran sekolah jauh-jauh hari?", "o": ["Agar berkas siap dan peluang tidak hilang karena terlambat", "Karena syaratnya tidak pernah berubah", "Supaya bisa menyontek teman", "Sebenarnya tidak perlu dicek"], "e": "Persiapan yang awal membuat prosesnya lebih tenang."},
+ {"c": "Informasi Karier", "q": "Cara yang tepat untuk mengenal sebuah profesi adalah…", "o": ["Bertanya pada orang yang menekuninya dan membaca informasi resmi", "Menilai dari satu video lucu", "Menebak-nebak saja", "Menilai dari penampilannya"], "e": "Narasumber langsung dan sumber resmi memberi gambaran yang utuh."},
+ {"c": "Informasi Karier", "q": "Teknologi seperti kecerdasan buatan (AI) mengubah banyak pekerjaan. Sikap yang paling tepat adalah…", "o": ["Terus belajar dan mau beradaptasi", "Takut lalu berhenti belajar", "Menolak semua teknologi", "Berharap tidak ada perubahan"], "e": "Kemampuan belajar sepanjang hayat adalah bekal terpenting."},
+ {"c": "Informasi Karier", "q": "Berwirausaha berarti…", "o": ["Membangun usaha sendiri dengan menyiapkan ide, modal, dan kemampuan", "Menunggu pelanggan datang tanpa usaha", "Bekerja tanpa rencana", "Pekerjaan yang pasti untung"], "e": "Wirausaha membutuhkan perencanaan, ketekunan, dan keberanian mencoba."},
+ {"c": "Pengambilan Keputusan", "q": "Langkah yang tepat saat mengambil keputusan penting adalah…", "o": ["Mengumpulkan informasi, menimbang pilihan dan akibatnya, memutuskan, lalu mengevaluasi", "Memilih yang pertama terlintas", "Menunggu teman memutuskan", "Melempar koin"], "e": "Keputusan yang baik lahir dari informasi dan pertimbangan."},
+ {"c": "Pengambilan Keputusan", "q": "Saat ragu di antara beberapa pilihan, hal yang membantu adalah…", "o": ["Menulis kelebihan dan kekurangan tiap pilihan", "Menghindari keputusan selamanya", "Memilih secara acak", "Menyalahkan keadaan"], "e": "Menuliskan pertimbangan membuat pikiran lebih jernih."},
+ {"c": "Pengambilan Keputusan", "q": "Risiko memilih sekolah hanya karena ikut teman adalah…", "o": ["Pilihan bisa tidak sesuai dengan minat dan kemampuanmu", "Pasti berhasil", "Tidak ada risiko sama sekali", "Guru menjadi senang"], "e": "Teman bisa berbeda minat dan kemampuan denganmu."},
+ {"c": "Pengambilan Keputusan", "q": "Orang tua ingin kamu memilih jurusan A, tetapi kamu lebih tertarik jurusan B. Sikap paling dewasa adalah…", "o": ["Berbicara baik-baik, menjelaskan alasan, dan mendengarkan pertimbangan orang tua", "Membantah dengan marah", "Mendaftar diam-diam tanpa memberi tahu", "Menurut saja tanpa pernah menyampaikan pendapat"], "e": "Dialog yang saling menghargai membantu mencapai keputusan terbaik, bisa dengan bantuan guru BK."},
+ {"c": "Pengambilan Keputusan", "q": "Rencana cadangan (Plan B) berguna karena…", "o": ["Membuatmu siap dan tenang bila rencana utama tidak berjalan", "Menunjukkan kamu tidak yakin pada tujuanmu", "Membuat rencana utama pasti gagal", "Tanda kurang berusaha"], "e": "Rencana cadangan adalah tanda perencanaan yang matang."},
+ {"c": "Pengambilan Keputusan", "q": "Tujuan yang SMART berarti tujuan yang…", "o": ["Spesifik, terukur, dapat dicapai, relevan, dan berbatas waktu", "Samar dan sangat sulit", "Tidak punya tenggat", "Hanya ada dalam angan-angan"], "e": "Tujuan SMART memudahkan kita merencanakan dan memantau kemajuan."},
+ {"c": "Pengambilan Keputusan", "q": "Tujuan yang spesifik dan terukur adalah…", "o": ["“Saya belajar matematika 30 menit tiap hari selama sebulan untuk menaikkan nilai ulangan.”", "“Saya ingin jadi pintar.”", "“Nanti saya lebih rajin.”", "“Semoga sukses.”"], "e": "Ada tindakan, ukuran, dan waktu yang jelas."},
+ {"c": "Keterampilan Diri", "q": "Keterampilan 4C abad ke-21 terdiri dari…", "o": ["Komunikasi, kolaborasi, berpikir kritis, dan kreativitas", "Menghafal, menyalin, menunggu, dan mengulang", "Cepat, cuek, curang, dan cerewet", "Cari, cetak, cuci, dan coret"], "e": "Keempatnya dibutuhkan di hampir semua profesi."},
+ {"c": "Keterampilan Diri", "q": "Berpikir kritis berarti…", "o": ["Menimbang bukti sebelum percaya atau memutuskan", "Meragukan semua hal tanpa alasan", "Selalu mengkritik orang lain", "Mengikuti pendapat mayoritas saja"], "e": "Berpikir kritis melindungi kita dari informasi yang salah."},
+ {"c": "Keterampilan Diri", "q": "Cara belajar yang lebih efektif adalah…", "o": ["Mencicil sedikit demi sedikit secara rutin", "Menunda sampai malam sebelum ujian", "Belajar hanya jika sedang mood", "Mengandalkan contekan"], "e": "Disiplin kecil yang konsisten membawa hasil besar."},
+ {"c": "Keterampilan Diri", "q": "Ketika gagal diterima di pilihan pertama, sikap yang sehat adalah…", "o": ["Mengevaluasi, belajar dari kegagalan, lalu mencoba pilihan lain", "Menyerah selamanya", "Menyalahkan semua orang", "Merasa hidup sudah berakhir"], "e": "Kegagalan adalah bahan belajar, bukan akhir perjalanan."},
+ {"c": "Keterampilan Diri", "q": "Bekerja dalam tim membutuhkan…", "o": ["Menghargai pendapat dan berbagi tugas", "Memaksakan pendapat sendiri", "Mengerjakan semuanya sendirian", "Menghindari tanggung jawab"], "e": "Tim yang baik saling mendengarkan dan saling mengisi."},
+ {"c": "Keterampilan Diri", "q": "Pola pikir bertumbuh (growth mindset) berarti…", "o": ["Percaya kemampuan dapat berkembang lewat usaha dan belajar", "Percaya bakat tidak bisa diubah", "Takut membuat kesalahan", "Menghindari tantangan"], "e": "Kesalahan dianggap bagian dari proses belajar."},
+ {"c": "Keterampilan Diri", "q": "Etika kerja yang baik antara lain…", "o": ["Jujur, tepat waktu, dan bertanggung jawab", "Datang terlambat tanpa kabar", "Melempar tugas ke orang lain", "Mengaku hasil kerja orang lain"], "e": "Sikap ini membuat orang lain percaya padamu."},
+ {"c": "Literasi Digital", "q": "Sebelum membagikan informasi tentang sekolah atau pekerjaan, sebaiknya kamu…", "o": ["Memeriksa kebenarannya di sumber resmi", "Langsung menyebarkannya", "Menyebarkannya jika judulnya menarik", "Percaya karena banyak yang membagikan"], "e": "Ramai dibagikan tidak berarti benar."},
+ {"c": "Literasi Digital", "q": "Jejak digital (unggahan dan komentar) dapat memengaruhi…", "o": ["Penilaian orang lain terhadapmu saat mendaftar sekolah atau bekerja", "Hanya nilai rapor", "Tidak berdampak apa pun", "Hanya akun yang tidak dipakai"], "e": "Pikirkan dulu sebelum mengunggah. Jejak digital bisa bertahan lama."},
+ {"c": "Kesehatan Mental", "q": "Rasa lelah berlebihan karena belajar (burnout) sebaiknya disikapi dengan…", "o": ["Istirahat cukup, menata ulang jadwal, dan bercerita pada orang yang dipercaya", "Mengabaikannya sampai ambruk", "Menambah jam belajar tanpa istirahat", "Menyalahkan diri sendiri"], "e": "Tubuh dan pikiran yang sehat adalah modal utama meraih cita-cita."},
+ {"c": "Kesehatan Mental", "q": "Rasa cemas menjelang ujian atau pemilihan sekolah itu…", "o": ["Wajar, dan bisa dikelola dengan persiapan, napas teratur, serta bercerita", "Pertanda pasti akan gagal", "Harus disembunyikan", "Tidak mungkin dialami orang lain"], "e": "Cemas itu manusiawi. Bicarakan dengan guru BK atau orang yang kamu percaya."},
+ {"c": "Kesehatan Mental", "q": "Waktu bermain gawai sebaiknya diatur agar…", "o": ["Tidak mengalahkan waktu belajar, tidur, dan aktivitas fisik", "Dihapus sepenuhnya", "Hanya dipakai saat malam", "Tidak perlu diatur"], "e": "Keseimbangan lebih penting daripada larangan total."},
+ {"c": "Kesehatan Mental", "q": "Temanmu mengajak memilih sekolah yang tidak cocok denganmu. Sebaiknya kamu…", "o": ["Menyampaikan pilihanmu dengan sopan dan tetap berteman", "Ikut saja agar tidak berbeda", "Memutus pertemanan", "Mengejek pilihannya"], "e": "Berbeda pilihan tidak harus merusak pertemanan."},
+ {"c": "Dukungan & Sikap", "q": "Guru BK dapat membantumu dalam…", "o": ["Mengenal diri, merencanakan studi dan karier, serta menyelesaikan masalah pribadi dan sosial", "Hanya menghukum murid", "Hanya mengurus daftar hadir", "Menentukan seluruh pilihanmu"], "e": "Guru BK mendampingimu, dan keputusan tetap kamu yang mengambil."},
+ {"c": "Dukungan & Sikap", "q": "Narasumber yang tepat untuk berdiskusi soal karier adalah…", "o": ["Guru BK, orang tua, dan orang yang menekuni bidang itu", "Hanya satu orang saja", "Siapa pun tanpa dasar", "Tidak perlu siapa-siapa"], "e": "Beberapa sudut pandang membuat keputusanmu lebih matang."},
+ {"c": "Dukungan & Sikap", "q": "Ekstrakurikuler dan organisasi melatih…", "o": ["Kepemimpinan, kerja sama, dan tanggung jawab", "Hanya membuang waktu", "Hanya hobi tanpa manfaat", "Tidak berpengaruh apa pun"], "e": "Pengalaman berorganisasi menjadi bekal dunia kerja."},
+ {"c": "Dukungan & Sikap", "q": "Cara memandang profesi yang tepat adalah…", "o": ["Setiap profesi yang halal dan bermanfaat patut dihargai", "Hanya yang bergaji tinggi yang layak", "Hanya jabatan tinggi yang terhormat", "Sebaiknya semua dihindari"], "e": "Setiap pekerjaan yang jujur memberi manfaat bagi masyarakat."}
 ];
 
 /* ---------------- DATA: REFLEKSI ---------------- */
 const D_REF=[
- "Sebutkan tiga hal yang paling kamu sukai. Profesi apa yang bisa berhubungan dengan hal-hal itu?",
- "Apa satu kekuatan terbesar yang kamu miliki, dan bagaimana kamu menggunakannya untuk membantu orang lain?",
- "Apa satu hambatan terbesarmu dalam mencapai cita-cita? Sebutkan satu cara mengatasinya.",
- "Siapa tokoh yang kamu kagumi? Sifat apa darinya yang ingin kamu tiru?",
- "Bayangkan dirimu 10 tahun lagi. Seperti apa kegiatanmu sehari-hari?",
- "Sebutkan dua pilihan sekolah lanjutan yang kamu pertimbangkan, beserta alasannya.",
- "Apa nilai hidup terpentingmu? Bagaimana nilai itu memengaruhi pilihan masa depanmu?",
- "Ceritakan satu kegagalan yang pernah kamu alami. Pelajaran apa yang kamu dapat?",
- "Jika temanmu bingung memilih sekolah, nasihat apa yang akan kamu berikan?",
- "Keterampilan apa yang ingin kamu latih tahun ini, dan bagaimana caranya?",
- "Sebutkan dua profesi yang mungkin muncul 10 tahun lagi karena perkembangan teknologi.",
- "Siapa yang bisa membantumu merencanakan karier? Apa yang akan kamu tanyakan padanya?",
- "Pilih satu kata yang menggambarkan dirimu saat ini. Jelaskan alasannya kepada kelompok.",
- "Jika semua pekerjaan bergaji sama, pekerjaan apa yang akan kamu pilih? Apa artinya bagi minatmu?",
- "Kapan terakhir kali kamu berhasil mengatasi rasa takut atau cemas? Bagaimana caramu?",
- "Satu kebiasaan kecil apa yang akan kamu mulai minggu ini untuk mendekatkan dirimu pada cita-cita?"
+ "Sebutkan satu hal yang kamu sukai dan satu hal yang kamu kuasai. Profesi apa yang menggabungkan keduanya?",
+ "Ceritakan satu keputusan sulit yang pernah kamu ambil. Apa yang kamu pelajari darinya?",
+ "Jika diberi waktu seminggu untuk mencoba pekerjaan apa saja, kamu memilih pekerjaan apa dan mengapa?",
+ "Siapa orang yang menginspirasi cita-citamu? Sifat apa darinya yang ingin kamu tiru?",
+ "Kebiasaan kecil apa yang bisa kamu mulai minggu ini untuk mendekatkan diri pada cita-citamu?",
+ "Apa hambatan terbesar menuju cita-citamu, dan siapa yang bisa membantumu mengatasinya?",
+ "Kalau rencana A tidak berjalan, apa rencana cadangan (Plan B) milikmu?",
+ "Hal apa yang membuatmu bangga pada dirimu sendiri akhir-akhir ini?",
+ "Bagaimana caramu bersikap jika teman mengajakmu memilih sesuatu yang tidak cocok denganmu?",
+ "Pekerjaan apa yang ditekuni orang dewasa di sekitarmu, dan apa yang bisa kamu pelajari dari pekerjaan itu?",
+ "Sebutkan satu kekuatan tiap anggota kelompok, lalu susun “tim impian” dari kekuatan tersebut.",
+ "Bayangkan kamu menulis surat untuk dirimu 10 tahun lagi. Apa isi satu kalimat pentingnya?",
+ "Apa yang kamu lakukan ketika lelah atau kehilangan semangat belajar?",
+ "Nilai hidup apa yang paling penting bagimu (kejujuran, keluarga, kebebasan, dll.), dan bagaimana nilai itu memengaruhi pilihan kariermu?",
+ "Ceritakan pengalaman bekerja sama dalam tim. Apa perananmu dan apa pelajarannya?",
+ "Teknologi atau keterampilan apa yang ingin kamu kuasai, dan untuk apa kamu memakainya?",
+ "Profesi apa yang membuatmu penasaran tetapi belum kamu pahami? Bagaimana cara mencari tahu tentangnya?",
+ "Apa yang akan kamu katakan pada temanmu yang takut gagal masuk sekolah impiannya?",
+ "Menurutmu, apa arti “sukses” bagimu? Apakah berbeda dengan gambaran sukses orang lain?",
+ "Satu langkah apa yang bisa kamu lakukan bulan ini untuk menyiapkan sekolah lanjutan?",
+ "Ceritakan kegagalan yang pernah kamu alami. Apa yang kamu pelajari dan bagaimana kamu bangkit?",
+ "Bagaimana kamu membagi waktu antara belajar, istirahat, dan bermain agar tetap seimbang?"
 ];
 
-/* ---------------- DATA: KARTU KEJUTAN (lebih banyak jebakan daripada keberuntungan) ---------------- */
+/* ---------------- DATA: KARTU KEJUTAN ---------------- */
 const D_CHA=[
- {i:"🎓",t:"Mendapat beasiswa prestasi!",d:"Belajarmu membuahkan hasil.",m:3},
- {i:"🏅",t:"Tim menang lomba antar sekolah!",d:"Kerja sama membuahkan juara.",p:10},
- {i:"🛠️",t:"Ikut pelatihan keterampilan gratis.",d:"Keterampilan baru membuka peluang.",m:2},
- {i:"🤝",t:"Tim sangat kompak berdiskusi!",d:"Lempar dadu sekali lagi.",x:1},
- {i:"🧑‍🏫",t:"Mentoring bersama alumni.",d:"Pengalaman alumni sangat berharga.",p:10},
- {i:"🙌",t:"Membantu teman belajar.",d:"Berbagi ilmu menambah ilmu.",p:5,m:1},
- {i:"🚀",t:"Lolos seleksi program unggulan!",d:"Persiapan matangmu terbayar.",m:5,p:5},
- {i:"😴",t:"Menunda mengerjakan tugas.",d:"Tugas menumpuk, kamu tertinggal.",m:-2},
- {i:"📄",t:"Salah memahami informasi pendaftaran.",d:"Selalu cek sumber resmi.",m:-3},
- {i:"📱",t:"Terlalu lama bermain gawai.",d:"Waktu belajarmu berkurang.",m:-2},
- {i:"📰",t:"Terkena hoaks info pendaftaran.",d:"Periksa sumber sebelum percaya.",m:-4},
- {i:"⏰",t:"Dokumen pendaftaran terlambat dikumpulkan.",d:"Jadwal itu penting.",m:-4,p:-5},
- {i:"🎭",t:"Memilih jurusan karena ikut tren.",d:"Pilihan tanpa mengenal diri sering tidak cocok.",m:-4},
- {i:"😬",t:"Gagal seleksi karena kurang persiapan.",d:"Persiapan lebih dulu, hasil menyusul.",m:-5,p:-5},
- {i:"🌪️",t:"Badai keraguan: pilihanmu berubah-ubah terus.",d:"Tetapkan prioritas dan pegang rencana.",m:-5},
- {i:"🕳️",t:"Tidak membaca syarat pendaftaran sama sekali.",d:"Jebakan besar bagi yang terburu-buru.",m:-6},
- {i:"💥",t:"Tim berselisih pendapat, kerja sama terganggu.",d:"Dengarkan dulu sebelum menanggapi.",m:-3},
- {i:"🎲",t:"Keberuntungan tidak berpihak, kamu ceroboh.",d:"Kesempatan butuh persiapan.",m:-4}
+ {"i": "🔎", "t": "Informasi dari sumber resmi", "d": "Kamu mengecek info sekolah lanjutan di situs resmi. Informasi tepat, langkah pun mantap.", "m": 3},
+ {"i": "🗣️", "t": "Berani bertanya", "d": "Kamu berkonsultasi dengan guru BK. Pikiranmu jadi lebih jernih.", "p": 10},
+ {"i": "📚", "t": "Belajar konsisten", "d": "Belajar sedikit demi sedikit setiap hari membuahkan hasil.", "p": 5, "x": 1},
+ {"i": "🤝", "t": "Kerja sama tim", "d": "Timmu saling membantu menyelesaikan tugas dengan baik.", "m": 2, "p": 5},
+ {"i": "🌟", "t": "Usahamu dihargai", "d": "Guru memuji kerja kerasmu. Teruskan semangatnya!", "p": 10},
+ {"i": "🧭", "t": "Menemukan arah", "d": "Hasil tes minat membantumu mengenali pilihan yang cocok.", "m": 4},
+ {"i": "💡", "t": "Ide kreatif", "d": "Idemu dipakai sebagai contoh di kelas.", "x": 1},
+ {"i": "🎓", "t": "Kakak alumni berbagi cerita", "d": "Pengalaman alumni memberimu gambaran nyata tentang sekolah lanjutan.", "m": 3, "p": 5},
+ {"i": "🧘", "t": "Istirahat cukup", "d": "Tidur dan istirahat yang cukup membuat fokusmu pulih.", "p": 5, "x": 1},
+ {"i": "🙌", "t": "Dukungan keluarga", "d": "Orang tuamu mendengarkan rencanamu dengan sungguh-sungguh.", "p": 10},
+ {"i": "⏰", "t": "Disiplin waktu", "d": "Kamu menepati jadwal belajarmu minggu ini.", "m": 1, "p": 5},
+ {"i": "📱", "t": "Terlalu lama bermain gawai", "d": "Waktu belajar terpakai tanpa terasa. Atur waktu layar, ya.", "m": -3},
+ {"i": "😴", "t": "Begadang sebelum ujian", "d": "Konsentrasimu menurun keesokan harinya.", "p": -5},
+ {"i": "🌀", "t": "Ikut-ikutan teman", "d": "Kamu memilih tanpa menimbang minat dan kemampuanmu sendiri.", "m": -4},
+ {"i": "⏳", "t": "Menunda tugas", "d": "Pekerjaan menumpuk dan harus dikejar.", "m": -2, "p": -5},
+ {"i": "📰", "t": "Terkena hoaks", "d": "Kamu percaya informasi yang belum dicek kebenarannya.", "p": -10},
+ {"i": "😰", "t": "Cemas berlebihan", "d": "Cemas itu wajar. Ceritakan pada orang yang kamu percaya, lalu ambil langkah kecil.", "m": -2},
+ {"i": "🧱", "t": "Gengsi menghalangi", "d": "Kamu enggan bertanya karena malu, sehingga informasimu kurang.", "m": -3, "p": -5},
+ {"i": "🗓️", "t": "Lupa jadwal pendaftaran", "d": "Berkas terlambat disiapkan. Catat tanggal pentingmu!", "m": -5},
+ {"i": "🙈", "t": "Mengabaikan masukan", "d": "Masukan yang baik terlewat begitu saja.", "p": -5},
+ {"i": "🔄", "t": "Rencana B menyelamatkan", "d": "Rencana A tersendat, tetapi Plan B-mu sudah siap.", "m": 2},
+ {"i": "🎢", "t": "Semangat naik turun", "d": "Semangatmu naik turun, tetapi kamu bangkit lagi.", "m": -2, "p": 5},
+ {"i": "💪", "t": "Bangkit dari kegagalan", "d": "Kamu belajar dari kegagalan dan mencoba lagi.", "m": 3, "p": 5},
+ {"i": "🔥", "t": "Semangat baru", "d": "Setelah beristirahat, semangatmu menyala kembali.", "p": 5, "x": 1}
 ];
 
+/* ---------------- DATA: TANTANGAN UNTUK TIM TERAKHIR ---------------- */
+const D_CHAL=["Sebutkan 3 kekuatan tiap anggota kelompokmu, lalu pilih satu profesi yang cocok untuk masing-masing.", "Ciptakan yel-yel karier berdurasi 20 detik dan tampilkan di depan kelas.", "Beri 2 apresiasi yang tulus dan spesifik kepada tim juara. Sebutkan hal yang bisa kalian pelajari dari mereka.", "Peragakan dalam 30 detik satu “ular” (hambatan karier) yang kamu temui di papan, lalu tunjukkan cara mengatasinya.", "Setiap anggota menyebutkan satu cita-cita dan langkah pertama untuk meraihnya. Tim lain memberi tepuk tangan.", "Pilih satu pilihan kuis yang tadi terlewat. Jelaskan jawaban yang benar dengan bahasa kalian sendiri.", "Tulis satu kalimat penyemangat untuk dirimu sendiri 5 tahun lagi, lalu bacakan di depan kelas.", "Pimpin tepuk semangat atau ice-breaker singkat untuk seluruh kelas.", "Ceritakan satu pelajaran terbaik dari permainan ini dan bagaimana kalian akan menerapkannya minggu ini.", "Pilih satu kartu kejutan yang tadi kalian dapat. Ceritakan pengalaman nyata yang mirip dan cara menyikapinya.", "Jelaskan kepada kelas satu profesi yang jarang diketahui teman-teman dalam 30 detik.", "Susun “tim impian” dari kekuatan semua anggota kelompok dan beri nama timnya."];
 
 /* ---------------- TIM ---------------- */
 const TEAM_NAMES6=["Tim Pelopor","Tim Inspirasi","Tim Visioner","Tim Inovator","Tim Kreator","Tim Mandiri"];
@@ -688,14 +749,14 @@ const DEFAULT_ABOUT={
 };
 function buildDefault(){
   return {
-    v:2,
+    v:2,rev:CONF_REV,
     ladders:Object.keys(D_LAD).map(k=>({a:+k,to:D_LAD[k].to,t:D_LAD[k].t,m:D_LAD[k].m})),
     snakes:Object.keys(D_SNK).map(k=>({a:+k,to:D_SNK[k].to,t:D_SNK[k].t,m:D_SNK[k].m})),
     tiles:{quiz:[...D_QT],ref:[...D_RT],cha:[...D_CT]},
     quiz:D_QUIZ.map(q=>({c:q.c,q:q.q,o:q.o.slice(),e:q.e})),
     reflect:D_REF.slice(),
     chance:D_CHA.map(c=>({i:c.i,t:c.t,d:c.d,m:c.m||0,p:c.p||0,x:c.x?1:0})),
-    rules:{pq:10,pr:5,pw:0,timer:0,pesan:"Karier adalah perjalanan panjang. Kenali dirimu, cari informasi, ambil keputusan dengan bijak, dan teruslah belajar. Setiap langkah kecil membawamu ke masa depan yang kamu impikan."},
+    rules:{pq:10,pr:5,pw:10,timer:0,tantangan:D_CHAL.join("\n"),pesan:"Karier adalah perjalanan panjang. Kenali dirimu, cari informasi, ambil keputusan dengan bijak, dan teruslah belajar. Setiap langkah kecil membawamu ke masa depan yang kamu impikan."},
     setup:{count:4,names:TEAM_NAMES6.slice(0,4),sound:true}
   };
 }
@@ -703,7 +764,7 @@ function buildDefault(){
 function sanitize(c){
   const d=buildDefault();
   if(!c||typeof c!=="object")return d;
-  const out={v:2},taken=new Set();
+  const out={v:2,rev:CONF_REV},taken=new Set();
   const links=(arr,up)=>{
     const r=[];
     (Array.isArray(arr)?arr:[]).forEach(x=>{
@@ -739,7 +800,7 @@ function sanitize(c){
     return {i:str(x.i,8)||"🎁",t,d:str(x.d,200),m:int(x.m,-30,30,0),p:int(x.p,-100,100,0),x:x.x?1:0};
   }).filter(Boolean);
   const R=c.rules&&typeof c.rules==="object"?c.rules:{};
-  out.rules={pq:int(R.pq,0,100,10),pr:int(R.pr,0,100,5),pw:int(R.pw,0,100,0),timer:int(R.timer,0,600,0),pesan:str(R.pesan,500)||d.rules.pesan};
+  out.rules={pq:int(R.pq,0,100,10),pr:int(R.pr,0,100,5),pw:int(R.pw,0,100,10),timer:int(R.timer,0,600,0),tantangan:String(R.tantangan==null?d.rules.tantangan:R.tantangan).split("\n").map(x=>x.trim().slice(0,220)).filter(Boolean).slice(0,30).join("\n"),pesan:str(R.pesan,500)||d.rules.pesan};
   const S=c.setup&&typeof c.setup==="object"?c.setup:{};
   out.setup={count:int(S.count,MIN_TEAMS,MAX_TEAMS,4),names:(Array.isArray(S.names)?S.names:[]).slice(0,MAX_TEAMS).map(x=>str(x,22)),sound:S.sound!==false};
   return out;
@@ -753,8 +814,17 @@ function cleanAbout(A){
     capaian:lst(A.capaian,DA.capaian),tujuan:lst(A.tujuan,DA.tujuan),catatan:str(A.catatan,700)
   };
 }
+const isFresh=c=>!!c&&typeof c==="object"&&int(c.rev,0,999,0)>=CONF_REV;
 function loadConf(){
-  try{const s=JSON.parse(localStorage.getItem(CONF_KEY)||"null");if(s)return sanitize(s)}catch(e){}
+  try{
+    const s=JSON.parse(localStorage.getItem(CONF_KEY)||"null");
+    if(s&&isFresh(s))return sanitize(s);
+    if(s){ /* pengaturan lama (isi bawaan sudah diperbarui): pakai bawaan baru, simpan nama kelompok */
+      const d=buildDefault();d.setup=sanitize(s).setup;
+      try{localStorage.setItem(CONF_KEY,JSON.stringify(d));localStorage.removeItem(UNSYNC_LS)}catch(e){}
+      return d;
+    }
+  }catch(e){}
   return buildDefault();
 }
 let storageOk=true;
@@ -930,34 +1000,30 @@ function renderTurn(){
   el.innerHTML=`<div class="big">${t.icon}</div><div><small>GILIRAN</small><b>${esc(t.name)}</b></div>`;
   document.querySelectorAll(".tok").forEach((e,i)=>e.classList.toggle("act",i===G.turn&&!G.over));
 }
-let LB="turn";
 function rankFast(){return G.teams.map((t,k)=>k).sort((a,b)=>G.teams[b].pos-G.teams[a].pos||G.teams[b].score-G.teams[a].score||a-b)}
-function rankCareer(){return G.teams.map((t,k)=>k).sort((a,b)=>(G.teams[b].ok||0)-(G.teams[a].ok||0)||G.teams[b].score-G.teams[a].score||G.teams[b].pos-G.teams[a].pos||a-b)}
-function renderChamps(){
-  const f=G.teams[rankFast()[0]],c=G.teams[rankCareer()[0]];
-  const moved=G.teams.some(t=>t.pos>1),answered=G.teams.some(t=>(t.ok||0)>0);
-  $("#champs").innerHTML=`
-    <div class="champ"><small>⚡ Tercepat</small><b>${moved?`${f.icon}<span>${esc(f.name)}</span>`:"—"}</b><em>${moved?`Kotak ${f.pos} · sisa ${100-f.pos}`:"Belum ada yang melangkah"}</em></div>
-    <div class="champ k"><small>🌟 Juara Karier</small><b>${answered?`${c.icon}<span>${esc(c.name)}</span>`:"—"}</b><em>${answered?`${c.ok} jawaban benar`:"Belum ada jawaban benar"}</em></div>`;
-}
+function rankCareer(){return G.teams.map((t,k)=>k).sort((a,b)=>G.teams[b].score-G.teams[a].score||(G.teams[b].ok||0)-(G.teams[a].ok||0)||G.teams[b].pos-G.teams[a].pos||a-b)}
+const sgn=n=>n>0?"+"+n:String(n);
 function renderTeams(popIdx){
-  const box=$("#teams"),st=box.scrollTop;
-  const order=LB==="fast"?rankFast():LB==="career"?rankCareer():G.teams.map((t,k)=>k);
-  const maxOk=Math.max(1,...G.teams.map(t=>t.ok||0));
-  box.innerHTML=order.map((i,r)=>{const t=G.teams[i];
-    const w=LB==="career"?Math.round((t.ok||0)/maxOk*100):t.pos;
-    return `
-    <div class="tm${i===G.turn&&!G.over?" cur":""}">
-      ${LB==="turn"?"":`<div class="rk${r===0?" r1":""}">${r+1}</div>`}
+  const fb=$("#lbFast"),kb=$("#lbQuiz"),fs=fb.scrollTop,ks=kb.scrollTop;
+  const moved=G.teams.some(t=>t.pos>1),maxS=Math.max(1,...G.teams.map(t=>t.score||0));
+  fb.innerHTML=rankFast().map((i,r)=>{const t=G.teams[i];return `
+    <div class="tm f${i===G.turn&&!G.over?" cur":""}">
+      <div class="rk${r===0&&moved?" r1":""}">${r+1}</div>
       <div class="tk" style="background:${t.color}">${t.icon}</div>
-      <div class="nm"><b>${esc(t.name)}</b><span>Kotak ${t.pos}${t.finished?" 🏆":""} · <b>✔ ${t.ok||0}</b></span></div>
-      <div class="sc${i===popIdx?" pop":""}">${t.score}</div>
-      <div class="adj"><button data-a="${i}" data-d="5" title="Tambah 5 poin">+5</button><button data-a="${i}" data-d="-5" title="Kurangi 5 poin">−5</button></div>
-      <div class="bar"><i style="width:${w}%"></i></div>
+      <div class="nm"><b>${esc(t.name)}</b><span>${t.finished?"🏆 Sampai tujuan":"sisa "+(100-t.pos)+" kotak"}</span></div>
+      <div class="sc">${t.pos}<small>KOTAK</small></div>
+      <div class="bar"><i style="width:${t.pos}%"></i></div>
     </div>`}).join("");
-  box.scrollTop=st;
-  renderChamps();
-  $("#lbSeg").querySelectorAll("button").forEach(b=>{const on=b.dataset.m===LB;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
+  kb.innerHTML=rankCareer().map((i,r)=>{const t=G.teams[i],b=t.bonus||0;return `
+    <div class="tm k${i===G.turn&&!G.over?" cur":""}">
+      <div class="rk${r===0&&(t.score||0)>0?" r1":""}">${r+1}</div>
+      <div class="tk" style="background:${t.color}">${t.icon}</div>
+      <div class="nm"><b>${esc(t.name)}</b><span class="stat"><i title="Jawaban kuis benar">✔ <b>${t.ok||0}</b></i>${t.bad?`<i title="Jawaban kuis salah">✘ ${t.bad}</i>`:""}<i title="Refleksi terjawab">💭 <b>${t.rf||0}</b></i><i title="Bonus poin (kartu kejutan dan penyesuaian guru)">🎁 <b>${sgn(b)}</b></i></span></div>
+      <div class="sc${i===popIdx?" pop":""}">${t.score||0}<small>POIN</small></div>
+      <div class="adj"><button data-a="${i}" data-d="5" title="Tambah 5 poin (bonus)">+5</button><button data-a="${i}" data-d="-5" title="Kurangi 5 poin (bonus)">−5</button></div>
+      <div class="bar"><i style="width:${Math.max(0,Math.round((t.score||0)/maxS*100))}%"></i></div>
+    </div>`}).join("");
+  fb.scrollTop=fs;kb.scrollTop=ks;
 }
 function renderLog(){
   $("#log").innerHTML=G.log.slice(0,5).map(s=>`<div>${s}</div>`).join("");
@@ -965,13 +1031,15 @@ function renderLog(){
 function log(s){G.log.unshift(s);renderLog()}
 function renderAll(){
   renderTurn();renderTeams();renderLog();setRoll();
-  const c=$(".tm.cur");if(c&&G.teams.length>6)c.scrollIntoView({block:"nearest"});
+  if(G.teams.length>6)document.querySelectorAll(".tm.cur").forEach(c=>c.scrollIntoView({block:"nearest"}));
 }
 function setRoll(){
   const b=$("#rollBtn");b.disabled=G.busy||G.over;
 }
-function addScore(i,n){
-  G.teams[i].score=Math.max(0,G.teams[i].score+n);
+function addScore(i,n,kind){
+  const t=G.teams[i];
+  t.score=(t.score||0)+n;
+  if(kind==="bonus")t.bonus=(t.bonus||0)+n;
   renderTeams(i);
 }
 
@@ -1024,8 +1092,16 @@ async function roll(){
   const d=await rollDice();
   log(`${t.icon} <b>${esc(t.name)}</b> melempar dadu: <b>${d}</b>`);
   await sleep(250);
-  await walkTo(i,Math.min(100,t.pos+d));
-  await resolve(i,true);
+  const raw=t.pos+d;
+  if(raw>100){ /* kelebihan: maju sampai 100 lalu mundur sebanyak kelebihannya */
+    const back=200-raw;
+    await walkTo(i,100);
+    log(`↩️ ${esc(t.name)} kelebihan ${raw-100} langkah dan kembali ke kotak ${back}`);
+    toast(`Kelebihan ${raw-100} langkah! Kembali ke kotak ${back}`);
+    await sleep(500);
+    await walkTo(i,back);
+  }else await walkTo(i,raw);
+  await resolve(i,0);
   if(!G.over){
     if(G.extra){G.extra=false;log(`🔁 ${esc(t.name)} mendapat giliran tambahan`)}
     else G.turn=(G.turn+1)%G.teams.length;
@@ -1033,9 +1109,11 @@ async function roll(){
     G.busy=false;renderAll();
   }
 }
-async function resolve(i,tiles){
+async function resolve(i,depth){
+  depth=depth||0;
   const t=G.teams[i],n=t.pos;
   if(n>=100){await win(i);return}
+  if(depth>4)return;
   const L=LAD[n],S=SNK[n];
   if(L){
     sfx.up();
@@ -1048,7 +1126,7 @@ async function resolve(i,tiles){
       <div class="mact"><button class="btn primary" data-v="ok">Naik! 🚀</button></div>`);
     log(`🪜 ${esc(t.name)} naik ke kotak ${L.to}: ${esc(L.t)}`);
     await slideTo(i,L.to);
-    if(t.pos>=100)await win(i);
+    await resolve(i,depth+1);
     return;
   }
   if(S){
@@ -1062,22 +1140,22 @@ async function resolve(i,tiles){
       <div class="mact"><button class="btn primary" data-v="ok">Lanjut 💪</button></div>`);
     log(`🐍 ${esc(t.name)} turun ke kotak ${S.to}: ${esc(S.t)}`);
     await slideTo(i,S.to);
+    await resolve(i,depth+1);
     return;
   }
-  if(!tiles)return;
   const R=CONF.rules;
   if(QT.has(n)){
     const ok=await askQuiz(t);
     if(ok===null)log(`❓ Bank soal kosong, kotak kuis dilewati`);
     else if(ok){t.ok=(t.ok||0)+1;addScore(i,R.pq);log(`✅ ${esc(t.name)} menjawab benar (+${R.pq})`)}
-    else{if(R.pw)addScore(i,-R.pw);log(`❌ ${esc(t.name)} belum tepat${R.pw?` (−${R.pw})`:""}. Tetap semangat!`)}
+    else{t.bad=(t.bad||0)+1;if(R.pw)addScore(i,-R.pw);log(`❌ ${esc(t.name)} belum tepat${R.pw?` (−${R.pw})`:""}. Tetap semangat!`)}
   }else if(RT.has(n)){
     const done=await askReflect(t);
     if(done===null)log(`💭 Kartu refleksi kosong, dilewati`);
-    else if(done){addScore(i,R.pr);log(`💭 ${esc(t.name)} menyelesaikan refleksi (+${R.pr})`)}
+    else if(done){t.rf=(t.rf||0)+1;addScore(i,R.pr);log(`💭 ${esc(t.name)} menyelesaikan refleksi (+${R.pr})`)}
     else log(`💭 ${esc(t.name)} melewati refleksi`);
   }else if(CT.has(n)){
-    await drawChance(i);
+    await drawChance(i,depth);
   }
 }
 function draw(key,len){
@@ -1139,7 +1217,7 @@ async function askReflect(team){
     <div class="mact"><button class="btn ghost" data-v="skip">Lewati</button><button class="btn primary" data-v="ok">✅ Sudah dijawab (+${CONF.rules.pr})</button></div>`);
   return v==="ok";
 }
-async function drawChance(i){
+async function drawChance(i,depth){
   const ci=draw("cDeck",CONF.chance.length);
   if(ci<0){log(`🎁 Kartu kejutan kosong, dilewati`);return}
   const t=G.teams[i],c=CONF.chance[ci];
@@ -1156,12 +1234,14 @@ async function drawChance(i){
     ${parts.length?`<p><b>${esc(t.name)}:</b> ${parts.join(" dan ")}.</p>`:""}
     <div class="mact"><button class="btn primary" data-v="ok">Terima</button></div>`);
   log(`🎁 ${esc(t.name)}: ${esc(c.t)}`);
-  if(c.p)addScore(i,c.p);
+  if(c.p)addScore(i,c.p,"bonus");
   if(c.x)G.extra=true;
   if(c.m){
     const target=Math.max(1,Math.min(99,t.pos+c.m));
-    await walkTo(i,target);
-    await resolve(i,false);
+    if(target!==t.pos){
+      await walkTo(i,target);
+      await resolve(i,(depth||0)+1);
+    }
   }
 }
 async function win(i){
@@ -1171,21 +1251,36 @@ async function win(i){
   placeToken(i,100,false);
   renderAll();
   sfx.win();confetti();
-  const rank=rankCareer().map(k=>({...G.teams[k],k}));
-  const champ=rank[0];
+  const fast=rankFast().map(k=>({...G.teams[k],k})),kuis=rankCareer().map(k=>({...G.teams[k],k}));
+  const champ=kuis[0];
   try{localStorage.removeItem(SAVE_KEY)}catch(e){}
-  await modal("win",`
+  /* tantangan untuk tim yang kalah: poin terendah di antara tim yang belum sampai tujuan */
+  const others=G.teams.map((x,k)=>k).filter(k=>k!==i);
+  const low=others.length?Math.min(...others.map(k=>G.teams[k].score||0)):0;
+  const losers=others.filter(k=>(G.teams[k].score||0)===low).map(k=>G.teams[k]);
+  const chal=CONF.rules.tantangan.split("\n").map(x=>x.trim()).filter(Boolean);
+  const pick=()=>chal.length?chal[Math.floor(Math.random()*chal.length)]:"";
+  const dot=x=>`<span class="dot" style="background:${x.color}">${x.icon}</span>`;
+  const sub=x=>`✔ ${x.ok||0} benar${x.bad?` · ✘ ${x.bad}`:""} · 💭 ${x.rf||0} · 🎁 ${sgn(x.bonus||0)}`;
+  const html=`
     <div class="mtag">🏆 Permainan selesai</div>
     <div class="bigico">🎉</div>
     <h2>${t.icon} ${esc(t.name)} sampai di Tujuan lebih dulu!</h2>
-    <p>⚡ <b>Tim Tercepat:</b> ${esc(t.name)} &nbsp;·&nbsp; 🌟 <b>Juara Karier (jawaban benar terbanyak):</b> ${champ.icon} ${esc(champ.name)} (${champ.ok||0} benar · ${champ.score} poin)</p>
-    <div class="rankwrap"><table class="rank">${rank.map((x,r)=>`<tr><td>${r+1}</td><td><span class="dot" style="background:${x.color}">${x.icon}</span>${esc(x.name)}</td><td>Kotak ${x.pos}</td><td>✔ ${x.ok||0}</td><td><b>${x.score}</b> poin</td></tr>`).join("")}</table></div>
+    <div class="twolb">
+      <div class="lbcol"><h3>⚡ Juara Tercepat</h3>
+        <div class="rankwrap"><table class="rank">${fast.map((x,r)=>`<tr><td>${r+1}</td><td>${dot(x)}${esc(x.name)}</td><td class="big">Kotak ${x.pos}</td></tr>`).join("")}</table></div></div>
+      <div class="lbcol k"><h3>🌟 Juara Kuis <small>(urut total poin)</small></h3>
+        <div class="rankwrap"><table class="rank">${kuis.map((x,r)=>`<tr><td>${r+1}</td><td>${dot(x)}${esc(x.name)}<br><small>${sub(x)}</small></td><td class="big">${x.score||0}<small> poin</small></td></tr>`).join("")}</table></div></div>
+    </div>
+    ${chal.length&&losers.length?`<div class="chal"><b>🔥 Tantangan Semangat untuk ${losers.map(x=>x.icon+" "+esc(x.name)).join(", ")}</b><p id="chText">${esc(pick())}</p><button class="btn ghost sm" id="chRe" type="button">🎲 Ganti tantangan</button></div>`:""}
     <p style="font-size:clamp(15px,1.8vw,20px)"><b>Pesan BK:</b> ${esc(CONF.rules.pesan)}</p>
     <div class="mact"><button class="btn ghost" data-v="menu">Pengaturan baru</button><button class="btn primary" data-v="again">🔁 Main lagi (tim sama)</button></div>
-    ${creditLine()?`<div class="mcredit">${creditLine()}</div>`:""}`).then(v=>{
-      if(v==="again")startGame(G.teams.map(x=>x.name));
-      else showSetup();
-    });
+    ${creditLine()?`<div class="mcredit">${creditLine()}</div>`:""}`;
+  const pr=modal("win",html);
+  const re=$("#chRe");if(re)re.addEventListener("click",()=>{const e=$("#chText");if(e)e.textContent=pick();sfx.card()});
+  const v=await pr;
+  if(v==="again")startGame(G.teams.map(x=>x.name));
+  else showSetup();
 }
 function confetti(){
   const cols=["#fbbf24","#fb7185","#34d399","#22d3ee","#a78bfa","#e879f9","#fff"];
@@ -1225,7 +1320,7 @@ function startGame(names,saved){
     G.timer=+saved.timer||0;
   }else{
     G={
-      teams:names.map((n,i)=>({name:n,icon:TEAM_ICONS[i%TEAM_ICONS.length],color:TEAM_COLORS[i%TEAM_COLORS.length],pos:1,score:0,ok:0,finished:false})),
+      teams:names.map((n,i)=>({name:n,icon:TEAM_ICONS[i%TEAM_ICONS.length],color:TEAM_COLORS[i%TEAM_COLORS.length],pos:1,score:0,ok:0,bad:0,rf:0,bonus:0,finished:false})),
       turn:0,qDeck:null,rDeck:null,cDeck:null,log:[],busy:false,over:false,extra:false,first:null,timer:+CFG.timer||0
     };
   }
@@ -1241,8 +1336,8 @@ function showSetup(){
 function confSummary(){
   const C=CONF;
   return `Bank soal: <b>${C.quiz.length}</b> kuis · <b>${C.reflect.length}</b> refleksi · <b>${C.chance.length}</b> kejutan<br>
-    Papan: <b>${C.ladders.length}</b> tangga · <b>${C.snakes.length}</b> ular · <b>${C.tiles.quiz.length}</b> kotak kuis<br>
-    Poin: kuis benar <b>+${C.rules.pq}</b> · refleksi <b>+${C.rules.pr}</b>${C.rules.pw?` · salah <b>−${C.rules.pw}</b>`:""}`;
+    Papan: <b>${C.ladders.length}</b> tangga · <b>${C.snakes.length}</b> ular · <b>${C.tiles.quiz.length}</b> kotak kuis · <b>${C.tiles.ref.length}</b> refleksi · <b>${C.tiles.cha.length}</b> kejutan<br>
+    Poin: kuis benar <b>+${C.rules.pq}</b>${C.rules.pw?` · salah <b>−${C.rules.pw}</b>`:""} · refleksi <b>+${C.rules.pr}</b>`;
 }
 function persistSetup(){
   CONF.setup={count:CFG.count,names:CFG.names.slice(0,MAX_TEAMS),sound:CFG.sound};
@@ -1396,7 +1491,7 @@ function edCounts(){
 }
 function cellForm(){
   const n=edSel;
-  if(!n)return `<div class="cellbox"><h4>Pilih kotak</h4><p class="ed-help" style="margin:0">Klik salah satu kotak di papan untuk mengubah isinya: kotak biasa, kuis, refleksi, kejutan, tangga, atau ular.</p></div>`;
+  if(!n)return `<div class="cellbox"><h4>Pilih kotak</h4><p class="ed-help" style="margin:0">Klik salah satu kotak di papan untuk mengubah isinya: kuis, refleksi, kejutan, tangga, atau ular (kotak biasa tidak disarankan).</p></div>`;
   if(n===1||n===100)return `<div class="cellbox"><h4>Kotak ${n}</h4><p class="ed-help" style="margin:0">Kotak ${n===1?"MULAI":"TUJUAN"} tidak dapat diubah.</p></div>`;
   const f=edFind(n),T=f.t;
   const types=[["none","Biasa"],["quiz","❓ Kuis"],["ref","💭 Refleksi"],["cha","🎁 Kejutan"],["ladder","🪜 Tangga"],["snake","🐍 Ular"]];
@@ -1438,11 +1533,14 @@ function edAturan(){
       ${row("pq","Kuis dijawab benar","poin yang didapat",100)}
       ${row("pr","Refleksi diselesaikan","poin yang didapat",100)}
       ${row("pw","Kuis dijawab salah / waktu habis","poin yang dikurangi (0 = tidak ada pengurangan)",100)}
-      <p class="ed-help" style="margin:8px 0 0">Poin kelompok tidak akan turun di bawah 0. Guru tetap bisa menambah/mengurangi manual dengan tombol +5 / −5 di papan skor.</p>
+      <p class="ed-help" style="margin:8px 0 0">Bawaan: benar +10, salah −10, refleksi +5. Poin boleh bernilai negatif. Guru juga bisa menambah/mengurangi manual dengan tombol +5 / −5 di papan Juara Kuis (dihitung sebagai bonus).</p>
     </div>
     <div class="panel"><h3>⏱ Waktu</h3>
       ${row("timer","Batas waktu menjawab kuis","dalam detik (0 = tanpa batas)",600)}
       <p class="ed-help" style="margin:8px 0 0">Jika waktu habis sebelum dijawab, kuis dianggap salah.</p>
+    </div>
+    <div class="panel" style="grid-column:1/-1"><h3>🔥 Tantangan untuk tim yang kalah</h3>
+      <div class="fl"><label>Satu tantangan per baris. Satu dipilih acak untuk tim dengan poin terendah (selain yang sampai tujuan) di akhir permainan<textarea data-g="rule" data-f="tantangan" style="min-height:190px">${esc(R.tantangan||"")}</textarea></label></div>
     </div>
     <div class="panel" style="grid-column:1/-1"><h3>🏁 Pesan penutup BK</h3>
       <div class="fl"><label>Ditampilkan di layar akhir permainan<textarea data-g="rule" data-f="pesan" maxlength="500" style="min-height:90px">${esc(R.pesan)}</textarea></label></div>
@@ -1497,7 +1595,7 @@ function edValidate(){
   return null;
 }
 /* ---------------- SINKRON PENGATURAN KE SERVER ---------------- */
-const UNSYNC_KEY="careerquest_bk_unsynced";
+const UNSYNC_KEY=UNSYNC_LS;
 let SYNC="cek";
 const lsGet2=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
 function setSync(st){
@@ -1518,9 +1616,10 @@ async function useServerConf(){
   const r=await GK.conf.load(ABOUT_ID);
   if(r.error){toast("Server tidak terjangkau, pengaturan pribadi tetap dipakai",true);return}
   try{localStorage.removeItem(UNSYNC_KEY)}catch(e){}
-  const c=r.conf?sanitize(r.conf):buildDefault();c.setup=CONF.setup;
+  const ok=r.conf&&isFresh(r.conf);
+  const c=ok?sanitize(r.conf):buildDefault();c.setup=CONF.setup;
   CONF=c;CFG.timer=CONF.rules.timer;rebuildMaps();saveConf();buildSetup();
-  setSync(r.conf?"server":"bawaan");toast("Memakai pengaturan default");
+  setSync(ok?"server":r.conf?"lokal":"bawaan");toast("Memakai pengaturan default");
 }
 function confForServer(){const c=JSON.parse(JSON.stringify(CONF));delete c.setup;return c}
 async function pushConf(){
@@ -1539,6 +1638,8 @@ async function syncConf(){
   const r=await GK.conf.load(ABOUT_ID);
   if(r.error){setSync("offline");return}
   const hasLocal=lsGet2(CONF_KEY)!==null,unsynced=lsGet2(UNSYNC_KEY)==="1";
+  const stale=!!r.conf&&!isFresh(r.conf); /* default server masih versi lama: tidak dipakai */
+  if(stale){setSync("lokal");return}
   if(r.conf&&!unsynced){
     if(!$("#game").classList.contains("hidden")){setSync("server");return} // jangan ubah papan saat game berjalan
     const c=sanitize(r.conf);c.setup=CONF.setup;
@@ -1731,9 +1832,9 @@ $("#resumeBtn").addEventListener("click",()=>{
   startGame(null,s);
 });
 $("#rollBtn").addEventListener("click",roll);
-$("#teams").addEventListener("click",e=>{
+$("#lbQuiz").addEventListener("click",e=>{
   const b=e.target.closest("[data-a]");if(!b||!G)return;
-  addScore(+b.dataset.a,+b.dataset.d);save();
+  addScore(+b.dataset.a,+b.dataset.d,"bonus");save();
 });
 document.addEventListener("keydown",e=>{
   if((e.code==="Space"||e.code==="Enter")&&G&&!$("#game").classList.contains("hidden")&&!$("#modal").classList.contains("show")&&!$("#editor").classList.contains("show")){
@@ -1766,10 +1867,10 @@ $("#bHelp").addEventListener("click",()=>{
     <div class="mtag">❔ Cara bermain</div>
     <h2>Career Quest — Tangga Masa Depanku</h2>
     <p>1. Setiap kelompok bergiliran melempar dadu (guru menekan tombol atau Spasi).<br>
-    2. 🪜 <b>Tangga</b> = kebiasaan positif, kamu naik. 🐍 <b>Ular</b> = hambatan karier, kamu turun. Kotak tempat mendarat setelah tangga atau ular adalah kotak polos: tidak ada kuis, refleksi, atau kejutan di sana.<br>
+    2. 🪜 <b>Tangga</b> = kebiasaan positif, kamu naik. 🐍 <b>Ular</b> = hambatan karier, kamu turun. Setelah naik atau turun, isi kotak tujuan tetap berlaku. Jika langkah melewati kotak 100, pion mundur sebanyak kelebihannya (97 + 4 → 99).<br>
     3. ❓ <b>Kuis</b>: jawaban benar +${R.pq} poin${R.pw?` (salah −${R.pw})`:""}. 💭 <b>Refleksi</b>: jawab dan diskusikan, +${R.pr} poin. 🎁 <b>Kartu Kejutan</b>: bisa maju, mundur, atau dapat poin.<br>
-    4. Sampai kotak 100 lebih dulu menjadi <b>Tim Tercepat</b>. Kelompok dengan jawaban kuis benar terbanyak menjadi <b>Juara Karier</b> (seri: skor lebih tinggi). Papan skor di samping menampilkan keduanya secara langsung.<br>
-    5. Guru bisa menyesuaikan poin dengan tombol +5 / −5 di papan skor.</p>
+    4. Sampai kotak 100 lebih dulu menjadi <b>⚡ Juara Tercepat</b>; total poin terbanyak menjadi <b>🌟 Juara Kuis</b>. Kedua papan juara ada di kiri dan kanan papan permainan. Tim yang kalah mendapat <b>tantangan semangat</b>.<br>
+    5. Guru bisa menyesuaikan poin dengan tombol +5 / −5 di papan Juara Kuis (dihitung sebagai bonus).</p>
     <div class="mact"><button class="btn primary" data-v="ok">Mengerti</button></div>
     ${creditLine()?`<div class="mcredit">${creditLine()}</div>`:""}`);
 });
@@ -1783,7 +1884,6 @@ $(".legend").addEventListener("click",e=>{
   document.querySelectorAll(".legend button").forEach(x=>x.classList.remove("on"));
   if(on){bd.classList.add("f-"+f);b.classList.add("on")}
 });
-$("#lbSeg").addEventListener("click",e=>{const b=e.target.closest("button[data-m]");if(!b)return;LB=b.dataset.m;renderTeams()});
 $("#bAbout").addEventListener("click",showAbout);
 syncSoundBtn();
 applyCredit();
