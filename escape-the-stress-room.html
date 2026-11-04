@@ -242,8 +242,8 @@ a.back:hover,button.back:hover{border-color:var(--cy);color:var(--cy)}
 .sidecredit b{color:var(--ink)}
 @media (min-width:1100px){
   .stage{grid-template-columns:290px minmax(0,1fr);align-items:start}
-  .stage .hud,.stage .qcard{grid-column:2}
-  .side{display:grid;gap:14px;grid-column:1;grid-row:1/span 3;position:sticky;top:72px}
+  .stage .hud,.stage .qcard,.stage .teambar{grid-column:2}
+  .side{display:grid;gap:14px;grid-column:1;grid-row:1/span 4;position:sticky;top:72px}
 }
 
 /* ---------- layar akhir ---------- */
@@ -314,6 +314,28 @@ a.back:hover,button.back:hover{border-color:var(--cy);color:var(--cy)}
   .row-btns .btn{flex:1 1 100%}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ======== mode bergiliran antar tim ======== */
+.teambar{display:flex;flex-wrap:wrap;gap:8px}
+.tchip{display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 10px;border:1px solid var(--line);border-radius:99px;background:var(--glass);font-size:14px;font-weight:700;color:var(--muted);transition:all .25s}
+.tchip i{width:12px;height:12px;border-radius:50%;flex:none}
+.tchip b{font-family:var(--f-head);font-size:14px;color:var(--gold)}
+.tchip.cur{border-color:var(--cy);color:var(--ink);background:var(--glass2);box-shadow:0 0 0 1px var(--cy) inset,0 0 18px -4px var(--cy)}
+.tin{display:flex;align-items:center;gap:10px}
+.tin i{width:16px;height:16px;border-radius:50%;flex:none}
+.tinputs{display:grid;gap:8px;grid-template-columns:1fr 1fr}
+.rothint{margin:12px 0 0;font-size:13.5px;line-height:1.5;color:var(--muted)}
+.rkh{margin:14px 0 4px;font-family:var(--f-head);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cy)}
+.rank{display:grid;gap:8px;margin:8px 0 12px}
+.rrow{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--line);border-radius:16px;background:var(--glass);font-weight:700;font-size:16px}
+.rrow.first{border-color:var(--gold);background:var(--hintbg);box-shadow:0 0 22px -8px var(--gold)}
+.rrow .rn{font-size:24px;text-align:center;font-family:var(--f-head)}
+.rrow small{display:block;font-weight:600;color:var(--muted);font-size:13px;margin-top:2px}
+.rrow .pt{font-family:var(--f-head);font-size:20px;color:var(--gold);white-space:nowrap}
+.rrow .pt i{font-style:normal;font-family:var(--f-body);font-size:12px;color:var(--muted);margin-left:4px}
+.rrow .dot2{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px}
+.rnote{font-size:13px;color:var(--dim);margin:0 0 8px}
+@media (max-width:640px){.tinputs{grid-template-columns:1fr}.tchip{font-size:13px;padding:5px 11px 5px 8px}}
 </style>
 </head>
 <body>
@@ -344,10 +366,19 @@ a.back:hover,button.back:hover{border-color:var(--cy);color:var(--cy)}
       <div>
         <div class="panel">
           <h3><b>1</b>Tim</h3>
-          <label class="lbl" for="inTeam">Nama tim</label>
+          <div class="lbl">Cara bermain</div>
+          <div class="chips" id="rotChips"><button class="chip on" type="button" data-rot="0">Satu tim</button><button class="chip" type="button" data-rot="1">🔁 Bergiliran antar tim</button></div>
+          <div id="singleBox" style="margin-top:14px"><label class="lbl" for="inTeam">Nama tim</label>
           <input class="field" id="inTeam" type="text" maxlength="24" placeholder="Contoh: Tim Cahaya" autocomplete="off">
           <div class="lbl" style="margin-top:14px">Jumlah pemain</div>
-          <div class="stepper"><button class="sbtn" id="plMinus" type="button" aria-label="Kurangi pemain">−</button><div class="val" id="plVal">4<small>orang</small></div><button class="sbtn" id="plPlus" type="button" aria-label="Tambah pemain">+</button></div>
+          <div class="stepper"><button class="sbtn" id="plMinus" type="button" aria-label="Kurangi pemain">−</button><div class="val" id="plVal">4<small>orang</small></div><button class="sbtn" id="plPlus" type="button" aria-label="Tambah pemain">+</button></div></div>
+          <div id="rotBox" class="hidden" style="margin-top:14px">
+            <div class="lbl">Jumlah tim</div>
+            <div class="stepper"><button class="sbtn" id="ntMinus" type="button" aria-label="Kurangi tim">−</button><div class="val" id="ntVal">3<small>tim</small></div><button class="sbtn" id="ntPlus" type="button" aria-label="Tambah tim">+</button></div>
+            <div class="lbl" style="margin-top:14px">Nama tiap tim</div>
+            <div class="tinputs" id="teamInputs"></div>
+            <p class="rothint">Tiap ruangan dimainkan tim yang berbeda secara bergantian. Kunci dan pintu keluar menjadi milik seluruh kelas, sedangkan poin dicatat per tim.</p>
+          </div>
         </div>
         <div class="panel">
           <h3><b>2</b>Mode permainan</h3>
@@ -409,6 +440,7 @@ a.back:hover,button.back:hover{border-color:var(--cy);color:var(--cy)}
       <div class="hbox keysbox"><small>KUNCI</small><div class="keys" id="hKeys"></div></div>
       <div class="hbox" id="timer"><svg viewBox="0 0 64 64" aria-hidden="true"><circle class="trk" cx="32" cy="32" r="27"/><circle class="prg" id="ringP" cx="32" cy="32" r="27" transform="rotate(-90 32 32)"/></svg><div><small id="tLbl">WAKTU</small><b id="tnum">3:00</b></div></div>
     </div>
+    <div class="teambar hidden" id="teamBar"></div>
     <div id="card" role="region" aria-live="polite"></div>
     <aside class="side" aria-label="Peta ruangan">
       <div class="box"><h3>Pintu keluar</h3><div id="sideDoor" style="--dw:clamp(150px,18vh,200px)"></div></div>
@@ -694,7 +726,8 @@ function toast(t,err){
 }
 
 /* ---------------- STATE & AUDIO ---------------- */
-let CFG={players:4,mode:"full",time:180,sound:true};
+let CFG={players:4,mode:"full",time:180,sound:true,rot:false,nt:3,names:[]};
+const maxNt=()=>5;
 let S=null,timerId=null;
 let recap=[];
 try{recap=JSON.parse(localStorage.getItem(SAVE_KEY)||"[]");if(!Array.isArray(recap))recap=[]}catch(e){recap=[]}
@@ -737,7 +770,7 @@ function doorHTML(keys,open){
 function recapHTML(){
   if(!recap.length)return "";
   const rows=recap.slice().sort((a,b)=>(b.score/b.max)-(a.score/a.max)||b.score-a.score).map((r,i)=>
-    `<tr><td>${i+1}</td><td>${esc(r.team)}</td><td>${r.players} org</td><td>${r.full?"Lengkap":"Singkat"}</td><td>🔑 ${r.keys}/5</td><td><b>${r.score}</b>/${r.max}</td><td>${r.icon} ${esc(r.title)}</td></tr>`).join("");
+    `<tr><td>${i+1}</td><td>${esc(r.team)}</td><td>${r.rot?"–":r.players+" org"}</td><td>${r.rot?"Gilir · ":""}${r.full?"Lengkap":"Singkat"}</td><td>🔑 ${r.keys}/${r.kmax||5}</td><td><b>${r.score}</b>/${r.max}</td><td>${r.icon} ${esc(r.title)}</td></tr>`).join("");
   return `<h3>🏅 Papan skor kelas</h3><table><thead><tr><th>#</th><th>TIM</th><th>PEMAIN</th><th>MODE</th><th>KUNCI</th><th>SKOR</th><th>GELAR</th></tr></thead><tbody>${rows}</tbody></table>
     <button class="btn ghost sm" data-clear type="button" style="margin-top:10px">Hapus papan skor</button>`;
 }
@@ -747,28 +780,33 @@ function renderSetup(){
   document.querySelectorAll(".mode").forEach(b=>{const on=b.dataset.mode===CFG.mode;b.classList.toggle("on",on);b.setAttribute("aria-checked",on)});
   document.querySelectorAll("#timeChips .chip").forEach(b=>b.classList.toggle("on",+b.dataset.t===CFG.time));
   $("#inSound").checked=CFG.sound;syncSound();
+  renderRotSetup();
 }
 function syncSound(){const b=$("#bSound");b.innerHTML=(CFG.sound?"🔊":"🔇")+`<span class="tx"> ${CFG.sound?"Suara":"Senyap"}</span>`}
 
 /* ---------------- MEMBANGUN ALUR ---------------- */
-function buildSteps(full){
+function buildSteps(full,nt){
   const steps=[];let id=0;
   ROOMS.forEach((R,ri)=>{
+    const team=nt>1?ri%nt:0;
+    if(nt>1)steps.push({type:"turn",room:ri,team});
     if(full){
-      steps.push({type:"intro",room:ri});
-      R.warm.forEach((c,wi)=>steps.push({type:"case",room:ri,c,kind:"warm",n:wi+1,id:id++}));
+      steps.push({type:"intro",room:ri,team});
+      R.warm.forEach((c,wi)=>steps.push({type:"case",room:ri,c,kind:"warm",n:wi+1,id:id++,team}));
     }
-    steps.push({type:"case",room:ri,c:R.boss,kind:"boss",n:full?3:1,id:id++});
-    if(full)steps.push({type:"reflect",room:ri});
+    steps.push({type:"case",room:ri,c:R.boss,kind:"boss",n:full?3:1,id:id++,team});
+    if(full)steps.push({type:"reflect",room:ri,team});
   });
   return {steps,count:id};
 }
 function newGame(){
   const team=($("#inTeam").value||"").trim()||("Tim "+(recap.length+1));
   const full=CFG.mode==="full";
-  const B=buildSteps(full);
+  const rot=CFG.rot,nt=rot?Math.max(2,Math.min(CFG.nt,5)):1;
+  const names=rot?teamNames().slice(0,nt):[team];
+  const B=buildSteps(full,nt);
   S={
-    team,players:CFG.players,limit:CFG.time,full,
+    team:rot?names.join(", "):team,rot,nt,names,turnFor:null,recs:null,players:CFG.players,limit:CFG.time,full,
     steps:B.steps,count:B.count,max:B.count*PTS_OK,step:0,cur:null,done:0,
     keys:[0,0,0,0,0],pts:Array(B.count).fill(0),hints:Array(B.count).fill(0),res:[],orders:[],bossOf:[],roomEnd:[],
     mode:"main",queue:[],phase:"",picked:null,correct:false,timeout:false,decided:null,
@@ -780,10 +818,17 @@ function newGame(){
   loadStep();
 }
 const total=()=>S.pts.reduce((a,b)=>a+b,0);
+const caseSteps=t=>S.steps.filter(x=>x.type==="case"&&x.team===t);
+const teamScore=t=>caseSteps(t).reduce((a,x)=>a+S.pts[x.id],0);
+const teamMax=t=>caseSteps(t).length*PTS_OK;
+const teamBosses=t=>caseSteps(t).filter(x=>x.kind==="boss").length;
+const teamKeys=t=>caseSteps(t).filter(x=>x.kind==="boss"&&S.keys[x.room]).length;
 const keyCount=()=>S.keys.reduce((a,b)=>a+b,0);
 function loadStep(){
   const st=S.mode==="retry"?S.bossOf[S.queue[0]]:S.steps[S.step];
   S.cur=st;
+  if(S.rot&&S.mode==="retry"&&S.turnFor!==S.queue[0]){S.turnFor=S.queue[0];return showTurn(st)}
+  if(st.type==="turn")return showTurn(st);
   if(st.type==="intro")return showIntro(st);
   if(st.type==="reflect")return showReflect(st);
   loadCase();
@@ -792,7 +837,8 @@ function loadStep(){
 /* ---------------- HUD & PANEL SAMPING ---------------- */
 function renderHud(popScore){
   const st=S.cur,ri=st?st.room:0;
-  $("#hTeam").textContent=S.team;
+  const ct=S.rot&&st?st.team:0;
+  $("#hTeam").textContent=S.rot?S.names[ct]:S.team;
   if(S.mode==="retry"){
     $("#hMissionLbl").textContent="CARI KUNCI";
     $("#hMission").textContent="Ruang "+(ri+1)+" · "+ROOMS[ri].name;
@@ -810,10 +856,11 @@ function renderHud(popScore){
     dots+=`<div class="${c}"></div>`;
   }
   $("#hDots").innerHTML=dots;
-  const sc=$("#hScore");sc.textContent=total();
-  $("#hMax").textContent="/ "+S.max;
+  const sc=$("#hScore");sc.textContent=S.rot?teamScore(ct):total();
+  $("#hMax").textContent="/ "+(S.rot?teamMax(ct):S.max);
   if(popScore){sc.classList.remove("pop");void sc.offsetWidth;sc.classList.add("pop")}
   $("#hKeys").innerHTML=S.keys.map(k=>`<div class="kslot${k?" on":""}">🔑</div>`).join("");
+  renderTeamBar(ct);
   renderSide();
 }
 function renderSide(){
@@ -854,6 +901,22 @@ function setCard(cls,html){
   const card=$("#card");card.className="qcard "+cls;card.innerHTML=html;
   card.style.animation="none";void card.offsetWidth;card.style.animation="";
 }
+
+/* ---------------- GILIRAN TIM ---------------- */
+function showTurn(st){
+  const R=ROOMS[st.room],tn=S.names[st.team];
+  S.phase="turn";S.tmax=0;clearTimer();setStress(0);
+  sfx.room();
+  renderHud();updateTimer();
+  const what=S.mode==="retry"?`mencari kunci ruangan ${st.room+1} yang tertinggal`:`menangani Ruang ${st.room+1}: ${esc(R.name)}`;
+  setCard("boss",`
+    <span class="mtag boss">🎯 Giliran tim</span>
+    <div class="mtitle"><div class="ic">👥</div><h2 style="color:${TCOL[st.team]}">${esc(tn)}</h2></div>
+    <p class="story2">Kendali berpindah ke <b>${esc(tn)}</b>. Saatnya ${what}.</p>
+    <div class="pills"><span class="pill">${R.icon} ${esc(R.name)}</span><span class="pill y">🔑 Kunci milik seluruh kelas</span><span class="pill g">Poin masuk ke ${esc(tn)}</span></div>
+    <div class="nextrow"><button class="btn primary" data-act="turnGo" type="button">✅ Siap, mulai giliran</button></div>`);
+}
+function turnGo(){sfx.click();if(S.mode==="main")next();else loadStep()}
 
 /* ---------------- PENGANTAR RUANGAN ---------------- */
 function showIntro(st){
@@ -941,6 +1004,7 @@ function reviewHTML(st){
       const nx=S.steps[S.step+1];
       if(!nx)label="Lihat hasil dan buka pintu 🚪";
       else if(nx.type==="reflect")label="Ke Ruang Jeda ➜";
+      else if(nx.type==="turn")label="Serahkan ke tim berikutnya ➜";
       else label=S.full?"Kasus berikutnya ➜":`Lanjut ke Misi ${st.room+2} ➜`;
     }
     act=`<div class="nextrow"><button class="btn primary" data-act="next" type="button">${label}</button></div>`;
@@ -1010,7 +1074,7 @@ function showReflect(st){
     </div>
     <div class="reflq">💭 ${esc(R.reflect)}</div>
     <p class="kbd" style="font-size:15px">Diskusikan sekitar 2 menit. Tidak ada poin di jeda ini; tujuannya merenung dan berbagi.</p>
-    <div class="nextrow"><button class="btn primary" data-act="next" type="button">${last?"Menuju pintu keluar 🚪":"Ruang berikutnya ➜"}</button></div>`);
+    <div class="nextrow"><button class="btn primary" data-act="next" type="button">${last?"Menuju pintu keluar 🚪":(S.rot?"Serahkan ke tim berikutnya ➜":"Ruang berikutnya ➜")}</button></div>`);
   sfx.room();
 }
 
@@ -1026,7 +1090,8 @@ function next(){
     S.queue.shift();
     if(S.queue.length)loadStep();
     else{
-      if(S.rec){S.rec.keys=keyCount();saveRecap()}
+      if(S.rot&&S.recs){S.recs.forEach((r,i)=>r.keys=teamKeys(i));saveRecap()}
+      else if(S.rec){S.rec.keys=keyCount();saveRecap()}
       renderEnd();
     }
   }
@@ -1034,7 +1099,7 @@ function next(){
 function startRetry(){
   S.queue=S.keys.map((k,i)=>k?-1:i).filter(i=>i>=0);
   if(!S.queue.length)return;
-  S.mode="retry";
+  S.mode="retry";S.turnFor=null;
   show("game");loadStep();
 }
 
@@ -1042,8 +1107,15 @@ function startRetry(){
 function endGame(){
   clearTimer();S.mode="main";
   const sc=total(),t=titleFor(sc/S.max*100);
-  S.rec={team:S.team,players:S.players,full:S.full,score:sc,max:S.max,keys:keyCount(),title:t.name,icon:t.icon};
-  recap.push(S.rec);saveRecap();
+  if(S.rot){
+    S.recs=S.names.map((n,i)=>{const mx=teamMax(i),pts=teamScore(i),tt=titleFor(mx?pts/mx*100:0);
+      return {team:n,players:0,rot:true,full:S.full,score:pts,max:mx,keys:teamKeys(i),kmax:teamBosses(i),title:tt.name,icon:tt.icon}});
+    S.recs.forEach(r=>recap.push(r));S.rec=S.recs[0];
+  }else{
+    S.rec={team:S.team,players:S.players,full:S.full,score:sc,max:S.max,keys:keyCount(),title:t.name,icon:t.icon};
+    recap.push(S.rec);
+  }
+  saveRecap();
   renderEnd();
 }
 function renderEnd(){
@@ -1057,8 +1129,9 @@ function renderEnd(){
     <div class="stats">
       <div class="stat"><small>TOTAL POIN</small><b>${sc}<i>dari ${S.max}</i></b></div>
       <div class="stat"><small>KUNCI TERKUMPUL</small><b>${keys} / 5</b></div>
-      <div class="stat"><small>TIM</small><b style="font-size:clamp(17px,2vw,24px);color:var(--ink)">${esc(S.team)}</b></div>
+      <div class="stat"><small>${S.rot?"JUMLAH TIM":"TIM"}</small><b style="font-size:clamp(17px,2vw,24px);color:var(--ink)">${S.rot?S.nt+" tim":esc(S.team)}</b></div>
     </div>
+    ${S.rot?rankHTML(S.names.map((n,i)=>({name:n,i,pts:teamScore(i),max:teamMax(i),sub:"🔑 "+teamKeys(i)+" / "+teamBosses(i)+" kunci · "+esc(titleFor(teamMax(i)?teamScore(i)/teamMax(i)*100:0).name)}))):""}
     ${all?"":`<p style="font-size:clamp(15px,1.7vw,19px);margin:6px 0;color:var(--muted)">Masih ada <b style="color:var(--ink)">${missing} kunci</b> yang belum didapat. Cari kunci yang tertinggal (tanpa poin tambahan) untuk membuka pintu.</p>`}
     <div class="lesson"><b>Pelajaran yang didapat:</b> mengelola stres, berkomunikasi dengan baik, bekerja sama, berani menolak tekanan teman, dan menunjukkan empati. Poin hanyalah bagian dari permainan; tujuan utamanya adalah belajar memilih solusi yang sehat dan bertanggung jawab.</div>
     <div class="tribute" style="margin-top:10px"><i>🌟</i><p><b>Beri tepuk tangan!</b> Game ini dirancang oleh <b>${esc(INFO.perancang)}</b>.</p></div>
@@ -1098,6 +1171,7 @@ function helpModal(){
       <li>Jawaban kurang tepat tetapi alasannya masuk akal dan baik (dinilai guru): <b>10 poin</b>. Jawaban tidak sesuai: 0 poin.</li>
       <li>Memakai petunjuk mengurangi <b>5 poin</b>.</li>
       <li>Kumpulkan lima kunci untuk membuka pintu keluar. Kunci yang tertinggal bisa dicari lagi di akhir.</li>
+      <li><b>Mode bergiliran</b>: 2–5 tim bergantian. Tiap ruangan dimainkan tim yang berbeda, kunci menjadi milik seluruh kelas, dan poin dicatat per tim.</li>
     </ol>
     <p><b>Gelar</b> (dari persentase poin): 80–100% Escape Master BK · 50–79% Pejuang Tangguh · 0–49% Calon Master BK.</p>
     <div class="mact"><button class="btn primary" data-v="ok" type="button">Mengerti</button></div>`);
@@ -1136,6 +1210,7 @@ $("#card").addEventListener("click",e=>{
   if(act==="hint")showHint();
   else if(act==="judge")judge(a.dataset.v);
   else if(act==="next")next();
+  else if(act==="turnGo")turnGo();
   else if(act==="again")again();
 });
 $("#end").addEventListener("click",e=>{
@@ -1155,11 +1230,45 @@ document.addEventListener("keydown",e=>{
     if(i>=0&&k.length===1)pick(i);
     else if(j>=0&&k.length===1)pick(j);
     else if(k==="h")showHint();
-  }else if(["review","intro","reflect"].includes(S.phase)&&(k==="enter"||k===" ")){
-    const b=$("#card [data-act=next],#card [data-act=again]");
+  }else if(["review","intro","reflect","turn"].includes(S.phase)&&(k==="enter"||k===" ")){
+    const b=$("#card [data-act=next],#card [data-act=again],#card [data-act=turnGo]");
     if(b){e.preventDefault();b.click()}
   }
 });
+
+
+/* ---------------- MODE BERGILIRAN ---------------- */
+const TCOL=["#22d3ee","#e879f9","#fbbf24","#34d399","#fb7185","#a78bfa"];
+function renderTeamInputs(){
+  $("#teamInputs").innerHTML=Array.from({length:CFG.nt},(_,i)=>`<label class="tin"><i style="background:${TCOL[i]}"></i><input class="field" data-ti="${i}" type="text" maxlength="24" placeholder="Tim ${i+1}" value="${esc(CFG.names[i]||"")}" autocomplete="off"></label>`).join("");
+}
+function renderRotSetup(){
+  CFG.nt=Math.max(2,Math.min(CFG.nt,maxNt()));
+  document.querySelectorAll("#rotChips .chip").forEach(b=>b.classList.toggle("on",(b.dataset.rot==="1")===CFG.rot));
+  $("#singleBox").classList.toggle("hidden",CFG.rot);
+  $("#rotBox").classList.toggle("hidden",!CFG.rot);
+  $("#ntVal").innerHTML=`${CFG.nt}<small>tim</small>`;
+  if(CFG.rot)renderTeamInputs();
+}
+function teamNames(){
+  return Array.from({length:CFG.nt},(_,i)=>((CFG.names[i]||"").trim()||("Tim "+(i+1))));
+}
+function renderTeamBar(ct){
+  const bar=$("#teamBar");
+  if(!S.rot){bar.classList.add("hidden");return}
+  bar.classList.remove("hidden");
+  bar.innerHTML=S.names.map((n,i)=>`<div class="tchip${i===ct?" cur":""}"><i style="background:${TCOL[i]}"></i>${esc(n)} <b>${teamScore(i)}</b></div>`).join("");
+}
+const MEDAL=["🥇","🥈","🥉"];
+function rankHTML(rows){   // rows: {name,i,pts,max,sub}
+  const rk=rows.slice().sort((a,b)=>(b.max?b.pts/b.max:0)-(a.max?a.pts/a.max:0)||b.pts-a.pts);
+  const uneven=rows.some(r=>r.max!==rows[0].max);
+  return `<div class="rkh">Peringkat tim</div><div class="rank">${rk.map((r,k)=>`<div class="rrow${k===0?" first":""}"><div class="rn">${MEDAL[k]||(k+1)}</div><div><span class="dot2" style="background:${TCOL[r.i]}"></span>${esc(r.name)}<small>${r.sub}</small></div><div class="pt">${r.pts}<i>/ ${r.max}</i></div></div>`).join("")}</div>${uneven?`<p class="rnote">Jumlah giliran tiap tim bisa berbeda, jadi peringkat dihitung dari persentase poin.</p>`:""}`;
+}
+$("#rotChips").addEventListener("click",e=>{const b=e.target.closest("[data-rot]");if(b){CFG.rot=b.dataset.rot==="1";renderSetup()}});
+$("#ntMinus").addEventListener("click",()=>{CFG.nt=Math.max(2,CFG.nt-1);renderSetup()});
+$("#ntPlus").addEventListener("click",()=>{CFG.nt=Math.min(maxNt(),CFG.nt+1);renderSetup()});
+$("#teamInputs").addEventListener("input",e=>{const i=e.target.dataset.ti;if(i!=null)CFG.names[+i]=e.target.value});
 
 applyCredit();
 renderSetup();
