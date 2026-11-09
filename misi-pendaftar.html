@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Misi Pendaftar — Pemantapan Kelanjutan Studi | Game BK</title>
+<meta name="description" content="Game BK sesuai RPL Bimbingan Klasikal: Pemantapan Kelanjutan Studi ke SMA/MA/SMK. Simulasi loket pendaftaran, dikendalikan guru, dimainkan berkelompok bergantian.">
+<style>
+:root{--bg:#0b1020;--bg2:#141b34;--card:#1a2342;--ink:#eef2ff;--muted:#9aa6cf;--line:rgba(255,255,255,.14);--ac:#38bdf8;--ac2:#a78bfa;--ok:#34d399;--warn:#fbbf24;--bad:#f87171}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Plus Jakarta Sans",system-ui,Segoe UI,Roboto,sans-serif;background:radial-gradient(1200px 600px at 20% -10%,#1e2a5a,transparent),var(--bg);color:var(--ink);overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+.hidden{display:none!important}
+#app{height:100%;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);background:rgba(8,12,28,.7);flex:0 0 auto}
+.top .ttl{font-weight:800;letter-spacing:.04em}
+.top .ttl small{display:block;font-weight:500;color:var(--muted);font-size:12px;letter-spacing:0}
+.sp{flex:1}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.07);border-radius:12px;padding:8px 14px;font-weight:700}
+.btn:hover{border-color:var(--ac)}
+.btn.pri{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#06101f;border-color:transparent}
+.btn.sm{padding:5px 10px;font-size:13px}
+.steps{display:flex;gap:6px;padding:8px 16px;overflow-x:auto;border-bottom:1px solid var(--line);flex:0 0 auto}
+.steps button{flex:0 0 auto;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:99px;padding:5px 12px;font-size:13px;font-weight:700}
+.steps button.on{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#06101f;border-color:transparent}
+.steps button.done{color:var(--ok)}
+.main{flex:1;min-height:0;overflow:auto;padding:16px clamp(12px,3vw,32px) 24px}
+.head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-bottom:14px}
+.head .tahap{width:100%;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ac);font-weight:800}
+.head h2{margin:0;flex:1;min-width:240px;font-size:clamp(24px,3.4vw,40px);line-height:1.1}
+.timer{display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.05)}
+.timer .tm{font-weight:800;font-size:26px;min-width:84px;text-align:center;font-variant-numeric:tabular-nums}
+.timer .tm.low{color:var(--bad)}
+.card{border:1px solid var(--line);border-radius:18px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.03));padding:clamp(14px,2vw,24px);margin-bottom:14px}
+.card h3{margin:0 0 10px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--ac)}
+.big{font-size:clamp(22px,3vw,36px);font-weight:800;line-height:1.3;margin:4px 0}
+.txt{font-size:clamp(16px,1.8vw,22px);line-height:1.55;margin:0 0 8px}
+.pts{margin:0;padding-left:1.2em;font-size:clamp(16px,1.8vw,21px);line-height:1.55}
+.pts li{margin:4px 0}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.prof{border:1px solid var(--line);border-radius:16px;padding:14px;background:rgba(255,255,255,.05)}
+.prof h4{margin:0 0 6px;font-size:22px}
+.prof .k{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ac);font-weight:800;margin-top:8px}
+.prof p{margin:2px 0;font-size:16px;line-height:1.45}
+textarea,input[type=text],select{width:100%;font:inherit;color:var(--ink);background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+textarea{min-height:90px;resize:vertical}
+label.f{display:block;font-weight:700;margin:10px 0 4px;font-size:14px;color:var(--muted)}
+.tally{display:flex;flex-wrap:wrap;gap:10px}
+.tally div{flex:1;min-width:130px;border:1px solid var(--line);border-radius:14px;padding:10px;text-align:center;background:rgba(255,255,255,.05)}
+.tally b{display:block;font-size:34px}
+.tally button{margin:2px}
+.obs{width:100%;border-collapse:collapse;font-size:15px}
+.obs th,.obs td{border:1px solid var(--line);padding:6px 8px;text-align:center}
+.obs th:first-child,.obs td:first-child{text-align:left}
+.obs .c{cursor:pointer;min-width:64px;font-weight:800}
+.obs .c.v1{background:rgba(52,211,153,.28);color:var(--ok)}
+.obs .c.v2{background:rgba(251,191,36,.25);color:var(--warn)}
+.turn{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.turn span{border:1px solid var(--line);border-radius:99px;padding:5px 14px;font-weight:700;color:var(--muted)}
+.turn span.on{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#06101f;border-color:transparent}
+.board{display:grid;gap:8px;margin-bottom:14px}
+.row{display:grid;grid-template-columns:150px repeat(5,1fr);gap:6px;align-items:center}
+.row .nm{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row.me .nm{color:var(--ac)}
+.slot{border:1px dashed var(--line);border-radius:10px;padding:6px 4px;text-align:center;font-size:12px;color:var(--muted);min-height:44px;display:grid;place-items:center;line-height:1.15}
+.slot.got{border-style:solid;background:rgba(52,211,153,.2);color:var(--ok);font-weight:800}
+.slot.cur{border-color:var(--ac);color:var(--ink);box-shadow:0 0 0 2px rgba(56,189,248,.35)}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:rgba(255,255,255,.06);border-radius:14px;padding:14px 16px;margin:8px 0;font-size:clamp(16px,1.8vw,21px);line-height:1.4}
+.opt:hover{border-color:var(--ac)}
+.opt.ok{background:rgba(52,211,153,.25);border-color:var(--ok)}
+.opt.bad{background:rgba(248,113,113,.22);border-color:var(--bad)}
+.opt[disabled]{cursor:default}
+.expl{border-left:4px solid var(--ac);padding:8px 14px;background:rgba(56,189,248,.1);border-radius:8px;font-size:clamp(15px,1.7vw,20px);line-height:1.5;margin-top:10px}
+.mod{position:fixed;inset:0;z-index:50;background:rgba(3,6,18,.75);display:flex;align-items:center;justify-content:center;padding:14px}
+.mod .box{width:min(900px,100%);max-height:92vh;overflow:auto;background:var(--bg2);border:1px solid var(--line);border-radius:20px;padding:20px}
+.mod h2{margin-top:0}
+.mact{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:14px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#0f172a;border:1px solid var(--ac);padding:10px 18px;border-radius:12px;z-index:90;font-weight:700}
+.setup{max-width:760px;margin:0 auto}
+.setup h1{font-size:clamp(30px,5vw,52px);margin:8px 0}
+.setup h1 span{color:var(--ac)}
+.alur{padding-left:1.2em;line-height:1.8}
+.alur span{color:var(--muted);margin-left:8px;font-size:13px}
+.rank{display:grid;gap:8px}
+.rank div{display:flex;justify-content:space-between;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:rgba(255,255,255,.05)}
+@media(max-width:760px){.row{grid-template-columns:90px repeat(5,1fr)}.slot{font-size:10px}}
+/* ===== Laporan / cetak ===== */
+.rep{background:#fff;color:#111;border-radius:12px;padding:22px;font-size:14px;line-height:1.5}
+.rep h1{font-size:20px;margin:0 0 4px}.rep h3{font-size:15px;margin:16px 0 6px;border-bottom:2px solid #ddd;padding-bottom:3px}
+.rep table{width:100%;border-collapse:collapse;margin:4px 0}.rep th,.rep td{border:1px solid #bbb;padding:5px 7px;text-align:left;vertical-align:top;font-size:13px}.rep th{background:#e8f0ff}
+.rep .pre{white-space:pre-wrap}
+@media print{
+  body{overflow:visible;background:#fff}
+  #app,.toast{display:none!important}
+  .mod{position:static;background:none;padding:0;display:block}
+  .mod .box{max-height:none;overflow:visible;border:0;background:#fff;padding:0;width:100%}
+  .mod .mact,.mod .noprint{display:none!important}
+  .rep{padding:0;border-radius:0}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="top">
+    <div class="ttl">MISI PENDAFTAR<small id="subttl">Pemantapan Kelanjutan Studi ke SMA/MA/SMK</small></div>
+    <div class="sp"></div>
+    <button class="btn sm hidden" id="bObs">📋 Observasi</button>
+    <button class="btn sm" id="bInfo">ℹ Info game</button>
+    <button class="btn sm hidden" id="bExit">⏏ Keluar sesi</button>
+  </div>
+  <div class="steps hidden" id="steps"></div>
+  <div class="main" id="main"></div>
+</div>
+<div id="mod" class="mod hidden"><div class="box" id="mbox"></div></div>
+
+<script>
+"use strict";
+/* ============================ DATA RPL ============================ */
+const RPL={
+ id:"studi",
+ judul:"Pemantapan Kelanjutan Studi ke SMA/MA/SMK",
+ meta:{"Topik":"Pemantapan Kelanjutan Studi ke SMA/MA/SMK","Komponen":"Perencanaan Individual","Strategi":"Bimbingan Klasikal","Bidang":"Wawasan dan Kesiapan Karier","Sasaran":"Kelas 9","Alokasi waktu":"4 JP (4 x 40 menit)"},
+ profil:"Kolaborasi, Penalaran Kritis, Komunikasi",
+ tujuan:["Murid mampu mengenali minat, bakat, dan cita-cita serta kaitannya dengan pilihan sekolah lanjutan (C).","Murid mampu menunjukkan sikap terbuka dan mantap terhadap pilihan kelanjutan studi yang sesuai dengan dirinya (A).","Murid mampu menyusun Rencana Kelanjutan Studi beserta langkah persiapannya (P)."],
+ pemantik:"Jika kalian harus memilih hari ini, sekolah lanjutan mana yang akan dipilih? Mengapa?",
+ refleksi:["Apa minat, bakat, dan cita-cita yang kalian miliki?","Bagaimana hubungan antara potensi diri dengan pilihan sekolah lanjutan yang akan dipilih?"],
+ praktik:["Model: Experiential Learning (Kolb)","Strategi: Student-Centered Learning, Reflektif dan Partisipatif","Metode: Observasi, Curah Pendapat, Diskusi Kelompok, Tanya Jawab, Refleksi, Penugasan"],
+ asesmen:["Asesmen awal: pertanyaan pemantik (lisan atau tertulis).","Asesmen proses: aktif bertanya/menjawab, mau berbagi pengalaman, antusias, dukungan pada teman.","Asesmen hasil: pemahaman terhadap materi, perasaan/sikap positif setelah layanan, komitmen atau rencana tindakan."],
+ sumber:["Kemendikdasmen RI. Panduan Bimbingan dan Konseling pada Satuan Pendidikan."],
+ indProses:["Aktif bertanya/menjawab","Mau berbagi pengalaman","Antusias","Dukungan pada teman"],
+ indHasil:["Pemahaman terhadap materi/topik layanan","Perasaan/sikap positif setelah layanan","Komitmen/rencana tindakan setelah layanan"]
+};
+const FASE=[
+ {id:"awal",judul:"Pembukaan & Pertanyaan Pemantik",tahap:"Tahap Awal · Asesmen awal",menit:15,tipe:"pemantik"},
+ {id:"konkret",judul:"Mengenal Jalur: SMA, MA, SMK",tahap:"Tahap Inti · Pengalaman Konkret",menit:20,tipe:"konkret"},
+ {id:"refleksi",judul:"Mengenali Diri",tahap:"Tahap Inti · Mengamati & Merefleksikan",menit:15,tipe:"refleksi"},
+ {id:"konsep",judul:"Membentuk Konsep",tahap:"Tahap Inti · Pembentukan Konsep",menit:20,tipe:"konsep"},
+ {id:"game",judul:"Game: Misi Pendaftar",tahap:"Tahap Inti · Eksperimen Aktif (1)",menit:50,tipe:"game"},
+ {id:"rencana",judul:"Rencana Kelanjutan Studi",tahap:"Tahap Inti · Eksperimen Aktif (2)",menit:25,tipe:"rencana"},
+ {id:"akhir",judul:"Refleksi & Penutup",tahap:"Tahap Penutup · Asesmen hasil",menit:15,tipe:"akhir"},
+ {id:"laporan",judul:"Laporan Asesmen",tahap:"Hasil sesi",menit:0,tipe:"laporan"}
+];
+const JALUR=[
+ {n:"SMA",e:"🎓",k:"Pendidikan umum; mata pelajaran dasar ditambah mata pelajaran pilihan sesuai minat.",b:"Kegiatan belajar dominan akademik: diskusi, proyek, praktikum IPA/IPS, ekstrakurikuler.",u:"Menyiapkan lulusan melanjutkan ke perguruan tinggi.",w:"Bisa langsung bekerja atau ikut pelatihan keterampilan, umumnya dengan bekal tambahan."},
+ {n:"MA",e:"🕌",k:"Pendidikan umum berciri khas agama Islam, berada di bawah Kementerian Agama; mata pelajaran umum plus keagamaan.",b:"Belajar akademik disertai pendalaman agama, pembiasaan ibadah, dan kegiatan keagamaan.",u:"Dapat melanjutkan ke perguruan tinggi umum maupun keagamaan.",w:"Bisa bekerja atau ikut pelatihan; bekal agama jadi nilai tambah."},
+ {n:"SMK",e:"🛠️",k:"Pendidikan kejuruan; ada konsentrasi keahlian (misalnya teknik, bisnis, pariwisata, teknologi informasi).",b:"Banyak praktik, bengkel/laboratorium, dan magang atau praktik kerja di dunia usaha.",u:"Tetap bisa melanjutkan ke perguruan tinggi atau pendidikan vokasi.",w:"Disiapkan untuk siap kerja sesuai bidang keahlian."}
+];
+const LOKET=[
+ {n:"Kenali Diri",e:"🔍"},{n:"Kenali Jalur",e:"🛤️"},{n:"Pertimbangan",e:"⚖️"},{n:"Persiapan",e:"📋"},{n:"Keputusan",e:"✅"}
+];
+/* q, o (3 pilihan), a (indeks benar), e (pembahasan) */
+const SOAL=[
+ [ /* 1 Kenali Diri */
+  {q:"Dina suka menggambar dan mengutak-atik aplikasi desain. Ia bercita-cita menjadi desainer grafis. Pilihan yang paling selaras dengan dirinya adalah…",o:["Sekolah yang dipilih teman-temannya saja","SMK dengan konsentrasi keahlian desain atau multimedia","Sekolah terdekat tanpa melihat jurusan atau mata pelajarannya"],a:1,e:"Pilihan sebaiknya selaras dengan minat, bakat, dan cita-cita. Konsentrasi desain atau multimedia memberi bekal praktik langsung."},
+  {q:"Bima jago berhitung, suka sains, dan ingin kuliah di jurusan teknik. Pilihan yang masuk akal adalah…",o:["SMA dengan mata pelajaran pilihan matematika dan sains, atau SMK bidang teknik","SMK pariwisata, karena kebetulan sedang ramai peminat","Memilih apa saja, nanti dipikir belakangan"],a:0,e:"Bima punya minat dan bakat sains-matematika, jadi jalur yang mendukung bidang itu lebih tepat."},
+  {q:"Manakah pernyataan yang benar tentang minat dan bakat?",o:["Minat adalah ketertarikan, bakat adalah potensi yang mudah berkembang; keduanya perlu dilatih","Bakat pasti terlihat sejak lahir dan tidak perlu dilatih","Minat tidak penting selama nilai bagus"],a:0,e:"Minat dan bakat sama-sama penting. Bakat berkembang jika dilatih, minat menjaga semangat belajar."},
+  {q:"Siti ingin mendalami ilmu agama sambil tetap belajar mata pelajaran umum. Jalur yang paling sesuai adalah…",o:["SMK Teknik Otomotif","MA (Madrasah Aliyah)","Jalur mana pun, tidak ada bedanya"],a:1,e:"MA memadukan mata pelajaran umum dengan pendalaman keagamaan."},
+  {q:"Cara yang tepat untuk mengenali potensi diri adalah…",o:["Merefleksikan pengalaman, menerima masukan guru dan orang tua, lalu mencoba kegiatan baru","Mengandalkan ramalan atau tebak-tebakan","Mengikuti apa pun yang dipilih kakak kelas"],a:0,e:"Potensi dikenali lewat refleksi, masukan orang terpercaya, dan pengalaman mencoba."},
+  {q:"Rafi bercita-cita menjadi teknisi mesin dan ingin cepat siap bekerja. Pilihan yang paling selaras adalah…",o:["SMA tanpa memikirkan mata pelajaran pilihan","SMK Teknik Mesin","MA dengan mengabaikan cita-cita"],a:1,e:"SMK Teknik Mesin menyiapkan keterampilan praktik sesuai cita-cita Rafi, dan tetap membuka peluang kuliah."}
+ ],
+ [ /* 2 Kenali Jalur */
+  {q:"Sekolah yang menyiapkan murid melanjutkan ke perguruan tinggi dengan mata pelajaran pilihan adalah…",o:["SMA","SMK","Pelatihan kerja singkat"],a:0,e:"SMA berfokus pada pendidikan umum dan persiapan ke perguruan tinggi, dengan mata pelajaran pilihan."},
+  {q:"Madrasah Aliyah (MA) memiliki ciri…",o:["Hanya mengajarkan keterampilan kerja","Mata pelajaran umum ditambah pendalaman keagamaan, di bawah Kementerian Agama","Tidak bisa melanjutkan ke perguruan tinggi"],a:1,e:"MA berciri khas agama Islam, dan lulusannya dapat melanjutkan ke perguruan tinggi."},
+  {q:"Istilah “konsentrasi keahlian” dipakai pada…",o:["SMA","MA","SMK"],a:2,e:"SMK memiliki konsentrasi keahlian seperti teknik, bisnis, pariwisata, atau teknologi informasi."},
+  {q:"Mitos atau fakta? “Lulusan SMK tidak bisa kuliah.”",o:["Mitos: lulusan SMK tetap bisa melanjutkan ke perguruan tinggi atau vokasi","Fakta: pintu kuliah tertutup untuk SMK","Fakta: hanya boleh kuliah di luar negeri"],a:0,e:"SMK menyiapkan kerja, tetapi lulusannya tetap bisa melanjutkan pendidikan. Cek persyaratan masing-masing jalur masuk."},
+  {q:"Mitos atau fakta? “Lulusan SMA pasti langsung mendapat pekerjaan.”",o:["Fakta: SMA paling menjamin pekerjaan","Mitos: tidak ada jaminan; biasanya perlu kuliah, pelatihan, atau keterampilan tambahan","Fakta: asal nilai tinggi pasti langsung bekerja"],a:1,e:"Setiap jalur punya peluang masing-masing. Bekal keterampilan dan kesiapan diri tetap menentukan."},
+  {q:"Murid yang suka praktik langsung di bengkel atau laboratorium dan ingin siap kerja akan paling cocok mempertimbangkan…",o:["SMK","Menunda sekolah","Sekolah mana pun yang paling jauh"],a:0,e:"SMK memberi banyak praktik dan pengalaman di dunia usaha atau dunia industri."}
+ ],
+ [ /* 3 Pertimbangan */
+  {q:"Pertimbangan yang paling utama dalam memilih sekolah lanjutan adalah…",o:["Kesesuaian dengan minat, bakat, dan cita-cita","Sekolah yang sedang viral","Sekolah yang dipilih paling banyak teman"],a:0,e:"Minat, bakat, dan cita-cita membuat murid bertahan dan berkembang di sekolah yang dipilih."},
+  {q:"Sahabatmu mengajak mendaftar ke sekolah yang sama. Sikap yang tepat adalah…",o:["Langsung ikut tanpa berpikir","Menjadikannya pertimbangan tambahan, tetapi keputusan utama tetap dari dirimu","Memusuhi temanmu jika berbeda pilihan"],a:1,e:"Teman boleh menjadi pertimbangan tambahan. Namun kamu yang menjalani sekolahnya, jadi putuskan berdasarkan potensi diri."},
+  {q:"Biaya dan jarak ke sekolah sebaiknya…",o:["Diabaikan sama sekali","Dibicarakan dengan orang tua dan dicari informasinya, termasuk bantuan atau beasiswa resmi","Diputuskan sendiri tanpa orang tua"],a:1,e:"Biaya, jarak, dan transportasi nyata. Diskusikan bersama keluarga dan cari informasi bantuan dari sumber resmi."},
+  {q:"Sumber informasi sekolah yang paling tepat dipercaya adalah…",o:["Kabar burung di grup chat","Situs resmi sekolah, juknis resmi pendaftaran, dan guru BK","Orang yang menjanjikan kursi dengan bayaran"],a:1,e:"Informasi harus dari sumber resmi. Aturan dan jadwal pendaftaran bisa berbeda tiap daerah dan tahun."},
+  {q:"Nilaimu sedang-sedang saja, tetapi ada sekolah favorit. Langkah yang bijak adalah…",o:["Hanya mendaftar satu sekolah favorit","Menimbang kemampuan dengan realistis dan menyiapkan pilihan cadangan","Menyerah sebelum mencoba"],a:1,e:"Berani bermimpi tetap baik. Siapkan juga pilihan cadangan agar tidak kehabisan jalan."},
+  {q:"Orang tuamu punya pendapat berbeda dari pilihanmu. Sebaiknya…",o:["Berdebat sampai menang","Mendengarkan alasan mereka, lalu menyampaikan alasanmu dengan tenang dan terbuka","Diam lalu mendaftar diam-diam"],a:1,e:"Komunikasi terbuka membantu menemukan pilihan yang disepakati dan didukung bersama."}
+ ],
+ [ /* 4 Persiapan */
+  {q:"Setelah menentukan pilihan sekolah, langkah awal yang tepat adalah…",o:["Menunggu saja sampai pengumuman","Mencari informasi resmi tentang jalur dan jadwal pendaftaran (juknis daerah)","Menyebar kabar ke semua orang"],a:1,e:"Aturan seperti jalur, jadwal, dan persyaratan berbeda tiap daerah dan tahun. Selalu cek juknis resmi."},
+  {q:"Berkas pendaftaran sebaiknya…",o:["Disiapkan sejak awal sesuai persyaratan di juknis resmi","Disiapkan pada hari terakhir","Tidak perlu dicek dulu"],a:0,e:"Menyiapkan lebih awal memberi waktu memperbaiki jika ada yang kurang."},
+  {q:"Persiapan akademik yang baik adalah…",o:["Berhenti belajar karena sudah memilih sekolah","Tetap belajar tekun sampai kelulusan dan memperkuat mata pelajaran yang terkait pilihan","Hanya belajar menjelang ujian"],a:1,e:"Belajar tekun menjaga hasil akhir dan memperkuat bekal di sekolah yang dituju."},
+  {q:"Contoh persiapan nonakademik yang perlu dilakukan adalah…",o:["Menjaga kesehatan, mental, dan menyiapkan portofolio atau latihan wawancara bila diperlukan","Begadang terus sampai hari pendaftaran","Menghindari semua orang"],a:0,e:"Kesehatan fisik, mental, dan kesiapan keterampilan sangat membantu kelancaran proses."},
+  {q:"Mengapa perlu menyiapkan Rencana A, B, dan C?",o:["Agar tetap punya jalan jika pilihan pertama belum berhasil","Supaya tidak perlu berusaha pada pilihan pertama","Supaya terlihat banyak pilihan saja"],a:0,e:"Rencana cadangan membuat kita tenang dan tetap bergerak jika hasilnya tidak sesuai harapan."},
+  {q:"Seseorang menawarkan “jalur khusus” bisa memasukkan ke sekolah dengan membayar sejumlah uang. Sikap yang tepat adalah…",o:["Langsung membayar agar aman","Menolak dan melapor ke guru atau pihak sekolah; mendaftar hanya lewat jalur resmi","Menyuruh teman ikut membayar"],a:1,e:"Pendaftaran resmi tidak memakai calo. Tawaran seperti itu rawan penipuan."}
+ ],
+ [ /* 5 Keputusan */
+  {q:"Teman dekatmu memilih sekolah favorit, padahal minatmu berbeda. Keputusan yang tepat adalah…",o:["Ikut temanmu agar tidak sendirian","Memilih sesuai minat dan bakat, tetap menjaga pertemanan lewat komunikasi","Tidak mendaftar sama sekali"],a:1,e:"Pertemanan tetap bisa dijaga walau beda sekolah. Pilihan pendidikan sebaiknya mengikuti potensi diri."},
+  {q:"Ayah ingin kamu masuk SMA, sedangkan kamu tertarik SMK. Langkah terbaik adalah…",o:["Menolak membahas","Menyiapkan alasan dan informasi tentang SMK, lalu berdiskusi dengan terbuka","Mendaftar tanpa memberi tahu"],a:1,e:"Diskusi dengan informasi yang jelas membantu orang tua memahami pilihanmu."},
+  {q:"Sekolah impianmu jauh dan biayanya cukup besar. Sikap yang bijak adalah…",o:["Memaksakan diri tanpa mempertimbangkan keluarga","Mencari informasi bantuan resmi, menimbang alternatif, dan menyiapkan pilihan cadangan","Membatalkan semua rencana"],a:1,e:"Impian tetap dijaga, sambil mencari jalan dan alternatif yang realistis."},
+  {q:"Kamu takut tidak diterima di sekolah pilihan pertama. Hal yang paling membantu adalah…",o:["Menyalahkan diri sendiri","Menyiapkan rencana cadangan dan terus berusaha semaksimal mungkin","Berhenti belajar agar tidak kecewa"],a:1,e:"Rasa takut wajar. Rencana cadangan dan usaha maksimal membuat kita lebih siap."},
+  {q:"Kamu belum tahu cita-cita yang pasti. Langkah yang tepat adalah…",o:["Memilih asal-asalan","Menggali minat dan bakat, bertanya kepada guru BK, lalu memilih jalur yang membuka banyak peluang","Menunggu sampai diberi tahu orang lain"],a:1,e:"Belum tahu cita-cita itu wajar. Menggali diri dan bertanya membantu menemukan arah."},
+  {q:"Nilaimu pas-pasan tetapi kamu ingin sekolah yang persaingannya ketat. Yang paling tepat adalah…",o:["Mendaftar tanpa persiapan","Meningkatkan belajar, menyiapkan Rencana A-B-C, dan menimbang peluang secara realistis","Memilih sekolah mana pun tanpa pertimbangan"],a:1,e:"Usaha, kejujuran menilai diri, dan rencana cadangan adalah kunci keputusan yang matang."}
+ ]
+];
+const FIELDS=[
+ {k:"sekolah",l:"Pilihan sekolah lanjutan (SMA/MA/SMK)"},
+ {k:"alasan",l:"Alasan memilih"},
+ {k:"cocok",l:"Kesesuaian dengan minat dan bakat"},
+ {k:"jurusan",l:"Pilihan jurusan / konsentrasi keahlian (bila perlu)"},
+ {k:"langkah",l:"Langkah persiapan yang akan dilakukan"}
+];
+const OBS=["–","Tampak","Perlu didorong"];
+const CRC_T=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC_T[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+function zipStore(files){
+  const enc=new TextEncoder(),parts=[],cen=[];let off=0;
+  const u16=n=>[n&255,(n>>8)&255],u32=n=>[n&255,(n>>8)&255,(n>>16)&255,(n>>>24)&255];
+  files.forEach(f=>{
+    const nm=enc.encode(f.name),d=enc.encode(f.data),crc=crc32(d);
+    const lh=new Uint8Array([0x50,0x4b,3,4,20,0,0,8,0,0,0,0,0x21,0,...u32(crc),...u32(d.length),...u32(d.length),...u16(nm.length),0,0]);
+    parts.push(lh,nm,d);
+    cen.push({nm,crc,len:d.length,off});
+    off+=lh.length+nm.length+d.length;
+  });
+  let cs=0;const cparts=[];
+  cen.forEach(c=>{
+    const h=new Uint8Array([0x50,0x4b,1,2,20,0,20,0,0,8,0,0,0,0,0x21,0,...u32(c.crc),...u32(c.len),...u32(c.len),...u16(c.nm.length),0,0,0,0,0,0,0,0,0,0,0,0,...u32(c.off)]);
+    cparts.push(h,c.nm);cs+=h.length+c.nm.length;
+  });
+  const end=new Uint8Array([0x50,0x4b,5,6,0,0,0,0,...u16(cen.length),...u16(cen.length),...u32(cs),...u32(off),0,0]);
+  return new Blob([...parts,...cparts,end],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+}
+const xe=v=>String(v==null?"":v).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const colL=i=>{let s="";i++;while(i>0){const m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26)}return s};
+function sheetXml(rows,widths,headRow){
+  const cols=`<cols>${widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("")}</cols>`;
+  const body=rows.map((r,ri)=>`<row r="${ri+1}">${r.map((v,ci)=>{
+    const st=(ri===headRow)?1:0;
+    if(typeof v==="number")return `<c r="${colL(ci)}${ri+1}" s="${st}"><v>${v}</v></c>`;
+    return `<c r="${colL(ci)}${ri+1}" s="${st}" t="inlineStr"><is><t xml:space="preserve">${xe(v)}</t></is></c>`}).join("")}</row>`).join("");
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"/></sheetViews>${cols}<sheetData>${body}</sheetData></worksheet>`;
+}
+function buildXlsx(sheets){
+  const f=[];
+  f.push({name:"[Content_Types].xml",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((_,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join("")}</Types>`});
+  f.push({name:"_rels/.rels",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`});
+  f.push({name:"xl/workbook.xml",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((s,i)=>`<sheet name="${xe(s.name).slice(0,31)}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join("")}</sheets></workbook>`});
+  f.push({name:"xl/_rels/workbook.xml.rels",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((_,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join("")}<Relationship Id="rId${sheets.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`});
+  f.push({name:"xl/styles.xml",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFDCE9FF"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`});
+  sheets.forEach((s,i)=>f.push({name:`xl/worksheets/sheet${i+1}.xml`,data:sheetXml(s.rows,s.w,s.head)}));
+  return zipStore(f);
+}
+/* ============================ STATE ============================ */
+const KEY="rpl_studi_misi_v1";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+let S=load();
+function newS(){return {setup:false,kelas:"",names:["Kelompok A","Kelompok B","Kelompok C","Kelompok D"],i:0,visited:{},tally:{SMA:0,MA:0,SMK:0,Belum:0},obs:{},hasil:{},notes:{},plans:{},g:null,turn:0,jalur:0,start:Date.now()}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&s.names)return Object.assign(newS(),s)}catch(e){}return null}
+function save(){try{if(S)localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
+function modal(html){return new Promise(res=>{$("#mbox").innerHTML=html;$("#mod").classList.remove("hidden");$("#mbox").onclick=e=>{const b=e.target.closest("[data-v]");if(b){$("#mod").classList.add("hidden");res(b.dataset.v)}}})}
+/* ---------- timer ---------- */
+const TM={left:0,run:false,iv:null,id:null};
+function tmReset(f){clearInterval(TM.iv);TM.run=false;TM.id=f.id;TM.left=f.menit*60;if(S.tm&&S.tm[f.id]!=null)TM.left=S.tm[f.id]}
+function tmPaint(){const e=$("#tm");if(e){e.textContent=fmt(Math.max(0,TM.left));e.classList.toggle("low",TM.left<=60&&TM.left>0)}const b=$("#tmb");if(b)b.textContent=TM.run?"⏸":"▶"}
+function tmToggle(){
+  if(TM.run){clearInterval(TM.iv);TM.run=false}
+  else{TM.run=true;TM.iv=setInterval(()=>{TM.left--;S.tm=S.tm||{};S.tm[TM.id]=TM.left;if(TM.left<=0){clearInterval(TM.iv);TM.run=false;toast("⏰ Waktu fase habis")}tmPaint();if(TM.left%10===0)save()},1000)}
+  tmPaint();
+}
+/* ---------- setup ---------- */
+function renderSetupScreen(){
+  $("#steps").classList.add("hidden");$("#bObs").classList.add("hidden");$("#bExit").classList.add("hidden");
+  const tot=FASE.reduce((a,f)=>a+f.menit,0);
+  const old=S&&S.setup;
+  const st=S||newS();
+  $("#main").innerHTML=`<div class="setup">
+   <div class="head"><div class="tahap">RPL Bimbingan Klasikal · Kelas 9 · ${tot} menit (${tot/40} JP)</div></div>
+   <h1>Misi <span>Pendaftar</span></h1>
+   <p class="txt"><b>${esc(RPL.judul)}</b>. Kelompok menjadi pendaftar yang mengurus misi di lima loket: mengenali diri, mengenali jalur, menimbang, bersiap, lalu memutuskan. Dimainkan bergantian, layar dikendalikan guru.</p>
+   <div class="card"><h3>Pengaturan sesi</h3>
+     <label class="f">Kelas</label><input type="text" id="kelas" maxlength="20" placeholder="contoh: 9A" value="${esc(st.kelas)}">
+     <label class="f">Jumlah kelompok</label><select id="jml">${[2,3,4,5,6].map(n=>`<option ${n===st.names.length?"selected":""}>${n}</option>`).join("")}</select>
+     <div id="nms"></div>
+   </div>
+   <div class="card"><h3>Alur sesi</h3><ol class="alur">${FASE.filter(f=>f.menit).map(f=>`<li>${esc(f.judul)}<span>${f.menit} mnt</span></li>`).join("")}<li>Laporan asesmen (PDF / Excel)<span>setelah sesi</span></li></ol></div>
+   <div class="mact" style="justify-content:flex-start"><button class="btn pri" id="go">▶ Mulai Sesi Layanan</button>${old?`<button class="btn" id="resume">↩ Lanjutkan sesi tersimpan</button>`:""}</div>
+   <p class="txt" style="color:var(--muted);font-size:14px">Data hanya tersimpan di perangkat guru (tidak ada data murid yang dikirim ke server).</p>
+  </div>`;
+  const paintN=()=>{const n=+$("#jml").value;$("#nms").innerHTML=Array.from({length:n},(_,i)=>`<label class="f">Nama kelompok ${i+1}</label><input type="text" class="nm" maxlength="22" value="${esc(st.names[i]||"Kelompok "+String.fromCharCode(65+i))}">`).join("")};
+  paintN();$("#jml").onchange=paintN;
+  $("#go").onclick=async()=>{
+    if(old){const v=await modal(`<h2>Mulai sesi baru?</h2><p>Sesi yang tersimpan (observasi, rencana, catatan) akan diganti.</p><div class="mact"><button class="btn" data-v="no">Batal</button><button class="btn pri" data-v="yes">Ya, mulai baru</button></div>`);if(v!=="yes")return}
+    const n=newS();n.kelas=$("#kelas").value.trim();n.names=[...document.querySelectorAll(".nm")].map((e,i)=>e.value.trim()||"Kelompok "+String.fromCharCode(65+i));n.setup=true;S=n;save();enterSesi();
+  };
+  if(old)$("#resume").onclick=()=>{S=Object.assign(newS(),S);enterSesi()};
+}
+/* ---------- sesi ---------- */
+function enterSesi(){$("#steps").classList.remove("hidden");$("#bObs").classList.remove("hidden");$("#bExit").classList.remove("hidden");tmReset(FASE[S.i]);renderSesi()}
+function goFase(i){S.i=i;S.visited[FASE[i].id]=1;save();tmReset(FASE[i]);renderSesi()}
+function renderSteps(){$("#steps").innerHTML=FASE.map((f,i)=>`<button data-i="${i}" class="${i===S.i?"on":S.visited[f.id]?"done":""}">${i+1}. ${esc(f.judul)}</button>`).join("");$("#steps").onclick=e=>{const b=e.target.closest("button");if(b)goFase(+b.dataset.i)}}
+const noteBox=(id,j,p)=>`<div class="card"><h3>${j||"📝 Catatan guru"}</h3><textarea data-note="${id}" placeholder="${esc(p||"Catat hal penting yang Anda amati…")}">${esc(S.notes[id]||"")}</textarea></div>`;
+const li=a=>a.map(x=>`<li>${esc(x)}</li>`).join("");
+function bodyFase(f){
+  switch(f.tipe){
+  case"pemantik":return `<div class="card"><h3>Sapaan & tujuan</h3><p class="txt">Sapa murid dengan hangat, cek kehadiran, lalu sampaikan tujuan, manfaat, dan alur layanan.</p><ol class="pts">${li(RPL.tujuan)}</ol></div>
+   <div class="card"><h3>Amati infografis</h3><p class="txt">Lulusan SMP dapat melanjutkan ke…</p><div class="big">🏫 SMP → 🎓 SMA &nbsp; 🕌 MA &nbsp; 🛠️ SMK → 🏛️ Kuliah · 💼 Dunia kerja · 🚀 Wirausaha</div></div>
+   <div class="card"><h3>❓ Pertanyaan pemantik (asesmen awal)</h3><div class="big">“${esc(RPL.pemantik)}”</div>
+    <p class="txt">Catat sebaran jawaban murid (ketuk tombol), lalu dengarkan alasan mereka.</p>
+    <div class="tally">${["SMA","MA","SMK","Belum"].map(k=>`<div><b id="t_${k}">${S.tally[k]}</b>${k==="Belum"?"Belum tahu":k}<br><button class="btn sm" data-t="${k}" data-d="1">＋</button><button class="btn sm" data-t="${k}" data-d="-1">－</button></div>`).join("")}</div></div>
+   ${noteBox("awal","📝 Alasan yang disampaikan murid (catatan asesmen awal)","Contoh: beberapa murid memilih SMK karena ingin cepat kerja…")}`;
+  case"konkret":return `<div class="card"><h3>Studi kasus / infografis profil jalur</h3><p class="txt">Murid mengamati profil tiga jalur, lalu menyampaikan perbedaan dan keunggulannya (individu atau kelompok).</p>
+   <div class="grid">${JALUR.map(j=>`<div class="prof"><h4>${j.e} ${j.n}</h4><div class="k">Kurikulum</div><p>${esc(j.k)}</p><div class="k">Kegiatan belajar</div><p>${esc(j.b)}</p><div class="k">Perguruan tinggi</div><p>${esc(j.u)}</p><div class="k">Dunia kerja</div><p>${esc(j.w)}</p></div>`).join("")}</div>
+   <p class="txt" style="margin-top:10px;color:var(--muted);font-size:15px">Catatan: aturan, jalur, dan jadwal pendaftaran berbeda tiap daerah dan tahun. Selalu rujuk juknis resmi.</p></div>
+   <div class="card"><h3>Giliran kelompok menyampaikan temuan</h3>${turnHtml()}<p class="txt">Apa perbedaan dan keunggulan yang kalian temukan?</p></div>
+   ${noteBox("konkret")}`;
+  case"refleksi":return `<div class="card"><h3>Pertanyaan reflektif</h3><div class="big">${RPL.refleksi.map(esc).join("<br>")}</div><p class="txt">Diskusi berpasangan atau kelompok kecil, lalu setiap kelompok menyampaikan hasilnya.</p>${turnHtml()}</div>${noteBox("refleksi")}`;
+  case"konsep":return `<div class="card"><h3>Pembentukan konsep</h3><ol class="pts">
+    <li><b>Karakteristik SMA, MA, SMK</b>: jalur umum, umum berciri keagamaan, dan kejuruan.</li>
+    <li><b>Faktor pertimbangan memilih sekolah</b>: minat, bakat, cita-cita, kemampuan akademik, biaya dan jarak, dukungan keluarga, informasi resmi.</li>
+    <li><b>Pentingnya mengenali potensi diri</b>: pilihan yang sesuai membuat belajar lebih bermakna dan bertahan.</li>
+    <li><b>Pilihan pendidikan dan karier masa depan</b>: setiap jalur punya peluang kuliah, kerja, atau wirausaha.</li></ol></div>
+    <div class="card"><h3>Hubungkan dengan pengalaman</h3><p class="txt">Ajak murid mengaitkan konsep dengan temuan pada tahap sebelumnya, lalu menyimpulkan poin-poin penting bersama.</p></div>${noteBox("konsep","📝 Kesimpulan murid")}`;
+  case"game":return gameHtml();
+  case"rencana":return rencanaHtml();
+  case"akhir":return `<div class="card"><h3>Refleksi tertulis (murid)</h3><ol class="pts"><li>Pilihan sekolah lanjutan yang paling sesuai dengan potensi diriku.</li><li>Informasi baru yang kudapat selama layanan.</li><li>Komitmenku mempersiapkan diri secara akademik dan nonakademik agar sesuai cita-cita dan rencana kariernya.</li></ol><p class="txt">Beberapa murid menyampaikan pemahaman, perasaan, dan rencana tindak lanjut.</p></div>
+   <div class="card"><h3>Asesmen hasil (observasi guru)</h3><p class="txt" style="color:var(--muted);font-size:15px">Ketuk sel untuk mengganti: – / Tampak / Perlu didorong.</p>${obsTable("hasil",RPL.indHasil)}</div>
+   ${noteBox("akhir","📝 Catatan hasil layanan")}
+   <div class="card"><h3>Penutup</h3><ol class="pts"><li>Menyimpulkan hasil layanan bersama murid.</li><li>Apresiasi atas partisipasi aktif.</li><li>Menyampaikan tindak lanjut atau materi layanan berikutnya.</li><li>Menutup dengan doa dan salam.</li></ol></div>
+   <div class="mact" style="justify-content:flex-start"><button class="btn pri" data-go="${FASE.length-1}">📄 Buka Laporan Asesmen</button></div>`;
+  case"laporan":return `<div class="card"><h3>Laporan asesmen</h3><p class="txt">Laporan memuat ringkasan sesi, asesmen awal, observasi proses, asesmen hasil, rencana kelompok, hasil permainan, dan catatan guru. Tanpa nama murid.</p>
+   <div class="mact" style="justify-content:flex-start"><button class="btn pri" id="bRep">📄 Lihat / Cetak PDF</button><button class="btn pri" id="bXls">📊 Unduh Excel</button></div></div>`;
+  }
+  return "";
+}
+function turnHtml(){return `<div class="turn">${S.names.map((n,i)=>`<span data-turn="${i}" class="${i===S.turn?"on":""}">${esc(n)}</span>`).join("")}<button class="btn sm" data-turnnext="1">Kelompok berikutnya ➜</button></div>`}
+function obsTable(kind,ind){
+  const o=S[kind];
+  return `<div style="overflow:auto"><table class="obs"><tr><th>Kelompok</th>${ind.map(x=>`<th>${esc(x)}</th>`).join("")}</tr>${S.names.map((n,i)=>`<tr><td>${esc(n)}</td>${ind.map((_,j)=>{const v=((o[i]||[])[j])||0;return `<td class="c v${v}" data-obs="${kind}|${i}|${j}">${OBS[v]}</td>`}).join("")}</tr>`).join("")}</table></div>`;
+}
+function renderSesi(){
+  const f=FASE[S.i];S.visited[f.id]=1;renderSteps();
+  $("#main").innerHTML=`<div class="head"><div class="tahap">${esc(f.tahap)}</div><h2>${esc(f.judul)}</h2>${f.menit?`<div class="timer"><span class="tm" id="tm"></span><button class="btn sm" id="tmb">▶</button><button class="btn sm" id="tmr" title="Atur ulang">↺</button></div>`:""}</div>${bodyFase(f)}
+   <div class="mact" style="justify-content:space-between">${S.i>0?`<button class="btn" data-go="${S.i-1}">⬅ ${esc(FASE[S.i-1].judul)}</button>`:"<span></span>"}${S.i<FASE.length-1?`<button class="btn pri" data-go="${S.i+1}">${esc(FASE[S.i+1].judul)} ➡</button>`:""}</div>`;
+  if(f.menit){tmPaint();$("#tmb").onclick=tmToggle;$("#tmr").onclick=()=>{clearInterval(TM.iv);TM.run=false;TM.left=f.menit*60;S.tm=S.tm||{};S.tm[f.id]=TM.left;tmPaint()}}
+  if(f.tipe==="laporan"){$("#bRep").onclick=showReport;$("#bXls").onclick=unduhXlsx}
+  if(f.tipe==="game")gameBind();
+  save();
+}
+$("#main").addEventListener("click",e=>{
+  const t=e.target.closest("[data-t]");if(t){const k=t.dataset.t;S.tally[k]=Math.max(0,S.tally[k]+ +t.dataset.d);$("#t_"+k).textContent=S.tally[k];save();return}
+  const g=e.target.closest("[data-go]");if(g){goFase(+g.dataset.go);return}
+  const tn=e.target.closest("[data-turn]");if(tn){S.turn=+tn.dataset.turn;save();renderSesi();return}
+  if(e.target.closest("[data-turnnext]")){S.turn=(S.turn+1)%S.names.length;save();renderSesi();return}
+  const o=e.target.closest("[data-obs]");if(o){const[k,i,j]=o.dataset.obs.split("|");S[k][i]=S[k][i]||[];S[k][i][j]=((S[k][i][j]||0)+1)%3;save();o.className="c v"+S[k][i][j];o.textContent=OBS[S[k][i][j]];return}
+  const pl=e.target.closest("[data-plan]");if(pl){S.planG=+pl.dataset.plan;save();renderSesi();return}
+});
+$("#main").addEventListener("input",e=>{
+  const n=e.target.closest("[data-note]");if(n){S.notes[n.dataset.note]=n.value;save();return}
+  const p=e.target.closest("[data-pf]");if(p){const i=S.planG||0;S.plans[i]=S.plans[i]||{};S.plans[i][p.dataset.pf]=p.value;save()}
+});
+function rencanaHtml(){
+  const i=S.planG||0,p=S.plans[i]||{};
+  return `<div class="card"><h3>Susun Rencana Kelanjutan Studi (per kelompok)</h3><p class="txt">Murid menyusun, mendiskusikan, saling memberi masukan, lalu mempresentasikan. Guru mengetik poin utama dari presentasi kelompok.</p>
+   <div class="turn">${S.names.map((n,k)=>`<span data-plan="${k}" class="${k===i?"on":""}" style="cursor:pointer">${esc(n)}</span>`).join("")}</div>
+   ${FIELDS.map(fl=>`<label class="f">${esc(fl.l)}</label><textarea data-pf="${fl.k}" style="min-height:64px">${esc(p[fl.k]||"")}</textarea>`).join("")}</div>${noteBox("rencana","📝 Masukan antar kelompok & penguatan guru")}`;
+}
+/* ============================ GAME ============================ */
+function gameInit(){
+  S.g={rows:S.names.map(()=>({s:0,att:0,ok:0,bad:0,done:null})),t:0,att:0,q:null,ans:null,ord:0,end:false};
+}
+function gameHtml(){
+  if(!S.g)gameInit();
+  const g=S.g;
+  const intro=`<div class="card"><h3>Cara bermain</h3><ol class="pts"><li>Setiap kelompok adalah <b>pendaftar</b> yang harus mengumpulkan <b>5 stempel</b>, satu dari tiap loket.</li><li>Kelompok mendapat giliran bergantian. Mereka berdiskusi, lalu menyebutkan jawaban; guru mengetuk pilihan tersebut.</li><li>Jawaban tepat: stempel loket diberikan dan kelompok maju ke loket berikutnya. Belum tepat: dibahas bersama, kelompok mengulang loket yang sama dengan soal lain.</li><li>Permainan selesai saat semua kelompok lengkap, atau saat waktu habis.</li></ol></div>`;
+  return `<div id="gw">${g.ord===0&&!g.q&&!g.started?intro+`<div class="mact" style="justify-content:flex-start"><button class="btn pri" id="gStart">▶ Mulai Permainan</button></div>`:gameBoard()}</div>`;
+}
+function gameBoard(){
+  const g=S.g,me=g.t;
+  const board=`<div class="board">${S.names.map((n,i)=>{const r=g.rows[i];return `<div class="row ${i===me&&!g.end?"me":""}"><div class="nm">${i===me&&!g.end?"▶ ":""}${esc(n)}</div>${LOKET.map((l,k)=>`<div class="slot ${k<r.s?"got":""} ${k===r.s&&!r.done?"cur":""}">${k<r.s?"🏅 ":l.e+" "}${esc(l.n)}</div>`).join("")}</div>`}).join("")}</div>`;
+  if(g.end)return board+resultHtml();
+  const r=g.rows[me],q=g.q,lk=q?q.l:r.s;
+  let card="";
+  if(!q){card=`<div class="card"><h3>Giliran ${esc(S.names[me])}</h3><div class="big">${LOKET[lk].e} Loket ${lk+1}: ${esc(LOKET[lk].n)}</div><p class="txt">Siap menerima misi dari loket ini?</p><button class="btn pri" id="gDraw">🎲 Ambil misi</button> <button class="btn" id="gEnd">🏁 Akhiri permainan</button></div>`}
+  else{
+    const Q=SOAL[lk][q.i];
+    card=`<div class="card"><h3>${esc(S.names[me])} · Loket ${lk+1}: ${esc(LOKET[lk].n)}</h3><div class="big">${esc(Q.q)}</div>${Q.o.map((t,k)=>`<button class="opt ${g.ans!=null?(k===Q.a?"ok":k===g.ans?"bad":""):""}" data-opt="${k}" ${g.ans!=null?"disabled":""}>${"ABC"[k]}. ${esc(t)}</button>`).join("")}
+    ${g.ans!=null?`<div class="expl"><b>${g.ans===Q.a?"✅ Stempel diberikan! ":"💬 Belum tepat. "}</b>${esc(Q.e)}</div><div class="mact" style="justify-content:flex-start"><button class="btn pri" id="gNext">Lanjut ke kelompok berikutnya ➜</button></div>`:`<p class="txt" style="color:var(--muted);font-size:14px">Kelompok berdiskusi, lalu guru mengetuk jawaban yang mereka sebutkan.</p>`}</div>`;
+  }
+  return board+card;
+}
+function resultHtml(){
+  const rows=S.names.map((n,i)=>({n,...S.g.rows[i]})).sort((a,b)=>b.s-a.s||(a.done&&b.done?a.done-b.done:0)||a.bad-b.bad);
+  return `<div class="card"><h3>🏁 Hasil Misi Pendaftar</h3><div class="rank">${rows.map((r,i)=>`<div><span>${["🥇","🥈","🥉"][i]||"•"} <b>${esc(r.n)}</b></span><span>${r.s}/5 stempel · ${r.ok} tepat · ${r.bad} dibahas</span></div>`).join("")}</div>
+  <p class="txt" style="margin-top:12px">Pesan: semua kelompok berhasil belajar. Yang terpenting adalah memahami diri dan menyiapkan rencana yang matang, bukan siapa yang paling cepat.</p>
+  <div class="mact" style="justify-content:flex-start"><button class="btn" id="gAgain">🔁 Main ulang</button><button class="btn pri" data-go="${S.i+1}">➡ Lanjut ke Rencana</button></div></div>`;
+}
+function gameBind(){
+  const w=$("#gw");if(!w)return;
+  const rerender=()=>{w.innerHTML=gameHtml();gameBind();save()};
+  const st=$("#gStart");if(st)st.onclick=()=>{S.g.started=true;rerender()};
+  const dr=$("#gDraw");if(dr)dr.onclick=()=>{const g=S.g,r=g.rows[g.t];g.q={l:r.s,i:(r.att+g.t)%SOAL[r.s].length};r.att++;g.ans=null;rerender()};
+  const en=$("#gEnd");if(en)en.onclick=()=>{S.g.end=true;rerender()};
+  const ag=$("#gAgain");if(ag)ag.onclick=()=>{gameInit();S.g.started=true;rerender()};
+  w.querySelectorAll("[data-opt]").forEach(b=>b.onclick=()=>{
+    const g=S.g,r=g.rows[g.t],Q=SOAL[g.q.l][g.q.i];g.ans=+b.dataset.opt;
+    if(g.ans===Q.a){r.ok++;r.s++;if(r.s>=5)r.done=++g.ord}else r.bad++;
+    rerender();
+  });
+  const nx=$("#gNext");if(nx)nx.onclick=()=>{
+    const g=S.g;g.q=null;g.ans=null;
+    if(g.rows.every(r=>r.s>=5)){g.end=true;rerender();return}
+    let k=0;do{g.t=(g.t+1)%S.names.length;k++}while(g.rows[g.t].s>=5&&k<S.names.length);
+    rerender();
+  };
+}
+/* ============================ INFO / LAPORAN ============================ */
+function infoHtml(){
+  return `<h2>ℹ Info game · Misi Pendaftar</h2><p class="txt"><b>${esc(RPL.judul)}</b></p>
+  <h3>Spesifikasi layanan (RPL)</h3><table class="obs" style="text-align:left">${Object.keys(RPL.meta).map(k=>`<tr><td style="width:34%"><b>${esc(k)}</b></td><td style="text-align:left">${esc(RPL.meta[k])}</td></tr>`).join("")}<tr><td><b>Dimensi profil lulusan</b></td><td style="text-align:left">${esc(RPL.profil)}</td></tr></table>
+  <h3>Tujuan layanan</h3><ol class="pts">${li(RPL.tujuan)}</ol>
+  <h3>Praktik pedagogis</h3><ul class="pts">${li(RPL.praktik)}</ul>
+  <h3>Alur sesi</h3><ol class="pts">${FASE.filter(f=>f.menit).map(f=>`<li>${esc(f.judul)} (${f.menit} menit)</li>`).join("")}</ol>
+  <h3>Asesmen</h3><ul class="pts">${li(RPL.asesmen)}</ul>
+  <h3>Cara kerja game</h3><p class="txt">Guru mengendalikan layar. Kelompok bergiliran mengumpulkan stempel di lima loket pendaftaran. Aturan, kuota, dan jadwal pendaftaran berbeda tiap daerah, jadi game tidak memuatnya; rujuk juknis resmi.</p>
+  <h3>Sumber</h3><ul class="pts">${li(RPL.sumber)}</ul>
+  <p class="txt" style="color:var(--muted);font-size:14px">Dirancang oleh Agung Fahri Husaeni, S.Pd., Guru BK SMP Negeri 36 Semarang.</p>
+  <div class="mact"><button class="btn pri" data-v="x">Tutup</button></div>`;
+}
+$("#bInfo").onclick=()=>modal(infoHtml());
+$("#bObs").onclick=()=>modal(`<h2>📋 Observasi proses layanan</h2><p class="txt" style="color:var(--muted);font-size:15px">Ketuk sel untuk mengganti: – / Tampak / Perlu didorong.</p>${obsTable("obs",RPL.indProses)}<div class="mact"><button class="btn pri" data-v="x">Selesai</button></div>`);
+$("#mbox").addEventListener("click",e=>{const o=e.target.closest("[data-obs]");if(o){const[k,i,j]=o.dataset.obs.split("|");S[k][i]=S[k][i]||[];S[k][i][j]=((S[k][i][j]||0)+1)%3;save();o.className="c v"+S[k][i][j];o.textContent=OBS[S[k][i][j]]}});
+$("#bExit").onclick=()=>{clearInterval(TM.iv);TM.run=false;save();renderSetupScreen()};
+function gameRows(){const g=S&&S.g;return g?S.names.map((n,i)=>[n,g.rows[i].s,g.rows[i].ok,g.rows[i].bad]):[]}
+function tglIni(){return new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})}
+function showReport(){
+  const M=(kind,ind)=>`<table><tr><th>Kelompok</th>${ind.map(x=>`<th>${esc(x)}</th>`).join("")}</tr>${S.names.map((n,i)=>`<tr><td>${esc(n)}</td>${ind.map((_,j)=>`<td>${OBS[((S[kind][i]||[])[j])||0]}</td>`).join("")}</tr>`).join("")}</table>`;
+  const gr=gameRows();
+  modal(`<div class="rep"><h1>Laporan Layanan Bimbingan Klasikal</h1><div>${esc(RPL.judul)} · Kelas ${esc(S.kelas||"-")} · ${tglIni()}</div>
+  <h3>Ringkasan</h3><table>${Object.keys(RPL.meta).map(k=>`<tr><td style="width:30%">${esc(k)}</td><td>${esc(RPL.meta[k])}</td></tr>`).join("")}<tr><td>Kelompok</td><td>${esc(S.names.join(", "))}</td></tr></table>
+  <h3>Asesmen awal (pertanyaan pemantik)</h3><div><i>${esc(RPL.pemantik)}</i></div><div>Sebaran pilihan: SMA ${S.tally.SMA} · MA ${S.tally.MA} · SMK ${S.tally.SMK} · Belum tahu ${S.tally.Belum}</div><div class="pre">${esc(S.notes.awal||"")}</div>
+  <h3>Observasi proses</h3>${M("obs",RPL.indProses)}
+  <h3>Asesmen hasil</h3>${M("hasil",RPL.indHasil)}<div class="pre">${esc(S.notes.akhir||"")}</div>
+  <h3>Rencana Kelanjutan Studi per kelompok</h3><table><tr><th>Kelompok</th>${FIELDS.map(f=>`<th>${esc(f.l)}</th>`).join("")}</tr>${S.names.map((n,i)=>`<tr><td>${esc(n)}</td>${FIELDS.map(f=>`<td class="pre">${esc((S.plans[i]||{})[f.k]||"")}</td>`).join("")}</tr>`).join("")}</table>
+  <h3>Hasil permainan</h3>${gr.length?`<table><tr><th>Kelompok</th><th>Stempel</th><th>Tepat</th><th>Dibahas</th></tr>${gr.map(r=>`<tr><td>${esc(r[0])}</td><td>${r[1]}/5</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join("")}</table>`:"<div>Permainan belum dimainkan.</div>"}
+  <h3>Catatan guru</h3>${FASE.filter(f=>S.notes[f.id]).map(f=>`<div><b>${esc(f.judul)}</b><div class="pre">${esc(S.notes[f.id])}</div></div>`).join("")||"<div>-</div>"}
+  <p style="margin-top:14px;font-size:12px;color:#555">Dibuat oleh Guru BK SMP Negeri 36 Semarang. Data tersimpan di perangkat guru dan tidak memuat nama murid.</p></div>
+  <div class="mact noprint"><button class="btn" data-v="x">Tutup</button><button class="btn pri" id="bPrint">🖨 Cetak / Simpan PDF</button></div>`);
+  $("#bPrint").onclick=()=>window.print();
+}
+function unduhXlsx(){
+  const gr=gameRows(),tgl=tglIni();
+  const Mx=(kind,ind)=>[["Kelompok",...ind],...S.names.map((n,i)=>[n,...ind.map((_,j)=>OBS[((S[kind][i]||[])[j])||0])])];
+  const sheets=[
+   {name:"Ringkasan",w:[28,70],head:-1,rows:[["RPL Bimbingan Klasikal",RPL.judul],...Object.keys(RPL.meta).map(k=>[k,RPL.meta[k]]),["Kelas",S.kelas||""],["Tanggal",tgl],["Kelompok",S.names.join(", ")],["Catatan","Data hanya tersimpan di perangkat guru. Tidak memuat nama murid."]]},
+   {name:"Asesmen Awal",w:[40,80],head:0,rows:[["Pertanyaan pemantik","Catatan guru"],[RPL.pemantik,"Sebaran: SMA "+S.tally.SMA+", MA "+S.tally.MA+", SMK "+S.tally.SMK+", Belum tahu "+S.tally.Belum+"\n"+(S.notes.awal||"")]]},
+   {name:"Observasi Proses",w:[22,24,24,24,24],head:0,rows:Mx("obs",RPL.indProses)},
+   {name:"Asesmen Akhir",w:[22,40,40,40],head:0,rows:[...Mx("hasil",RPL.indHasil),[],["Catatan observasi",S.notes.akhir||""]]},
+   {name:"Rencana Kelompok",w:[22,...FIELDS.map(()=>38)],head:0,rows:[["Kelompok",...FIELDS.map(f=>f.l)],...S.names.map((n,i)=>[n,...FIELDS.map(f=>(S.plans[i]||{})[f.k]||"")])]},
+   {name:"Hasil Permainan",w:[24,10,10,10],head:0,rows:gr.length?[["Kelompok","Stempel (maks 5)","Tepat","Dibahas"],...gr]:[["Permainan belum dimainkan"]]},
+   {name:"Catatan Guru",w:[40,90],head:0,rows:[["Fase","Catatan"],...FASE.filter(f=>S.notes[f.id]).map(f=>[f.judul,S.notes[f.id]])]}
+  ];
+  const blob=buildXlsx(sheets),a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download=`RPL-studi${S.kelas?"-"+S.kelas.replace(/[^\w-]+/g,""):""}-${new Date().toISOString().slice(0,10)}.xlsx`;
+  document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);toast("Berkas Excel diunduh");
+}
+renderSetupScreen();
+</script>
+</body>
+</html>
