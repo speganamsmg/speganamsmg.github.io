@@ -1,0 +1,2381 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tangga Karakter — Menjadi Remaja Berkarakter Melalui Ibadah | Game BK</title>
+<meta name="description" content="Game BK sesuai RPL Bimbingan Klasikal: Menjadi Remaja Berkarakter Melalui Ibadah. Dirancang oleh Agung Fahri Husaeni, S.Pd., Guru BK SMP Negeri 36 Semarang.">
+<meta name="theme-color" content="#050816">
+<script>try{var _t=localStorage.getItem("tema");document.documentElement.setAttribute("data-theme",_t==="light"||_t==="dark"?_t:(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"))}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400..800&display=swap">
+<style>
+:root{
+  --bg0:#050816; --bg1:#0a1030; --bg2:#1a1058;
+  --ink:#e8efff; --muted:#93a4cf; --dim:#6b7aa8;
+  --cy:#22d3ee; --mg:#e879f9; --gold:#fbbf24; --green:#34d399; --red:#fb7185; --vio:#a78bfa;
+  --panel:#10183f;
+  --glass:rgba(255,255,255,.06); --glass2:rgba(255,255,255,.1); --line:rgba(125,211,252,.22);
+  --f-head:"Orbitron","Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
+  --f-body:"Plus Jakarta Sans","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  font-family:var(--f-body);color:var(--ink);overflow:hidden;
+  background:
+    radial-gradient(900px 600px at 8% -10%,rgba(34,211,238,.22),transparent 60%),
+    radial-gradient(900px 700px at 100% 105%,rgba(232,121,249,.22),transparent 60%),
+    linear-gradient(160deg,var(--bg0),var(--bg1) 55%,var(--bg2));
+  background-attachment:fixed;
+}
+body::before{ /* kisi halus */
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(125,211,252,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(125,211,252,.05) 1px,transparent 1px);
+  background-size:44px 44px;mask-image:radial-gradient(ellipse at center,#000 35%,transparent 85%);
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 35%,transparent 85%);
+}
+button,input,select,textarea{font-family:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+::selection{background:var(--cy);color:#04111f}
+*{scrollbar-width:thin;scrollbar-color:rgba(125,211,252,.35) transparent}
+
+/* ---------- TOMBOL ---------- */
+.btn{border:1px solid transparent;border-radius:14px;padding:13px 24px;font-size:18px;font-weight:800;color:#04111f;transition:transform .12s,box-shadow .2s,filter .2s;letter-spacing:.2px}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:linear-gradient(135deg,var(--cy),#38bdf8 45%,var(--mg));box-shadow:0 0 0 1px rgba(255,255,255,.25) inset,0 8px 28px -6px rgba(34,211,238,.55)}
+.btn.primary:hover:not(:disabled){filter:brightness(1.1);box-shadow:0 0 0 1px rgba(255,255,255,.35) inset,0 10px 34px -4px rgba(232,121,249,.6)}
+.btn.ghost{background:var(--glass);color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{background:var(--glass2);border-color:rgba(125,211,252,.5)}
+.btn.sm{padding:8px 14px;font-size:14px;border-radius:11px}
+.btn.danger{background:rgba(251,113,133,.14);color:#fecdd3;border-color:rgba(251,113,133,.45)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn:focus-visible,.chip:focus-visible,.tb:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
+
+/* ---------- SETUP ---------- */
+#setup{position:relative;z-index:1;height:100%;overflow:auto;display:flex;justify-content:center;padding:clamp(12px,3vw,32px)}
+.setup-card{margin:auto;width:min(1080px,100%);background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:28px;padding:clamp(16px,2.6vw,34px);box-shadow:0 30px 90px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.04) inset}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(14px,2.4vw,30px);align-items:center;margin-bottom:22px}
+.hero .cover{border-radius:20px;overflow:hidden;border:1px solid var(--line);box-shadow:0 18px 50px -12px rgba(34,211,238,.35);aspect-ratio:2/1;background:#0a1030}
+.hero .cover img,.hero .cover svg{display:block;width:100%;height:100%;object-fit:cover}
+.chipline{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border:1px solid var(--line);border-radius:99px;background:var(--glass);font-size:13px;font-weight:700;color:var(--cy);letter-spacing:.14em;text-transform:uppercase}
+.chipline i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.hero h1{margin:12px 0 6px;font-family:var(--f-head);font-weight:900;font-size:clamp(34px,5.4vw,64px);line-height:1;letter-spacing:.02em;text-transform:uppercase}
+.hero h1 span{background:linear-gradient(90deg,var(--cy),var(--mg));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 18px rgba(34,211,238,.35))}
+.hero .sub{margin:0;font-size:clamp(15px,1.7vw,20px);color:var(--muted);line-height:1.5}
+.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.panel{background:rgba(2,6,23,.38);border:1px solid var(--line);border-radius:20px;padding:16px 18px}
+.panel+.panel{margin-top:14px}
+.panel h3{margin:0 0 12px;font-family:var(--f-head);font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--cy);display:flex;align-items:center;gap:8px}
+.panel h3 b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f;font-size:13px}
+.stepper{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.stepper .sbtn{width:46px;height:46px;border-radius:14px;border:1px solid var(--line);background:var(--glass);color:var(--ink);font-size:26px;font-weight:700;line-height:1}
+.stepper .sbtn:hover{background:var(--glass2);border-color:var(--cy)}
+.stepper .val{min-width:84px;text-align:center;font-family:var(--f-head);font-size:34px;font-weight:800;color:#fff;text-shadow:0 0 18px rgba(34,211,238,.6)}
+.stepper .val small{display:block;font-family:var(--f-body);font-size:12px;font-weight:600;color:var(--muted);text-shadow:none;letter-spacing:.06em}
+.quick{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:12px;padding:6px 12px;font-size:14px;font-weight:700}
+.chip.on{background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f;border-color:transparent}
+.namegrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;max-height:min(40vh,330px);overflow:auto;padding-right:4px;margin-top:12px}
+.tname{display:flex;align-items:center;gap:8px;min-width:0}
+.tname .tk{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:18px;border:2px solid rgba(255,255,255,.85);flex:none;box-shadow:0 0 14px -2px currentColor}
+.field,.tname input,.fl input,.fl textarea,.fl select,.opt-row input[type=number],.opt-row select{width:100%;font-size:16px;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(2,6,23,.55);color:var(--ink);font-weight:600;min-width:0}
+.tname input:focus,.fl input:focus,.fl textarea:focus,.fl select:focus,.opt-row input:focus,.opt-row select:focus{outline:none;border-color:var(--cy);box-shadow:0 0 0 3px rgba(34,211,238,.2)}
+.opt-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:10px 0;font-size:16px}
+.opt-row label{flex:1}
+.opt-row input[type=number]{width:104px;text-align:center}
+.opt-row select{width:auto}
+.opt-row input[type=checkbox]{width:44px;height:24px;appearance:none;-webkit-appearance:none;border-radius:99px;background:rgba(255,255,255,.14);position:relative;cursor:pointer;border:1px solid var(--line);padding:0;transition:background .2s}
+.opt-row input[type=checkbox]::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s}
+.opt-row input[type=checkbox]:checked{background:linear-gradient(135deg,var(--cy),var(--mg))}
+.opt-row input[type=checkbox]:checked::after{transform:translateX(20px)}
+.summary{font-size:14px;color:var(--muted);line-height:1.7}
+.summary b{color:var(--ink)}
+.how{font-size:15px;line-height:1.55;color:var(--muted)}
+.how ul{margin:0;padding-left:20px}.how li{margin:4px 0}.how b{color:var(--ink)}
+.row-btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;align-items:center}
+.row-btns .grow{flex:1}
+button.back{font-family:inherit;cursor:pointer}
+.navrow{display:flex;gap:8px;flex-wrap:wrap}
+a.back,button.back{display:inline-flex;align-items:center;gap:6px;color:var(--ink);text-decoration:none;font-weight:700;font-size:14.5px;padding:8px 16px;border:1px solid var(--line);border-radius:99px;background:var(--glass);white-space:nowrap}
+a.back:hover,button.back:hover{border-color:var(--cy);color:var(--cy)}
+.setup-top{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.by{text-align:right;font-size:14px;line-height:1.45;color:var(--muted)}
+.by b{display:block;color:var(--ink);font-size:15.5px}
+.by span{display:block}
+.credit{margin-top:20px;padding-top:14px;border-top:1px solid var(--line);text-align:center;font-size:13.5px;color:var(--muted);line-height:1.6}
+.credit b{color:var(--ink)}
+
+/* ---------- GAME ---------- */
+#game{position:relative;z-index:1;height:100%;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:10px;padding:8px 18px;height:60px;background:rgba(2,6,23,.55);border-bottom:1px solid var(--line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);flex:none}
+.topbar .ttl{font-family:var(--f-head);font-weight:900;font-size:19px;letter-spacing:.06em;white-space:nowrap;text-transform:uppercase}
+.topbar .ttl span{color:var(--cy);text-shadow:0 0 14px rgba(34,211,238,.6)}
+.topbar .ttl small{font-family:var(--f-body);font-weight:600;color:var(--muted);letter-spacing:0;text-transform:none;font-size:14px;margin-left:8px}
+.topbar .sp{flex:1}
+.tb{background:var(--glass);border:1px solid var(--line);color:var(--ink);border-radius:11px;padding:7px 13px;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap}
+.tb:hover{background:var(--glass2);border-color:var(--cy)}
+main{flex:1;display:flex;gap:18px;padding:14px 18px;min-height:0;align-items:center;justify-content:center;--sw:clamp(250px,22vw,330px);--s:min(calc(100vh - 104px),calc((100vw - 2*var(--sw) - 96px)/1.1))}
+.board-wrap{flex:none;position:relative}
+.board-wrap::before{content:"";position:absolute;inset:-14px;border-radius:30px;background:conic-gradient(from 210deg,rgba(34,211,238,.5),rgba(232,121,249,.5),rgba(34,211,238,.5));filter:blur(22px);opacity:.38}
+.board{position:relative;width:var(--s);height:var(--s);display:grid;grid-template:repeat(10,1fr)/repeat(10,1fr);border:1px solid rgba(125,211,252,.5);border-radius:20px;overflow:hidden;box-shadow:0 22px 60px rgba(0,0,0,.55),0 0 0 4px rgba(2,6,23,.6);background:rgba(6,10,36,.92)}
+.cell{position:relative;display:flex;align-items:center;justify-content:center;font-size:calc(var(--s)*.036);color:var(--ink);border:1px solid rgba(125,211,252,.08)}
+.cell.a{background:rgba(255,255,255,.035)}.cell.b{background:rgba(255,255,255,.012)}
+.cell.q{background:radial-gradient(circle at 50% 55%,rgba(251,191,36,.34),rgba(251,191,36,.08) 70%)}
+.cell.r{background:radial-gradient(circle at 50% 55%,rgba(167,139,250,.38),rgba(167,139,250,.09) 70%)}
+.cell.c{background:radial-gradient(circle at 50% 55%,rgba(244,114,182,.36),rgba(244,114,182,.09) 70%)}
+.cell.start{background:linear-gradient(135deg,rgba(52,211,153,.5),rgba(34,211,238,.25));font-weight:900}
+.cell.end{background:linear-gradient(135deg,rgba(251,191,36,.7),rgba(232,121,249,.4));box-shadow:inset 0 0 22px rgba(251,191,36,.55)}
+.cell .n{position:absolute;top:5%;left:8%;font-family:var(--f-head);font-size:calc(var(--s)*.016);font-weight:700;color:rgba(200,225,255,.55)}
+.cell .lb{font-size:calc(var(--s)*.0125);font-weight:900;position:absolute;bottom:5%;letter-spacing:.12em;opacity:.9;font-family:var(--f-head)}
+.links,.tokens{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.cell.lad{background:radial-gradient(circle at 50% 55%,rgba(52,211,153,.5),rgba(52,211,153,.12) 72%);box-shadow:inset 0 0 0 calc(var(--s)*.0025) rgba(52,211,153,.9)}
+.cell.snk{background:radial-gradient(circle at 50% 55%,rgba(251,113,133,.42),rgba(251,113,133,.1) 72%);box-shadow:inset 0 0 0 calc(var(--s)*.0025) rgba(251,113,133,.85)}
+.cell .lk{position:absolute;left:0;right:0;bottom:7%;display:flex;flex-direction:column;align-items:center;line-height:1.05;pointer-events:none;transition:opacity .25s}
+.cell .lk i{font-style:normal;font-size:calc(var(--s)*.034)}
+.cell .lk b{font-family:var(--f-head);font-size:calc(var(--s)*.0185);font-weight:800;padding:0 .35em;border-radius:99px;margin-top:2%}
+.cell .lk.up b{background:#16a34a;color:#fff}
+.cell .lk.dn b{background:#e11d48;color:#fff}
+.board.f-ladder .cell.snk,.board.f-snake .cell.lad{opacity:.28}
+.cell.lad,.cell.snk{transition:opacity .25s}
+.legend button{font:inherit;font-size:12px;color:var(--muted);background:transparent;border:1px solid transparent;border-radius:99px;padding:1px 6px;cursor:pointer;white-space:nowrap}
+.legend button:hover{border-color:var(--line)}
+.legend button.on{border-color:var(--cy);color:var(--ink);background:var(--glass)}
+.tokens{--tw:.054}
+.tok{position:absolute;width:calc(var(--s)*var(--tw));height:calc(var(--s)*var(--tw));transform:translate(-50%,-50%);border-radius:50%;border:calc(var(--s)*.004) solid #fff;display:grid;place-items:center;font-size:calc(var(--s)*var(--tw)*.58);box-shadow:0 0 0 1px rgba(0,0,0,.4),0 0 calc(var(--s)*.02) var(--glow,#fff),0 4px 10px rgba(0,0,0,.5);transition:left .26s ease,top .26s ease;z-index:2}
+.tok.slow{transition:left .95s ease-in-out,top .95s ease-in-out}
+.tok.act{animation:bob .7s ease-in-out infinite;z-index:4}
+@keyframes bob{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-64%) scale(1.18)}}
+
+.side{width:var(--sw);flex:none;display:flex;flex-direction:column;gap:11px;max-height:calc(100vh - 88px)}
+.turn{border-radius:20px;padding:13px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 10px 30px -8px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.18) inset;color:#fff;transition:background .3s;position:relative;overflow:hidden}
+.turn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);transform:translateX(-100%);animation:shine 3.4s ease-in-out infinite}
+@keyframes shine{60%,100%{transform:translateX(100%)}}
+.turn .big{font-size:42px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
+.turn small{display:block;opacity:.9;font-family:var(--f-head);font-weight:700;letter-spacing:.2em;font-size:11px}
+.turn b{font-size:clamp(20px,2vw,26px);line-height:1.12;text-shadow:0 2px 8px rgba(0,0,0,.35);overflow-wrap:anywhere}
+.dice-box{background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:13px;display:flex;align-items:center;gap:15px}
+.die{width:88px;height:88px;flex:none;background:linear-gradient(145deg,#ffffff,#cfe3ff);border-radius:20px;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:11px;box-shadow:0 0 0 2px rgba(34,211,238,.6),0 0 26px rgba(34,211,238,.5),0 10px 20px rgba(0,0,0,.45)}
+.die.roll{animation:shake .14s infinite}
+@keyframes shake{0%{transform:rotate(-9deg) translateY(0)}50%{transform:rotate(9deg) translateY(-6px)}100%{transform:rotate(-9deg) translateY(0)}}
+.pip{width:72%;height:72%;margin:auto;border-radius:50%;background:transparent}
+.pip.on{background:radial-gradient(circle at 35% 30%,#4b5fd9,#0a1030)}
+#rollBtn{flex:1;font-family:var(--f-head);font-size:21px;padding:18px 8px;letter-spacing:.06em}
+.hint{font-size:12.5px;color:var(--muted);margin-top:5px;text-align:center}
+.teams{display:flex;flex-direction:column;gap:6px;overflow:auto;min-height:60px;flex:1 1 auto;padding-right:3px}
+.tm{display:flex;align-items:center;gap:10px;background:var(--glass);border-radius:14px;padding:7px 10px;border:1px solid transparent;flex:none}
+.tm.cur{border-color:var(--gold);background:rgba(251,191,36,.14);box-shadow:0 0 22px -6px rgba(251,191,36,.7)}
+.tm .tk{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:19px;border:2px solid rgba(255,255,255,.9);flex:none}
+.tm .nm{flex:1;min-width:0}
+.tm .nm b{display:block;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tm .nm span{font-size:12.5px;color:var(--muted)}
+.tm .sc{font-family:var(--f-head);font-size:21px;font-weight:800;color:var(--gold);min-width:42px;text-align:right;text-shadow:0 0 12px rgba(251,191,36,.5)}
+.tm .adj{display:flex;flex-direction:column;gap:2px}
+.tm .adj button{background:rgba(255,255,255,.12);border:none;color:#fff;border-radius:6px;font-size:11px;font-weight:800;line-height:1;padding:3px 6px}
+.tm .adj button:hover{background:rgba(255,255,255,.3)}
+.pop{animation:pop .6s}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.5)}100%{transform:scale(1)}}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted);padding:0 4px}
+.log{font-size:13px;background:rgba(2,6,23,.45);border:1px solid var(--line);border-radius:14px;padding:8px 12px;min-height:56px;flex:none}
+.log div{margin:2px 0;color:var(--muted)}.log div:first-child{color:var(--ink);font-weight:700}
+.sidecredit{font-size:11.5px;color:var(--dim);text-align:center;line-height:1.45;flex:none}
+
+/* ---------- MODAL ---------- */
+#modal{position:fixed;inset:0;background:rgba(2,4,18,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:18px;z-index:80}
+#modal.show{display:flex}
+#mcard{--ac:var(--cy);width:min(860px,100%);max-height:94vh;overflow:auto;background:linear-gradient(165deg,rgba(18,26,70,.96),rgba(8,12,38,.98));color:var(--ink);border-radius:26px;padding:clamp(18px,3vw,34px);box-shadow:0 30px 90px rgba(0,0,0,.65),0 0 60px -10px var(--ac);border:1px solid color-mix(in srgb,var(--ac) 55%,transparent);animation:rise .28s ease-out;position:relative}
+#mcard::before{content:"";position:absolute;left:24px;right:24px;top:0;height:3px;border-radius:0 0 6px 6px;background:var(--ac);box-shadow:0 0 18px var(--ac)}
+@keyframes rise{from{transform:translateY(30px) scale(.96);opacity:0}to{transform:none;opacity:1}}
+#mcard.ladder{--ac:var(--green)}#mcard.snake{--ac:var(--red)}#mcard.quiz{--ac:var(--gold)}#mcard.reflect{--ac:var(--vio)}#mcard.chance{--ac:#f472b6}#mcard.win{--ac:var(--gold)}
+.mtag{display:inline-block;font-family:var(--f-head);font-weight:800;letter-spacing:.12em;font-size:13px;padding:6px 14px;border-radius:999px;background:color-mix(in srgb,var(--ac) 18%,transparent);color:var(--ac);border:1px solid color-mix(in srgb,var(--ac) 50%,transparent);margin-bottom:10px;text-transform:uppercase}
+#mcard h2{margin:4px 0 8px;font-size:clamp(23px,3.1vw,35px);line-height:1.15}
+#mcard p{font-size:clamp(16px,1.9vw,23px);line-height:1.5;margin:8px 0;color:#dbe5ff}
+.qtext{font-size:clamp(20px,2.5vw,30px)!important;font-weight:700;color:#fff!important}
+.bigico{font-size:70px;line-height:1;filter:drop-shadow(0 0 22px var(--ac))}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;background:var(--glass);border:1px solid var(--line);border-radius:16px;padding:13px;font-size:clamp(16px,1.9vw,22px);font-weight:600;color:var(--ink);transition:transform .1s,background .15s,border-color .15s}
+.opt:hover:not(:disabled){transform:translateY(-2px);background:var(--glass2);border-color:var(--cy)}
+.opt span{flex:none;width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f;display:grid;place-items:center;font-family:var(--f-head);font-weight:900}
+.opt.ok{background:rgba(52,211,153,.22);border-color:var(--green);box-shadow:0 0 22px -6px var(--green)}
+.opt.no{background:rgba(251,113,133,.2);border-color:var(--red)}
+.opt:disabled{cursor:default;color:var(--ink)}
+.fb{margin-top:6px;padding:12px 16px;border-radius:16px;font-size:clamp(16px,1.9vw,21px);line-height:1.45;border:1px solid transparent}
+.fb.ok{background:rgba(52,211,153,.14);border-color:rgba(52,211,153,.5)}
+.fb.no{background:rgba(251,113,133,.13);border-color:rgba(251,113,133,.5)}
+.timer{position:relative;height:14px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;margin:10px 0}
+.timer i{position:absolute;inset:0;background:linear-gradient(90deg,var(--green),var(--gold),var(--red));transform-origin:left;transition:transform 1s linear}
+.timer b{position:absolute;right:8px;top:-4px;font-size:13px;font-family:var(--f-head)}
+.mact{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}
+.rank{width:100%;border-collapse:collapse;margin:10px 0;font-size:clamp(15px,1.8vw,21px)}
+.rank td{padding:8px 10px;border-bottom:1px solid var(--line)}
+.rank tr:first-child td{font-weight:900;background:rgba(251,191,36,.14)}
+.rank .dot{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;margin-right:8px;vertical-align:middle;border:2px solid #fff}
+.rankwrap{max-height:36vh;overflow:auto}
+.conf{position:fixed;top:-20px;width:12px;height:18px;z-index:90;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(112vh) rotate(720deg)}}
+.mcredit{margin-top:14px;font-size:13px;color:var(--muted);text-align:center}
+#toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);z-index:120;background:rgba(10,16,48,.96);border:1px solid var(--cy);color:#fff;padding:11px 20px;border-radius:14px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;max-width:90vw;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 24px -6px var(--cy)}
+#toast.show{opacity:1;transform:translateX(-50%)}
+#toast.bad{border-color:var(--red);box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 24px -6px var(--red)}
+
+/* ---------- EDITOR ---------- */
+#editor{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;background:linear-gradient(165deg,#060a24,#0b1236 60%,#170f4d)}
+#editor.show{display:flex}
+.ed-top{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--line);background:rgba(2,6,23,.6);flex-wrap:wrap}
+.ed-top h2{margin:0;font-family:var(--f-head);font-size:18px;letter-spacing:.08em;text-transform:uppercase}
+.ed-top h2 span{color:var(--cy)}
+.ed-top .sp{flex:1}
+.ed-tabs{display:flex;gap:6px;padding:10px 20px;overflow-x:auto;border-bottom:1px solid var(--line);flex:none}
+.ed-tabs button{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:12px;padding:8px 14px;font-size:14.5px;font-weight:700;white-space:nowrap}
+.ed-tabs button b{margin-left:6px;font-size:12px;color:var(--cy)}
+.ed-tabs button.on{background:linear-gradient(135deg,rgba(34,211,238,.25),rgba(232,121,249,.25));color:#fff;border-color:var(--cy)}
+#edBody{flex:1;overflow:auto;padding:16px 20px 40px;min-height:0}
+.ed-wrap{max-width:980px;margin:0 auto}
+.ed-help{color:var(--muted);font-size:14.5px;line-height:1.55;margin:0 0 14px}
+.ed-help b{color:var(--ink)}
+.ed-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.ed-bar .sp{flex:1}
+details.qi{background:var(--glass);border:1px solid var(--line);border-radius:16px;margin-bottom:8px;overflow:hidden}
+details.qi[open]{border-color:rgba(34,211,238,.55);background:rgba(34,211,238,.05)}
+details.qi summary{cursor:pointer;display:flex;align-items:center;gap:10px;padding:10px 14px;list-style:none;font-weight:600;font-size:15px}
+details.qi summary::-webkit-details-marker{display:none}
+details.qi summary .no{flex:none;display:grid;place-items:center;min-width:30px;height:28px;padding:0 6px;border-radius:9px;background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f;font-family:var(--f-head);font-weight:800;font-size:12px}
+details.qi summary .st{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px solid var(--line);border-radius:99px;padding:2px 10px;max-width:30%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fl{display:grid;gap:10px;padding:4px 14px 14px}
+.fl label{display:grid;gap:4px;font-size:13px;font-weight:700;color:var(--muted)}
+.fl label.okf{color:var(--green)}
+.fl textarea{min-height:64px;resize:vertical;line-height:1.45}
+.fl .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fl .three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.fl .acts{display:flex;gap:8px;justify-content:flex-end}
+.fl label.chk{display:flex;align-items:center;gap:8px;color:var(--ink);font-size:14.5px}
+.fl label.chk input{width:20px;height:20px}
+.ed-two{display:grid;grid-template-columns:minmax(0,auto) minmax(260px,1fr);gap:20px;align-items:start}
+.mini{--ms:min(560px,calc(100vw - 40px));width:var(--ms);height:var(--ms);display:grid;grid-template:repeat(10,1fr)/repeat(10,1fr);border:1px solid rgba(125,211,252,.5);border-radius:16px;overflow:hidden;background:rgba(6,10,36,.9)}
+.mc{position:relative;display:flex;align-items:center;justify-content:center;border:1px solid rgba(125,211,252,.09);font-size:calc(var(--ms)*.032);cursor:pointer;background:rgba(255,255,255,.025);color:var(--ink);padding:0}
+.mc:hover{background:rgba(34,211,238,.2)}
+.mc .n{position:absolute;top:3%;left:6%;font-size:calc(var(--ms)*.017);font-family:var(--f-head);color:rgba(200,225,255,.6)}
+.mc.q{background:rgba(251,191,36,.3)}.mc.r{background:rgba(167,139,250,.34)}.mc.c{background:rgba(244,114,182,.32)}
+.mc.l{background:rgba(52,211,153,.3)}.mc.s{background:rgba(251,113,133,.3)}
+.mc.fix{cursor:default;background:rgba(251,191,36,.22)}
+.mc.sel{outline:3px solid var(--cy);outline-offset:-3px;z-index:2;box-shadow:0 0 18px var(--cy)}
+.mc .to{position:absolute;bottom:3%;right:6%;font-size:calc(var(--ms)*.016);font-weight:800;color:#fff;font-family:var(--f-head)}
+.typechips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+.cellbox{background:var(--glass);border:1px solid var(--line);border-radius:16px;padding:14px}
+.cellbox h4{margin:0 0 4px;font-family:var(--f-head);font-size:15px;letter-spacing:.06em;color:var(--cy)}
+.kv{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13.5px;color:var(--muted);margin:0 0 12px}
+.kv b{color:var(--ink)}
+.rule-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.rule-grid .panel{margin:0}
+.rule-grid .panel+.panel{margin-top:0}
+.rule-grid .opt-row small{display:block;color:var(--muted);font-size:12.5px;font-weight:500;margin-top:2px}
+.warn{color:#fde68a;font-size:13.5px;margin:6px 0 0}
+
+/* ---------- LEADERBOARD ---------- */
+.champs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.champ{position:relative;overflow:hidden;border:1px solid var(--line);background:var(--glass);border-radius:14px;padding:8px 11px;min-width:0}
+.champ small{display:block;font-family:var(--f-head);font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--cy)}
+.champ.k small{color:var(--gold)}
+.champ b{display:flex;align-items:center;gap:6px;font-size:15px;line-height:1.25;margin-top:2px}
+.champ b span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.champ em{display:block;font-style:normal;font-size:12px;color:var(--muted);margin-top:1px}
+.seg{display:flex;gap:4px;padding:3px;border:1px solid var(--line);border-radius:12px;background:var(--glass)}
+.seg button{flex:1;font:inherit;font-size:12.5px;font-weight:700;padding:6px 4px;border:0;border-radius:9px;background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap}
+.seg button.on{background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f}
+.tm .rk{flex:none;width:22px;text-align:center;font-family:var(--f-head);font-size:13px;font-weight:800;color:var(--muted)}
+.tm .rk.r1{color:var(--gold)}
+.tm{position:relative}
+.tm .bar{position:absolute;left:10px;right:10px;bottom:3px;height:3px;border-radius:3px;background:rgba(125,150,200,.18);overflow:hidden;pointer-events:none}
+.tm .bar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--cy),var(--mg));transition:width .5s}
+.tm .nm span{white-space:nowrap}
+.tm .nm span b{display:inline;font-size:inherit;color:var(--green)}
+/* ---------- TENTANG GAME ---------- */
+#mcard.about{--ac:var(--cy)}
+.ab-chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}
+.ab-chips span{display:inline-flex;flex-direction:column;gap:1px;padding:7px 14px;border:1px solid var(--line);border-radius:14px;background:var(--glass);font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.3}
+.ab-chips small{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--cy);font-family:var(--f-head);font-weight:700}
+.ab-sec{margin-top:16px}
+.ab-sec h3{margin:0 0 8px;font-family:var(--f-head);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--cy)}
+#mcard .ab-sec p,#mcard .ab-sec li{font-size:clamp(15px,1.7vw,19px);line-height:1.55;color:#dbe5ff}
+.ab-sec ul,.ab-sec ol{margin:0;padding:0;list-style:none;display:grid;gap:8px;counter-reset:n}
+.ab-sec li{position:relative;padding:9px 12px 9px 44px;background:var(--glass);border:1px solid var(--line);border-radius:12px;margin:0}
+.ab-sec ul li::before{content:"✔";position:absolute;left:12px;top:9px;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-size:13px;background:rgba(52,211,153,.2);color:var(--green)}
+.ab-sec ol li{counter-increment:n}
+.ab-sec ol li::before{content:counter(n);position:absolute;left:12px;top:9px;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-size:12px;font-family:var(--f-head);font-weight:800;background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f}
+.ab-by{margin-top:18px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,rgba(34,211,238,.1),rgba(232,121,249,.1));text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
+.ab-by b{display:block;color:#fff;font-size:18px}
+.ab-empty{color:var(--dim);font-style:italic}
+.bg-item{border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px;display:grid;gap:8px;background:var(--glass)}
+.bg-top{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:8px}
+.bg-act{display:flex;gap:6px;justify-content:flex-end}
+@media(max-width:700px){.bg-top{grid-template-columns:1fr}}
+.syncstate{margin-top:8px;font-size:12.5px;font-weight:700;color:var(--muted)}.syncstate.ok{color:var(--green)}.syncstate.warn{color:var(--gold)}
+.linkbtn{font:inherit;font-size:12.5px;font-weight:800;color:var(--cy);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+.lockbox{max-width:520px;margin:30px auto;text-align:center}.lockbox .lk{font-size:44px}.lockbox .btn{margin-top:6px}
+.list-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+.list-row .fl{flex:1;min-width:0;padding:0}
+.list-row .btn{margin-top:2px}
+@media print{
+  body{background:#fff!important;color:#000!important;overflow:visible!important;height:auto!important}
+  body::before{display:none!important}
+  #setup,#game,#editor,#toast,.conf,.mact{display:none!important}
+  #modal{position:static!important;display:block!important;background:none!important;padding:0!important;backdrop-filter:none!important}
+  #mcard{max-height:none!important;overflow:visible!important;box-shadow:none!important;border:none!important;background:#fff!important;width:100%!important;animation:none!important}
+  #mcard::before{display:none}
+  #mcard,#mcard *{color:#000!important;background:transparent!important;border-color:#bbb!important}
+  .ab-sec li::before{background:#eee!important}
+}
+
+/* ---------- TEMA TERANG ---------- */
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg0:#f4f7ff; --bg1:#e8eefc; --bg2:#f1e6ff;
+  --ink:#10204a; --muted:#44557f; --dim:#667599;
+  --cy:#0891b2; --mg:#c026d3; --gold:#b45309; --green:#047857; --red:#e11d48; --vio:#6d4fd6;
+  --panel:#ffffff;
+  --glass:rgba(255,255,255,.78); --glass2:rgba(255,255,255,.95); --line:rgba(30,64,175,.24);
+}
+[data-theme="light"] body{background:
+  radial-gradient(900px 600px at 8% -10%,rgba(34,211,238,.28),transparent 60%),
+  radial-gradient(900px 700px at 100% 105%,rgba(232,121,249,.22),transparent 60%),
+  linear-gradient(160deg,var(--bg0),var(--bg1) 55%,var(--bg2));background-attachment:fixed}
+[data-theme="light"] body::before{opacity:.35}
+[data-theme="light"] .setup-card{background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(255,255,255,.7));box-shadow:0 24px 60px -24px rgba(30,64,175,.35)}
+[data-theme="light"] .panel{background:rgba(255,255,255,.72)}
+[data-theme="light"] .stepper .val{color:var(--ink);text-shadow:none}
+[data-theme="light"] .field,[data-theme="light"] .tname input,[data-theme="light"] .fl input,[data-theme="light"] .fl textarea,[data-theme="light"] .fl select,[data-theme="light"] .opt-row input[type=number],[data-theme="light"] .opt-row select{background:#fff;color:var(--ink)}
+[data-theme="light"] .opt-row input[type=checkbox]{background:rgba(30,64,175,.22)}
+[data-theme="light"] .topbar{background:rgba(255,255,255,.8)}
+[data-theme="light"] .board{background:#f2f6ff;border-color:rgba(30,64,175,.4);box-shadow:0 22px 50px -18px rgba(30,64,175,.45),0 0 0 4px rgba(255,255,255,.7)}
+[data-theme="light"] .cell{border-color:rgba(30,64,175,.1)}
+[data-theme="light"] .cell.a{background:rgba(30,64,175,.06)}
+[data-theme="light"] .cell.b{background:rgba(255,255,255,.7)}
+[data-theme="light"] .cell .n{color:rgba(40,60,120,.6)}
+[data-theme="light"] .board-wrap::before{opacity:.22}
+[data-theme="light"] .log{background:rgba(255,255,255,.7)}
+[data-theme="light"] #modal{background:rgba(190,205,240,.7)}
+[data-theme="light"] #mcard{background:linear-gradient(165deg,#ffffff,#eef3ff);box-shadow:0 30px 80px -20px rgba(30,64,175,.4)}
+[data-theme="light"] #mcard p,[data-theme="light"] #mcard .ab-sec p,[data-theme="light"] #mcard .ab-sec li{color:#22335f}
+[data-theme="light"] .qtext,[data-theme="light"] .ab-by b{color:var(--ink)!important}
+[data-theme="light"] .ab-by b{color:var(--ink)}
+[data-theme="light"] .timer{background:rgba(30,64,175,.14)}
+[data-theme="light"] #toast{background:#fff;color:var(--ink)}
+[data-theme="light"] #editor{background:linear-gradient(165deg,#f4f7ff,#e8eefc 60%,#f1e6ff)}
+[data-theme="light"] .ed-top{background:rgba(255,255,255,.85)}
+[data-theme="light"] .ed-tabs button.on{color:var(--ink)}
+[data-theme="light"] .mc{background:rgba(30,64,175,.05);color:var(--ink)}
+[data-theme="light"] .mc .to{color:var(--ink)}
+[data-theme="light"] .tm .adj button{background:rgba(30,64,175,.12);color:var(--ink)}
+[data-theme="light"] .tm .adj button:hover{background:rgba(30,64,175,.25)}
+[data-theme="light"] .seg button.on{color:#fff}
+[data-theme="light"] .ab-chips span{color:var(--ink)}
+[data-theme="light"] .gk-box{background:#fff}
+
+
+/* ---------- PAPAN JUARA (kiri & kanan) ---------- */
+.lb{display:flex;flex-direction:column;min-height:120px;flex:1 1 auto;background:rgba(2,6,23,.38);border:1px solid var(--line);border-radius:18px;padding:10px 10px 8px}
+.lb h4{margin:0 0 8px;font-family:var(--f-head);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--cy);display:flex;flex-direction:column;gap:1px}
+.lb h4 em{font-style:normal;font-family:var(--f-body);font-size:11.5px;letter-spacing:0;text-transform:none;font-weight:600;color:var(--muted)}
+.lb.k h4{color:var(--gold)}
+.lb .rows{display:flex;flex-direction:column;gap:6px;overflow:auto;min-height:0;flex:1;padding-right:2px}
+.tm.f .sc{color:var(--cy);text-shadow:0 0 12px rgba(34,211,238,.5)}
+.tm .sc{font-size:26px;line-height:1;min-width:52px;text-align:right}
+.tm .sc small{display:block;font-family:var(--f-body);font-size:9px;font-weight:700;letter-spacing:.12em;color:var(--muted);text-shadow:none;margin-top:2px}
+.tm .nm .stat{display:flex;flex-wrap:wrap;gap:1px 8px;font-style:normal;white-space:normal}
+.tm .nm .stat i{font-style:normal;white-space:nowrap}
+.tm .nm .stat i b{color:var(--ink);display:inline;font-size:inherit}
+.tm.k .nm span.stat{color:var(--muted)}
+.tm{padding-bottom:9px}
+.lb .tm{gap:8px}.lb .tm .nm b{font-size:15px}.lb .tm .sc{min-width:46px}.lb .tm .adj button{padding:3px 5px}
+.twolb{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:10px 0}
+.twolb h3{margin:0 0 4px;font-family:var(--f-head);font-size:clamp(14px,1.5vw,19px);letter-spacing:.08em;text-transform:uppercase;color:var(--cy)}
+.twolb .k h3{color:var(--gold)}
+.twolb h3 small{font-family:var(--f-body);font-size:.7em;letter-spacing:0;text-transform:none;color:var(--muted);font-weight:600}
+.twolb .rankwrap{max-height:40vh}
+.rank .big{font-family:var(--f-head);font-weight:900;font-size:1.35em;text-align:right;white-space:nowrap}
+.rank .big small{font-family:var(--f-body);font-size:.5em;font-weight:600;color:var(--muted)}
+.rank small{color:var(--muted);font-size:.68em;font-weight:600}
+.chal{border:2px dashed var(--gold);border-radius:16px;padding:10px 16px 12px;margin:10px 0;background:rgba(251,191,36,.08)}
+.chal b{color:var(--gold);font-size:clamp(15px,1.8vw,21px)}
+.chal p{margin:6px 0 8px!important}
+@media (max-width:700px){.twolb{grid-template-columns:1fr}}
+[data-theme="light"] .lb{background:rgba(255,255,255,.72)}
+@media (max-width:1180px){.topbar{height:auto;min-height:60px;flex-wrap:wrap;row-gap:6px;padding:8px 12px}.topbar .ttl{flex:none}}
+@media (max-width:980px){main{overflow-x:clip}}
+
+
+/* ---------- LAYOUT SEIMBANG, DADU, JAM, ZONA ---------- */
+.side{height:var(--s);max-height:none}
+.dice{display:flex;gap:8px;flex:none}
+#die2{display:none}
+.dice.two #die2{display:grid}
+.dice.two .die{width:66px;height:66px;padding:8px;border-radius:16px}
+.turn{flex-wrap:wrap;row-gap:8px}
+.turn .tn{flex:1;min-width:0}
+.turn b{overflow-wrap:break-word;word-break:normal;font-size:clamp(18px,1.7vw,26px)}
+.turn .zn{display:block;font-size:12px;font-weight:700;opacity:.92;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.clk{flex:1 1 100%;display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--f-head);font-weight:800;font-size:18px;background:rgba(0,0,0,.28);border-radius:12px;padding:6px 10px;text-align:center;line-height:1.1}
+.clk small{display:inline;font-family:var(--f-body);font-size:10px;font-weight:700;opacity:.9}
+.clk.hot{background:rgba(220,38,38,.65);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.06)}}
+.estline{font-size:13px;color:var(--cy);background:rgba(34,211,238,.08);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin:2px 0 10px}
+.opt-row.col{flex-direction:column;align-items:flex-start;gap:6px}
+.cell.zt{border-top:3px solid var(--zc)}
+.zlegend{display:flex;flex-wrap:wrap;gap:3px 10px;font-size:11.5px;color:var(--muted);padding:0 4px}
+.zlegend span{white-space:nowrap}
+.zlegend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+@media (min-width:1700px) and (min-height:900px){
+  main{--sw:340px;--s:min(calc(100vh - 104px),calc((100vw - 2.4*var(--sw) - 96px)/1.1))}
+  .side{zoom:1.2;height:calc(var(--s)/1.2)}
+}
+
+
+/* ---------- START (di luar papan) ---------- */
+.board-wrap{margin-left:calc(var(--s)*.1)}
+.startpad{position:absolute;left:calc(var(--s)*-.1);bottom:calc(var(--s)*.005);width:calc(var(--s)*.1);height:calc(var(--s)*.1);display:grid;place-items:center;font-size:calc(var(--s)*.05);border-radius:50%;background:radial-gradient(circle at 40% 35%,rgba(52,211,153,.6),rgba(34,211,238,.25));border:2px dashed rgba(52,211,153,.85);box-shadow:0 0 22px -4px rgba(52,211,153,.7)}
+.tokens{overflow:visible;z-index:5}
+.cell.end{font-size:calc(var(--s)*.06)}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:980px){
+  body{overflow:auto}
+  #game{height:auto;min-height:100%}
+  main{flex-direction:column;--s:min(calc((100vw - 24px)/1.1),calc(100vh - 150px));padding:10px}
+  .side{width:min(100%,640px);max-height:none}
+  .board-wrap{order:1}.side.sl{order:2}.side.sr{order:3}
+  .side{height:auto;zoom:1}
+  main{--s:min(calc((100vw - 24px)/1.1),calc(100vh - 150px))}
+  .lb .rows{max-height:none}
+  .setup-grid,.hero,.rule-grid{grid-template-columns:1fr}
+  .opts{grid-template-columns:1fr}
+  .topbar .ttl{font-size:15px}.topbar .ttl small{display:none}
+  .by{text-align:left}
+  .ed-two{grid-template-columns:1fr}
+  .namegrid{grid-template-columns:1fr}
+  .fl .two,.fl .three{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+/* ---------- SESI LAYANAN (RPL) ---------- */
+#sesi{position:relative;z-index:1;height:100%;display:flex;flex-direction:column}
+.s-top{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);background:rgba(5,8,22,.55);backdrop-filter:blur(10px);flex-wrap:wrap}
+.s-top .ttl{font-family:var(--f-head);font-weight:900;font-size:18px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.s-top .ttl span{color:var(--cy)}
+.s-top .sp{flex:1}
+.s-steps{display:flex;gap:6px;padding:8px 16px;overflow-x:auto;border-bottom:1px solid var(--line)}
+.s-steps button{flex:0 0 auto;display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--glass);color:var(--muted);border-radius:99px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.s-steps button b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--glass2);font-size:12px;color:var(--ink)}
+.s-steps button.on{color:#04111f;background:linear-gradient(135deg,var(--cy),var(--mg));border-color:transparent}
+.s-steps button.on b{background:rgba(255,255,255,.55);color:#04111f}
+.s-steps button.done b{background:var(--green);color:#04111f}
+.s-body{flex:1;min-height:0;overflow:auto;padding:16px clamp(12px,3vw,32px) 8px;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+.s-main{min-width:0}
+.s-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-bottom:14px}
+.s-head .tahap{font-family:var(--f-head);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cy);width:100%}
+.s-head h2{margin:0;font-size:clamp(24px,3.4vw,42px);line-height:1.1;flex:1;min-width:240px}
+.s-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border:1px solid var(--line);border-radius:99px;background:var(--glass);font-size:13px;font-weight:700}
+.s-chip.k{color:var(--gold);border-color:rgba(251,191,36,.4)}
+.s-chip.c{color:var(--green);border-color:rgba(52,211,153,.4)}
+.s-timer{display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--line);border-radius:16px;background:var(--glass)}
+.s-timer .tm{font-family:var(--f-head);font-weight:800;font-size:26px;min-width:84px;text-align:center}
+.s-timer .tm.low{color:var(--red);animation:pulse 1s infinite}
+.s-timer button{border:1px solid var(--line);background:var(--glass2);color:var(--ink);border-radius:10px;padding:6px 10px;font-size:14px;font-weight:700;cursor:pointer}
+.s-card{border:1px solid var(--line);border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.03));padding:clamp(14px,2vw,26px);margin-bottom:14px}
+.s-card h3{margin:0 0 10px;font-family:var(--f-head);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--cy)}
+.s-big{font-size:clamp(22px,3vw,38px);font-weight:800;line-height:1.3;margin:6px 0}
+.s-text{font-size:clamp(17px,1.9vw,24px);line-height:1.55;margin:0 0 8px}
+.s-ill{display:flex;flex-wrap:wrap;gap:10px;font-size:clamp(34px,5vw,64px);margin:6px 0 14px}
+.s-pts{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.s-pts li{padding:10px 14px;border:1px solid var(--line);border-radius:14px;background:var(--glass);font-size:clamp(16px,1.8vw,22px);line-height:1.45}
+.s-qs{counter-reset:q;display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.s-qs li{counter-increment:q;position:relative;padding:10px 14px 10px 50px;border:1px solid var(--line);border-radius:14px;background:var(--glass);font-size:clamp(16px,1.8vw,22px);line-height:1.45}
+.s-qs li::before{content:counter(q);position:absolute;left:12px;top:10px;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f;font-weight:800;font-size:14px}
+.s-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.s-tabs button{border:1px solid var(--line);background:var(--glass);color:var(--ink);border-radius:14px;padding:8px 14px;font-size:15px;font-weight:700;cursor:pointer}
+.s-tabs button.on{background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f;border-color:transparent}
+.s-kunci{margin-top:10px}
+.s-kunci>summary{cursor:pointer;color:var(--gold);font-weight:700}
+.s-kunci ul{margin:8px 0 0;padding-left:20px}
+.s-slide{display:grid;gap:10px;min-height:220px}
+.s-slide .ik{font-size:clamp(48px,7vw,92px);line-height:1}
+.s-nav2{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:10px}
+.s-btn{border:1px solid var(--line);background:var(--glass2);color:var(--ink);border-radius:14px;padding:10px 18px;font-size:16px;font-weight:800;cursor:pointer}
+.s-btn.p{background:linear-gradient(135deg,var(--cy),#38bdf8 45%,var(--mg));color:#04111f;border-color:transparent}
+.s-btn:disabled{opacity:.4;cursor:not-allowed}
+.tl-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 14px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line)}
+.tl-q{font-size:clamp(16px,1.8vw,22px);line-height:1.4}
+.tl-cs{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.tl-c{display:grid;grid-template-columns:auto auto auto;align-items:center;gap:4px;border:1px solid var(--line);border-radius:14px;padding:4px 6px;background:var(--glass)}
+.tl-c button{width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:var(--glass2);color:var(--ink);font-size:18px;font-weight:800;cursor:pointer}
+.tl-c b{min-width:30px;text-align:center;font-family:var(--f-head);font-size:20px}
+.tl-c small{grid-column:1/-1;text-align:center;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.tl-c.c0{border-color:rgba(52,211,153,.5)}.tl-c.c1{border-color:rgba(251,191,36,.5)}.tl-c.c2{border-color:rgba(251,113,133,.5)}
+.s-side{position:sticky;top:0;display:grid;gap:12px}
+.s-side .s-card{margin:0;padding:14px}
+.s-side ul{margin:0;padding-left:18px;font-size:14.5px;line-height:1.5;color:var(--muted)}
+.s-side textarea,.rp-f textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:12px;background:var(--glass);color:var(--ink);padding:10px;font:inherit;font-size:15px;resize:vertical}
+.s-bottom{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px;border-top:1px solid var(--line);background:rgba(5,8,22,.55)}
+.s-bottom .mid{color:var(--muted);font-size:14px;font-weight:700}
+.rp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.rp-team{border:1px solid var(--line);border-radius:16px;padding:12px;background:var(--glass);display:grid;gap:8px}
+.rp-team h4{margin:0;font-size:17px;display:flex;align-items:center;gap:8px}
+.rp-f label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--cy);font-weight:700;margin-bottom:3px}
+.rp-f textarea{min-height:56px}
+.s-ex{border-left:4px solid var(--gold);padding:8px 12px;background:rgba(251,191,36,.08);border-radius:0 12px 12px 0;font-size:15px}
+.ob-t{width:100%;border-collapse:collapse;font-size:15px}
+.ob-t th,.ob-t td{border:1px solid var(--line);padding:6px 8px;text-align:center}
+.ob-t th{font-size:12px;letter-spacing:.06em}
+.ob-t td:first-child,.ob-t th:first-child{text-align:left}
+.ob-c{min-width:44px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--glass);color:var(--ink);font-weight:800;cursor:pointer}
+.ob-c.v1{background:rgba(52,211,153,.45)}.ob-c.v2{background:rgba(251,191,36,.4)}
+.rep h2{font-size:22px}.rep h3{margin:14px 0 6px;font-size:15px;color:var(--cy);letter-spacing:.06em;text-transform:uppercase}
+.rep table{width:100%;border-collapse:collapse;font-size:14px}.rep th,.rep td{border:1px solid var(--line);padding:5px 7px;text-align:left;vertical-align:top}
+.rep .meta{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:14px}.rep .meta b{color:var(--muted)}
+.rep .pl{white-space:pre-wrap}
+.alur{margin:14px 0 0;display:grid;gap:6px;padding:0;list-style:none;counter-reset:a}
+.alur li{counter-increment:a;display:flex;gap:10px;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--glass);font-size:15px}
+.alur li::before{content:counter(a);display:grid;place-items:center;width:24px;height:24px;border-radius:8px;background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f;font-weight:800;font-size:13px;flex:0 0 auto}
+.alur li span{margin-left:auto;color:var(--muted);font-size:13px;font-weight:700}
+@media(max-width:980px){.s-body{grid-template-columns:1fr}.s-side{position:static}}
+[data-theme="light"] .s-top,[data-theme="light"] .s-bottom{background:rgba(255,255,255,.8)}
+[data-theme="light"] .s-card{background:rgba(255,255,255,.75)}
+[data-theme="light"] .s-pts li,[data-theme="light"] .s-qs li,[data-theme="light"] .alur li{background:#fff;color:var(--ink)}
+@media print{#sesi{display:none!important}.rep,.rep *{color:#000!important}.rep table th,.rep table td{border-color:#999!important}}
+
+</style>
+</head>
+<body>
+
+<!-- ============ SETUP ============ -->
+<section id="setup">
+  <div class="setup-card">
+    <div class="setup-top">
+      <div class="navrow"><a class="back" href="gamebk.html">← Menu Game BK</a><button class="back" id="aboutBtn" type="button">ℹ Tentang game</button><button class="back" data-gk-theme type="button">☀ Terang</button></div>
+      <div class="by">Dirancang oleh <b>Agung Fahri Husaeni, S.Pd.</b><span>Guru BK SMP Negeri 36 Semarang</span></div>
+    </div>
+    <div class="hero">
+      <div>
+        <span class="chipline"><i></i>Game BK</span>
+        <h1>Tangga <span>Karakter</span></h1>
+        <p class="sub"><b>Menjadi Remaja Berkarakter Melalui Ibadah</b>. Ular tangga pembentuk karakter. Pahami makna ibadah, bangun disiplin dan tanggung jawab, lalu capai kotak 100 bersama kelompokmu.</p>
+      </div>
+      <div class="cover"><img src="career-quest-cover.svg" alt="Papan ular tangga karier bergaya futuristik" onerror="this.parentNode.style.display='none'"></div>
+    </div>
+
+    <div class="setup-grid">
+      <div>
+        <div class="panel">
+          <h3><b>1</b> Jumlah kelompok</h3>
+          <div class="stepper">
+            <button class="sbtn" id="cntMinus" aria-label="Kurangi kelompok">−</button>
+            <div class="val"><span id="cntVal">4</span><small>KELOMPOK</small></div>
+            <button class="sbtn" id="cntPlus" aria-label="Tambah kelompok">+</button>
+            <div class="quick" id="countChips"></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3><b>2</b> Nama kelompok</h3>
+          <div class="namegrid" id="nameList"></div>
+        </div>
+      </div>
+      <div>
+        <div class="panel">
+          <h3><b>3</b> Pengaturan</h3>
+          <div class="opt-row col"><label>🎲 Jumlah dadu<small style="display:block;color:var(--muted);font-weight:500;font-size:12.5px">2 dadu lebih cepat, dan angka kembar = main lagi</small></label><div class="quick" id="diceChips"></div></div>
+          <div class="opt-row col"><label>⏳ Lama permainan<small style="display:block;color:var(--muted);font-weight:500;font-size:12.5px">Habis waktu: putaran diselesaikan, tim terdepan jadi Juara Tercepat</small></label><div class="quick" id="limChips"></div></div>
+          <div class="estline" id="estLine"></div>
+          <div class="opt-row"><label for="optTimer">⏱ Batas waktu kuis (detik)<small style="display:block;color:var(--muted);font-weight:500;font-size:12.5px">0 = tanpa batas</small></label>
+            <input type="number" id="optTimer" min="0" max="600" step="5" value="0"></div>
+          <div class="opt-row"><label for="optSound">🔊 Efek suara</label><input type="checkbox" id="optSound" checked></div>
+          <div class="summary" id="confSummary" style="margin-top:12px"></div>
+          <div class="syncstate" id="syncState" aria-live="polite"></div>
+          <div class="row-btns" style="margin-top:12px"><button class="btn ghost sm" id="editBtn">⚙ Atur soal, papan &amp; poin</button></div>
+        </div>
+        <div class="panel how">
+          <h3>Cara bermain</h3>
+          <ul>
+            <li>Kelompok bergiliran melempar dadu (1 atau 2 dadu, bisa diatur). Guru menekan tombol dadu. Pada mode 2 dadu, <b>angka kembar</b> (mis. 4 + 4) berarti <b>main lagi</b>.</li>
+            <li>🪜 <b>Tangga</b> = kebiasaan baik, naik! 🐍 <b>Ular</b> = kebiasaan yang menghambat, turun.</li>
+            <li>Papan terbagi 5 <b>zona</b>; kuis mengikuti tema zonanya. Setelah naik tangga atau turun ular, isi kotak tujuan tetap berlaku.</li>
+            <li>Dua <b>tangga ekspres</b> (88 dan 93) langsung ke 🏁 finish. Jangan lewat kotak 100: pion akan mundur.</li>
+            <li>Mendarat di kotak yang sudah ditempati kelompok lain? Kelompok itu <b>kembali ke 🚩 Start</b>.</li>
+            <li>Waktu habis? Putaran diselesaikan, lalu tim terdepan menjadi Juara Tercepat.</li>
+            <li>❓ <b>Kuis</b> dan 💭 <b>Refleksi</b> memberi poin, 🎁 <b>Kartu Kejutan</b> bisa maju, mundur, atau menambah poin.</li>
+            <li>Dua juara: <b>⚡ Juara Tercepat</b> (sampai kotak 100 lebih dulu) dan <b>🌟 Juara Kuis</b> (total poin terbanyak). Tim yang kalah mendapat <b>tantangan semangat</b>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px"><h3>🧩 Alur sesi · 160 menit (4 JP)</h3><ol class="alur"><li>Sapa & Pertanyaan Pemantik<span>15 mnt</span></li><li>Studi Kasus Kebiasaan Ibadah Remaja<span>25 mnt</span></li><li>Refleksi: Semangat dan Hambatan<span>15 mnt</span></li><li>Pembentukan Konsep<span>20 mnt</span></li><li>Permainan Tangga Karakter<span>40 mnt</span></li><li>Menyusun Rencana Pembiasaan<span>30 mnt</span></li><li>Refleksi Akhir & Komitmen<span>10 mnt</span></li><li>Penutup<span>5 mnt</span></li></ol></div>
+    <div class="row-btns">
+      <button class="btn primary" id="startBtn">▶ Mulai Sesi Layanan</button>
+      <button class="btn ghost hidden" id="resumeSesiBtn">↩ Lanjutkan sesi</button>
+      <button class="btn ghost hidden" id="resumeBtn">↩ Lanjutkan permainan terakhir</button>
+    </div>
+  </div>
+</section>
+
+<section id="sesi" class="hidden"></section>
+
+<!-- ============ GAME ============ -->
+<section id="game" class="hidden">
+  <div class="topbar">
+    <div class="ttl">Tangga <span>Karakter</span><small>Menjadi Remaja Berkarakter Melalui Ibadah</small></div>
+    <div class="sp"></div>
+    <button class="tb" id="bSesi">📚 Sesi</button>
+    <button class="tb" id="bHelp">❔ Cara bermain</button>
+    <button class="tb" id="bAbout">ℹ Tentang</button>
+    <button class="tb" data-gk-theme type="button">☀ Terang</button>
+    <button class="tb" id="bSound">🔊 Suara</button>
+    <button class="tb" id="bFull">⛶ Layar penuh</button>
+    <button class="tb" id="bEnd" title="Akhiri sekarang dan umumkan juara">🏁 Akhiri</button>
+    <button class="tb" id="bReset">⟲ Ulang</button>
+    <a class="tb" href="gamebk.html">⌂ Menu BK</a>
+  </div>
+  <main>
+    <aside class="side sl">
+      <div class="turn" id="turn"></div>
+      <div class="dice-box">
+        <div class="dice" id="dice"><div class="die" id="die"></div><div class="die" id="die2"></div></div>
+        <div style="flex:1">
+          <button class="btn primary" id="rollBtn" style="width:100%">🎲 LEMPAR DADU</button>
+          <div class="hint">atau tekan tombol Spasi</div>
+        </div>
+      </div>
+      <div class="lb f"><h4>⚡ Juara Tercepat <em>posisi di papan</em></h4><div class="rows" id="lbFast"></div></div>
+    </aside>
+    <div class="board-wrap">
+      <div class="startpad" id="startpad" title="Start">🚩</div>
+      <div class="board" id="board">
+        <svg class="links" id="links" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+      </div>
+      <div class="tokens" id="tokens"></div>
+    </div>
+    <aside class="side sr">
+      <div class="lb k"><h4>🌟 Juara Kuis <em>urut total poin</em></h4><div class="rows" id="lbQuiz"></div></div>
+      <div class="zlegend" id="zlegend"><span><i style="background:#22d3ee"></i>1. Makna Ibadah</span><span><i style="background:#34d399"></i>2. Manfaat untuk Karakter</span><span><i style="background:#fbbf24"></i>3. Disiplin & Tanggung Jawab</span><span><i style="background:#f472b6"></i>4. Hambatan</span><span><i style="background:#a78bfa"></i>5. Strategi Konsisten</span></div>
+      <div class="legend"><button type="button" data-f="ladder" title="Tonjolkan tangga">🪜 Tangga ▲ naik</button><button type="button" data-f="snake" title="Tonjolkan ular">🐍 Ular ▼ turun</button><span>❓ Kuis</span><span>💭 Refleksi</span><span>🎁 Kejutan</span></div>
+      <div class="log" id="log"></div>
+      <div class="sidecredit" id="sideCredit"></div>
+    </aside>
+  </main>
+</section>
+
+<!-- ============ EDITOR ============ -->
+<section id="editor" aria-label="Pengaturan guru">
+  <div class="ed-top">
+    <h2>⚙ Pengaturan <span>Guru</span></h2>
+    <span class="sp"></span>
+    <span id="edState" style="font-size:13px;color:var(--muted)"></span>
+    <button class="btn ghost sm" id="edCancel">Batal</button>
+    <button class="btn primary sm" id="edSave" title="Berlaku di perangkat ini saja">💾 Simpan di perangkat ini</button>
+    <button class="btn ghost sm" id="edPublish" title="Perlu password admin">☁ Jadikan default semua</button>
+  </div>
+  <div class="ed-tabs" id="edTabs" role="tablist"></div>
+  <div id="edBody"></div>
+</section>
+
+<!-- ============ MODAL ============ -->
+<div id="modal"><div id="mcard"><div id="mbody"></div></div></div>
+<div id="toast" role="status"></div>
+<input type="file" id="importFile" accept="application/json,.json" class="hidden">
+
+<script src="config.js"></script>
+<script src="gamekit.js"></script>
+<script>
+"use strict";
+/* =====================================================
+   TANGGA KARAKTER — Menjadi Remaja Berkarakter Melalui Ibadah (RPL Bimbingan Klasikal)
+   Game BK untuk semua jenjang — satu file, tanpa library eksternal
+   Dirancang oleh Agung Fahri Husaeni, S.Pd.
+   Guru BK SMP Negeri 36 Semarang
+   ===================================================== */
+const $=(s,r=document)=>r.querySelector(s);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const clone=o=>JSON.parse(JSON.stringify(o));
+const int=(v,lo,hi,d)=>{v=Math.round(Number(v));return Number.isFinite(v)?Math.min(hi,Math.max(lo,v)):d};
+const str=(v,max)=>String(v==null?"":v).trim().slice(0,max);
+const PAKET={"id": "ibadah", "judul": "Menjadi Remaja Berkarakter Melalui Ibadah", "nama": "Tangga Karakter", "namaA": "Tangga", "namaB": "Karakter", "sub": "Ular tangga pembentuk karakter. Pahami makna ibadah, bangun disiplin dan tanggung jawab, lalu capai kotak 100 bersama kelompokmu.", "meta": {"Topik layanan": "Menjadi Remaja Berkarakter Melalui Ibadah", "Komponen": "Layanan Dasar", "Strategi": "Bimbingan Klasikal", "Bidang": "Kematangan Intelektual", "Sasaran": "Kelas 9", "Alokasi waktu": "4 JP (4 × 40 menit)"}, "profil": "Beriman, bertakwa kepada Tuhan Yang Maha Esa, dan berakhlak mulia; Mandiri", "capaian": "Peserta didik mampu menentukan alternatif pengambilan keputusan dan pengentasan masalah berdasarkan konsep ilmu pengetahuan dan perilaku belajar, seperti menentukan sesuatu secara mandiri, memecahkan masalah, dan mengambil keputusan.", "tujuan": ["Pengenalan (C): Murid mampu menjelaskan makna ibadah sebagai kebutuhan spiritual dan bagian dari pembentukan karakter.", "Akomodasi (A): Murid mampu menunjukkan sikap positif terhadap pelaksanaan ibadah secara sadar, disiplin, dan bertanggung jawab.", "Tindakan (P): Murid mampu menyusun dan melaksanakan rencana sederhana untuk membiasakan ibadah secara konsisten dalam kehidupan sehari-hari."], "praktik": ["Model: Experiential Learning", "Strategi: Student-Centered Learning, Reflektif, dan Partisipatif", "Metode: Observasi, curah pendapat, diskusi kelompok, tanya jawab, refleksi, dan penugasan"], "asesmen": ["Awal: angket pertanyaan awal (lisan atau tertulis)", "Proses: aktif bertanya/menjawab, mau berbagi pengalaman, antusias, dukungan pada teman", "Hasil: pemahaman materi, perasaan atau sikap positif, komitmen atau rencana tindakan"], "catatanKeberagaman": "Gunakan bahasa yang netral. Setiap murid beribadah sesuai agama dan keyakinannya. Tidak ada murid yang dipaksa menceritakan ibadah pribadinya.", "indikatorObs": ["Aktif bertanya/menjawab", "Mau berbagi pengalaman", "Antusias", "Mendukung teman"], "kunciAlur": "Pembelajaran Mendalam: Berkesadaran, Bermakna, Menggembirakan", "zonaNama": ["Makna Ibadah", "Manfaat untuk Karakter", "Disiplin & Tanggung Jawab", "Hambatan", "Strategi Konsisten"], "fase": [{"id": "awal", "tipe": "pemantik", "judul": "Sapa & Pertanyaan Pemantik", "tahap": "Tahap Awal", "kolb": "Pembuka", "ciri": ["Bermakna", "Menggembirakan"], "menit": 15, "ilustrasi": ["🕌", "⛪", "🛕", "🕍", "☸️", "🤲", "🌅", "📿"], "pemantik": "Mengapa kita beribadah, dan apa manfaatnya bagi kehidupan sehari-hari?", "poin": ["Tujuan: memahami makna ibadah dan menyusun rencana membiasakannya.", "Manfaat: karakter yang lebih disiplin, bertanggung jawab, dan tenang.", "Alur: kasus → refleksi → konsep → permainan → rencana → komitmen."], "panduan": ["Sapa murid dengan hangat, cek kehadiran, ciptakan suasana menyenangkan.", "Ajak murid mengamati ilustrasi atau video singkat tentang kebiasaan ibadah remaja.", "Ajukan pertanyaan pemantik. Jawaban murid menjadi asesmen awal: catat di kotak samping, tidak perlu dinilai.", "Sampaikan tujuan, manfaat, dan alur kegiatan layanan."], "noteJ": "📝 Asesmen awal: jawaban murid", "noteP": "Catat jawaban dan reaksi murid atas pertanyaan pemantik (tidak dinilai)."}, {"id": "kasus", "tipe": "kasus", "judul": "Studi Kasus Kebiasaan Ibadah Remaja", "tahap": "Tahap Inti · Memahami", "kolb": "1 · Pengalaman Konkret", "ciri": ["Berkesadaran", "Bermakna", "Menggembirakan"], "menit": 25, "kasus": [{"j": "Rafi: Rutin tetapi Terasa Kosong", "ikon": "😐", "cerita": "Rafi beribadah setiap hari tanpa pernah bolong. Namun ia merasa hanya \"menggugurkan kewajiban\". Prosesnya cepat dan pikirannya melayang ke mana-mana. Setelah selesai, ia tidak merasakan apa-apa.", "tanya": ["Apa yang kurang dari ibadah Rafi, padahal ia rutin?", "Apa makna ibadah yang bisa Rafi temukan?", "Apa yang bisa Rafi lakukan agar ibadahnya lebih sadar?"], "kunci": ["Rutin sudah baik, tetapi belum disertai penghayatan dan makna.", "Ibadah sebagai bentuk penghambaan dan kebutuhan spiritual.", "Memahami tujuan, meluangkan waktu tenang, fokus saat beribadah."]}, {"j": "Salsa: Jadwal yang Padat", "ikon": "📆", "cerita": "Salsa pulang sekolah, langsung les, lalu mengerjakan tugas hingga malam. Ibadahnya sering tertunda atau terlewat. Ia ingin lebih teratur, tetapi merasa tidak punya waktu.", "tanya": ["Faktor apa yang membuat Salsa sulit konsisten?", "Strategi apa yang bisa Salsa coba?", "Siapa yang bisa mendukung Salsa?"], "kunci": ["Jadwal padat, kelelahan, dan belum ada rencana waktu ibadah.", "Menjadwalkan waktu ibadah sebagai prioritas, memasang pengingat, mulai dari langkah kecil.", "Orang tua, teman, dan wali kelas."]}, {"j": "Dimas: Hanya Saat Diawasi", "ikon": "👀", "cerita": "Di sekolah, Dimas ikut beribadah bersama teman karena ada guru yang mengawasi. Di rumah, ia hampir tidak pernah melakukannya jika tidak diingatkan.", "tanya": ["Apa yang mendorong Dimas beribadah di sekolah?", "Apa bedanya dorongan dari luar dan kesadaran diri?", "Bagaimana Dimas bisa tumbuh menjadi mandiri?"], "kunci": ["Pengawasan dan ikut-ikutan teman (motivasi luar).", "Dorongan luar tidak bertahan lama. Kesadaran diri membuat konsisten walau tidak ada yang melihat.", "Memahami makna, menetapkan tujuan pribadi, membuat rencana dan jurnal."]}], "panduan": ["Kelompok bergiliran menyampaikan hasil diskusi. Tekan Kelompok berikutnya untuk berpindah.", "Setiap kelompok mendapat satu kasus dan mengidentifikasi makna ibadah, manfaatnya, serta faktor yang memengaruhi konsistensi.", "Murid menyampaikan hasil pengamatan atau pengalaman secara individu maupun kelompok.", "Gunakan kunci pembahasan untuk memperkaya tanpa menghakimi."], "giliran": true}, {"id": "refleksi", "tipe": "refleksi", "judul": "Refleksi: Semangat dan Hambatan", "tahap": "Tahap Inti · Memahami", "kolb": "2 · Pengamatan Reflektif", "ciri": ["Berkesadaran", "Bermakna"], "menit": 15, "tanya": ["Apa yang membuat saya semangat beribadah?", "Apa yang membuat saya kurang semangat beribadah?", "Bagaimana cara membangun kebiasaan ibadah yang lebih baik?"], "bentuk": "Berdiskusi berpasangan atau kelompok kecil, lalu perwakilan menyampaikan hasil.", "panduan": ["Murid merefleksikan hasil kegiatan dan berdiskusi berpasangan atau dalam kelompok kecil.", "Pandu refleksi dengan pertanyaan di layar.", "Kelompok bergiliran menyampaikan hasil diskusi. Hargai semua jawaban."], "giliran": true}, {"id": "konsep", "tipe": "konsep", "judul": "Pembentukan Konsep", "tahap": "Tahap Inti · Memahami", "kolb": "3 · Konseptualisasi Abstrak", "ciri": ["Berkesadaran", "Bermakna", "Menggembirakan"], "menit": 20, "kartu": [{"j": "Pengertian Ibadah", "ikon": "📖", "isi": ["Ibadah adalah bentuk penghambaan kepada Tuhan Yang Maha Esa sesuai keyakinan masing-masing.", "Ibadah adalah kebutuhan spiritual, bukan sekadar kewajiban."]}, {"j": "Makna Ibadah bagi Remaja", "ikon": "💫", "isi": ["Membantu mengenal diri dan menenangkan hati.", "Memberi arah dan pegangan di masa remaja yang penuh perubahan."]}, {"j": "Manfaat bagi Karakter", "ikon": "🌱", "isi": ["Menumbuhkan kejujuran, ketenangan, dan syukur.", "Melatih pengendalian diri dan kepedulian."]}, {"j": "Ibadah, Disiplin, dan Tanggung Jawab", "ikon": "⏳", "isi": ["Teratur dan tepat waktu melatih disiplin.", "Melakukannya dengan kesadaran sendiri melatih tanggung jawab dan kemandirian."]}, {"j": "Hambatan Membiasakan Ibadah", "ikon": "🚧", "isi": ["Rasa malas, gawai, begadang, jadwal padat, dan ikut-ikutan.", "Mengenali hambatan adalah langkah pertama mengatasinya."]}, {"j": "Strategi Konsisten", "ikon": "🧭", "isi": ["Mulai dari langkah kecil, jadwalkan, pasang pengingat.", "Cari dukungan orang tua dan teman, catat kemajuan, dan evaluasi tiap pekan."]}], "rangkum": "Hubungkan konsep dengan pengalaman dari kasus dan refleksi, lalu simpulkan poin-poin penting bersama murid.", "panduan": ["Jelaskan makna ibadah sebagai penghambaan kepada Tuhan YME dan kaitannya dengan karakter, disiplin, tanggung jawab, dan pengendalian diri.", "Fasilitasi murid menghubungkan konsep dengan pengalaman yang telah dibahas.", "Simpulkan poin penting bersama murid sebelum bermain."]}, {"id": "game", "tipe": "game", "judul": "Permainan Tangga Karakter", "tahap": "Tahap Inti · Memahami & Mengaplikasi", "kolb": "Penguatan konsep (permainan)", "ciri": ["Menggembirakan", "Bermakna"], "menit": 40, "intro": "Permainan ini menjadi metode untuk menguatkan pemahaman. Kuis mengecek konsep (Pengenalan/C), refleksi menumbuhkan sikap (Akomodasi/A), kartu kejutan dan ular tangga menggambarkan kebiasaan yang membantu dan menghambat.", "panduan": ["Kelompok A bermain, lalu kelompok B, dan seterusnya secara bergantian. Guru memegang layar.", "Berhenti sejenak pada kotak kuis dan refleksi untuk membahas bersama.", "Gunakan ular dan tangga sebagai bahan diskusi: mengapa ini menghambat atau membantu?", "Setelah selesai, tekan Lanjut sesi untuk menyusun rencana."]}, {"id": "rencana", "tipe": "rencana", "judul": "Menyusun Rencana Pembiasaan", "tahap": "Tahap Inti · Mengaplikasi", "kolb": "4 · Eksperimen Aktif", "ciri": ["Berkesadaran", "Bermakna", "Menggembirakan"], "menit": 30, "kolom": [{"k": "t", "l": "Tujuan", "h": "Apa yang ingin dibiasakan?"}, {"k": "l", "l": "Langkah", "h": "Apa, kapan, dan di mana dilakukan?"}, {"k": "h", "l": "Hambatan", "h": "Apa yang mungkin menghalangi?"}, {"k": "k", "l": "Menjaga konsistensi", "h": "Pengingat, dukungan, dan catatan apa yang dipakai?"}], "kriteria": ["Kecil dan realistis", "Punya waktu yang jelas", "Ada pengingat atau dukungan", "Ada cara mencatat dan evaluasi"], "contoh": {"t": "Beribadah tepat waktu dengan lebih tenang.", "l": "Menyiapkan diri 5 menit sebelum waktu ibadah, di tempat yang nyaman di rumah.", "h": "Sibuk bermain gawai dan lupa waktu.", "k": "Alarm di ponsel, diingatkan kakak, dan mencentang jurnal tiap hari."}, "panduan": ["Murid menyusun rencana pembiasaan: tujuan, langkah, hambatan, dan cara menjaga konsistensi.", "Kelompok berdiskusi, saling memberi masukan, lalu bergiliran mempresentasikan.", "Ketik ringkasan rencana tiap kelompok bila ingin ikut tercetak di laporan.", "Beri penguatan dan motivasi agar rencana diterapkan."], "giliran": true}, {"id": "akhir", "tipe": "akhir", "judul": "Refleksi Akhir & Komitmen", "tahap": "Tahap Inti · Merefleksi", "kolb": "Asesmen hasil", "ciri": ["Berkesadaran", "Bermakna"], "menit": 10, "petunjuk": "Murid menuliskan refleksi pribadi, lalu kelompok bergiliran menyampaikan pemahaman, perasaan, dan rencana tindak lanjut.", "refleksi": ["Apa makna ibadah bagi dirimu?", "Perubahan apa yang ingin kamu lakukan?", "Apa komitmenmu untuk membiasakan ibadah secara sadar, disiplin, dan bertanggung jawab?"], "panduan": ["Ajak murid menuliskan refleksi: makna ibadah bagi diri, perubahan yang ingin dilakukan, dan komitmen.", "Murid menyampaikan pemahaman, perasaan, dan rencana tindak lanjut.", "Asesmen akhir cukup lewat observasi guru. Tandai pada tabel dan catat di kotak samping."], "giliran": true, "hasilInd": ["Menjelaskan makna ibadah (Pengenalan)", "Bersikap positif terhadap ibadah yang sadar, disiplin, dan bertanggung jawab (Akomodasi)", "Menyampaikan rencana atau komitmen (Tindakan)"], "noteJ": "📝 Asesmen akhir: catatan observasi", "noteP": "Catat pemahaman, perasaan, dan komitmen yang muncul. Tidak harus berupa nilai."}, {"id": "penutup", "tipe": "penutup", "judul": "Penutup", "tahap": "Tahap Penutup", "kolb": "Penutup", "ciri": ["Berkesadaran", "Bermakna", "Menggembirakan"], "menit": 5, "kesimpulan": ["Ibadah adalah penghambaan kepada Tuhan YME dan kebutuhan spiritual.", "Ibadah yang sadar membentuk disiplin, tanggung jawab, dan pengendalian diri.", "Hambatan dikenali dan diatasi dengan rencana dan dukungan.", "Kebiasaan kecil yang konsisten membentuk karakter."], "apresiasi": "Beri apresiasi atas partisipasi aktif murid selama kegiatan.", "tindak": ["Menjalankan rencana pembiasaan di rumah dan sekolah", "Dukungan orang tua/wali dan pemantauan wali kelas", "Materi layanan berikutnya akan disampaikan guru BK"], "doa": "Tutup dengan doa dan salam sesuai agama dan keyakinan masing-masing.", "panduan": ["Simpulkan hasil layanan bersama murid.", "Apresiasi partisipasi aktif.", "Sampaikan tindak lanjut atau materi berikutnya.", "Tutup dengan doa dan salam."]}, {"id": "laporan", "tipe": "laporan", "judul": "Laporan Sesi", "tahap": "Asesmen", "kolb": "Rekap asesmen", "ciri": [], "menit": 0, "panduan": ["Laporan memuat jawaban asesmen awal, observasi proses, observasi hasil, hasil permainan, rencana kelompok, dan catatan guru.", "Tekan Cetak untuk mencetak atau menyimpan sebagai PDF.", "Data hanya tersimpan di perangkat ini dan tidak dikirim ke server."]}], "pesan": "Beribadah dengan sadar membentuk karakter yang disiplin, bertanggung jawab, dan tenang. Mulailah dari langkah kecil, jalankan rencanamu, dan jangan ragu meminta dukungan orang tua, teman, serta guru.", "rpl": [{"j": "Spesifikasi", "tipe": "poin", "isi": ["Komponen layanan: Layanan Dasar", "Strategi layanan: Bimbingan Klasikal", "Bidang layanan: Kematangan Intelektual", "Sasaran layanan: Kelas 9", "Alokasi waktu: 4 JP (4 × 40 menit)"]}, {"j": "Sumber", "tipe": "poin", "isi": ["Kementerian Pendidikan Dasar dan Menengah RI. Panduan Bimbingan dan Konseling pada Satuan Pendidikan", "Jaelani, D. A., dkk. (2025). Kontribusi Kegiatan Remaja Masjid, Salat Zuhur Berjamaah, dan Tahfidz Al-Qur'an terhadap Karakter Religius Siswa SMP. Epistemic: Jurnal Ilmiah Pendidikan", "Muchtar, A., & Wajdi, A. M. F. (2025). Implementasi Program Shalat Dzuhur Berjamaah dalam Pembentukan Karakter di SMP Muhammadiyah 3 Samarinda. Jurnal Penelitian Tarbawi"]}, {"j": "Kesiapan murid", "tipe": "poin", "isi": ["Pengetahuan awal: Sebagian murid telah melaksanakan ibadah secara rutin, namun masih melakukannya sebagai kebiasaan tanpa memahami makna dan tujuan ibadah dalam kehidupan sehari-hari.", "Minat: Murid memiliki potensi untuk membangun kebiasaan ibadah yang lebih sadar, disiplin, dan bertanggung jawab sebagai bagian dari pembentukan karakter positif.", "Latar belakang: Murid berasal dari latar belakang keluarga, sosial, budaya, pengalaman belajar, dan karakteristik yang beragam sehingga memerlukan layanan yang inklusif dan menghargai perbedaan.", "Kebutuhan belajar: Murid membutuhkan pemahaman, pengalaman reflektif, dan strategi praktis agar mampu membangun kebiasaan ibadah yang dilakukan dengan kesadaran, penghayatan, dan tanggung jawab.", "Aspek lainnya: Murid berada pada tahap perkembangan remaja awal sehingga memerlukan layanan yang aktif, menyenangkan, partisipatif, dan sesuai kebutuhan perkembangannya."]}, {"j": "Materi layanan", "tipe": "teks", "isi": ["Pengertian ibadah, makna ibadah dalam kehidupan remaja, manfaat ibadah bagi pembentukan karakter, hubungan ibadah dengan disiplin dan tanggung jawab, hambatan dalam membiasakan ibadah, serta strategi membangun kebiasaan ibadah yang konsisten."]}, {"j": "Dimensi Profil Lulusan", "tipe": "teks", "isi": ["Beriman, bertakwa kepada Tuhan Yang Maha Esa, dan berakhlak mulia; Mandiri"]}, {"j": "Aspek perkembangan dan tataran internalisasi tujuan", "tipe": "poin", "isi": ["Aspek perkembangan: Kematangan Intelektual", "Tataran internalisasi tujuan: Mengembangkan alternatif pengambilan keputusan dan pengentasan masalah berdasarkan pengalaman pada saat menggunakan konsep-konsep ilmu pengetahuan dan perilaku belajar."]}, {"j": "Praktik pedagogis", "tipe": "poin", "isi": ["Model: Experiential Learning", "Strategi: Student-Centered Learning, Reflektif, dan Partisipatif", "Metode: Observasi, curah pendapat, diskusi kelompok, tanya jawab, refleksi, dan penugasan"]}, {"j": "Kemitraan layanan", "tipe": "poin", "isi": ["Orang tua/wali: memberikan dukungan, penguatan, dan pendampingan kepada murid dalam menerapkan hasil layanan di lingkungan keluarga.", "Guru mata pelajaran/wali kelas: berkolaborasi mengamati perkembangan murid, memberikan penguatan, serta mendukung penerapan hasil layanan di sekolah.", "Pihak terkait: narasumber sesuai kebutuhan layanan, seperti alumni, tenaga profesional, DUDI, perguruan tinggi, puskesmas, psikolog, BNN, kepolisian, atau instansi lain."]}, {"j": "Lingkungan layanan dan pemanfaatan digital", "tipe": "poin", "isi": ["Ruang fisik: ruang kelas dan/atau ruang BK yang nyaman, aman, kondusif, serta mendukung interaksi dan diskusi.", "Ruang belajar: platform digital sekolah (Google Classroom, Google Drive, atau WhatsApp Group) untuk berbagi materi, lembar kerja, informasi, dan penugasan.", "Ruang virtual: budaya belajar yang kolaboratif, reflektif, bermakna, dan menghargai keberagaman.", "Pemanfaatan digital: Canva, YouTube, Google Form, dan Quizizz."]}, {"j": "Pengalaman belajar: Tahap awal", "tipe": "poin", "isi": ["Guru BK menyapa murid dengan hangat, mengecek kehadiran, dan menciptakan suasana belajar menyenangkan.", "Murid mengamati ilustrasi atau video singkat tentang kebiasaan ibadah remaja, lalu menjawab pertanyaan pemantik: \"Mengapa kita beribadah dan apa manfaatnya bagi kehidupan sehari-hari?\"", "Guru BK menyampaikan tujuan, manfaat, dan alur kegiatan layanan."]}, {"j": "Pengalaman belajar: Tahap inti (Memahami)", "tipe": "poin", "isi": ["Pengalaman konkret: studi kasus kebiasaan ibadah remaja, diskusi kelompok tentang makna, manfaat, dan faktor konsistensi, lalu menyampaikan hasil.", "Mengamati dan merefleksikan: berdiskusi berpasangan atau kelompok kecil dengan pertanyaan \"Apa yang membuat saya semangat atau kurang semangat beribadah? Bagaimana cara membangun kebiasaan ibadah yang lebih baik?\"", "Pembentukan konsep: guru BK menjelaskan makna ibadah sebagai penghambaan kepada Tuhan Yang Maha Esa serta kaitannya dengan karakter, disiplin, tanggung jawab, dan pengendalian diri."]}, {"j": "Pengalaman belajar: Mengaplikasi, merefleksi, dan penutup", "tipe": "poin", "isi": ["Eksperimen aktif: murid menyusun rencana pembiasaan ibadah (tujuan, langkah, hambatan, cara menjaga konsistensi), berdiskusi, saling memberi masukan, dan mempresentasikan.", "Merefleksi: murid menuliskan refleksi tentang makna ibadah, perubahan yang ingin dilakukan, dan komitmen, lalu menyampaikan pemahaman, perasaan, dan rencana tindak lanjut.", "Penutup: menyimpulkan hasil layanan, apresiasi, menyampaikan tindak lanjut, dan menutup dengan doa dan salam."]}, {"j": "Asesmen", "tipe": "poin", "isi": ["Asesmen awal: angket pertanyaan awal (lisan atau tertulis). Di game ini diambil dari jawaban murid atas pertanyaan pemantik.", "Asesmen proses: aktif bertanya/menjawab, mau berbagi pengalaman, antusias, dan dukungan pada teman (observasi guru).", "Asesmen hasil: pemahaman terhadap materi, perasaan atau sikap positif, dan komitmen atau rencana tindakan (observasi guru)."]}]};
+const ZONES=[
+  {n:"Makna Ibadah",c:["Makna Ibadah"]},
+  {n:"Manfaat untuk Karakter",c:["Manfaat Karakter"]},
+  {n:"Disiplin & Tanggung Jawab",c:["Disiplin & Tanggung Jawab"]},
+  {n:"Hambatan",c:["Hambatan"]},
+  {n:"Strategi Konsisten",c:["Strategi Konsisten"]}];
+const ZCOL=["#22d3ee","#34d399","#fbbf24","#f472b6","#a78bfa"];
+const zoneOf=n=>Math.max(0,Math.min(4,Math.floor((n-1)/20)));
+const SAVE_KEY='rpl_ibadah_save_v1';
+const CONF_KEY='rpl_ibadah_conf_v1';
+const MAX_TEAMS=24,MIN_TEAMS=2;
+const CONF_REV=1; /* naikkan angka ini bila isi bawaan (soal, papan, poin) diperbarui: pengaturan lama otomatis diganti */
+const UNSYNC_LS="rpl_ibadah_unsynced";
+
+/* ---------------- DATA: TANGGA & ULAR ---------------- */
+const D_LAD={
+  5:{to:29,t:"Beribadah dengan sadar dan penuh perhatian",m:"Kesadaran membuat ibadah terasa lebih bermakna."},
+  13:{to:37,t:"Menetapkan waktu ibadah yang tetap",m:"Waktu yang tetap memudahkan kebiasaan terbentuk."},
+  24:{to:38,t:"Mengingat makna di balik ibadah",m:"Memahami tujuan membuat semangat tumbuh dari dalam."},
+  33:{to:57,t:"Beribadah tepat waktu",m:"Tepat waktu melatih disiplin dan tanggung jawab."},
+  47:{to:67,t:"Saling mengingatkan dengan teman dan keluarga",m:"Dukungan orang terdekat menguatkan konsistensi."},
+  55:{to:65,t:"Memasang pengingat di gawai",m:"Pengingat membantu niat menjadi tindakan."},
+  69:{to:91,t:"Mencatat kebiasaan di jurnal harian",m:"Catatan membuat kemajuanmu terlihat dan menyemangati."},
+  75:{to:90,t:"Memulai dari langkah kecil yang konsisten",m:"Langkah kecil yang terus diulang menjadi kebiasaan kuat."},
+  82:{to:94,t:"Berdoa dan bersyukur sebelum beraktivitas",m:"Hati yang tenang membuat harimu lebih terarah. Kamu nyaris sampai!"},
+  88:{to:100,t:"Mengendalikan diri saat tergoda menunda",m:"Pengendalian diri membawamu melaju ke Tujuan!"},
+  93:{to:100,t:"Ibadah menjadi kebutuhan, bukan beban",m:"Kesadaran penuh membawamu langsung ke Tujuan!"}
+};
+const D_SNK={
+  27:{to:17,t:"Menunda dengan alasan \"nanti saja\"",m:"Mulai dari sekarang, sekecil apa pun langkahnya."},
+  49:{to:34,t:"Beribadah hanya saat diawasi",m:"Tumbuhkan kesadaran dari dalam, bukan karena diawasi."},
+  68:{to:57,t:"Terlalu lama bermain gawai",m:"Atur waktu layar agar tidak mengalahkan waktu ibadah dan belajar."},
+  72:{to:62,t:"Beribadah terburu-buru tanpa penghayatan",m:"Beri waktu cukup agar ibadahmu bermakna."},
+  84:{to:64,t:"Mengabaikan ibadah saat sibuk",m:"Sesibuk apa pun, jadwalkan waktu ibadah sebagai prioritas."},
+  86:{to:65,t:"Membandingkan ibadah dengan orang lain",m:"Setiap orang punya prosesnya sendiri. Fokus memperbaiki diri."},
+  89:{to:70,t:"Ikut-ikutan tanpa memahami makna",m:"Pahami dulu mengapa kamu melakukannya."},
+  98:{to:30,t:"Merasa sudah cukup, lalu berhenti",m:"Kebiasaan baik perlu dijaga terus. Jatuh jauh, tetapi kamu bisa bangkit!"},
+  19:{to:8,t:"Malas memulai",m:"Mulai dengan langkah paling kecil, lalu lanjutkan."},
+  36:{to:25,t:"Begadang hingga bangun kesiangan",m:"Tidur cukup menopang disiplin ibadahmu."},
+  43:{to:30,t:"Menyerah setelah sekali terlewat",m:"Satu kali terlewat bukan akhir. Bangkit dan lanjutkan."},
+  61:{to:48,t:"Menganggap ibadah sebagai beban",m:"Ingat kembali manfaat dan maknanya agar terasa ringan."},
+  77:{to:63,t:"Tidak mau diingatkan orang yang peduli",m:"Pengingat yang baik adalah tanda sayang."},
+  92:{to:79,t:"Merasa paling benar lalu menilai orang lain",m:"Tetap rendah hati dan terus memperbaiki diri."}
+};
+
+const D_QT=new Set([1, 3, 6, 8, 9, 10, 14, 15, 17, 21, 22, 23, 28, 29, 31, 34, 37, 38, 41, 42, 44, 46, 50, 51, 52, 56, 57, 59, 63, 64, 65, 70, 71, 74, 79, 80, 83, 90, 94, 97]);
+const D_RT=new Set([4, 11, 18, 25, 32, 39, 45, 53, 60, 66, 76, 87, 96]);
+const D_CT=new Set([2, 7, 12, 16, 20, 26, 30, 35, 40, 48, 54, 58, 62, 67, 73, 78, 81, 85, 91, 95, 99]);
+/* Setiap kotak 1–99 berisi: tangga, ular, kuis, refleksi, atau kejutan (tanpa kotak polos). */
+
+/* ---------------- DATA: KUIS (jawaban benar selalu urutan pertama, diacak saat tampil) ---------------- */
+const D_QUIZ=[
+ {"c": "Makna Ibadah", "q": "Ibadah dalam arti luas adalah…", "o": ["Wujud penghambaan dan ketaatan kepada Tuhan Yang Maha Esa sesuai keyakinan masing-masing", "Kegiatan untuk mendapat pujian orang lain", "Tugas sekolah tambahan", "Kebiasaan yang boleh ditinggalkan saat lelah"], "e": "Ibadah adalah hubungan penghambaan kepada Tuhan YME. Tata caranya mengikuti keyakinan masing-masing."},
+ {"c": "Makna Ibadah", "q": "Beribadah dengan sadar berarti…", "o": ["Memahami makna dan tujuan dari yang dilakukan", "Melakukannya secepat mungkin", "Melakukannya hanya bila diawasi", "Melakukannya sambil bermain gawai"], "e": "Kesadaran dan penghayatan membuat ibadah lebih bermakna."},
+ {"c": "Makna Ibadah", "q": "Ibadah sebagai kebutuhan spiritual berarti…", "o": ["Hati terasa lebih tenang dan terarah ketika ibadah dijalankan", "Hanya dilakukan saat ada masalah", "Hanya dilakukan pada hari besar", "Tidak berhubungan dengan diri sendiri"], "e": "Kebutuhan spiritual perlu dipenuhi seperti kebutuhan lainnya."},
+ {"c": "Makna Ibadah", "q": "Bagi remaja, ibadah dapat membantu…", "o": ["Mengenal diri, menenangkan hati, dan mengarahkan perilaku", "Memenangkan semua lomba", "Menambah uang saku", "Menghindarkan dari semua masalah"], "e": "Ibadah menjadi pegangan saat remaja menghadapi banyak perubahan."},
+ {"c": "Makna Ibadah", "q": "Dua murid sama-sama rutin beribadah. Yang membedakan kualitasnya adalah…", "o": ["Kesadaran dan penghayatannya", "Lamanya waktu saja", "Banyaknya orang yang melihat", "Pakaian yang dikenakan"], "e": "Rutin itu baik. Rutin disertai kesadaran lebih baik lagi."},
+ {"c": "Makna Ibadah", "q": "Beribadah sesuai keyakinan masing-masing menunjukkan sikap…", "o": ["Saling menghormati keberagaman", "Merendahkan yang berbeda", "Memaksa teman ikut", "Mengejek tata cara lain"], "e": "Keberagaman adalah kekayaan. Hormati cara beribadah orang lain."},
+ {"c": "Makna Ibadah", "q": "Beribadah hanya untuk \"menggugurkan kewajiban\" sebenarnya…", "o": ["Kurang bermakna karena minim penghayatan", "Sudah paling sempurna", "Tidak bisa diperbaiki", "Lebih baik daripada yang sadar"], "e": "Kebiasaan bisa ditumbuhkan menjadi kesadaran dengan memahami maknanya."},
+ {"c": "Makna Ibadah", "q": "Ibadah tidak hanya ritual, tetapi juga tercermin pada…", "o": ["Sikap baik dalam keseharian", "Nilai rapor saja", "Jumlah teman", "Penampilan"], "e": "Ibadah yang bermakna mewujud dalam akhlak sehari-hari."},
+ {"c": "Makna Ibadah", "q": "Pertanyaan yang tepat untuk menumbuhkan makna ibadah adalah…", "o": ["\"Untuk apa dan mengapa aku melakukan ini?\"", "\"Siapa yang sedang melihatku?\"", "\"Berapa cepat bisa selesai?\"", "\"Apa yang kudapat hari ini?\""], "e": "Bertanya makna membantu ibadah menjadi pilihan sadar."},
+ {"c": "Manfaat Karakter", "q": "Salah satu manfaat ibadah bagi karakter adalah…", "o": ["Menumbuhkan ketenangan, kejujuran, dan pengendalian diri", "Membuat selalu menang", "Menghilangkan semua tugas", "Membuat tidak pernah salah"], "e": "Ibadah membentuk karakter dari dalam, bukan sekadar hasil luar."},
+ {"c": "Manfaat Karakter", "q": "Karakter religius tampak dari…", "o": ["Sikap jujur, santun, dan peduli sehari-hari", "Pidato yang panjang", "Hadiah yang diterima", "Suara yang keras"], "e": "Karakter dinilai dari perbuatan sehari-hari."},
+ {"c": "Manfaat Karakter", "q": "Remaja yang rutin beribadah cenderung terbantu dalam…", "o": ["Membangun disiplin, ketenangan, dan tanggung jawab", "Pintar semua pelajaran tanpa belajar", "Bebas dari masalah", "Tidak perlu berusaha"], "e": "Ibadah mendukung pembentukan karakter, tetapi tetap perlu usaha di bidang lain."},
+ {"c": "Manfaat Karakter", "q": "Ibadah membantu pengendalian diri karena…", "o": ["Melatih menahan diri dan menaati waktu", "Membuat mudah marah", "Membuat menjauhi teman", "Membuat lupa tugas"], "e": "Menaati waktu dan menahan diri adalah latihan pengendalian diri."},
+ {"c": "Manfaat Karakter", "q": "Rasa syukur yang tumbuh dari ibadah membuat remaja…", "o": ["Lebih menghargai yang dimiliki dan tidak mudah iri", "Merasa lebih tinggi dari orang lain", "Berhenti berusaha", "Mengabaikan teman"], "e": "Syukur menenangkan hati dan menguatkan semangat."},
+ {"c": "Manfaat Karakter", "q": "Ibadah bersama, misalnya di sekolah, dapat menumbuhkan…", "o": ["Kebersamaan dan saling mengingatkan dalam kebaikan", "Persaingan", "Rasa malu", "Pertengkaran"], "e": "Kebersamaan membuat kebiasaan baik lebih mudah dijaga."},
+ {"c": "Manfaat Karakter", "q": "Ketika emosi memuncak, kebiasaan ibadah dapat membantu dengan cara…", "o": ["Memberi jeda untuk menenangkan diri sebelum bertindak", "Melampiaskan kemarahan", "Menyalahkan orang lain", "Menghindari semua orang"], "e": "Jeda menenangkan diri membuat keputusan lebih bijak."},
+ {"c": "Manfaat Karakter", "q": "Merasa selalu diawasi Tuhan Yang Maha Esa dapat menumbuhkan…", "o": ["Kejujuran meski tidak ada orang yang melihat", "Takut ketahuan guru", "Kepura-puraan", "Keinginan mencari pujian"], "e": "Kejujuran sejati lahir dari kesadaran, bukan dari pengawasan."},
+ {"c": "Manfaat Karakter", "q": "Remaja berkarakter adalah remaja yang…", "o": ["Ucapan dan perbuatannya selaras dengan nilai baik", "Paling populer", "Paling pandai berdebat", "Paling banyak pengikut"], "e": "Karakter tampak dari keselarasan nilai dan tindakan."},
+ {"c": "Disiplin & Tanggung Jawab", "q": "Disiplin beribadah berarti…", "o": ["Melakukannya teratur sesuai waktu yang ditetapkan", "Melakukannya hanya saat ingat", "Menunggu disuruh", "Menunda sampai waktu hampir habis"], "e": "Disiplin adalah keteraturan yang dijaga dengan kesadaran."},
+ {"c": "Disiplin & Tanggung Jawab", "q": "Tanggung jawab dalam beribadah dimulai dari…", "o": ["Kesadaran diri tanpa harus selalu disuruh", "Perintah orang lain", "Ancaman", "Pengawasan terus-menerus"], "e": "Tanggung jawab sejati tumbuh dari dalam diri."},
+ {"c": "Disiplin & Tanggung Jawab", "q": "Kebiasaan tepat waktu dalam beribadah melatih…", "o": ["Manajemen waktu dan disiplin yang berguna di sekolah", "Keterlambatan", "Kemalasan", "Ketergantungan pada orang lain"], "e": "Disiplin waktu terbawa ke belajar dan kegiatan lain."},
+ {"c": "Disiplin & Tanggung Jawab", "q": "Murid yang menaati jadwal ibadah dan jadwal belajarnya menunjukkan…", "o": ["Kemampuan mengatur prioritas", "Tidak punya waktu bermain", "Rasa takut", "Sikap ikut-ikutan"], "e": "Mengatur prioritas adalah tanda kematangan."},
+ {"c": "Disiplin & Tanggung Jawab", "q": "Bila suatu ketika lalai beribadah, sikap yang bertanggung jawab adalah…", "o": ["Mengakui, memperbaiki, dan berusaha lebih baik", "Menyalahkan keadaan", "Menyembunyikannya", "Menyerah"], "e": "Bertanggung jawab berarti berani memperbaiki."},
+ {"c": "Disiplin & Tanggung Jawab", "q": "Pengendalian diri tampak ketika…", "o": ["Tetap menyempatkan beribadah meski ingin bermain gawai", "Menuruti semua keinginan", "Menunda tanpa batas", "Marah saat diingatkan"], "e": "Pengendalian diri adalah memilih yang penting dulu."},
+ {"c": "Disiplin & Tanggung Jawab", "q": "Ibadah melatih disiplin karena dilakukan…", "o": ["Berulang dan teratur sehingga menjadi kebiasaan", "Setahun sekali", "Sesuka hati", "Hanya saat sempat"], "e": "Pengulangan yang teratur membentuk kebiasaan."},
+ {"c": "Disiplin & Tanggung Jawab", "q": "Kemandirian dalam beribadah berarti…", "o": ["Menjalankannya atas kesadaran sendiri", "Menunggu diingatkan terus", "Mengikuti teman", "Menunggu hari libur"], "e": "Mandiri adalah salah satu dimensi Profil Lulusan."},
+ {"c": "Disiplin & Tanggung Jawab", "q": "Contoh tanggung jawab di rumah terkait ibadah adalah…", "o": ["Menyiapkan diri dan mengatur waktu sendiri", "Menyuruh adik menggantikan", "Menunggu orang tua mengurus semuanya", "Menghindar"], "e": "Tanggung jawab dimulai dari hal yang bisa kita lakukan sendiri."},
+ {"c": "Hambatan", "q": "Hambatan paling umum remaja dalam beribadah adalah…", "o": ["Rasa malas, gawai, dan kesibukan", "Terlalu banyak waktu luang", "Terlalu mudah", "Tidak ada hambatan"], "e": "Mengenali hambatan adalah langkah awal mengatasinya."},
+ {"c": "Hambatan", "q": "Kebiasaan begadang dapat menyebabkan…", "o": ["Sulit bangun dan terlewatnya waktu ibadah pagi", "Lebih disiplin", "Lebih segar", "Tidak berpengaruh"], "e": "Tidur cukup menopang disiplin."},
+ {"c": "Hambatan", "q": "Temanmu mengajak bermain saat waktu ibadahmu tiba. Sikap tepat…", "o": ["Menyampaikan dengan sopan bahwa kamu beribadah dulu", "Ikut bermain", "Berbohong", "Marah"], "e": "Tegas dan santun adalah sikap asertif."},
+ {"c": "Hambatan", "q": "Ibadah terasa jenuh seperti rutinitas. Solusi yang tepat…", "o": ["Mengingat kembali makna dan tujuannya", "Berhenti sementara", "Menyalahkan orang lain", "Menganggapnya tidak penting"], "e": "Menghidupkan kembali makna mengusir rasa jenuh."},
+ {"c": "Hambatan", "q": "Jadwalmu padat dengan les dan tugas. Cara yang tepat…", "o": ["Menyusun jadwal yang menyediakan waktu ibadah", "Mengorbankan ibadah", "Mengeluh saja", "Mengabaikan tugas"], "e": "Waktu ibadah termasuk prioritas yang dijadwalkan."},
+ {"c": "Hambatan", "q": "Gawai menghambat ibadahmu. Langkah paling efektif…", "o": ["Membatasi waktu layar dan menyimpannya saat waktu ibadah", "Memakainya lebih lama", "Memainkannya sambil beribadah", "Menyalahkan gawainya"], "e": "Mengatur gawai adalah wujud pengendalian diri."},
+ {"c": "Hambatan", "q": "Bila sesekali terlewat, sebaiknya…", "o": ["Segera memperbaiki dan tidak menyerah", "Menganggap semuanya gagal", "Berhenti total", "Menunda lagi"], "e": "Satu kali terlewat bukan akhir. Bangkit dan lanjutkan."},
+ {"c": "Hambatan", "q": "Merasa ibadah orang lain lebih baik daripada ibadahmu. Sikap sehat…", "o": ["Fokus memperbaiki diri tanpa membandingkan", "Merasa minder", "Menjatuhkan orang itu", "Meniru berlebihan"], "e": "Setiap orang punya proses sendiri."},
+ {"c": "Hambatan", "q": "Beribadah hanya saat diawasi menunjukkan…", "o": ["Motivasi masih dari luar dan perlu ditumbuhkan dari dalam", "Keberanian", "Disiplin tinggi", "Kemandirian"], "e": "Tujuan kita: dari dorongan luar menjadi kesadaran diri."},
+ {"c": "Strategi Konsisten", "q": "Strategi paling awal membangun kebiasaan adalah…", "o": ["Mulai dari langkah kecil dan konsisten", "Langsung target besar", "Menunggu semangat datang", "Menunggu liburan"], "e": "Langkah kecil yang konsisten lebih bertahan lama."},
+ {"c": "Strategi Konsisten", "q": "Rencana pembiasaan yang baik memuat…", "o": ["Tujuan, langkah, hambatan, dan cara menjaga konsistensi", "Hanya tujuan", "Hanya hadiah", "Hanya keinginan"], "e": "Empat unsur ini sama dengan lembar rencana yang akan kamu susun."},
+ {"c": "Strategi Konsisten", "q": "Pengingat (alarm atau jadwal) berfungsi untuk…", "o": ["Membantu menepati waktu yang sudah direncanakan", "Mengganggu", "Menggantikan niat", "Sekadar hiasan"], "e": "Pengingat membantu niat menjadi tindakan."},
+ {"c": "Strategi Konsisten", "q": "Dukungan orang tua dan teman berperan…", "o": ["Saling mengingatkan dan menyemangati", "Mengawasi terus-menerus", "Menghukum", "Tidak berperan"], "e": "Dukungan lingkungan menguatkan konsistensi."},
+ {"c": "Strategi Konsisten", "q": "Mencatat kebiasaan di jurnal atau ceklis berguna untuk…", "o": ["Memantau kemajuan dan menjaga semangat", "Dipamerkan", "Dinilai orang lain", "Tidak ada manfaat"], "e": "Catatan membuat kemajuan terlihat."},
+ {"c": "Strategi Konsisten", "q": "Apresiasi kecil pada diri sendiri setelah konsisten satu pekan dapat…", "o": ["Menguatkan semangat melanjutkan kebiasaan", "Menggantikan niat beribadah", "Menjadi kewajiban", "Membuat lalai"], "e": "Menghargai usaha sendiri menjaga motivasi."},
+ {"c": "Strategi Konsisten", "q": "Konsisten berarti…", "o": ["Melakukan terus-menerus walau sedikit", "Sekali tetapi banyak sekali", "Hanya saat suasana hati bagus", "Hanya di hari libur"], "e": "Konsistensi mengalahkan semangat sesaat."},
+ {"c": "Strategi Konsisten", "q": "Langkah setelah menyusun rencana adalah…", "o": ["Melaksanakan dan mengevaluasinya tiap pekan", "Menyimpannya saja", "Melupakannya", "Menunggu disuruh"], "e": "Rencana berarti bila dijalankan dan dievaluasi."}
+];
+
+/* ---------------- DATA: REFLEKSI ---------------- */
+const D_REF=[
+ "Apa yang membuatmu semangat beribadah? Ceritakan satu pengalaman.",
+ "Apa yang membuatmu kurang semangat beribadah, dan bagaimana kamu menghadapinya?",
+ "Bagaimana perasaanmu setelah beribadah dengan sungguh-sungguh dibanding beribadah terburu-buru?",
+ "Ceritakan satu kebiasaan baik yang sudah kamu jaga. Apa rahasia konsistensimu?",
+ "Siapa orang di sekitarmu yang bisa saling mengingatkan denganmu dalam kebaikan?",
+ "Apa satu hal kecil yang bisa kamu mulai besok agar ibadahmu lebih sadar dan teratur?",
+ "Bagaimana ibadah membantumu bersikap lebih sabar saat sedang kesal?",
+ "Apa hambatan terbesar dalam membiasakan ibadah, dan bagaimana kamu mengatasinya?",
+ "Bagaimana caramu menyeimbangkan jadwal belajar, bermain, dan ibadah?",
+ "Apa yang kamu rasakan ketika bisa menepati rencana kebiasaanmu?",
+ "Bagaimana caramu menghargai teman yang beribadah dengan cara berbeda darimu?",
+ "Apa perbedaan antara beribadah karena disuruh dan karena kesadaran sendiri?",
+ "Karakter baik apa yang ingin kamu tumbuhkan lewat ibadah?",
+ "Apa yang akan kamu katakan pada diri sendiri saat merasa malas beribadah?",
+ "Apa dukungan yang kamu harapkan dari orang tua atau guru agar kebiasaanmu terjaga?",
+ "Pesan apa yang ingin kamu sampaikan kepada teman agar semangat beribadah bersama?",
+];
+
+/* ---------------- DATA: KARTU KEJUTAN ---------------- */
+const D_CHA=[
+ {"i": "⏰", "t": "Pengingat menyala", "d": "Alarm pengingatmu berbunyi tepat waktu. Kamu langsung bergegas.", "m": 3, "p": 5},
+ {"i": "🤝", "t": "Teman saling mengingatkan", "d": "Sahabatmu mengingatkan dengan ramah. Kamu bersyukur.", "m": 2, "p": 10},
+ {"i": "📓", "t": "Jurnal terisi", "d": "Kamu rutin mengisi jurnal kebiasaan sepekan penuh.", "p": 10},
+ {"i": "🌅", "t": "Bangun lebih awal", "d": "Kamu bangun lebih pagi dan punya waktu tenang.", "m": 4, "p": 5},
+ {"i": "🙏", "t": "Bersyukur", "d": "Kamu berhenti sejenak untuk bersyukur. Hatimu tenang.", "p": 10, "x": 1},
+ {"i": "👨‍👩‍👧", "t": "Dukungan keluarga", "d": "Keluargamu mendukung rencana kebiasaanmu.", "m": 3, "p": 5},
+ {"i": "🎯", "t": "Langkah kecil berhasil", "d": "Target kecilmu tercapai hari ini.", "m": 2, "p": 5, "x": 1},
+ {"i": "🌟", "t": "Menginspirasi teman", "d": "Temanmu terinspirasi dari konsistensimu.", "p": 10},
+ {"i": "🧘", "t": "Pengendalian diri", "d": "Kamu berhasil menahan diri dari godaan gawai.", "m": 3, "p": 5},
+ {"i": "📚", "t": "Jadwal seimbang", "d": "Belajar, bermain, dan ibadahmu seimbang pekan ini.", "m": 2, "p": 5, "x": 1},
+ {"i": "💬", "t": "Diskusi bermakna", "d": "Diskusi kelompok memberi sudut pandang baru.", "p": 10},
+ {"i": "🛡️", "t": "Rencana cadangan", "d": "Kamu punya rencana cadangan bila jadwal berubah.", "p": 10, "x": 1},
+ {"i": "📱", "t": "Gawai menggoda", "d": "Notifikasi gawai menyita waktumu.", "m": -3, "p": -5},
+ {"i": "😴", "t": "Kesiangan", "d": "Kamu begadang dan bangun kesiangan.", "m": -4},
+ {"i": "🏃", "t": "Terburu-buru", "d": "Kamu melakukannya terburu-buru tanpa penghayatan.", "m": -2, "p": -5},
+ {"i": "🙈", "t": "Membandingkan diri", "d": "Kamu membandingkan diri dengan orang lain dan jadi minder.", "m": -1, "p": -5},
+ {"i": "🎮", "t": "Asyik bermain", "d": "Kamu terlalu asyik bermain hingga terlewat jadwal.", "m": -3},
+ {"i": "😮‍💨", "t": "Merasa jenuh", "d": "Rasa jenuh datang. Ingat kembali maknanya.", "m": -2},
+ {"i": "📅", "t": "Jadwal bentrok", "d": "Jadwal bentrok dan kamu belum menyiapkan cadangan.", "m": -3, "p": -5},
+ {"i": "🌧️", "t": "Semangat menurun", "d": "Semangatmu turun karena hasil belum terlihat.", "m": -2},
+ {"i": "💡", "t": "Ingat tujuan", "d": "Kamu ingat tujuanmu dan semangat kembali.", "m": 3, "x": 1},
+ {"i": "🌱", "t": "Kebiasaan tumbuh", "d": "Kebiasaan barumu mulai terasa mudah.", "m": 2, "p": 10},
+ {"i": "🧩", "t": "Belajar dari teman", "d": "Teman membagikan trik menjaga konsistensi.", "m": 2, "p": 5},
+ {"i": "🔔", "t": "Evaluasi pekanan", "d": "Kamu mengevaluasi rencana dan memperbaikinya.", "p": 10, "x": 1},
+];
+
+/* ---------------- DATA: TANTANGAN UNTUK TIM TERAKHIR ---------------- */
+const D_CHAL=["Setiap anggota menyebut satu alasan beribadah dengan sadar, lalu kelompok memilih alasan yang paling kuat.", "Susun 3 langkah kecil membiasakan ibadah dalam 1 menit.", "Ciptakan yel-yel 20 detik bertema \"Kebiasaan Baik, Karakter Baik\".", "Peragakan percakapan singkat: menolak ajakan bermain dengan sopan saat waktu ibadah tiba.", "Sebutkan 3 hambatan beribadah dan 1 solusi untuk masing-masing.", "Berikan 2 apresiasi yang tulus kepada tim juara.", "Tuliskan satu pesan penyemangat untuk teman yang sedang kurang semangat.", "Jelaskan dengan kalimat sendiri perbedaan ibadah karena disuruh dan karena kesadaran.", "Sebutkan 3 cara menenangkan diri saat marah atau cemas.", "Peragakan bagaimana mengingatkan teman dengan ramah.", "Sebutkan 3 contoh disiplin dan tanggung jawab yang berkaitan dengan ibadah.", "Sebutkan satu hal yang akan kamu terapkan mulai hari ini."];
+
+/* ---------------- TIM ---------------- */
+const TEAM_NAMES6=["Tim Pelopor","Tim Inspirasi","Tim Visioner","Tim Inovator","Tim Kreator","Tim Mandiri"];
+const defName=i=>TEAM_NAMES6[i]||("Tim "+(i+1));
+const TEAM_ICONS=["🚀","🌟","🦅","🎯","💡","🧭","🔥","🌈","🦁","🐬","⚡","🛡️","🎨","🧩","🏹","🌊","🦊","🐼","🍀","🎸","🪐","🧠","🏆","🎲"];
+const TEAM_COLORS=["#ef4444","#f59e0b","#16a34a","#2563eb","#9333ea","#db2777","#0891b2","#84cc16","#f97316","#14b8a6","#6366f1","#e11d48","#a16207","#0d9488","#7c3aed","#ea580c","#65a30d","#0ea5e9","#c026d3","#dc2626","#059669","#4f46e5","#ca8a04","#be185d"];
+/* Posisi pion dalam satu kotak: disusun rapi dalam kisi sesuai jumlah kelompok */
+function tokenOffsets(n){
+  const cols=Math.ceil(Math.sqrt(n)),rows=Math.ceil(n/cols),step=Math.min(2.7,7.4/cols),out=[];
+  for(let k=0;k<n;k++){
+    const r=Math.floor(k/cols),c=k%cols,inRow=(r===rows-1)?(n-r*cols):cols;
+    out.push([(c-(inRow-1)/2)*step,(r-(rows-1)/2)*step]);
+  }
+  return out;
+}
+const tokenSize=n=>n<=4?.054:n<=9?.042:n<=16?.033:.027;
+
+/* ---------------- PENGATURAN (bisa diubah guru) ---------------- */
+const ABOUT_ID="rpl-ibadah";
+const DEFAULT_ABOUT={
+  deskripsi:"Permainan ular tangga digital untuk Bimbingan Klasikal topik “Menjadi Remaja Berkarakter Melalui Ibadah”. Game dijalankan guru BK dalam sebuah sesi berfase sesuai RPL: pertanyaan pemantik (asesmen awal), studi kasus, refleksi, konsep, permainan ular tangga, rencana pembiasaan, refleksi akhir (asesmen akhir lewat observasi guru), dan penutup. Kelompok bergiliran, dan guru memegang kendali layar.",
+  perancang:"Agung Fahri Husaeni, S.Pd.",
+  jabatan:"Guru BK SMP Negeri 36 Semarang",
+  sasaran:"Kelas 9",
+  durasi:"4 JP (4 × 40 menit)",
+  media:"Laptop dengan proyektor/IFP, dikendalikan guru, dimainkan berkelompok",
+  bidang:"Kematangan Intelektual",
+  capaian:["Peserta didik mampu menentukan alternatif pengambilan keputusan dan pengentasan masalah berdasarkan konsep ilmu pengetahuan dan perilaku belajar, seperti menentukan sesuatu secara mandiri, memecahkan masalah, dan mengambil keputusan."],
+  tujuan:["Pengenalan (C): Murid mampu menjelaskan makna ibadah sebagai kebutuhan spiritual dan bagian dari pembentukan karakter.", "Akomodasi (A): Murid mampu menunjukkan sikap positif terhadap pelaksanaan ibadah secara sadar, disiplin, dan bertanggung jawab.", "Tindakan (P): Murid mampu menyusun dan melaksanakan rencana sederhana untuk membiasakan ibadah secara konsisten dalam kehidupan sehari-hari."],
+  catatan:"Gunakan bahasa yang netral. Setiap murid beribadah sesuai agama dan keyakinannya. Tidak ada murid yang dipaksa menceritakan ibadah pribadinya.",
+  bagian:[]
+};
+function buildDefault(){
+  return {
+    v:2,rev:CONF_REV,
+    ladders:Object.keys(D_LAD).map(k=>({a:+k,to:D_LAD[k].to,t:D_LAD[k].t,m:D_LAD[k].m})),
+    snakes:Object.keys(D_SNK).map(k=>({a:+k,to:D_SNK[k].to,t:D_SNK[k].t,m:D_SNK[k].m})),
+    tiles:{quiz:[...D_QT],ref:[...D_RT],cha:[...D_CT]},
+    quiz:D_QUIZ.map(q=>({c:q.c,q:q.q,o:q.o.slice(),e:q.e})),
+    reflect:D_REF.slice(),
+    chance:D_CHA.map(c=>({i:c.i,t:c.t,d:c.d,m:c.m||0,p:c.p||0,x:c.x?1:0})),
+    rules:{pq:10,pr:5,pw:10,timer:0,tantangan:D_CHAL.join("\n"),pesan:"Beribadah dengan sadar membentuk karakter yang disiplin, bertanggung jawab, dan tenang. Mulailah dari langkah kecil, jalankan rencanamu, dan jangan ragu meminta dukungan orang tua, teman, serta guru."},
+    setup:{count:4,names:TEAM_NAMES6.slice(0,4),sound:true,dice:2,limit:45}
+  };
+}
+/* Merapikan dan memvalidasi pengaturan (dari penyimpanan, impor berkas, atau editor) */
+function sanitize(c){
+  const d=buildDefault();
+  if(!c||typeof c!=="object")return d;
+  const out={v:2,rev:CONF_REV},taken=new Set();
+  const links=(arr,up)=>{
+    const r=[];
+    (Array.isArray(arr)?arr:[]).forEach(x=>{
+      if(!x)return;
+      const a=int(x.a,2,99,0),to=int(x.to,1,100,0);
+      if(!a||!to||taken.has(a))return;
+      if(up?to<=a:to>=a)return;
+      taken.add(a);
+      r.push({a,to,t:str(x.t,120)||(up?"Tangga karier":"Ular hambatan"),m:str(x.m,300)});
+    });
+    return r.sort((p,q)=>p.a-q.a);
+  };
+  out.ladders=links(Array.isArray(c.ladders)?c.ladders:d.ladders,true);
+  out.snakes=links(Array.isArray(c.snakes)?c.snakes:d.snakes,false);
+  const tl=arr=>{
+    const r=[];
+    (Array.isArray(arr)?arr:[]).forEach(n=>{n=int(n,1,99,0);if(n&&!taken.has(n)){taken.add(n);r.push(n)}});
+    return r.sort((a,b)=>a-b);
+  };
+  const T=c.tiles&&typeof c.tiles==="object"?c.tiles:d.tiles;
+  out.tiles={quiz:tl(T.quiz),ref:tl(T.ref),cha:tl(T.cha)};
+  out.quiz=(Array.isArray(c.quiz)?c.quiz:d.quiz).map(q=>{
+    if(!q)return null;
+    const o=(Array.isArray(q.o)?q.o:[]).map(x=>str(x,200));
+    if(!o[0])return null;
+    const opts=[o[0],...o.slice(1).filter(Boolean)].slice(0,4),qq=str(q.q,400);
+    if(opts.length<2||!qq)return null;
+    return {c:str(q.c,40)||"Umum",q:qq,o:opts,e:str(q.e,400)};
+  }).filter(Boolean);
+  out.reflect=(Array.isArray(c.reflect)?c.reflect:d.reflect).map(x=>str(x,400)).filter(Boolean);
+  out.chance=(Array.isArray(c.chance)?c.chance:d.chance).map(x=>{
+    if(!x)return null;const t=str(x.t,120);if(!t)return null;
+    return {i:str(x.i,8)||"🎁",t,d:str(x.d,200),m:int(x.m,-30,30,0),p:int(x.p,-100,100,0),x:x.x?1:0};
+  }).filter(Boolean);
+  const R=c.rules&&typeof c.rules==="object"?c.rules:{};
+  out.rules={pq:int(R.pq,0,100,10),pr:int(R.pr,0,100,5),pw:int(R.pw,0,100,10),timer:int(R.timer,0,600,0),tantangan:String(R.tantangan==null?d.rules.tantangan:R.tantangan).split("\n").map(x=>x.trim().slice(0,220)).filter(Boolean).slice(0,30).join("\n"),pesan:str(R.pesan,500)||d.rules.pesan};
+  const S=c.setup&&typeof c.setup==="object"?c.setup:{};
+  out.setup={dice:int(S.dice,1,2,2),limit:[0,30,45,60].includes(+S.limit)?+S.limit:45,count:int(S.count,MIN_TEAMS,MAX_TEAMS,4),names:(Array.isArray(S.names)?S.names:[]).slice(0,MAX_TEAMS).map(x=>str(x,22)),sound:S.sound!==false};
+  return out;
+}
+const BG_TIPE=["teks","poin","nomor"];
+const BG_LS="cq_bagian_"+ABOUT_ID;
+function cleanBg(v){return (Array.isArray(v)?v:[]).slice(0,10).map(x=>x&&typeof x==="object"?{j:str(x.j,60),tipe:BG_TIPE.includes(x.tipe)?x.tipe:"teks",isi:String(x.isi==null?"":x.isi).replace(/\r/g,"").trim().slice(0,1500)}:null).filter(x=>x&&(x.j||x.isi))}
+function localBg(){try{return cleanBg(JSON.parse(localStorage.getItem(BG_LS)||"[]"))}catch(e){return[]}}
+function saveLocalBg(a){try{localStorage.setItem(BG_LS,JSON.stringify(a))}catch(e){}}
+function withBg(i){if(!i.bagian||!i.bagian.length){const l=localBg();if(l.length)i.bagian=l}return i}
+function bgHtml(b){
+  const L=b.isi.split("\n").map(x=>x.trim()).filter(Boolean);
+  if(!L.length)return `<p class="ab-empty">Belum diisi.</p>`;
+  if(b.tipe==="poin")return `<ul>${L.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+  if(b.tipe==="nomor")return `<ol>${L.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>`;
+  return L.map(x=>`<p>${esc(x)}</p>`).join("");
+}
+function cleanAbout(A){
+  A=A&&typeof A==="object"?A:{};const DA=DEFAULT_ABOUT;
+  const lst=(v,fb)=>(Array.isArray(v)?v:fb).map(x=>str(x,300)).filter(Boolean).slice(0,15);
+  return {
+    deskripsi:str(A.deskripsi,700),perancang:str(A.perancang,80),jabatan:str(A.jabatan,120),
+    sasaran:str(A.sasaran,160),durasi:str(A.durasi,80),media:str(A.media,160),bidang:str(A.bidang,80),
+    capaian:lst(A.capaian,DA.capaian),tujuan:lst(A.tujuan,DA.tujuan),catatan:str(A.catatan,700),bagian:cleanBg(A.bagian)
+  };
+}
+const isFresh=c=>!!c&&typeof c==="object"&&int(c.rev,0,999,0)>=CONF_REV;
+function loadConf(){
+  try{
+    const s=JSON.parse(localStorage.getItem(CONF_KEY)||"null");
+    if(s&&isFresh(s))return sanitize(s);
+    if(s){ /* pengaturan lama (isi bawaan sudah diperbarui): pakai bawaan baru, simpan nama kelompok */
+      const d=buildDefault();d.setup=sanitize(s).setup;
+      try{localStorage.setItem(CONF_KEY,JSON.stringify(d));localStorage.removeItem(UNSYNC_LS)}catch(e){}
+      return d;
+    }
+  }catch(e){}
+  return buildDefault();
+}
+let storageOk=true;
+function saveConf(){
+  try{localStorage.setItem(CONF_KEY,JSON.stringify(CONF));storageOk=true}catch(e){storageOk=false}
+}
+let CONF=loadConf();
+let LAD={},SNK={},QT=new Set(),RT=new Set(),CT=new Set();
+function rebuildMaps(){
+  LAD={};SNK={};
+  CONF.ladders.forEach(x=>LAD[x.a]=x);
+  CONF.snakes.forEach(x=>SNK[x.a]=x);
+  QT=new Set(CONF.tiles.quiz);RT=new Set(CONF.tiles.ref);CT=new Set(CONF.tiles.cha);
+}
+rebuildMaps();
+
+/* ---------------- KREDIT & TENTANG GAME ---------------- */
+const GK=window.GameKit||{info:{cached:(i,d)=>d,load:async(i,d)=>({info:d}),save:async()=>{throw new Error("gamekit.js belum termuat")}},auth:{token:()=>null,ensure:async()=>null,drop(){}}};
+let INFO=withBg(cleanAbout(GK.info.cached(ABOUT_ID,DEFAULT_ABOUT)));
+function refreshInfo(){
+  return GK.info.load(ABOUT_ID,DEFAULT_ABOUT).then(r=>{INFO=withBg(cleanAbout(r.info));applyCredit();return r}).catch(()=>null);
+}
+function creditLine(){
+  const A=INFO;if(!A.perancang)return "";
+  return `Dirancang oleh <b>${esc(A.perancang)}</b>${A.jabatan?` · ${esc(A.jabatan)}`:""}`;
+}
+function applyCredit(){
+  const A=INFO,by=$(".setup-top .by");
+  if(by)by.innerHTML=A.perancang?`Dirancang oleh <b>${esc(A.perancang)}</b>${A.jabatan?`<span>${esc(A.jabatan)}</span>`:""}`:"";
+  const sc=$("#sideCredit");if(sc)sc.innerHTML=creditLine();
+}
+function aboutHtml(){
+  const A=INFO;
+  const chips=[["Bidang layanan",A.bidang],["Sasaran",A.sasaran],["Durasi",A.durasi],["Media",A.media]].filter(x=>x[1]).map(x=>`<span><small>${x[0]}</small>${esc(x[1])}</span>`).join("");
+  const list=(arr,tag)=>arr.length?`<${tag}>${arr.map(x=>`<li>${esc(x)}</li>`).join("")}</${tag}>`:`<p class="ab-empty">Belum diisi.</p>`;
+  return `<div class="mtag">ℹ Tentang game</div>
+    <h2>Tangga Karakter — Menjadi Remaja Berkarakter Melalui Ibadah</h2>
+    ${chips?`<div class="ab-chips">${chips}</div>`:""}
+    ${A.deskripsi?`<div class="ab-sec"><h3>Deskripsi</h3><p>${esc(A.deskripsi)}</p></div>`:""}
+    <div class="ab-sec"><h3>Capaian layanan BK</h3>${list(A.capaian,"ul")}</div>
+    <div class="ab-sec"><h3>Tujuan khusus</h3>${list(A.tujuan,"ol")}</div>
+    ${rplHtml()}
+    ${A.bagian.map(b=>`<div class="ab-sec">${b.j?`<h3>${esc(b.j)}</h3>`:""}${bgHtml(b)}</div>`).join("")}
+    ${A.catatan?`<div class="ab-sec"><h3>Catatan</h3><p>${esc(A.catatan)}</p></div>`:""}
+    ${A.perancang?`<div class="ab-by">Dirancang oleh<b>${esc(A.perancang)}</b>${esc(A.jabatan)}</div>`:""}
+    <div class="mact"><button class="btn ghost" data-v="edit">✎ Edit info</button><button class="btn ghost" data-v="print">🖨 Cetak</button><button class="btn primary" data-v="ok">Tutup</button></div>`;
+}
+async function showAbout(){
+  if($("#modal").classList.contains("show")||$("#editor").classList.contains("show"))return;
+  refreshInfo();
+  const v=await modal("about",aboutHtml());
+  if(v==="edit")openEditor("tentang");
+  else if(v==="print"){
+    openModal("about",aboutHtml().replace(/<div class="mact">[\s\S]*$/,'<div class="mact"><button class="btn primary" data-v="ok">Tutup</button></div>'));
+    $("#mbody").querySelectorAll("[data-v]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.v)));
+    setTimeout(()=>{try{window.print()}catch(e){}},150);
+  }
+}
+
+/* ---------------- STATE ---------------- */
+let CFG={count:CONF.setup.count,names:CONF.setup.names.slice(),timer:CONF.rules.timer,sound:CONF.setup.sound,dice:CONF.setup.dice,limit:CONF.setup.limit};
+let G=null;
+let resolveModal=null;
+
+/* ---------------- AUDIO ---------------- */
+let ac=null;
+function tone(f,d=.12,type="sine",v=.12,when=0){
+  if(!CFG.sound)return;
+  try{
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.type=type;o.frequency.value=f;
+    const t=ac.currentTime+when;
+    g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);
+    o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+d+.02);
+  }catch(e){}
+}
+const sfx={
+  roll:()=>{for(let i=0;i<6;i++)tone(300+Math.random()*300,.06,"square",.05,i*.1)},
+  step:()=>tone(520,.07,"triangle",.1),
+  up:()=>[523,659,784,1046].forEach((f,i)=>tone(f,.15,"triangle",.12,i*.1)),
+  down:()=>[600,480,360,240].forEach((f,i)=>tone(f,.16,"sawtooth",.08,i*.1)),
+  ok:()=>[659,880].forEach((f,i)=>tone(f,.18,"triangle",.14,i*.12)),
+  bad:()=>[220,180].forEach((f,i)=>tone(f,.25,"square",.08,i*.15)),
+  card:()=>[784,988].forEach((f,i)=>tone(f,.12,"sine",.12,i*.08)),
+  win:()=>[523,659,784,1046,784,1046,1318].forEach((f,i)=>tone(f,.2,"triangle",.14,i*.14))
+};
+let toastT=null;
+function toast(msg,bad){
+  const t=$("#toast");t.textContent=msg;t.className="show"+(bad?" bad":"");
+  clearTimeout(toastT);toastT=setTimeout(()=>{t.className=bad?"bad":""},2800);
+}
+
+/* ---------------- BOARD ---------------- */
+function center(n){
+  if(n<=0)return {x:-5.5,y:95};
+  const i=n-1,r=Math.floor(i/10),c=(r%2===0)?i%10:9-(i%10);
+  return {x:c*10+5,y:(9-r)*10+5};
+}
+function cellKind(n){
+  if(n===100)return "end";
+  if(LAD[n])return "l";
+  if(SNK[n])return "s";
+  if(QT.has(n))return "q";
+  if(RT.has(n))return "r";
+  if(CT.has(n))return "c";
+  return "";
+}
+function buildBoard(){
+  const b=$("#board");
+  b.querySelectorAll(".cell").forEach(e=>e.remove());
+  const frag=document.createDocumentFragment();
+  for(let r=9;r>=0;r--){
+    for(let c=0;c<10;c++){
+      const n=(r%2===0)?r*10+c+1:r*10+(9-c)+1;
+      const d=document.createElement("div");
+      const k=cellKind(n);
+      let cls="cell "+(((r+c)%2)?"a":"b"),icon="",lb="";
+      if(k==="end"){cls="cell end";icon="🏁"}
+      else if(k==="q"){cls="cell q";icon="❓"}
+      else if(k==="r"){cls="cell r";icon="💭"}
+      else if(k==="c"){cls="cell c";icon="🎁"}
+      d.className=cls+(r%2===0&&r>0&&r%2===0&&[2,4,6,8].includes(r)?" zt":"");d.dataset.n=n;d.style.setProperty("--zc",ZCOL[zoneOf(n)]);
+      d.innerHTML=`<span class="n">${n}</span>${icon}${lb?`<span class="lb">${lb}</span>`:""}`;
+      frag.appendChild(d);
+    }
+  }
+  b.insertBefore(frag,$("#links"));
+  drawLinks();
+}
+function drawLinks(){
+  /* Tanpa gambar tangga/ular: setiap kotak awal diberi ikon, panah, dan nomor tujuan. */
+  $("#links").innerHTML="";
+  document.querySelectorAll("#board .cell .lk").forEach(e=>e.remove());
+  document.querySelectorAll("#board .cell.lad,#board .cell.snk").forEach(e=>e.classList.remove("lad","snk"));
+  const put=(n,to,up)=>{
+    const c=$(`#board .cell[data-n="${n}"]`);if(!c)return;
+    c.classList.add(up?"lad":"snk");
+    [...c.childNodes].forEach(x=>{if(x.nodeType===3)x.remove()}); /* ikon kuis/kejutan tidak berlaku di kotak tangga/ular */
+    const b=document.createElement("span");b.className="lk "+(up?"up":"dn");
+    b.innerHTML=`<i>${up?"🪜":"🐍"}</i><b>${up?"▲":"▼"} ${to}</b>`;
+    b.title=(up?"Tangga: naik ke kotak ":"Ular: turun ke kotak ")+to;
+    c.appendChild(b);
+  };
+  CONF.snakes.forEach(S=>put(S.a,S.to,false));
+  CONF.ladders.forEach(L=>put(L.a,L.to,true));
+}
+function buildTokens(){
+  const L=$("#tokens");L.innerHTML="";
+  const n=G.teams.length;
+  L.style.setProperty("--tw",tokenSize(n));
+  G.offs=tokenOffsets(n);
+  G.teams.forEach((t,i)=>{
+    const e=document.createElement("div");
+    e.className="tok";e.id="tok"+i;e.style.background=t.color;e.style.setProperty("--glow",t.color);e.textContent=t.icon;
+    L.appendChild(e);placeToken(i,t.pos,false);
+  });
+}
+function placeToken(i,n,slow){
+  const e=$("#tok"+i);if(!e)return;
+  const c=center(n),o=G.offs[i];
+  e.classList.toggle("slow",!!slow);
+  e.style.left=(c.x+o[0])+"%";e.style.top=(c.y+o[1])+"%";
+}
+
+/* ---------------- RENDER ---------------- */
+function renderDie(n,id){
+  const f={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]}[n]||[];
+  $(id||"#die").innerHTML=Array.from({length:9},(_,i)=>`<div class="pip${f.includes(i)?" on":""}"></div>`).join("");
+}
+const fmtClock=s=>{s=Math.max(0,Math.round(s));return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
+function updateClock(){
+  const e=$("#clock");if(!e||!G)return;
+  if(!G.limit){e.innerHTML=`⏱ ${fmtClock(G.elapsed)}`;e.classList.remove("hot");return}
+  const left=G.limit*60-G.elapsed;
+  e.innerHTML=left>0?`⏳ ${fmtClock(left)}`:`⏰ habis<small>selesaikan putaran</small>`;
+  e.classList.toggle("hot",left<=300);
+}
+let clockT=null;
+function startClock(){
+  clearInterval(clockT);let last=Date.now();
+  clockT=setInterval(()=>{
+    const now=Date.now(),dt=Math.min(3,(now-last)/1000);last=now;
+    if(!G||G.over||$("#game").classList.contains("hidden")||document.hidden)return;
+    G.elapsed+=dt;updateClock();
+    if(G.limit&&!G.timeUp&&G.elapsed>=G.limit*60){G.timeUp=true;toast("⏰ Waktu habis! Permainan berakhir setelah putaran ini selesai.")}
+    else if(G.limit&&!G.warn5&&G.limit*60-G.elapsed<=300&&G.limit>=15){G.warn5=true;toast("⏳ Sisa waktu 5 menit")}
+  },1000);
+}
+function renderTurn(){
+  const t=G.teams[G.turn],el=$("#turn"),z=zoneOf(t.pos);
+  el.style.background=`linear-gradient(135deg,${t.color},${t.color}99)`;
+  el.innerHTML=`<div class="big">${t.icon}</div><div class="tn"><small>GILIRAN</small><b>${esc(t.name)}</b><span class="zn">🗺️ Zona ${z+1} · ${ZONES[z].n}</span></div><div class="clk" id="clock"></div>`;
+  updateClock();
+  document.querySelectorAll(".tok").forEach((e,i)=>e.classList.toggle("act",i===G.turn&&!G.over));
+}
+function rankFast(){return G.teams.map((t,k)=>k).sort((a,b)=>G.teams[b].pos-G.teams[a].pos||G.teams[b].score-G.teams[a].score||a-b)}
+function rankCareer(){return G.teams.map((t,k)=>k).sort((a,b)=>G.teams[b].score-G.teams[a].score||(G.teams[b].ok||0)-(G.teams[a].ok||0)||G.teams[b].pos-G.teams[a].pos||a-b)}
+const sgn=n=>n>0?"+"+n:String(n);
+function renderTeams(popIdx){
+  const fb=$("#lbFast"),kb=$("#lbQuiz"),fs=fb.scrollTop,ks=kb.scrollTop;
+  const moved=G.teams.some(t=>t.pos>0),maxS=Math.max(1,...G.teams.map(t=>t.score||0));
+  fb.innerHTML=rankFast().map((i,r)=>{const t=G.teams[i];return `
+    <div class="tm f${i===G.turn&&!G.over?" cur":""}">
+      <div class="rk${r===0&&moved?" r1":""}">${r+1}</div>
+      <div class="tk" style="background:${t.color}">${t.icon}</div>
+      <div class="nm"><b>${esc(t.name)}</b><span>${t.finished?"🏆 Sampai tujuan":"sisa "+(100-t.pos)+" kotak"}</span></div>
+      <div class="sc">${t.pos?`${t.pos}<small>KOTAK</small>`:"🚩"}</div>
+      <div class="bar"><i style="width:${t.pos}%"></i></div>
+    </div>`}).join("");
+  kb.innerHTML=rankCareer().map((i,r)=>{const t=G.teams[i],b=t.bonus||0;return `
+    <div class="tm k${i===G.turn&&!G.over?" cur":""}">
+      <div class="rk${r===0&&(t.score||0)>0?" r1":""}">${r+1}</div>
+      <div class="tk" style="background:${t.color}">${t.icon}</div>
+      <div class="nm"><b>${esc(t.name)}</b><span class="stat"><i title="Jawaban kuis benar">✔ <b>${t.ok||0}</b></i>${t.bad?`<i title="Jawaban kuis salah">✘ ${t.bad}</i>`:""}<i title="Refleksi terjawab">💭 <b>${t.rf||0}</b></i><i title="Bonus poin (kartu kejutan dan penyesuaian guru)">🎁 <b>${sgn(b)}</b></i></span></div>
+      <div class="sc${i===popIdx?" pop":""}">${t.score||0}<small>POIN</small></div>
+      <div class="adj"><button data-a="${i}" data-d="5" title="Tambah 5 poin (bonus)">+5</button><button data-a="${i}" data-d="-5" title="Kurangi 5 poin (bonus)">−5</button></div>
+      <div class="bar"><i style="width:${Math.max(0,Math.round((t.score||0)/maxS*100))}%"></i></div>
+    </div>`}).join("");
+  fb.scrollTop=fs;kb.scrollTop=ks;
+}
+function renderLog(){
+  $("#log").innerHTML=G.log.slice(0,5).map(s=>`<div>${s}</div>`).join("");
+}
+function log(s){G.log.unshift(s);renderLog()}
+function renderAll(){
+  renderTurn();renderTeams();renderLog();setRoll();
+  if(G.teams.length>6)document.querySelectorAll(".tm.cur").forEach(c=>c.scrollIntoView({block:"nearest"}));
+}
+function setRoll(){
+  const b=$("#rollBtn");b.disabled=G.busy||G.over;
+}
+function addScore(i,n,kind){
+  const t=G.teams[i];
+  t.score=(t.score||0)+n;
+  if(kind==="bonus")t.bonus=(t.bonus||0)+n;
+  renderTeams(i);
+}
+
+/* ---------------- MODAL ---------------- */
+function openModal(cls,html){
+  $("#mcard").className=cls||"";
+  $("#mbody").innerHTML=html;
+  $("#modal").classList.add("show");
+  $("#mcard").scrollTop=0;
+}
+function closeModal(v){
+  $("#modal").classList.remove("show");
+  const r=resolveModal;resolveModal=null;
+  if(r)r(v);
+}
+function modal(cls,html){
+  return new Promise(res=>{
+    resolveModal=res;
+    openModal(cls,html);
+    $("#mbody").querySelectorAll("[data-v]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.v)));
+  });
+}
+
+/* ---------------- GAMEPLAY ---------------- */
+async function rollDice(){
+  const two=(G.dice||1)===2,ds=two?["#die","#die2"]:["#die"];
+  ds.forEach(s=>$(s).classList.add("roll"));sfx.roll();
+  for(let i=0;i<9;i++){ds.forEach(s=>renderDie(1+Math.floor(Math.random()*6),s));await sleep(90)}
+  ds.forEach(s=>$(s).classList.remove("roll"));
+  const v=ds.map(()=>1+Math.floor(Math.random()*6));
+  G.last=v;
+  ds.forEach((s,k)=>renderDie(v[k],s));
+  return v.reduce((a,b)=>a+b,0);
+}
+async function walkTo(i,target){
+  const t=G.teams[i];
+  while(t.pos!==target){
+    t.pos+=t.pos<target?1:-1;
+    placeToken(i,t.pos,false);sfx.step();renderTeams();
+    await sleep(260);
+  }
+}
+async function slideTo(i,n){
+  const t=G.teams[i];t.pos=n;
+  placeToken(i,n,true);renderTeams();
+  await sleep(1050);
+}
+async function roll(){
+  if(!G||G.busy||G.over||$("#modal").classList.contains("show"))return;
+  G.busy=true;setRoll();
+  const i=G.turn,t=G.teams[i];
+  const d=await rollDice();
+  log(`${t.icon} <b>${esc(t.name)}</b> melempar dadu: <b>${d}</b>`);
+  await sleep(250);
+  if(G.dice===2&&G.last&&G.last[0]===G.last[1]){ /* dadu kembar: main lagi (maks. 3 kali beruntun) */
+    G.dbl=(G.dbl||0)+1;
+    if(G.dbl>=3){G.dbl=0;log(`🎲 Dadu kembar tiga kali beruntun, tidak ada giliran tambahan`)}
+    else{G.extra=true;sfx.up&&sfx.up();log(`🎲🎲 <b>Dadu kembar (${G.last[0]}+${G.last[1]})!</b> ${esc(t.name)} main lagi`);toast(`🎲🎲 Dadu kembar! ${t.name} main lagi`,true)}
+  }else G.dbl=0;
+  const raw=t.pos+d;
+  if(raw>100){ /* kelebihan: maju sampai 100 lalu mundur sebanyak kelebihannya */
+    const back=200-raw;
+    await walkTo(i,100);
+    log(`↩️ ${esc(t.name)} kelebihan ${raw-100} langkah dan kembali ke kotak ${back}`);
+    toast(`Kelebihan ${raw-100} langkah! Kembali ke kotak ${back}`);
+    await sleep(500);
+    await walkTo(i,back);
+  }else await walkTo(i,raw);
+  await resolve(i,0);
+  if(!G.over){
+    if(G.extra){G.extra=false;log(`🔁 ${esc(t.name)} mendapat giliran tambahan`)}
+    else{
+      G.dbl=0;
+      G.turn=(G.turn+1)%G.teams.length;
+      if(G.turn===0&&G.timeUp){G.busy=false;await finishGame(0,true);return}
+    }
+    save();
+    G.busy=false;renderAll();
+  }
+}
+async function bump(i){
+  const t=G.teams[i],n=t.pos;
+  if(n<=0||n>=100)return;
+  const hit=G.teams.map((x,j)=>j).filter(j=>j!==i&&G.teams[j].pos===n&&!G.teams[j].finished);
+  if(!hit.length)return;
+  sfx.down();
+  const names=hit.map(j=>G.teams[j].icon+" "+esc(G.teams[j].name)).join(", ");
+  log(`💥 ${esc(t.name)} mendarat di kotak ${n}. ${names} kembali ke Start`);
+  toast(`💥 ${hit.map(j=>G.teams[j].name).join(", ")} tersundul, kembali ke Start!`,true);
+  hit.forEach(j=>{G.teams[j].pos=0;placeToken(j,0,true)});
+  renderTeams();
+  await sleep(1200);
+}
+async function resolve(i,depth){
+  depth=depth||0;
+  const t=G.teams[i],n=t.pos;
+  if(n>=100){await win(i);return}
+  await bump(i);
+  if(depth>4)return;
+  const L=LAD[n],S=SNK[n];
+  if(L){
+    sfx.up();
+    await modal("ladder",`
+      <div class="mtag">🪜 Tangga karier</div>
+      <div class="bigico">🪜</div>
+      <h2>${esc(L.t)}</h2>
+      ${L.m?`<p>${esc(L.m)}</p>`:""}
+      <p><b>${esc(t.name)}</b> naik dari kotak ${n} ke kotak <b>${L.to}</b>!</p>
+      <div class="mact"><button class="btn primary" data-v="ok">Naik! 🚀</button></div>`);
+    log(`🪜 ${esc(t.name)} naik ke kotak ${L.to}: ${esc(L.t)}`);
+    await slideTo(i,L.to);
+    await resolve(i,depth+1);
+    return;
+  }
+  if(S){
+    sfx.down();
+    await modal("snake",`
+      <div class="mtag">🐍 Ular hambatan</div>
+      <div class="bigico">🐍</div>
+      <h2>${esc(S.t)}</h2>
+      ${S.m?`<p><b>Pesan BK:</b> ${esc(S.m)}</p>`:""}
+      <p><b>${esc(t.name)}</b> turun dari kotak ${n} ke kotak <b>${S.to}</b>.</p>
+      <div class="mact"><button class="btn primary" data-v="ok">Lanjut 💪</button></div>`);
+    log(`🐍 ${esc(t.name)} turun ke kotak ${S.to}: ${esc(S.t)}`);
+    await slideTo(i,S.to);
+    await resolve(i,depth+1);
+    return;
+  }
+  const R=CONF.rules;
+  if(QT.has(n)){
+    const ok=await askQuiz(t,zoneOf(n));
+    if(ok===null)log(`❓ Bank soal kosong, kotak kuis dilewati`);
+    else if(ok){t.ok=(t.ok||0)+1;addScore(i,R.pq);log(`✅ ${esc(t.name)} menjawab benar (+${R.pq})`)}
+    else{t.bad=(t.bad||0)+1;if(R.pw)addScore(i,-R.pw);log(`❌ ${esc(t.name)} belum tepat${R.pw?` (−${R.pw})`:""}. Tetap semangat!`)}
+  }else if(RT.has(n)){
+    const done=await askReflect(t);
+    if(done===null)log(`💭 Kartu refleksi kosong, dilewati`);
+    else if(done){t.rf=(t.rf||0)+1;addScore(i,R.pr);log(`💭 ${esc(t.name)} menyelesaikan refleksi (+${R.pr})`)}
+    else log(`💭 ${esc(t.name)} melewati refleksi`);
+  }else if(CT.has(n)){
+    await drawChance(i,depth);
+  }
+}
+function drawFrom(key,pool){
+  if(!pool.length)return -1;
+  if(G[key])G[key]=G[key].filter(k=>pool.includes(k));
+  if(!G[key]||!G[key].length)G[key]=shuffle(pool.slice());
+  return G[key].pop();
+}
+function quizPool(z){
+  const known=new Set(ZONES.flatMap(x=>x.c)),all=CONF.quiz.map((q,k)=>k);
+  const p=all.filter(k=>ZONES[z].c.includes(CONF.quiz[k].c)||!known.has(CONF.quiz[k].c));
+  return p.length?p:all;
+}
+function draw(key,len){
+  if(!len)return -1;
+  if(G[key])G[key]=G[key].filter(k=>k<len);
+  if(!G[key]||!G[key].length)G[key]=shuffle([...Array(len).keys()]);
+  return G[key].pop();
+}
+function askQuiz(team,z){
+  z=z||0;
+  return new Promise(res=>{
+    const qi=drawFrom("qz"+z,quizPool(z));
+    if(qi<0){res(null);return}
+    const q=CONF.quiz[qi],R=CONF.rules;
+    const opts=shuffle(q.o.map((t,k)=>({t,ok:k===0})));
+    const L="ABCD";let timer=null,left=G.timer,done=false;
+    sfx.card();
+    openModal("quiz",`
+      <div class="mtag">❓ Kuis · Zona ${z+1}: ${ZONES[z].n}</div>
+      <h2>${team.icon} ${esc(team.name)}, jawab ya!</h2>
+      <p class="qtext">${esc(q.q)}</p>
+      ${G.timer?`<div class="timer"><i id="tbar"></i><b id="tnum">${left}</b></div>`:""}
+      <div class="opts">${opts.map((o,k)=>`<button class="opt" data-k="${k}"><span>${L[k]}</span>${esc(o.t)}</button>`).join("")}</div>
+      <div id="fb"></div>`);
+    const btns=[...$("#mbody").querySelectorAll(".opt")];
+    function finish(k){
+      if(done)return;done=true;clearInterval(timer);
+      btns.forEach((b,j)=>{b.disabled=true;if(opts[j].ok)b.classList.add("ok");else if(j===k)b.classList.add("no")});
+      const ok=k>=0&&opts[k].ok;
+      ok?sfx.ok():sfx.bad();
+      const pen=(!ok&&R.pw)?` −${R.pw} poin`:"";
+      $("#fb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?`✅ Benar! +${R.pq} poin`:(k<0?"⏰ Waktu habis."+pen:"❌ Belum tepat."+pen)}</b>${q.e?`<br>${esc(q.e)}`:""}</div>
+        <div class="mact"><button class="btn primary" id="qNext">Lanjut ➜</button></div>`;
+      $("#qNext").addEventListener("click",()=>{closeModal();res(ok)});
+      $("#mcard").scrollTop=9999;
+    }
+    btns.forEach((b,k)=>b.addEventListener("click",()=>finish(k)));
+    if(G.timer){
+      const bar=$("#tbar");
+      timer=setInterval(()=>{
+        left--;
+        const tn=$("#tnum");if(tn)tn.textContent=Math.max(left,0);
+        if(bar)bar.style.transform=`scaleX(${Math.max(left,0)/G.timer})`;
+        if(left<=0)finish(-1);
+      },1000);
+    }
+  });
+}
+async function askReflect(team){
+  const ri=draw("rDeck",CONF.reflect.length);
+  if(ri<0)return null;
+  sfx.card();
+  const p=CONF.reflect[ri];
+  const v=await modal("reflect",`
+    <div class="mtag">💭 Kartu refleksi</div>
+    <div class="bigico">💭</div>
+    <h2>${team.icon} ${esc(team.name)}</h2>
+    <p class="qtext">${esc(p)}</p>
+    <p style="color:var(--muted)!important;font-size:16px!important">Diskusikan 1 menit, lalu wakil kelompok menyampaikan jawaban.</p>
+    <div class="mact"><button class="btn ghost" data-v="skip">Lewati</button><button class="btn primary" data-v="ok">✅ Sudah dijawab (+${CONF.rules.pr})</button></div>`);
+  return v==="ok";
+}
+async function drawChance(i,depth){
+  const ci=draw("cDeck",CONF.chance.length);
+  if(ci<0){log(`🎁 Kartu kejutan kosong, dilewati`);return}
+  const t=G.teams[i],c=CONF.chance[ci];
+  sfx.card();
+  const parts=[];
+  if(c.m)parts.push(c.m>0?`maju ${c.m} kotak`:`mundur ${-c.m} kotak`);
+  if(c.p)parts.push(c.p>0?`+${c.p} poin`:`${c.p} poin`);
+  if(c.x)parts.push("lempar dadu lagi");
+  await modal("chance",`
+    <div class="mtag">🎁 Kartu kejutan</div>
+    <div class="bigico">${esc(c.i)}</div>
+    <h2>${esc(c.t)}</h2>
+    ${c.d?`<p>${esc(c.d)}</p>`:""}
+    ${parts.length?`<p><b>${esc(t.name)}:</b> ${parts.join(" dan ")}.</p>`:""}
+    <div class="mact"><button class="btn primary" data-v="ok">Terima</button></div>`);
+  log(`🎁 ${esc(t.name)}: ${esc(c.t)}`);
+  if(c.p)addScore(i,c.p,"bonus");
+  if(c.x)G.extra=true;
+  if(c.m){
+    const target=Math.max(1,Math.min(99,t.pos+c.m));
+    if(target!==t.pos){
+      await walkTo(i,target);
+      await resolve(i,(depth||0)+1);
+    }
+  }
+}
+async function win(i){
+  const t=G.teams[i];
+  t.pos=100;t.finished=true;G.over=true;
+  if(G.first===null||G.first===undefined)G.first=i;
+  placeToken(i,100,false);
+  await finishGame(i,false);
+}
+async function finishGame(i,byTime){
+  G.over=true;
+  if(byTime){i=rankFast()[0];if(G.first===null||G.first===undefined)G.first=i}
+  const t=G.teams[i];
+  renderAll();
+  sfx.win();confetti();
+  const fast=rankFast().map(k=>({...G.teams[k],k})),kuis=rankCareer().map(k=>({...G.teams[k],k}));
+  const champ=kuis[0];sesiCatatGame(fast,kuis);
+  try{localStorage.removeItem(SAVE_KEY)}catch(e){}
+  /* tantangan untuk tim yang kalah: poin terendah di antara tim yang belum sampai tujuan */
+  const others=G.teams.map((x,k)=>k).filter(k=>k!==i);
+  const low=others.length?Math.min(...others.map(k=>G.teams[k].score||0)):0;
+  const losers=others.filter(k=>(G.teams[k].score||0)===low).map(k=>G.teams[k]);
+  const chal=CONF.rules.tantangan.split("\n").map(x=>x.trim()).filter(Boolean);
+  const pick=()=>chal.length?chal[Math.floor(Math.random()*chal.length)]:"";
+  const dot=x=>`<span class="dot" style="background:${x.color}">${x.icon}</span>`;
+  const sub=x=>`✔ ${x.ok||0} benar${x.bad?` · ✘ ${x.bad}`:""} · 💭 ${x.rf||0} · 🎁 ${sgn(x.bonus||0)}`;
+  const html=`
+    <div class="mtag">🏆 Permainan selesai</div>
+    <div class="bigico">🎉</div>
+    <h2>${byTime?`⏱ Waktu habis! ${t.icon} ${esc(t.name)} paling dekat dengan 🏁${t.pos?` (kotak ${t.pos})`:""}`:`${t.icon} ${esc(t.name)} sampai di Tujuan lebih dulu!`}</h2>
+    <div class="twolb">
+      <div class="lbcol"><h3>⚡ Juara Tercepat${byTime?" <small>(terdepan saat waktu habis)</small>":""}</h3>
+        <div class="rankwrap"><table class="rank">${fast.map((x,r)=>`<tr><td>${r+1}</td><td>${dot(x)}${esc(x.name)}</td><td class="big">${x.pos?"Kotak "+x.pos:"🚩"}</td></tr>`).join("")}</table></div></div>
+      <div class="lbcol k"><h3>🌟 Juara Kuis <small>(urut total poin)</small></h3>
+        <div class="rankwrap"><table class="rank">${kuis.map((x,r)=>`<tr><td>${r+1}</td><td>${dot(x)}${esc(x.name)}<br><small>${sub(x)}</small></td><td class="big">${x.score||0}<small> poin</small></td></tr>`).join("")}</table></div></div>
+    </div>
+    ${chal.length&&losers.length?`<div class="chal"><b>🔥 Tantangan Semangat untuk ${losers.map(x=>x.icon+" "+esc(x.name)).join(", ")}</b><p id="chText">${esc(pick())}</p><button class="btn ghost sm" id="chRe" type="button">🎲 Ganti tantangan</button></div>`:""}
+    <p style="font-size:clamp(15px,1.8vw,20px)"><b>Pesan BK:</b> ${esc(CONF.rules.pesan)}</p>
+    <div class="mact"><button class="btn ghost" data-v="again">🔁 Main lagi</button><button class="btn primary" data-v="menu">Lanjut sesi ▶</button></div>
+    ${creditLine()?`<div class="mcredit">${creditLine()}</div>`:""}`;
+  const pr=modal("win",html);
+  const re=$("#chRe");if(re)re.addEventListener("click",()=>{const e=$("#chText");if(e)e.textContent=pick();sfx.card()});
+  const v=await pr;
+  if(v==="again")startGame(G.teams.map(x=>x.name));
+  else sesiKembali();
+}
+function confetti(){
+  const cols=["#fbbf24","#fb7185","#34d399","#22d3ee","#a78bfa","#e879f9","#fff"];
+  for(let k=0;k<110;k++){
+    const e=document.createElement("div");e.className="conf";
+    e.style.left=Math.random()*100+"vw";
+    e.style.background=cols[k%cols.length];
+    e.style.animationDuration=(2.4+Math.random()*2.6)+"s";
+    e.style.animationDelay=(Math.random()*1.2)+"s";
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(),7500);
+  }
+}
+
+/* ---------------- SIMPAN / LANJUT ---------------- */
+function save(){
+  try{
+    if(!G||G.over)return;
+    const {teams,turn,qDeck,rDeck,cDeck,log,timer,dice,limit,elapsed}=G;
+    const zd={};Object.keys(G).filter(k=>/^qz\d$/.test(k)).forEach(k=>zd[k]=G[k]);
+    localStorage.setItem(SAVE_KEY,JSON.stringify(Object.assign({teams,turn,qDeck,rDeck,cDeck,log:log.slice(0,8),timer,dice,limit,elapsed,sound:CFG.sound},zd)));
+  }catch(e){}
+}
+function loadSaved(){
+  try{
+    const s=JSON.parse(localStorage.getItem(SAVE_KEY)||"null");
+    if(s&&Array.isArray(s.teams)&&s.teams.length>=MIN_TEAMS&&s.teams.length<=MAX_TEAMS)return s;
+  }catch(e){}
+  return null;
+}
+
+/* ---------------- ALUR LAYAR ---------------- */
+function startGame(names,saved){
+  $("#sesi").classList.add("hidden");$("#setup").classList.add("hidden");$("#game").classList.remove("hidden");
+  if(saved){
+    G=Object.assign({busy:false,over:false,extra:false,first:null},saved);
+    G.teams=saved.teams.map(t=>Object.assign({},t));
+    G.timer=+saved.timer||0;G.dice=saved.dice===1?1:2;G.limit=+saved.limit||0;G.elapsed=+saved.elapsed||0;G.timeUp=false;
+  }else{
+    G={
+      teams:names.map((n,i)=>({name:n,icon:TEAM_ICONS[i%TEAM_ICONS.length],color:TEAM_COLORS[i%TEAM_COLORS.length],pos:0,score:0,ok:0,bad:0,rf:0,bonus:0,finished:false})),
+      turn:0,qDeck:null,rDeck:null,cDeck:null,log:[],busy:false,over:false,extra:false,first:null,timer:+CFG.timer||0,dice:CFG.dice||2,limit:+CFG.limit||0,elapsed:0,timeUp:false
+    };
+  }
+  buildBoard();buildTokens();renderDie(1);renderDie(1,"#die2");$("#dice").classList.toggle("two",G.dice===2);renderAll();startClock();
+  if(!saved)log(`🧭 Petualangan dimulai! ${G.dice} dadu${G.limit?" · batas waktu "+G.limit+" menit":""}`);
+  save();
+}
+function showSetup(){
+  $("#game").classList.add("hidden");$("#setup").classList.remove("hidden");
+  document.querySelectorAll(".conf").forEach(e=>e.remove());
+  buildSetup();
+}
+function confSummary(){
+  const C=CONF;
+  return `Bank soal: <b>${C.quiz.length}</b> kuis · <b>${C.reflect.length}</b> refleksi · <b>${C.chance.length}</b> kejutan<br>
+    Papan: <b>5</b> zona · <b>${C.ladders.length}</b> tangga · <b>${C.snakes.length}</b> ular · <b>${C.tiles.quiz.length}</b> kotak kuis · <b>${C.tiles.ref.length}</b> refleksi · <b>${C.tiles.cha.length}</b> kejutan<br>
+    Poin: kuis benar <b>+${C.rules.pq}</b>${C.rules.pw?` · salah <b>−${C.rules.pw}</b>`:""} · refleksi <b>+${C.rules.pr}</b>`;
+}
+/* perkiraan lama main (hasil simulasi: sekitar 70 detik per giliran, termasuk diskusi) */
+const EST={1:[85,109,142,164,187,214,244],2:[48,65,77,93,109,119,134]}; /* untuk 2..8 kelompok, tanpa batas waktu */
+function estFree(d,n){const a=EST[d];return n<=8?a[Math.max(0,n-2)]:Math.round(a[6]+(n-8)*(a[6]-a[5]))}
+function estText(){
+  const f=estFree(CFG.dice,CFG.count),L=CFG.limit;
+  const m=L?Math.min(L+3,f):f;
+  return `⏱ Perkiraan lama main (${CFG.count} kelompok, ${CFG.dice} dadu): <b>±${m} menit</b>${L&&f>L+3?" (dibatasi waktu)":""}`;
+}
+function persistSetup(){
+  CONF.setup={count:CFG.count,names:CFG.names.slice(0,MAX_TEAMS),sound:CFG.sound,dice:CFG.dice,limit:CFG.limit};
+  CONF.rules.timer=CFG.timer;
+  saveConf();
+}
+function buildSetup(){
+  $("#cntVal").textContent=CFG.count;
+  $("#cntMinus").disabled=CFG.count<=MIN_TEAMS;
+  $("#cntPlus").disabled=CFG.count>=MAX_TEAMS;
+  $("#countChips").innerHTML=[2,4,6,8,10,12].map(n=>`<button class="chip${n===CFG.count?" on":""}" data-n="${n}">${n}</button>`).join("");
+  $("#nameList").innerHTML=Array.from({length:CFG.count},(_,i)=>`
+    <div class="tname"><div class="tk" style="background:${TEAM_COLORS[i%TEAM_COLORS.length]}">${TEAM_ICONS[i%TEAM_ICONS.length]}</div>
+    <input type="text" maxlength="22" value="${esc(CFG.names[i]||defName(i))}" data-i="${i}" aria-label="Nama kelompok ${i+1}"></div>`).join("");
+  $("#diceChips").innerHTML=[1,2].map(n=>`<button class="chip${n===CFG.dice?" on":""}" data-d="${n}">${n} dadu</button>`).join("");
+  $("#limChips").innerHTML=[[0,"Tanpa batas"],[30,"30 mnt"],[45,"45 mnt"],[60,"60 mnt"]].map(([m,l])=>`<button class="chip${m===CFG.limit?" on":""}" data-l="${m}">${l}</button>`).join("");
+  $("#estLine").innerHTML=estText();
+  $("#optTimer").value=String(CFG.timer);
+  $("#optSound").checked=CFG.sound;
+  $("#confSummary").innerHTML=confSummary();
+  $("#resumeBtn").classList.toggle("hidden",!loadSaved());
+}
+function setCount(n){
+  CFG.count=Math.max(MIN_TEAMS,Math.min(MAX_TEAMS,n));
+  buildSetup();
+}
+
+/* =====================================================
+   EDITOR PENGATURAN GURU
+   ===================================================== */
+let ED=null,edTab="kuis",edSel=0,edSnap="";
+const ED_TABS=[
+  ["kuis","❓ Kuis",()=>ED.quiz.length],
+  ["refleksi","💭 Refleksi",()=>ED.reflect.length],
+  ["kejutan","🎁 Kejutan",()=>ED.chance.length],
+  ["papan","🪜 Papan",()=>ED.ladders.length+ED.snakes.length],
+  ["aturan","🎯 Poin & waktu",()=>""],
+  ["tentang","ℹ Tentang game",()=>""],
+  ["cadangan","💾 Cadangan",()=>""]
+];
+function padED(o){o.quiz.forEach(q=>{while(q.o.length<4)q.o.push("")});if(!o.about)o.about=clone(ED&&ED.about?ED.about:INFO);return o}
+function edDirty(){return JSON.stringify(ED)!==edSnap}
+function openEditor(tab){
+  ED=null;ED=padED(clone(CONF));edSnap=JSON.stringify(ED);edSel=0;
+  if(typeof tab==="string")edTab=tab;
+  $("#editor").classList.add("show");
+  renderEd();updateState();
+}
+function updateState(){
+  const el=$("#edState");if(!el||!ED)return;
+  el.textContent=edDirty()?"● Ada perubahan yang belum disimpan":"Tersimpan";
+  el.style.color=edDirty()?"var(--gold)":"var(--muted)";
+}
+function renderTabs(){
+  $("#edTabs").innerHTML=ED_TABS.map(([k,l,n])=>`<button role="tab" data-tab="${k}" class="${k===edTab?"on":""}" aria-selected="${k===edTab}">${l}${n()!==""?`<b>${n()}</b>`:""}</button>`).join("");
+}
+function renderEd(openIdx){
+  renderTabs();
+  const body=$("#edBody");
+  const fn={kuis:edKuis,refleksi:edRefleksi,kejutan:edKejutan,papan:edPapan,aturan:edAturan,tentang:edTentang,cadangan:edCadangan}[edTab];
+  body.innerHTML=fn(openIdx);
+  if(typeof openIdx==="number"){
+    const d=body.querySelector(`details[data-i="${openIdx}"]`);
+    if(d){d.scrollIntoView({block:"center"});const f=d.querySelector("textarea,input");if(f)f.focus()}
+  }
+}
+/* ---- Kuis ---- */
+function qSummary(q,i){
+  return `<summary><span class="no">${i+1}</span><span class="st">${esc(q.q||"(soal kosong)")}</span><span class="cat">${esc(q.c||"Umum")}</span></summary>`;
+}
+function edKuis(openIdx){
+  const items=ED.quiz.map((q,i)=>`
+    <details class="qi" data-i="${i}" ${openIdx===i?"open":""}>${qSummary(q,i)}
+      <div class="fl">
+        <label>Kategori<input data-g="q" data-i="${i}" data-f="c" value="${esc(q.c)}" maxlength="40" placeholder="mis. Mengenal Diri"></label>
+        <label>Pertanyaan<textarea data-g="q" data-i="${i}" data-f="q" maxlength="400">${esc(q.q)}</textarea></label>
+        <label class="okf">✅ Jawaban benar<input data-g="q" data-i="${i}" data-f="o0" value="${esc(q.o[0]||"")}" maxlength="200"></label>
+        <div class="two">
+          <label>Pilihan salah 1<input data-g="q" data-i="${i}" data-f="o1" value="${esc(q.o[1]||"")}" maxlength="200"></label>
+          <label>Pilihan salah 2<input data-g="q" data-i="${i}" data-f="o2" value="${esc(q.o[2]||"")}" maxlength="200"></label>
+        </div>
+        <label>Pilihan salah 3 (boleh dikosongkan)<input data-g="q" data-i="${i}" data-f="o3" value="${esc(q.o[3]||"")}" maxlength="200"></label>
+        <label>Penjelasan setelah menjawab<textarea data-g="q" data-i="${i}" data-f="e" maxlength="400">${esc(q.e)}</textarea></label>
+        <div class="acts"><button class="btn ghost sm" data-act="dupQ" data-i="${i}">⧉ Gandakan</button><button class="btn danger sm" data-act="delQ" data-i="${i}">🗑 Hapus</button></div>
+      </div>
+    </details>`).join("");
+  return `<div class="ed-wrap">
+    <p class="ed-help">Setiap soal punya <b>satu jawaban benar</b> dan 1–3 pilihan salah. Urutan pilihan <b>diacak otomatis</b> saat tampil, jadi cukup tulis jawaban benar di kolom hijau. Soal muncul acak tanpa berulang sampai semua terpakai.</p>
+    <div class="ed-bar"><button class="btn primary sm" data-act="addQ">+ Tambah soal</button><span class="sp"></span><span style="color:var(--muted);font-size:14px">${ED.quiz.length} soal</span></div>
+    ${items||'<p class="ed-help">Belum ada soal. Kotak kuis di papan akan dilewati.</p>'}</div>`;
+}
+/* ---- Refleksi ---- */
+function edRefleksi(){
+  const items=ED.reflect.map((p,i)=>`
+    <div class="ed-bar" style="align-items:flex-start;gap:8px">
+      <span class="no" style="flex:none;display:grid;place-items:center;min-width:32px;height:30px;margin-top:6px;border-radius:9px;background:linear-gradient(135deg,var(--cy),var(--mg));color:#04111f;font-family:var(--f-head);font-weight:800;font-size:12px">${i+1}</span>
+      <div style="flex:1;min-width:0" class="fl"><textarea data-g="r" data-i="${i}" maxlength="400" aria-label="Pertanyaan refleksi ${i+1}">${esc(p)}</textarea></div>
+      <button class="btn danger sm" data-act="delR" data-i="${i}" style="margin-top:4px" aria-label="Hapus">🗑</button>
+    </div>`).join("");
+  return `<div class="ed-wrap">
+    <p class="ed-help">Pertanyaan untuk <b>kotak 💭 Refleksi</b>. Kelompok mendiskusikan lalu guru menekan “Sudah dijawab” untuk memberi poin.</p>
+    <div class="ed-bar"><button class="btn primary sm" data-act="addR">+ Tambah pertanyaan</button><span class="sp"></span><span style="color:var(--muted);font-size:14px">${ED.reflect.length} pertanyaan</span></div>
+    ${items||'<p class="ed-help">Belum ada pertanyaan refleksi.</p>'}</div>`;
+}
+/* ---- Kejutan ---- */
+function edKejutan(openIdx){
+  const items=ED.chance.map((c,i)=>`
+    <details class="qi" data-i="${i}" ${openIdx===i?"open":""}><summary><span class="no">${esc(c.i||"🎁")}</span><span class="st">${esc(c.t||"(kartu kosong)")}</span><span class="cat">${c.m?(c.m>0?"+"+c.m+" kotak":c.m+" kotak"):""}${c.p?(c.m?" · ":"")+(c.p>0?"+":"")+c.p+" poin":""}${c.x?" · dadu lagi":""}</span></summary>
+      <div class="fl">
+        <div class="two"><label>Ikon (emoji)<input data-g="c" data-i="${i}" data-f="i" value="${esc(c.i)}" maxlength="8"></label>
+        <label>Judul kartu<input data-g="c" data-i="${i}" data-f="t" value="${esc(c.t)}" maxlength="120"></label></div>
+        <label>Keterangan<textarea data-g="c" data-i="${i}" data-f="d" maxlength="200">${esc(c.d)}</textarea></label>
+        <div class="three">
+          <label>Maju (+) / mundur (−) kotak<input type="number" data-g="c" data-i="${i}" data-f="m" value="${c.m}" min="-30" max="30"></label>
+          <label>Poin (+/−)<input type="number" data-g="c" data-i="${i}" data-f="p" value="${c.p}" min="-100" max="100"></label>
+          <label class="chk" style="align-self:end;padding-bottom:10px"><input type="checkbox" data-g="c" data-i="${i}" data-f="x" ${c.x?"checked":""}>Lempar dadu lagi</label>
+        </div>
+        <div class="acts"><button class="btn ghost sm" data-act="dupC" data-i="${i}">⧉ Gandakan</button><button class="btn danger sm" data-act="delC" data-i="${i}">🗑 Hapus</button></div>
+      </div>
+    </details>`).join("");
+  return `<div class="ed-wrap">
+    <p class="ed-help">Kartu untuk <b>kotak 🎁 Kejutan</b>. Satu kartu bisa memajukan atau memundurkan pion, menambah atau mengurangi poin, dan memberi giliran tambahan. Biarkan angka 0 jika tidak dipakai.</p>
+    <div class="ed-bar"><button class="btn primary sm" data-act="addC">+ Tambah kartu</button><span class="sp"></span><span style="color:var(--muted);font-size:14px">${ED.chance.length} kartu</span></div>
+    ${items||'<p class="ed-help">Belum ada kartu kejutan.</p>'}</div>`;
+}
+/* ---- Papan ---- */
+function edFind(n){
+  const l=ED.ladders.find(x=>x.a===n);if(l)return {t:"ladder",o:l};
+  const s=ED.snakes.find(x=>x.a===n);if(s)return {t:"snake",o:s};
+  if(ED.tiles.quiz.includes(n))return {t:"quiz"};
+  if(ED.tiles.ref.includes(n))return {t:"ref"};
+  if(ED.tiles.cha.includes(n))return {t:"cha"};
+  return {t:"none"};
+}
+function miniCells(){
+  let h="";
+  for(let r=9;r>=0;r--)for(let c=0;c<10;c++){
+    const n=(r%2===0)?r*10+c+1:r*10+(9-c)+1;
+    let cls="mc",ic="",to="";
+    if(n===100){cls+=" fix";ic="🏁"}
+    else{
+      const f=edFind(n);
+      if(f.t==="quiz"){cls+=" q";ic="❓"}else if(f.t==="ref"){cls+=" r";ic="💭"}else if(f.t==="cha"){cls+=" c";ic="🎁"}
+      else if(f.t==="ladder"){cls+=" l";ic="🪜";to=`<span class="to">↑${f.o.to}</span>`}
+      else if(f.t==="snake"){cls+=" s";ic="🐍";to=`<span class="to">↓${f.o.to}</span>`}
+    }
+    if(n===edSel)cls+=" sel";
+    h+=`<button type="button" class="${cls}" data-cell="${n}" aria-label="Kotak ${n}"><span class="n">${n}</span>${ic}${to}</button>`;
+  }
+  return h;
+}
+function edCounts(){
+  return `<div class="kv"><span>🪜 Tangga <b>${ED.ladders.length}</b></span><span>🐍 Ular <b>${ED.snakes.length}</b></span><span>❓ Kuis <b>${ED.tiles.quiz.length}</b></span><span>💭 Refleksi <b>${ED.tiles.ref.length}</b></span><span>🎁 Kejutan <b>${ED.tiles.cha.length}</b></span></div>`;
+}
+function cellForm(){
+  const n=edSel;
+  if(!n)return `<div class="cellbox"><h4>Pilih kotak</h4><p class="ed-help" style="margin:0">Klik salah satu kotak di papan untuk mengubah isinya: kuis, refleksi, kejutan, tangga, atau ular (kotak biasa tidak disarankan).</p></div>`;
+  if(n===100)return `<div class="cellbox"><h4>Kotak ${n}</h4><p class="ed-help" style="margin:0">Kotak finish tidak dapat diubah.</p></div>`;
+  const f=edFind(n),T=f.t;
+  const types=[["none","Biasa"],["quiz","❓ Kuis"],["ref","💭 Refleksi"],["cha","🎁 Kejutan"],["ladder","🪜 Tangga"],["snake","🐍 Ular"]];
+  let extra="";
+  if(T==="ladder"||T==="snake"){
+    const up=T==="ladder",o=f.o;
+    extra=`<div class="fl">
+      <label>${up?"Naik ke kotak (lebih besar dari "+n+")":"Turun ke kotak (lebih kecil dari "+n+")"}<input type="number" data-g="cell" data-f="to" value="${o.to}" min="${up?n+1:1}" max="${up?100:n-1}"></label>
+      <label>Judul ${up?"tangga (kebiasaan baik)":"ular (kebiasaan yang menghambat)"}<input data-g="cell" data-f="t" value="${esc(o.t)}" maxlength="120"></label>
+      <label>Pesan BK<textarea data-g="cell" data-f="m" maxlength="300">${esc(o.m)}</textarea></label></div>`;
+  }
+  return `<div class="cellbox"><h4>Kotak ${n}</h4>
+    <div class="typechips">${types.map(([k,l])=>`<button type="button" class="chip${T===k?" on":""}" data-type="${k}">${l}</button>`).join("")}</div>${extra}</div>`;
+}
+function edPapan(){
+  return `<div class="ed-wrap"><p class="ed-help">Klik kotak di papan, lalu pilih jenisnya. <b>Tangga</b> menaikkan pion ke kotak yang lebih besar, <b>ular</b> menurunkan ke kotak yang lebih kecil. Satu kotak hanya boleh berisi satu jenis.</p>
+    <div id="edCounts">${edCounts()}</div>
+    <div class="ed-two"><div class="mini" id="mini">${miniCells()}</div><div id="cellForm">${cellForm()}</div></div></div>`;
+}
+function refreshPapan(full){
+  $("#mini").innerHTML=miniCells();
+  $("#edCounts").innerHTML=edCounts();
+  if(full)$("#cellForm").innerHTML=cellForm();
+  renderTabs();
+}
+function setCellType(n,type){
+  ED.ladders=ED.ladders.filter(x=>x.a!==n);ED.snakes=ED.snakes.filter(x=>x.a!==n);
+  ["quiz","ref","cha"].forEach(k=>ED.tiles[k]=ED.tiles[k].filter(x=>x!==n));
+  if(type==="quiz"||type==="ref"||type==="cha")ED.tiles[type].push(n);
+  else if(type==="ladder")ED.ladders.push({a:n,to:Math.min(100,n+15),t:"Tangga baru",m:""});
+  else if(type==="snake")ED.snakes.push({a:n,to:Math.max(1,n-12),t:"Ular baru",m:""});
+}
+/* ---- Aturan ---- */
+function edAturan(){
+  const R=ED.rules;
+  const row=(f,l,sub,max)=>`<div class="opt-row"><label for="r_${f}">${l}<small>${sub}</small></label><input type="number" id="r_${f}" data-g="rule" data-f="${f}" min="0" max="${max}" value="${R[f]}"></div>`;
+  return `<div class="ed-wrap"><div class="rule-grid">
+    <div class="panel"><h3>🎯 Poin</h3>
+      ${row("pq","Kuis dijawab benar","poin yang didapat",100)}
+      ${row("pr","Refleksi diselesaikan","poin yang didapat",100)}
+      ${row("pw","Kuis dijawab salah / waktu habis","poin yang dikurangi (0 = tidak ada pengurangan)",100)}
+      <p class="ed-help" style="margin:8px 0 0">Bawaan: benar +10, salah −10, refleksi +5. Poin boleh bernilai negatif. Guru juga bisa menambah/mengurangi manual dengan tombol +5 / −5 di papan Juara Kuis (dihitung sebagai bonus).</p>
+    </div>
+    <div class="panel"><h3>⏱ Waktu</h3>
+      ${row("timer","Batas waktu menjawab kuis","dalam detik (0 = tanpa batas)",600)}
+      <p class="ed-help" style="margin:8px 0 0">Jika waktu habis sebelum dijawab, kuis dianggap salah.</p>
+    </div>
+    <div class="panel" style="grid-column:1/-1"><h3>🔥 Tantangan untuk tim yang kalah</h3>
+      <div class="fl"><label>Satu tantangan per baris. Satu dipilih acak untuk tim dengan poin terendah (selain yang sampai tujuan) di akhir permainan<textarea data-g="rule" data-f="tantangan" style="min-height:190px">${esc(R.tantangan||"")}</textarea></label></div>
+    </div>
+    <div class="panel" style="grid-column:1/-1"><h3>🏁 Pesan penutup BK</h3>
+      <div class="fl"><label>Ditampilkan di layar akhir permainan<textarea data-g="rule" data-f="pesan" maxlength="500" style="min-height:90px">${esc(R.pesan)}</textarea></label></div>
+    </div></div></div>`;
+}
+/* ---- Tentang game ---- */
+function aboutList(k,label,help){
+  const arr=ED.about[k];
+  return `<div class="panel" style="grid-column:1/-1"><h3>${label}</h3><p class="ed-help" style="margin:0 0 10px">${help}</p>
+    ${arr.map((t,i)=>`<div class="list-row"><div class="fl"><textarea data-g="al" data-k="${k}" data-i="${i}" maxlength="300" aria-label="${esc(label)} ${i+1}" style="min-height:52px">${esc(t)}</textarea></div><button class="btn danger sm" data-act="delAL" data-k="${k}" data-i="${i}" aria-label="Hapus">🗑</button></div>`).join("")||'<p class="ed-help">Belum ada isi.</p>'}
+    <button class="btn ghost sm" data-act="addAL" data-k="${k}">+ Tambah</button></div>`;
+}
+function aboutBagian(){
+  const arr=ED.about.bagian||(ED.about.bagian=[]);
+  const row=(b,i)=>`<div class="bg-item"><div class="bg-top"><div class="fl"><input data-g="bg" data-i="${i}" data-f="j" value="${esc(b.j||"")}" maxlength="60" placeholder="Nama bagian, mis. Rujukan, Saran fasilitasi, Langkah bermain" aria-label="Nama bagian ${i+1}"></div><div class="fl"><select data-g="bg" data-i="${i}" data-f="tipe" aria-label="Bentuk isi"><option value="teks"${b.tipe==="teks"?" selected":""}>Paragraf</option><option value="poin"${b.tipe==="poin"?" selected":""}>Daftar poin ✔</option><option value="nomor"${b.tipe==="nomor"?" selected":""}>Daftar bernomor</option></select></div></div>
+    <div class="fl"><textarea data-g="bg" data-i="${i}" data-f="isi" maxlength="1500" style="min-height:80px" placeholder="Isi bagian. Untuk daftar, tulis satu butir per baris." aria-label="Isi bagian ${i+1}">${esc(b.isi||"")}</textarea></div>
+    <div class="bg-act"><button class="btn ghost sm" data-act="upBG" data-i="${i}" ${i===0?"disabled":""} aria-label="Naikkan">↑</button><button class="btn ghost sm" data-act="dnBG" data-i="${i}" ${i===arr.length-1?"disabled":""} aria-label="Turunkan">↓</button><button class="btn danger sm" data-act="delBG" data-i="${i}" aria-label="Hapus bagian">🗑 Hapus</button></div></div>`;
+  return `<div class="panel" style="grid-column:1/-1"><h3>➕ Bagian tambahan</h3><p class="ed-help" style="margin:0 0 10px">Buat bagian baru dengan nama sendiri (maksimal 10). Tampil di Tentang game setelah Tujuan khusus, sesuai urutan di sini.</p>
+    ${arr.map(row).join("")||'<p class="ed-help">Belum ada bagian tambahan.</p>'}
+    ${arr.length<10?'<button class="btn ghost sm" data-act="addBG">+ Tambah bagian</button>':""}</div>`;
+}
+function edTentang(){
+  if(!GK.auth.token())return `<div class="ed-wrap"><div class="panel lockbox"><div class="lk">🔒</div><h3>Info game dikunci</h3>
+    <p class="ed-help">Kredit perancang, capaian layanan BK, dan tujuan khusus hanya bisa diubah dengan <b>password admin Speganam</b>. Perubahan tersimpan di server, sehingga semua perangkat dan pengunjung melihat info yang sama.</p>
+    <button class="btn primary" data-act="unlock">🔓 Buka dengan password</button></div></div>`;
+  const A=ED.about;
+  const inp=(f,l,max)=>`<label>${l}<input data-g="ab" data-f="${f}" value="${esc(A[f])}" maxlength="${max}"></label>`;
+  return `<div class="ed-wrap"><p class="ed-help">Info ini tampil di tombol <b>ℹ Tentang game</b> dan bisa dicetak. Tersimpan di server, jadi berlaku di semua perangkat. Info game tersimpan ke server saat Anda menekan tombol simpan mana pun. <b>Nama perancang</b> dan keterangannya juga dipakai sebagai kredit di seluruh game. Isi bawaan adalah rancangan awal: silakan sesuaikan dengan program layanan BK Anda. Bisa diubah kapan saja.</p>
+    <div class="rule-grid">
+      <div class="panel"><h3>👤 Kredit perancang</h3><div class="fl">${inp("perancang","Nama perancang",80)}${inp("jabatan","Jabatan dan sekolah",120)}</div></div>
+      <div class="panel"><h3>📌 Info singkat</h3><div class="fl">${inp("bidang","Bidang layanan BK",80)}${inp("sasaran","Sasaran peserta",160)}${inp("durasi","Durasi",80)}${inp("media","Media / alat",160)}</div></div>
+      <div class="panel" style="grid-column:1/-1"><h3>📝 Deskripsi</h3><div class="fl"><textarea data-g="ab" data-f="deskripsi" maxlength="700" style="min-height:90px">${esc(A.deskripsi)}</textarea></div></div>
+      ${aboutList("capaian","🎯 Capaian layanan BK","Capaian yang ingin dicapai peserta didik lewat layanan ini. Satu butir per baris.")}
+      ${aboutList("tujuan","✅ Tujuan khusus","Tujuan khusus permainan. Satu butir per baris.")}
+      ${aboutBagian()}
+      <div class="panel" style="grid-column:1/-1"><h3>🗒 Catatan (opsional)</h3><div class="fl"><textarea data-g="ab" data-f="catatan" maxlength="700" style="min-height:70px" placeholder="mis. rujukan program, saran fasilitasi, atau refleksi akhir bagi guru">${esc(A.catatan)}</textarea></div></div>
+    </div></div>`;
+}
+/* ---- Cadangan ---- */
+function edCadangan(){
+  return `<div class="ed-wrap"><p class="ed-help"><b>Simpan di perangkat ini</b> berlaku untuk Anda sendiri (tanpa password). <b>Jadikan default semua</b> hanya bisa dilakukan admin dengan password dan menjadi pengaturan awal bagi semua perangkat. <b>Cadangan</b> di bawah adalah berkas milik Anda sendiri: pakai untuk memindahkan pengaturan pribadi ke komputer atau proyektor lain, atau membagikannya ke rekan guru.</p>
+    <div class="rule-grid">
+      <div class="panel" style="grid-column:1/-1"><h3>☁ Jadikan default semua (admin)</h3><p class="ed-help">Khusus admin: mengirim pengaturan yang <b>sudah tersimpan di perangkat ini</b> ke server sebagai default semua perangkat, misalnya pengaturan lama yang dibuat sebelum fitur server ada. Default di server akan diganti.</p><button class="btn primary sm" data-act="push">☁ Jadikan pengaturan perangkat ini sebagai default</button></div>
+      <div class="panel"><h3>⬇ Unduh cadangan</h3><p class="ed-help">Menyimpan semua soal, kartu, papan, dan aturan ke satu berkas.</p><button class="btn primary sm" data-act="export">Unduh pengaturan (.json)</button></div>
+      <div class="panel"><h3>⬆ Buka cadangan</h3><p class="ed-help">Memuat berkas pengaturan. Hasilnya baru berlaku setelah menekan “Simpan di perangkat ini”.</p><button class="btn ghost sm" data-act="import">Pilih berkas…</button></div>
+      <div class="panel" style="grid-column:1/-1"><h3>↺ Kembalikan ke bawaan</h3><p class="ed-help">Mengembalikan seluruh soal, kartu, papan, dan aturan ke isi awal Career Quest. Hasilnya baru berlaku setelah “Simpan di perangkat ini”.</p><button class="btn danger sm" data-act="reset">Kembalikan ke bawaan</button></div>
+    </div></div>`;
+}
+/* ---- Validasi & simpan ---- */
+function edValidate(){
+  for(let i=0;i<ED.quiz.length;i++){
+    const q=ED.quiz[i],any=q.q.trim()||q.o.some(x=>x.trim());
+    if(!any)continue;
+    if(!q.q.trim())return ["kuis",i,`Soal no. ${i+1}: pertanyaan belum diisi.`];
+    if(!q.o[0].trim())return ["kuis",i,`Soal no. ${i+1}: jawaban benar belum diisi.`];
+    if(q.o.slice(1).filter(x=>x.trim()).length<1)return ["kuis",i,`Soal no. ${i+1}: isi minimal 1 pilihan salah.`];
+  }
+  for(let i=0;i<ED.chance.length;i++){
+    const c=ED.chance[i];
+    if(!c.t.trim()&&(c.d.trim()||c.m||c.p||c.x))return ["kejutan",i,`Kartu kejutan no. ${i+1}: judul belum diisi.`];
+  }
+  return null;
+}
+/* ---------------- SINKRON PENGATURAN KE SERVER ---------------- */
+const UNSYNC_KEY=UNSYNC_LS;
+let SYNC="cek";
+const lsGet2=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+function setSync(st){
+  SYNC=st;const e=$("#syncState");if(!e)return;
+  const t={cek:["☁ Memeriksa server…",""],server:["☁ Memakai pengaturan default dari server","ok"],bawaan:["Pengaturan bawaan Career Quest",""],
+    pribadi:["✏ Memakai pengaturan pribadi di perangkat ini (tidak mengubah default server)","warn"],
+    lokal:["⚠ Pengaturan ini baru ada di perangkat ini. Admin: buka ⚙ Atur, lalu ☁ Jadikan default semua.","warn"],
+    offline:["⚠ Server tidak terjangkau. Memakai pengaturan di perangkat ini.","warn"]}[st];
+  e.className="syncstate "+t[1];e.textContent=t[0];
+  if(st==="pribadi"){
+    const b=document.createElement("button");b.type="button";b.id="useServer";b.className="linkbtn";b.textContent="↩ Pakai default server";e.appendChild(document.createTextNode(" "));e.appendChild(b);
+  }
+}
+async function useServerConf(){
+  const v=await modal("",`<div class="mtag">Default server</div><h2>Pakai pengaturan default?</h2><p>Pengaturan pribadi di perangkat ini diganti dengan pengaturan default dari server.</p>
+    <div class="mact"><button class="btn ghost" data-v="no">Batal</button><button class="btn primary" data-v="yes">Pakai default</button></div>`);
+  if(v!=="yes")return;
+  const r=await GK.conf.load(ABOUT_ID);
+  if(r.error){toast("Server tidak terjangkau, pengaturan pribadi tetap dipakai",true);return}
+  try{localStorage.removeItem(UNSYNC_KEY)}catch(e){}
+  const ok=r.conf&&isFresh(r.conf);
+  const c=ok?sanitize(r.conf):buildDefault();c.setup=CONF.setup;
+  CONF=c;CFG.timer=CONF.rules.timer;rebuildMaps();saveConf();buildSetup();
+  setSync(ok?"server":r.conf?"lokal":"bawaan");toast("Memakai pengaturan default");
+}
+function confForServer(){const c=JSON.parse(JSON.stringify(CONF));delete c.setup;return c}
+async function pushConf(){
+  try{
+    await GK.conf.save(ABOUT_ID,confForServer());
+    try{localStorage.removeItem(UNSYNC_KEY)}catch(e){}
+    setSync("server");return true;
+  }catch(e){
+    try{localStorage.setItem(UNSYNC_KEY,"1")}catch(_){}
+    setSync("lokal");
+    toast(e&&e.code==="CANCEL"?"Tersimpan di perangkat ini saja (password dibatalkan)":"Belum tersimpan ke server: "+(e&&e.message||"galat"),true);
+    return false;
+  }
+}
+async function syncConf(){
+  const r=await GK.conf.load(ABOUT_ID);
+  if(r.error){setSync("offline");return}
+  const hasLocal=lsGet2(CONF_KEY)!==null,unsynced=lsGet2(UNSYNC_KEY)==="1";
+  const stale=!!r.conf&&!isFresh(r.conf); /* default server masih versi lama: tidak dipakai */
+  if(stale){setSync("lokal");return}
+  if(r.conf&&!unsynced){
+    if(!$("#game").classList.contains("hidden")){setSync("server");return} // jangan ubah papan saat game berjalan
+    const c=sanitize(r.conf);c.setup=CONF.setup;
+    CONF=c;CFG.timer=CONF.rules.timer;
+    rebuildMaps();saveConf();buildSetup();setSync("server");
+  }else if(unsynced)setSync(r.conf?"pribadi":"lokal");
+  else if(!r.conf&&hasLocal)setSync("lokal");
+  else setSync(r.conf?"server":"bawaan");
+}
+async function edSave(publish){
+  const bad=edValidate();
+  if(bad){edTab=bad[0];renderEd(bad[1]);toast(bad[2],true);return}
+  const newInfo=cleanAbout(ED.about);
+  if(JSON.stringify(newInfo)!==JSON.stringify(INFO)){
+    const b=$("#edSave");b.disabled=true;
+    try{
+      saveLocalBg(newInfo.bagian);
+      const back=cleanAbout(await GK.info.save(ABOUT_ID,newInfo));
+      const lost=newInfo.bagian.length&&!back.bagian.length;
+      INFO=withBg(back);applyCredit();
+      if(lost)toast("Bagian tambahan tersimpan di perangkat ini saja: server belum menyimpan bagian baru (perlu pembaruan skrip server).",true);
+    }
+    catch(e){
+      b.disabled=false;
+      if(e&&e.code==="CANCEL"){edTab="tentang";renderEd();toast("Info game belum tersimpan (password dibatalkan)",true);return}
+      toast("Info game gagal disimpan: "+(e&&e.message||"galat"),true);return;
+    }
+    b.disabled=false;
+  }
+  const clean=sanitize(ED);
+  clean.setup={count:CFG.count,names:CFG.names.slice(0,MAX_TEAMS),sound:CFG.sound,dice:CFG.dice,limit:CFG.limit};
+  const before=JSON.stringify(confForServer());
+  CONF=clean;CFG.timer=CONF.rules.timer;
+  rebuildMaps();saveConf();applyCredit();
+  const changed=before!==JSON.stringify(confForServer());
+  buildSetup();
+  let res=null;
+  if(publish===true){
+    if(SYNC==="offline"){toast("Server tidak terjangkau. Pengaturan baru tersimpan di perangkat ini saja.",true);res=false}
+    else res=await pushConf();
+  }else if(changed||SYNC==="pribadi"||SYNC==="lokal"){
+    /* simpan pribadi: tidak menyentuh server, dan tidak ditimpa default server saat dibuka lagi */
+    try{localStorage.setItem(UNSYNC_KEY,"1")}catch(e){}
+    setSync(SYNC==="lokal"||SYNC==="offline"?SYNC:"pribadi");
+    res="pribadi";
+  }
+  closeEditor();buildSetup();
+  if(res===true)toast("✅ Dijadikan default: berlaku di semua perangkat");
+  else if(res==="pribadi")toast(storageOk?"✅ Disimpan di perangkat ini (pribadi)":"Pengaturan dipakai, tetapi peramban tidak mengizinkan penyimpanan",!storageOk);
+  else if(res===null)toast(storageOk?"✅ Pengaturan disimpan":"Pengaturan dipakai, tetapi peramban tidak mengizinkan penyimpanan",!storageOk);
+}
+function closeEditor(){$("#editor").classList.remove("show");ED=null}
+async function edCancel(){
+  if(ED&&edDirty()){
+    const v=await modal("",`<div class="mtag">Batal</div><h2>Buang perubahan?</h2><p>Perubahan yang belum disimpan akan hilang.</p>
+      <div class="mact"><button class="btn ghost" data-v="no">Lanjut mengedit</button><button class="btn primary" data-v="yes">Buang perubahan</button></div>`);
+    if(v!=="yes")return;
+  }
+  closeEditor();
+}
+async function confirmDel(what){
+  const v=await modal("",`<div class="mtag">Hapus</div><h2>Hapus ${esc(what)}?</h2>
+    <div class="mact"><button class="btn ghost" data-v="no">Batal</button><button class="btn danger" data-v="yes">Hapus</button></div>`);
+  return v==="yes";
+}
+function edExport(){
+  try{
+    const out=sanitize(ED);
+    const blob=new Blob([JSON.stringify(out,null,2)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);a.download="career-quest-pengaturan.json";
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+    toast("Berkas cadangan diunduh");
+  }catch(e){toast("Gagal mengunduh cadangan",true)}
+}
+$("#importFile").addEventListener("change",e=>{
+  const f=e.target.files&&e.target.files[0];e.target.value="";
+  if(!f||!ED)return;
+  const rd=new FileReader();
+  rd.onload=()=>{
+    try{
+      const data=JSON.parse(rd.result);
+      if(!data||typeof data!=="object"||Array.isArray(data))throw 0;
+      const clean=sanitize(data);
+      clean.setup=ED.setup;clean.about=ED.about;
+      ED=padED(clean);renderEd();updateState();
+      toast("Berkas dimuat. Tekan “Simpan di perangkat ini” untuk memakainya.");
+    }catch(err){toast("Berkas tidak valid. Pilih berkas .json hasil unduhan Career Quest.",true)}
+  };
+  rd.onerror=()=>toast("Berkas tidak bisa dibaca",true);
+  rd.readAsText(f);
+});
+
+/* ---- Event editor ---- */
+$("#edTabs").addEventListener("click",e=>{
+  const b=e.target.closest("[data-tab]");if(!b||!ED)return;
+  edTab=b.dataset.tab;renderEd();
+});
+$("#edBody").addEventListener("input",e=>{
+  const t=e.target,g=t.dataset.g;if(!g||!ED)return;
+  const i=+t.dataset.i,f=t.dataset.f;
+  const val=t.type==="checkbox"?(t.checked?1:0):t.value;
+  if(g==="q"){
+    const q=ED.quiz[i];if(!q)return;
+    if(/^o\d$/.test(f))q.o[+f[1]]=val;else q[f]=val;
+    const d=t.closest("details");
+    if(d){const st=d.querySelector(".st"),ct=d.querySelector(".cat");if(st)st.textContent=q.q||"(soal kosong)";if(ct)ct.textContent=q.c||"Umum"}
+  }else if(g==="r"){ED.reflect[i]=val}
+  else if(g==="c"){
+    const c=ED.chance[i];if(!c)return;
+    c[f]=(f==="m"||f==="p")?(Math.round(Number(val))||0):val;
+    const d=t.closest("details");
+    if(d){
+      const no=d.querySelector(".no"),st=d.querySelector(".st"),ct=d.querySelector(".cat");
+      if(no)no.textContent=c.i||"🎁";if(st)st.textContent=c.t||"(kartu kosong)";
+      if(ct)ct.textContent=(c.m?(c.m>0?"+"+c.m+" kotak":c.m+" kotak"):"")+(c.p?(c.m?" · ":"")+(c.p>0?"+":"")+c.p+" poin":"")+(c.x?" · dadu lagi":"");
+    }
+  }else if(g==="cell"){
+    const f2=edFind(edSel);if(!f2.o)return;
+    if(f==="to"){
+      const n=Math.round(Number(val)),up=f2.t==="ladder";
+      if(Number.isFinite(n)&&(up?(n>edSel&&n<=100):(n<edSel&&n>=1))){f2.o.to=n;refreshPapan(false)}
+    }else f2.o[f]=val;
+  }else if(g==="ab"){ED.about[f]=val}
+  else if(g==="al"){ED.about[t.dataset.k][i]=val}
+  else if(g==="bg"){const b=(ED.about.bagian||[])[i];if(b)b[f]=val}
+  else if(g==="rule"){
+    if(f==="pesan")ED.rules.pesan=val;
+    else ED.rules[f]=Math.max(0,Math.min(f==="timer"?600:100,Math.round(Number(val))||0));
+  }
+  updateState();
+});
+$("#edBody").addEventListener("change",e=>{
+  if(e.target.dataset.g==="cell"&&e.target.dataset.f==="to"&&ED){
+    const f=edFind(edSel);if(f.o)e.target.value=f.o.to;
+  }
+});
+$("#edBody").addEventListener("click",async e=>{
+  if(!ED)return;
+  const cellB=e.target.closest("[data-cell]");
+  if(cellB){edSel=+cellB.dataset.cell;refreshPapan(true);return}
+  const tb=e.target.closest("[data-type]");
+  if(tb&&edSel){setCellType(edSel,tb.dataset.type);refreshPapan(true);updateState();return}
+  const b=e.target.closest("[data-act]");if(!b)return;
+  const a=b.dataset.act,i=+b.dataset.i;
+  if(a==="addQ"){const last=ED.quiz[ED.quiz.length-1];ED.quiz.push({c:last?last.c:"Umum",q:"",o:["","","",""],e:""});renderEd(ED.quiz.length-1)}
+  else if(a==="dupQ"){const q=clone(ED.quiz[i]);ED.quiz.splice(i+1,0,q);renderEd(i+1)}
+  else if(a==="delQ"){if(await confirmDel("soal no. "+(i+1))){ED.quiz.splice(i,1);renderEd()}}
+  else if(a==="addR"){ED.reflect.push("");renderEd();const t=$("#edBody").querySelectorAll("textarea");if(t.length){t[t.length-1].scrollIntoView({block:"center"});t[t.length-1].focus()}}
+  else if(a==="delR"){if(await confirmDel("pertanyaan refleksi no. "+(i+1))){ED.reflect.splice(i,1);renderEd()}}
+  else if(a==="addC"){ED.chance.push({i:"🎁",t:"",d:"",m:0,p:0,x:0});renderEd(ED.chance.length-1)}
+  else if(a==="dupC"){ED.chance.splice(i+1,0,clone(ED.chance[i]));renderEd(i+1)}
+  else if(a==="delC"){if(await confirmDel("kartu kejutan no. "+(i+1))){ED.chance.splice(i,1);renderEd()}}
+  else if(a==="push"){b.disabled=true;pushConf().then(ok=>{b.disabled=false;if(ok)toast("✅ Pengaturan dikirim ke server")})}
+  else if(a==="unlock"){GK.auth.ensure().then(t=>{if(t&&ED)renderEd()})}
+  else if(a==="addAL"){ED.about[b.dataset.k].push("");renderEd();const ts=$("#edBody").querySelectorAll(`textarea[data-k="${b.dataset.k}"]`);if(ts.length){ts[ts.length-1].focus();ts[ts.length-1].scrollIntoView({block:"center"})}}
+  else if(a==="delAL"){ED.about[b.dataset.k].splice(i,1);renderEd()}
+  else if(a==="addBG"){(ED.about.bagian||(ED.about.bagian=[])).push({j:"",tipe:"teks",isi:""});renderEd();const ts=$("#edBody").querySelectorAll('input[data-g="bg"][data-f="j"]');if(ts.length){ts[ts.length-1].focus();ts[ts.length-1].scrollIntoView({block:"center"})}}
+  else if(a==="delBG"){ED.about.bagian.splice(i,1);renderEd()}
+  else if(a==="upBG"&&i>0){const A=ED.about.bagian;[A[i-1],A[i]]=[A[i],A[i-1]];renderEd()}
+  else if(a==="dnBG"&&i<ED.about.bagian.length-1){const A=ED.about.bagian;[A[i+1],A[i]]=[A[i],A[i+1]];renderEd()}
+  else if(a==="export")edExport();
+  else if(a==="import")$("#importFile").click();
+  else if(a==="reset"){
+    if(await confirmDel("semua pengaturan dan kembali ke isi bawaan")){
+      const keep=ED.setup,keepA=ED.about;ED=padED(buildDefault());ED.setup=keep;ED.about=keepA;edSel=0;renderEd();toast("Dikembalikan ke bawaan. Tekan “Simpan di perangkat ini” untuk memakainya.");
+    }
+  }
+  updateState();renderTabs();
+});
+$("#edSave").addEventListener("click",()=>edSave(false));
+$("#edPublish").addEventListener("click",()=>edSave(true));
+$("#syncState").addEventListener("click",e=>{if(e.target.id==="useServer")useServerConf()});
+$("#edCancel").addEventListener("click",edCancel);
+
+/* ---------------- EVENT ---------------- */
+$("#cntMinus").addEventListener("click",()=>setCount(CFG.count-1));
+$("#cntPlus").addEventListener("click",()=>setCount(CFG.count+1));
+$("#countChips").addEventListener("click",e=>{
+  const b=e.target.closest("[data-n]");if(!b)return;
+  setCount(+b.dataset.n);
+});
+$("#nameList").addEventListener("input",e=>{
+  const i=e.target.dataset.i;if(i!==undefined)CFG.names[+i]=e.target.value;
+});
+$("#optTimer").addEventListener("change",e=>{
+  CFG.timer=int(e.target.value,0,600,0);e.target.value=CFG.timer;persistSetup();
+});
+$("#diceChips").addEventListener("click",e=>{const b=e.target.closest("[data-d]");if(!b)return;CFG.dice=+b.dataset.d;persistSetup();buildSetup()});
+$("#limChips").addEventListener("click",e=>{const b=e.target.closest("[data-l]");if(!b)return;CFG.limit=+b.dataset.l;persistSetup();buildSetup()});
+$("#optSound").addEventListener("change",e=>{CFG.sound=e.target.checked;syncSoundBtn();persistSetup()});
+$("#editBtn").addEventListener("click",openEditor);
+/* ---------------- SESI LAYANAN (alur RPL) ---------------- */
+const SES_KEY="rpl_"+PAKET.id+"_sesi_v1";
+const FASE=PAKET.fase;
+function newSes(){return {i:0,visited:{},tally:{},obs:{},notes:{},plans:{},game:null,kasus:0,konsep:0,turn:0,hasil:{},start:Date.now()}}
+function loadSes(){try{const s=JSON.parse(localStorage.getItem(SES_KEY)||"null");if(s&&typeof s.i==="number"&&s.i>=0&&s.i<FASE.length)return Object.assign(newSes(),s)}catch(e){}return null}
+let SES=loadSes();
+function saveSes(){try{if(SES)localStorage.setItem(SES_KEY,JSON.stringify(SES))}catch(e){}}
+const teamNames=()=>Array.from({length:CFG.count},(_,i)=>str(CFG.names[i],22)||defName(i));
+const fmtT=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+
+/* pewaktu fase */
+const TM={left:0,run:false,iv:null,faseId:null};
+function tmReset(f){
+  clearInterval(TM.iv);TM.run=false;TM.faseId=f.id;TM.left=(f.menit||0)*60;
+}
+function tmPaint(){
+  const e=$("#sTm");if(!e)return;
+  e.textContent=fmtT(TM.left);e.classList.toggle("low",TM.run&&TM.left<=30&&TM.left>0);
+  const b=$("#sTmGo");if(b)b.textContent=TM.run?"⏸ Jeda":"▶ Mulai";
+}
+function tmToggle(){
+  if(TM.run){clearInterval(TM.iv);TM.run=false;tmPaint();return}
+  if(TM.left<=0)return;
+  TM.run=true;
+  TM.iv=setInterval(()=>{
+    TM.left--;
+    if(TM.left<=0){TM.left=0;clearInterval(TM.iv);TM.run=false;try{sfx.win()}catch(e){}toast("⏰ Waktu fase habis")}
+    tmPaint();
+  },1000);
+  tmPaint();
+}
+
+/* tampilan */
+function showSesi(){
+  $("#setup").classList.add("hidden");$("#game").classList.add("hidden");$("#sesi").classList.remove("hidden");
+  renderSesi();
+}
+function startSesi(){
+  CFG.names=teamNames();persistSetup();
+  SES=newSes();saveSes();G=null;
+  tmReset(FASE[0]);showSesi();
+}
+function resumeSesi(){tmReset(FASE[SES.i]);showSesi()}
+function exitSesi(){
+  $("#sesi").classList.add("hidden");$("#game").classList.add("hidden");$("#setup").classList.remove("hidden");
+  buildSetup();syncSesiBtn();
+}
+function syncSesiBtn(){
+  const b=$("#resumeSesiBtn");if(!b)return;
+  const s=loadSes();
+  b.classList.toggle("hidden",!s);
+  if(s)b.textContent="↩ Lanjutkan sesi (fase "+(s.i+1)+" dari "+FASE.length+")";
+}
+function goFase(i){
+  if(i<0||i>=FASE.length)return;
+  SES.i=i;SES.visited[FASE[i].id]=1;saveSes();tmReset(FASE[i]);renderSesi();
+  const b=$(".s-body");if(b)b.scrollTop=0;
+}
+function bukaPapan(){
+  if(!(G&&!G.over)){
+    const sv=loadSaved();
+    if(sv){startGame(null,sv);return}
+    startGame(teamNames());return;
+  }
+  $("#sesi").classList.add("hidden");$("#game").classList.remove("hidden");
+}
+function sesiKembali(){
+  /* dipanggil dari papan permainan: kembali ke sesi (setelah selesai atau menjeda) */
+  if(!SES){SES=newSes()}
+  const gi=FASE.findIndex(f=>f.tipe==="game");
+  if(G&&G.over&&gi>=0&&SES.i===gi){SES.visited[FASE[gi].id]=1;SES.i=Math.min(gi+1,FASE.length-1)}
+  saveSes();$("#game").classList.add("hidden");tmReset(FASE[SES.i]);showSesi();
+}
+function sesiCatatGame(fast,kuis){
+  if(!SES)return;
+  SES.game={fast:fast.map(x=>({n:x.name,pos:x.pos||0})),kuis:kuis.map(x=>({n:x.name,score:x.score||0,ok:x.ok||0,bad:x.bad||0,rf:x.rf||0}))};
+  saveSes();
+}
+
+/* ---- render per tipe ---- */
+const li=a=>a.map(x=>`<li>${esc(x)}</li>`).join("");
+const noteBox=f=>`<div class="s-card"><h3>${esc(f.noteJ||"📝 Catatan guru")}</h3><textarea data-note="${f.id}" placeholder="${esc(f.noteP||"Catatan observasi, temuan penting, atau tindak lanjut (ikut tercetak di laporan)")}">${esc(SES.notes[f.id]||"")}</textarea></div>`;
+const OBS_SYM=["·","✓","◐"],OBS_TXT=["–","Tampak","Perlu didorong"];
+function obsTable(kind,ind){
+  const names=teamNames();
+  return `<table class="ob-t"><tr><th>Kelompok</th>${ind.map(x=>`<th>${esc(x)}</th>`).join("")}</tr>
+    ${names.map((n,i)=>`<tr><td>${TEAM_ICONS[i%TEAM_ICONS.length]} ${esc(n)}</td>${ind.map((_,j)=>{const v=(((SES[kind]||{})[i]||[])[j])||0;return `<td><button class="ob-c ${v?"v"+v:""}" data-ob data-kind="${kind}" data-i="${i}" data-j="${j}" title="${OBS_TXT[v]}">${OBS_SYM[v]}</button></td>`}).join("")}</tr>`).join("")}</table>
+    <p class="s-text" style="font-size:14px;color:var(--muted);margin-top:8px">Ketuk kotak: ✓ = Tampak, ◐ = Perlu didorong, · = belum diamati. Ini catatan observasi, bukan nilai.</p>`;
+}
+function giliranHtml(){
+  const names=teamNames(),t=Math.min(SES.turn||0,names.length-1);
+  return `<div class="s-card"><h3>🔁 Giliran kelompok</h3><div class="s-tabs">${names.map((n,i)=>`<button type="button" data-gl="${i}" class="${i===t?"on":""}">${TEAM_ICONS[i%TEAM_ICONS.length]} ${esc(n)}</button>`).join("")}</div>
+    <div class="s-nav2" style="justify-content:flex-start"><button class="s-btn p" data-glnext>Kelompok berikutnya ▶</button><span style="color:var(--muted);font-weight:700">Sekarang: ${esc(names[t])}</span></div></div>`;
+}
+function bodyFase(f){
+  const t=f.tipe;
+  if(t==="pemantik")return `<div class="s-card"><h3>🖼 Amati</h3><div class="s-ill" aria-hidden="true">${f.ilustrasi.map(x=>`<span>${x}</span>`).join("")}</div>
+      <p class="s-text">Perhatikan kebiasaan ibadah remaja dari berbagai keyakinan.</p></div>
+    <div class="s-card"><h3>💭 Pertanyaan pemantik</h3><div class="s-big">${esc(f.pemantik)}</div></div>
+    <div class="s-card"><h3>📝 Asesmen awal</h3><p class="s-text">Tampung jawaban murid atas pertanyaan pemantik. Catat di kotak samping. Tidak dinilai, cukup diamati.</p></div>
+    <div class="s-card"><h3>🎯 Tujuan, manfaat, dan alur</h3><ul class="s-pts">${li(f.poin)}</ul></div>
+    <div class="s-card"><h3>🧩 Alur sesi</h3><ol class="alur">${FASE.filter(x=>x.tipe!=="laporan").map(x=>`<li>${esc(x.judul)}<span>${x.menit} mnt</span></li>`).join("")}</ol></div>`;
+  if(t==="akhir")return giliranHtml()+`<div class="s-card"><h3>✍ Refleksi tertulis dan lisan</h3><p class="s-text">${esc(f.petunjuk)}</p><ol class="s-qs">${li(f.refleksi)}</ol></div>
+      <div class="s-card"><h3>👀 Asesmen akhir: observasi guru</h3><p class="s-text">Amati tiap kelompok saat menyampaikan refleksi. Tidak perlu berupa angka.</p>${obsTable("hasil",f.hasilInd)}</div>`;
+  if(t==="kasus"){
+    const k=Math.min(SES.kasus,f.kasus.length-1),c=f.kasus[k];
+    return giliranHtml()+`<div class="s-tabs">${f.kasus.map((x,i)=>`<button type="button" data-kasus="${i}" class="${i===k?"on":""}">${x.ikon} Kasus ${i+1}</button>`).join("")}</div>
+      <div class="s-card"><h3>📖 ${esc(c.j)}</h3><p class="s-text">${esc(c.cerita)}</p></div>
+      <div class="s-card"><h3>💬 Diskusikan</h3><ol class="s-qs">${li(c.tanya)}</ol>
+        <details class="s-kunci"><summary>🔑 Kunci pembahasan (untuk guru)</summary><ul>${li(c.kunci)}</ul></details></div>`;
+  }
+  if(t==="refleksi")return giliranHtml()+`<div class="s-card"><h3>🪞 Refleksikan</h3><ol class="s-qs">${li(f.tanya)}</ol></div><div class="s-card"><h3>👥 Bentuk kegiatan</h3><p class="s-text">${esc(f.bentuk)}</p></div>`;
+  if(t==="konsep"){
+    const k=Math.min(SES.konsep,f.kartu.length-1),c=f.kartu[k];
+    return `<div class="s-card"><div class="s-slide"><div class="ik" aria-hidden="true">${c.ikon}</div><div class="s-big">${esc(c.j)}</div><ul class="s-pts">${li(c.isi)}</ul></div>
+        <div class="s-nav2"><button class="s-btn" data-konsep="-1" ${k===0?"disabled":""}>◀ Kartu sebelumnya</button><span class="mid" style="color:var(--muted);font-weight:700">Kartu ${k+1} / ${f.kartu.length}</span><button class="s-btn p" data-konsep="1" ${k===f.kartu.length-1?"disabled":""}>Kartu berikutnya ▶</button></div></div>
+      <div class="s-card"><h3>🔗 Hubungkan</h3><p class="s-text">${esc(f.rangkum)}</p></div>`;
+  }
+  if(t==="game"){
+    const g=SES.game;
+    return `<div class="s-card"><h3>🎲 Permainan</h3><p class="s-text">${esc(f.intro)}</p>
+        <div class="s-nav2" style="justify-content:flex-start;flex-wrap:wrap"><button class="s-btn p" id="sBukaPapan">${G&&!G.over?"▶ Kembali ke papan permainan":"🎲 Buka papan permainan"}</button></div>
+        <p class="s-text" style="color:var(--muted);font-size:15px">Kelompok: ${teamNames().map(esc).join(" · ")}</p></div>
+      ${g?`<div class="s-card"><h3>🏆 Hasil permainan</h3><p class="s-text"><b>⚡ Tercepat:</b> ${esc(g.fast[0].n)}${g.fast[0].pos?` (kotak ${g.fast[0].pos})`:""}<br><b>🌟 Juara Kuis:</b> ${esc(g.kuis[0].n)} (${g.kuis[0].score} poin)</p></div>`:""}`;
+  }
+  if(t==="rencana"){
+    return giliranHtml()+`<div class="s-card"><h3>🧪 Rencana yang baik</h3><ul class="s-pts">${li(f.kriteria)}</ul></div>
+      <div class="s-card"><h3>💡 Contoh</h3><div class="s-ex">${f.kolom.map(c=>`<b>${esc(c.l)}:</b> ${esc(f.contoh[c.k])}`).join("<br>")}</div></div>
+      <div class="s-card"><h3>📋 Ringkasan rencana tiap kelompok (opsional, ikut tercetak)</h3><div class="rp-grid">${teamNames().map((n,i)=>{const p=SES.plans[i]||{};return `<div class="rp-team"><h4>${TEAM_ICONS[i%TEAM_ICONS.length]} ${esc(n)}</h4>${f.kolom.map(c=>`<div class="rp-f"><label>${esc(c.l)}</label><textarea data-plan="${i}" data-f="${c.k}" placeholder="${esc(c.h)}">${esc(p[c.k]||"")}</textarea></div>`).join("")}</div>`}).join("")}</div></div>`;
+  }
+  if(t==="penutup")return `<div class="s-card"><h3>📌 Kesimpulan bersama</h3><ul class="s-pts">${li(f.kesimpulan)}</ul></div>
+    <div class="s-card"><h3>👏 Apresiasi</h3><p class="s-text">${esc(f.apresiasi)}</p></div>
+    <div class="s-card"><h3>➡ Tindak lanjut</h3><ul class="s-pts">${li(f.tindak)}</ul></div>
+    <div class="s-card"><h3>🙏 Doa dan salam</h3><p class="s-text">${esc(f.doa)}</p></div>`;
+  if(t==="laporan")return `<div class="s-card"><h3>📄 Laporan sesi</h3><p class="s-text">Rekap angket awal dan akhir, observasi proses, hasil permainan, rencana kelompok, dan catatan guru.</p><div class="s-nav2" style="justify-content:flex-start"><button class="s-btn p" id="sLap">📄 Tampilkan laporan</button></div></div>`;
+  return "";
+}
+function renderSesi(){
+  if(!SES)return;
+  const ob=$(".s-body"),keep=ob?ob.scrollTop:0;
+  const f=FASE[SES.i],n=FASE.length;
+  $("#sesi").innerHTML=`
+  <div class="s-top"><div class="ttl">${esc(PAKET.namaA)} <span>${esc(PAKET.namaB)}</span></div>
+    <div class="sp"></div>
+    <button class="tb" id="sObs">📋 Observasi</button>
+    <button class="tb" id="sAbout">ℹ Tentang</button>
+    <button class="tb" data-gk-theme type="button">☀ Terang</button>
+    <button class="tb" id="sFull">⛶ Layar penuh</button>
+    <button class="tb" id="sMenu">⌂ Awal</button></div>
+  <div class="s-steps" id="sSteps">${FASE.map((x,i)=>`<button type="button" data-fase="${i}" class="${i===SES.i?"on":SES.visited[x.id]?"done":""}"><b>${SES.visited[x.id]&&i!==SES.i?"✓":i+1}</b>${esc(x.judul.length>24?x.judul.slice(0,22)+"…":x.judul)}</button>`).join("")}</div>
+  <div class="s-body"><div class="s-main">
+    <div class="s-head"><div class="tahap">${esc(f.tahap)} · ${esc(f.kolb)}</div><h2>${esc(f.judul)}</h2>
+      ${f.ciri.map(c=>`<span class="s-chip c">✦ ${esc(c)}</span>`).join("")}
+      ${f.menit?`<div class="s-timer"><span class="tm" id="sTm">${fmtT(TM.left)}</span><button id="sTmGo" type="button">▶ Mulai</button><button id="sTmRe" type="button" title="Atur ulang">↺</button></div>`:""}</div>
+    ${bodyFase(f)}</div>
+    <aside class="s-side"><div class="s-card"><h3>🧑‍🏫 Panduan guru</h3><ul>${li(f.panduan)}</ul></div>${f.tipe==="laporan"?"":noteBox(f)}
+      ${SES.i===0?`<div class="s-card"><h3>🌈 Keberagaman</h3><ul><li>${esc(PAKET.catatanKeberagaman)}</li></ul></div>`:""}</aside></div>
+  <div class="s-bottom"><button class="s-btn" id="sPrev" ${SES.i===0?"disabled":""}>◀ Sebelumnya</button><div class="mid">Fase ${SES.i+1} dari ${n}</div><button class="s-btn p" id="sNext" ${SES.i===n-1?"disabled":""}>Lanjut ▶</button></div>`;
+  tmPaint();
+  $("#sesi").querySelectorAll("[data-gk-theme]").forEach(b=>b.addEventListener("click",()=>{try{GK.theme.toggle()}catch(e){}}));
+  try{GK.theme.apply()}catch(e){}
+  const nb=$(".s-body");if(nb)nb.scrollTop=keep;
+}
+
+/* observasi proses */
+function obsHtml(){
+  return `<div class="mtag">📋 Asesmen proses</div><h2>Observasi kelompok</h2>${obsTable("obs",PAKET.indikatorObs)}<div class="mact"><button class="btn primary" data-v="ok">Tutup</button></div>`;
+}
+function reportHtml(){
+  const names=teamNames(),P=PAKET;
+  const tb=(kind,ind)=>`<table><tr><th>Kelompok</th>${ind.map(x=>`<th>${esc(x)}</th>`).join("")}</tr>${names.map((n,i)=>`<tr><td>${esc(n)}</td>${ind.map((_,j)=>`<td>${OBS_TXT[(((SES[kind]||{})[i]||[])[j])||0]}</td>`).join("")}</tr>`).join("")}</table>`;
+  const g=SES.game,frc=FASE.find(x=>x.tipe==="rencana");
+  const plans=names.map((n,i)=>{const p=SES.plans[i]||{};return Object.keys(p).some(k=>p[k])?`<tr><td>${esc(n)}</td>${frc.kolom.map(c=>`<td class="pl">${esc(p[c.k]||"")}</td>`).join("")}</tr>`:""}).join("");
+  const nt=(id)=>SES.notes[id]?`<p class="pl">${esc(SES.notes[id])}</p>`:"<p>–</p>";
+  const others=FASE.filter(f=>SES.notes[f.id]&&f.id!=="awal"&&f.id!=="akhir").map(f=>`<tr><td>${esc(f.judul)}</td><td class="pl">${esc(SES.notes[f.id])}</td></tr>`).join("");
+  return `<div class="mtag">📄 Laporan sesi</div><h2>RPL Bimbingan Klasikal: ${esc(P.judul)}</h2>
+    <div class="meta">${Object.keys(P.meta).map(k=>`<b>${esc(k)}</b><span>${esc(P.meta[k])}</span>`).join("")}<b>Tanggal</b><span>${new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})}</span><b>Kelompok</b><span>${names.map(esc).join(", ")}</span></div>
+    <h3>Asesmen awal: jawaban murid atas pertanyaan pemantik</h3>${nt("awal")}
+    <h3>Asesmen proses: observasi</h3>${tb("obs",P.indikatorObs)}
+    <h3>Asesmen akhir: observasi hasil layanan</h3>${tb("hasil",FASE.find(x=>x.tipe==="akhir").hasilInd)}${nt("akhir")}
+    <h3>Hasil permainan</h3>${g?`<p>Tercepat: <b>${esc(g.fast[0].n)}</b>${g.fast[0].pos?` (kotak ${g.fast[0].pos})`:""} · Juara kuis: <b>${esc(g.kuis[0].n)}</b> (${g.kuis[0].score} poin)</p>`:"<p>Permainan belum diselesaikan.</p>"}
+    <h3>Rencana pembiasaan kelompok</h3>${plans?`<table><tr><th>Kelompok</th>${frc.kolom.map(c=>`<th>${esc(c.l)}</th>`).join("")}</tr>${plans}</table>`:"<p>Belum diisi.</p>"}
+    <h3>Catatan guru lainnya</h3>${others?`<table>${others}</table>`:"<p>–</p>"}
+    <p style="font-size:13px;color:var(--muted)">Data hanya tersimpan di perangkat ini dan tidak dikirim ke server.</p>
+    <div class="mact"><button class="btn ghost" data-print>🖨 Cetak</button><button class="btn primary" data-v="ok">Tutup</button></div>`;
+}
+async function openRep(){if($("#modal").classList.contains("show"))return;await modal("rep",reportHtml())}
+
+/* event */
+document.addEventListener("click",e=>{
+  const sesiOn=!$("#sesi").classList.contains("hidden");
+  const t=e.target;
+  if(t.closest("#mbody")){
+    const o=t.closest("[data-ob]");
+    if(o&&SES){const kd=o.dataset.kind,i=+o.dataset.i,j=+o.dataset.j;const M=SES[kd]||(SES[kd]={});const a=M[i]||(M[i]=[0,0,0,0]);a[j]=((a[j]||0)+1)%3;saveSes();o.textContent=OBS_SYM[a[j]];o.title=OBS_TXT[a[j]];o.className="ob-c "+(a[j]?"v"+a[j]:"")}
+    if(t.closest("[data-print]"))window.print();
+    return;
+  }
+  if(!sesiOn)return;
+  let b;
+  if((b=t.closest("[data-fase]")))goFase(+b.dataset.fase);
+  else if(t.closest("#sPrev"))goFase(SES.i-1);
+  else if(t.closest("#sNext"))goFase(SES.i+1);
+  else if(t.closest("#sTmGo"))tmToggle();
+  else if(t.closest("#sTmRe")){tmReset(FASE[SES.i]);tmPaint()}
+  else if((b=t.closest("[data-gl]"))){SES.turn=+b.dataset.gl;saveSes();renderSesi()}
+  else if(t.closest("[data-glnext]")){const n=teamNames().length;SES.turn=((SES.turn||0)+1)%n;const f=FASE[SES.i];if(f.tipe==="kasus")SES.kasus=SES.turn%f.kasus.length;saveSes();renderSesi();toast("Giliran: "+teamNames()[SES.turn])}
+  else if((b=t.closest("[data-ob]"))&&!t.closest("#mbody")){const kd=b.dataset.kind,i=+b.dataset.i,j=+b.dataset.j;const M=SES[kd]||(SES[kd]={});const a=M[i]||(M[i]=[0,0,0,0]);a[j]=((a[j]||0)+1)%3;saveSes();renderSesi()}
+  else if((b=t.closest("[data-kasus]"))){SES.kasus=+b.dataset.kasus;saveSes();renderSesi()}
+  else if((b=t.closest("[data-konsep]"))){SES.konsep=Math.max(0,SES.konsep+(+b.dataset.konsep));saveSes();renderSesi()}
+  else if(t.closest("#sBukaPapan"))bukaPapan();
+  else if(t.closest("#sLap"))openRep();
+  else if(t.closest("#sObs")){if(!$("#modal").classList.contains("show"))modal("rep",obsHtml())}
+  else if(t.closest("#sAbout"))showAbout();
+  else if(t.closest("#sMenu"))exitSesi();
+  else if(t.closest("#sFull")){try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen()}catch(er){}}
+});
+document.addEventListener("input",e=>{
+  const t=e.target;if(!SES)return;
+  if(t.dataset&&t.dataset.note){SES.notes[t.dataset.note]=t.value;saveSes()}
+  else if(t.dataset&&t.dataset.plan!==undefined){const i=+t.dataset.plan;(SES.plans[i]||(SES.plans[i]={}))[t.dataset.f]=t.value;saveSes()}
+});
+
+function rplHtml(){
+  return `<div class="ab-sec"><h3>📘 Isi RPL</h3><p class="ab-empty">Rencana Pelaksanaan Layanan BK, Pendekatan Kurikulum Pembelajaran Mendalam. Berikut isi RPL yang menjadi dasar game ini.</p></div>`+PAKET.rpl.map(b=>`<div class="ab-sec"><h3>${esc(b.j)}</h3>${b.tipe==="teks"?b.isi.map(x=>`<p>${esc(x)}</p>`).join(""):`<ul>${b.isi.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`}</div>`).join("");
+}
+
+$("#startBtn").addEventListener("click",async()=>{
+  if(loadSes()){
+    const v=await modal("",`<div class="mtag">▶ Sesi baru</div><h2>Mulai sesi baru?</h2><p>Sesi yang sedang berjalan (angket, observasi, rencana, catatan) akan diganti.</p><div class="mact"><button class="btn ghost" data-v="no">Batal</button><button class="btn primary" data-v="yes">Mulai sesi baru</button></div>`);
+    if(v!=="yes")return;
+  }
+  try{localStorage.removeItem(SAVE_KEY)}catch(e){}
+  startSesi();
+});
+$("#resumeSesiBtn").addEventListener("click",()=>{SES=loadSes();if(SES)resumeSesi()});
+$("#bSesi").addEventListener("click",()=>{if(!SES)SES=newSes();tmReset(FASE[SES.i]);showSesi()});
+syncSesiBtn();
+$("#resumeBtn").addEventListener("click",()=>{
+  const s=loadSaved();if(!s)return;
+  if(typeof s.sound==="boolean")CFG.sound=s.sound;
+  startGame(null,s);
+});
+$("#rollBtn").addEventListener("click",roll);
+$("#lbQuiz").addEventListener("click",e=>{
+  const b=e.target.closest("[data-a]");if(!b||!G)return;
+  addScore(+b.dataset.a,+b.dataset.d,"bonus");save();
+});
+document.addEventListener("keydown",e=>{
+  if((e.code==="Space"||e.code==="Enter")&&G&&!$("#game").classList.contains("hidden")&&!$("#modal").classList.contains("show")&&!$("#editor").classList.contains("show")){
+    if(document.activeElement&&["BUTTON","INPUT","SELECT","A","TEXTAREA"].includes(document.activeElement.tagName)&&e.code==="Enter")return;
+    e.preventDefault();roll();
+  }
+});
+function syncSoundBtn(){$("#bSound").textContent=CFG.sound?"🔊 Suara":"🔇 Senyap"}
+$("#bSound").addEventListener("click",()=>{CFG.sound=!CFG.sound;syncSoundBtn();persistSetup()});
+$("#bFull").addEventListener("click",()=>{
+  try{
+    if(!document.fullscreenElement)document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }catch(e){}
+});
+$("#bEnd").addEventListener("click",async()=>{
+  if(!G||G.over||$("#modal").classList.contains("show"))return;
+  const v=await modal("",`<div class="mtag">🏁 Akhiri</div><h2>Akhiri permainan sekarang?</h2><p>Juara diumumkan berdasarkan posisi dan poin saat ini.</p>
+    <div class="mact"><button class="btn ghost" data-v="no">Lanjut main</button><button class="btn primary" data-v="yes">Akhiri sekarang</button></div>`);
+  if(v==="yes"&&G&&!G.over&&!G.busy)await finishGame(0,true);
+});
+$("#bReset").addEventListener("click",async()=>{
+  if(!G||G.busy&&!G.over)return;
+  const v=await modal("",`
+    <div class="mtag">⟲ Ulang permainan</div>
+    <h2>Mulai dari awal?</h2>
+    <p>Posisi dan skor semua kelompok akan dihapus.</p>
+    <div class="mact"><button class="btn ghost" data-v="no">Batal</button><button class="btn ghost" data-v="menu">Ke pengaturan</button><button class="btn primary" data-v="yes">Ulang sekarang</button></div>`);
+  if(v==="yes")startGame(G.teams.map(t=>t.name));
+  else if(v==="menu"){try{localStorage.removeItem(SAVE_KEY)}catch(e){}showSetup()}
+});
+$("#bHelp").addEventListener("click",()=>{
+  if($("#modal").classList.contains("show"))return;
+  const R=CONF.rules;
+  modal("",`
+    <div class="mtag">❔ Cara bermain</div>
+    <h2>Tangga Karakter — Menjadi Remaja Berkarakter Melalui Ibadah</h2>
+    <p>1. Setiap kelompok bergiliran melempar dadu (guru menekan tombol atau Spasi). Pada mode 2 dadu, angka kembar (mis. 4 + 4) berarti main lagi. Mendarat di kotak yang sedang ditempati kelompok lain membuat kelompok itu kembali ke 🚩 Start.<br>
+    2. 🪜 <b>Tangga</b> = kebiasaan baik, kamu naik (tangga di kotak 88 dan 93 langsung ke 🏁 finish). 🐍 <b>Ular</b> = kebiasaan yang menghambat, kamu turun. Setelah naik atau turun, isi kotak tujuan tetap berlaku. Jika langkah melewati kotak 100, pion mundur sebanyak kelebihannya (97 + 4 → 99). Mendarat di kotak yang ditempati kelompok lain membuat kelompok itu kembali ke 🚩 Start.<br>
+    3. ❓ <b>Kuis</b>: jawaban benar +${R.pq} poin${R.pw?` (salah −${R.pw})`:""}. 💭 <b>Refleksi</b>: jawab dan diskusikan, +${R.pr} poin. 🎁 <b>Kartu Kejutan</b>: bisa maju, mundur, atau dapat poin.<br>
+    4. Sampai kotak 100 lebih dulu menjadi <b>⚡ Juara Tercepat</b> (jika waktu habis, tim terdepan); total poin terbanyak menjadi <b>🌟 Juara Kuis</b>. Kedua papan juara ada di kiri dan kanan papan permainan. Tim yang kalah mendapat <b>tantangan semangat</b>.<br>
+    5. Guru bisa menyesuaikan poin dengan tombol +5 / −5 di papan Juara Kuis (dihitung sebagai bonus).</p>
+    <div class="mact"><button class="btn primary" data-v="ok">Mengerti</button></div>
+    ${creditLine()?`<div class="mcredit">${creditLine()}</div>`:""}`);
+});
+window.addEventListener("beforeunload",()=>{try{save()}catch(e){}});
+
+$("#aboutBtn").addEventListener("click",showAbout);
+$(".legend").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-f]");if(!b)return;
+  const f=b.dataset.f,bd=$("#board"),on=!bd.classList.contains("f-"+f);
+  bd.classList.remove("f-ladder","f-snake");
+  document.querySelectorAll(".legend button").forEach(x=>x.classList.remove("on"));
+  if(on){bd.classList.add("f-"+f);b.classList.add("on")}
+});
+$("#bAbout").addEventListener("click",showAbout);
+syncSoundBtn();
+applyCredit();
+refreshInfo();
+buildSetup();
+setSync("cek");
+syncConf();
+if(location.hash==="#tentang")setTimeout(showAbout,200);
+</script>
+</body>
+</html>
