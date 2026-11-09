@@ -87,9 +87,9 @@
         { layanan: 'Mencegah Gangguan Mental Ringan', href: 'escape-stress-room-rpl.html', judul: 'Escape the Stress Room', label: 'Escape room · RPL Kelas 9 · 4 JP',
           isi: 'Sesi layanan lengkap sesuai RPL: pemantik, studi kasus, refleksi, konsep, game escape room lima ruangan (pengertian, pemicu, tanda, kelola emosi dengan latihan napas, cari bantuan), rencana menjaga kesehatan mental, dan laporan PDF/Excel.',
           tag: ['Sesuai RPL', 'Berkelompok', 'Proyektor / IFP'], tentang: 'escape-stress-room-rpl.html' },
-        { layanan: 'Membangun Hubungan Pertemanan yang Sehat', href: 'detektif-konflik.html', judul: 'Detektif Konflik', label: 'Detektif · Kelas 9',
-          isi: 'Game detektif digital: kumpulkan bukti dari dua sisi cerita, pecahkan kasus pertemanan, jaga meteran kepercayaan, lalu pimpin Sidang Damai. (Versi sesuai RPL sedang disiapkan.)',
-          tag: ['Berkelompok', 'Proyektor / IFP'], tentang: 'detektif-konflik.html#tentang' },
+        { layanan: 'Membangun Hubungan Pertemanan yang Sehat', href: 'detektif-konflik-rpl.html', judul: 'Detektif Konflik', label: 'Detektif · RPL Kelas 9 · 4 JP',
+          isi: 'Sesi layanan lengkap sesuai RPL: pemantik, studi kasus, refleksi, konsep, game detektif lima kasus pertemanan (bukti dua sisi, putusan ciri relasi, langkah damai, Meteran Kepercayaan), rencana membangun relasi sehat, dan laporan PDF/Excel.',
+          tag: ['Sesuai RPL', 'Berkelompok', 'Proyektor / IFP'], tentang: 'detektif-konflik-rpl.html' },
         { layanan: 'Pemantapan Kelanjutan Studi ke SMA/MA/SMK', href: 'misi-pendaftar.html', judul: 'Misi Pendaftar', label: 'Simulasi loket pendaftaran · RPL Kelas 9 · 4 JP',
           isi: 'Sesi layanan lengkap sesuai RPL: pemantik, mengenal jalur SMA/MA/SMK, refleksi diri, konsep, game simulasi lima loket pendaftaran (kenali diri, kenali jalur, pertimbangan, persiapan, keputusan), Rencana Kelanjutan Studi tiap kelompok, dan laporan PDF/Excel.',
           tag: ['Sesuai RPL', 'Berkelompok', 'Proyektor / IFP'], tentang: 'misi-pendaftar.html' }
@@ -139,136 +139,6 @@
         }
         li.append(el('span', 'no', String(i + 1)), t, ac); ul.append(li);
       });
-    })();
-  </script>
-  <link rel="icon" href="assets/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <meta name="theme-color" content="#121a33">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&display=swap">
-  <link rel="stylesheet" href="style.css?v=50">
-  <link rel="stylesheet" href="dashboard.css?v=50">
-  <link rel="stylesheet" href="gamebk.css?v=50">
-  <style>
-    /* Kartu ramping: hanya gambar + judul + tombol. Deskripsi & tag pindah ke jendela Info. */
-    .gbk-body { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 0.6rem; padding: 0.9rem 1.2rem 1rem; }
-    .gbk-body h2 { font-size: 1.2rem; }
-    .gbk-play { margin-top: 0; justify-self: end; white-space: nowrap; }
-    .gbk-soon .gbk-body { grid-template-columns: 1fr; }
-    .gbk-grid > li { grid-template-rows: 1fr auto; }
-    .gbk-grid > li > .gbk-card { grid-template-rows: auto 1fr; height: 100%; }
-    button.gbk-about { font: inherit; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
-    .gbk-ov { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; padding: 1rem; background: rgba(5, 8, 22, 0.55); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
-    .gbk-ov[hidden] { display: none; }
-    .gbk-dlg { position: relative; width: min(30rem, 100%); max-height: 90vh; overflow: auto; display: grid; gap: 0.75rem; padding: 1.4rem 1.4rem 1.3rem; border: 1px solid var(--line); border-radius: 1.4rem; background: var(--surface); color: var(--ink); box-shadow: var(--shadow-up); }
-    .gbk-dlg h3 { margin: 0; padding-right: 2.2rem; font-size: 1.3rem; letter-spacing: -0.02em; line-height: 1.15; }
-    .gbk-dlg .gbk-lbl { justify-self: start; padding: 0.12rem 0.7rem; border-radius: 99px; background: var(--tint); font-size: 0.74rem; font-weight: 700; }
-    .gbk-dlg p { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.55; }
-    .gbk-dlg .gbk-x { position: absolute; top: 0.8rem; right: 0.8rem; width: 2.2rem; height: 2.2rem; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--ink); font-size: 1.1rem; line-height: 1; cursor: pointer; }
-    .gbk-dlg .gbk-x:hover { border-color: var(--accent); color: var(--accent); }
-    .gbk-dlg .gbk-act { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.2rem; }
-    .gbk-dlg .gbk-act .gbk-play { margin: 0; text-decoration: none; }
-    .gbk-dlg .gbk-act .gbk-about { align-self: center; }
-    @media (max-width: 420px) { .gbk-body { grid-template-columns: 1fr; } .gbk-play { justify-self: start; } }
-    /* Tampilan daftar (list) */
-    ul.gbk-list{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
-    .gbk-row{display:grid;grid-template-columns:2rem minmax(0,1fr) auto;align-items:center;gap:.4rem .8rem;padding:.7rem .9rem;border:1px solid var(--line);border-radius:1rem;background:var(--surface);color:var(--ink)}
-    .gbk-row .no{font-weight:800;color:var(--muted);text-align:center}
-    .gbk-row .tt{min-width:0}
-    .gbk-row .tt b{display:block;font-size:1rem;line-height:1.25}
-    .gbk-row .tt small{display:block;color:var(--muted);font-size:.82rem;margin-top:.1rem}
-    .gbk-row .tt small em{font-style:normal;font-weight:700;color:var(--accent)}
-    .gbk-row .ac{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-    .gbk-row .gbk-play{margin:0;text-decoration:none;white-space:nowrap}
-    .gbk-row.soon{opacity:.6}
-    .gbk-row.soon .tt small{font-style:italic}
-    @media(max-width:520px){.gbk-row{grid-template-columns:1.6rem 1fr}.gbk-row .ac{grid-column:2;justify-content:flex-start}}
-  </style>
-</head>
-<body>
-  <main class="wrap">
-    <div class="topbar">
-      <a class="btn-back" href="./" id="home"></a>
-      <button class="icon-btn theme-btn" id="themeBtn" type="button" aria-label="Ganti tema terang atau gelap"></button>
-    </div>
-    <header class="dhead gbk-head" id="dhead">
-      <h1>Game BK</h1>
-      <div class="rich">Game pembelajaran Bimbingan dan Konseling. Pilih layanan, lalu mainkan gamenya di kelas.</div>
-    </header>
-    <ul class="gbk-list" id="games"></ul>
-    <p class="gbk-credit">Dirancang oleh <b>Agung Fahri Husaeni, S.Pd.</b> · Guru BK SMP Negeri 36 Semarang</p>
-  </main>
-  <script src="config.js?v=50"></script>
-  <script src="common.js?v=50"></script>
-  <script>
-    (function () {
-      /* Daftar game. Untuk menambah game: simpan file game di folder yang sama, lalu tambahkan satu baris di sini. */
-      var GAMES = [
-        { layanan: 'Menjadi Remaja Berkarakter Melalui Ibadah', href: 'rpl-ibadah.html', judul: 'Tangga Karakter', label: 'Ular tangga · RPL Kelas 9 · 4 JP',
-          isi: 'Sesi layanan lengkap sesuai RPL "Menjadi Remaja Berkarakter Melalui Ibadah": pemantik, studi kasus, refleksi, konsep, permainan ular tangga, rencana pembiasaan, dan laporan asesmen. Dikendalikan penuh oleh guru, dimainkan berkelompok bergantian.',
-          tag: ['Sesuai RPL', 'Berkelompok', 'Proyektor / IFP'], tentang: 'rpl-ibadah.html#tentang' },
-        { layanan: 'Mencegah Gangguan Mental Ringan', href: 'escape-the-stress-room.html', judul: 'Escape the Stress Room', label: 'Escape room · Kelas 9',
-          isi: 'Game escape room digital: lewati ruangan, selesaikan kasus BK, kumpulkan kunci, lalu buka pintu keluar. (Versi sesuai RPL sedang disiapkan.)',
-          tag: ['Berkelompok', 'Proyektor / IFP'], tentang: 'escape-the-stress-room.html#tentang' },
-        { layanan: 'Membangun Hubungan Pertemanan yang Sehat', href: 'detektif-konflik.html', judul: 'Detektif Konflik', label: 'Detektif · Kelas 9',
-          isi: 'Game detektif digital: kumpulkan bukti dari dua sisi cerita, pecahkan kasus pertemanan, jaga meteran kepercayaan, lalu pimpin Sidang Damai. (Versi sesuai RPL sedang disiapkan.)',
-          tag: ['Berkelompok', 'Proyektor / IFP'], tentang: 'detektif-konflik.html#tentang' },
-        { layanan: 'Pemantapan Kelanjutan Studi ke SMA/MA/SMK', href: 'career-quest-studi-lanjut.html', judul: 'Misi Pendaftar (sementara: Career Quest Studi Lanjut)', label: 'Simulasi pendaftaran · Kelas 9 Sem. 2',
-          isi: 'Sementara memakai Career Quest Studi Lanjut. Akan diganti game simulasi "Misi Pendaftar" sesuai RPL.',
-          tag: ['Berkelompok', 'Proyektor / IFP'], tentang: 'career-quest-studi-lanjut.html#tentang' }
-      ];
-      var LAYANAN = ['Menjadi Remaja Berkarakter Melalui Ibadah','Mencegah Gangguan Mental Ringan','Mengembangkan Growth Mindset','Menjaga Kesehatan Reproduksi','Menumbuhkan Jiwa Wirausaha','Menghargai Keberagaman dalam Pertemanan','Mengelola Media Sosial yang Positif','Membangun Perilaku Anti Korupsi','Social Butterfly','Membangun Hubungan Pertemanan yang Sehat','Meningkatkan Prestasi Belajar','Melatih Keterampilan Literasi dan Numerasi','Persiapan Menghadapi Ujian','Membangun Self Love','Membangun Personal Branding','Pemantapan Kelanjutan Studi ke SMA/MA/SMK'];
-      var $ = function (id) { return document.getElementById(id); };
-      function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
-
-      var themeBtn = $('themeBtn');
-      themeBtn.append(App.svg('moon', 'moon'), App.svg('sun', 'sun'));
-      themeBtn.addEventListener('click', App.theme.toggle);
-      App.pasangBack('gamebk');
-
-      /* Jendela Info: deskripsi + tag + tautan capaian & tujuan BK */
-      var ov = el('div', 'gbk-ov'); ov.hidden = true; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Info game');
-      document.body.append(ov);
-      var opener = null;
-      function tutupInfo() { ov.hidden = true; ov.textContent = ''; if (opener) { try { opener.focus(); } catch (e) {} opener = null; } }
-      function bukaInfo(g, btn) {
-        opener = btn; ov.textContent = '';
-        var box = el('div', 'gbk-dlg');
-        var x = el('button', 'gbk-x', '✕'); x.type = 'button'; x.setAttribute('aria-label', 'Tutup'); x.addEventListener('click', tutupInfo);
-        var tags = el('div', 'gbk-tags'); (g.tag || []).forEach(function (t) { tags.append(el('span', '', t)); });
-        var act = el('div', 'gbk-act');
-        var play = el('a', 'gbk-play', '▶ Mainkan'); play.href = g.href; act.append(play);
-        if (g.tentang) { var ab = el('a', 'gbk-about', 'ℹ Capaian & tujuan BK'); ab.href = g.tentang; act.append(ab); }
-        box.append(x, el('h3', '', g.judul), el('span', 'gbk-lbl', g.label), el('p', '', g.isi), tags, act);
-        ov.append(box); ov.hidden = false; x.focus();
-      }
-      ov.addEventListener('mousedown', function (e) { if (e.target === ov) tutupInfo(); });
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !ov.hidden) tutupInfo(); });
-
-      var ul = $('games');
-      GAMES.forEach(function (g) {
-        var li = el('li');
-        var a = el('a', 'gbk-card'); a.href = g.href;
-        var art = el('div', 'gbk-art' + (g.gambar ? ' has-img' : ''), g.gambar ? '' : g.ikon); art.setAttribute('aria-hidden', 'true');
-        if (g.gambar) { var im = el('img'); im.src = g.gambar; im.alt = ''; im.loading = 'lazy'; im.onerror = function () { im.remove(); art.classList.remove('has-img'); art.insertBefore(document.createTextNode(g.ikon), art.firstChild); }; art.append(im); }
-        art.append(el('small', '', g.label));
-        var b = el('div', 'gbk-body');
-        b.append(el('h2', '', g.judul), el('span', 'gbk-play', '▶ Mainkan'));
-        a.append(art, b); li.append(a);
-        var info = el('button', 'gbk-about', 'ℹ Info game'); info.type = 'button';
-        info.addEventListener('click', function () { bukaInfo(g, info); });
-        li.append(info);
-        ul.append(li);
-      });
-      var soon = el('li');
-      var sc = el('div', 'gbk-card gbk-soon');
-      var sa = el('div', 'gbk-art', '🎮'); sa.setAttribute('aria-hidden', 'true');
-      var sb = el('div', 'gbk-body'); sb.append(el('h2', '', 'Game berikutnya'), el('p', '', 'Segera hadir.'));
-      sc.append(sa, sb); soon.append(sc); ul.append(soon);
     })();
   </script>
 </body>
