@@ -308,6 +308,10 @@ details.qi summary .cat{flex:none;font-size:12px;color:var(--cy);border:1px soli
 .ab-by{margin-top:18px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,rgba(34,211,238,.1),rgba(232,121,249,.1));text-align:center;font-size:15px;color:var(--muted);line-height:1.5}
 .ab-by b{display:block;color:#fff;font-size:18px}
 .ab-empty{color:var(--dim);font-style:italic}
+.bg-item{border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px;display:grid;gap:8px;background:var(--glass)}
+.bg-top{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:8px}
+.bg-act{display:flex;gap:6px;justify-content:flex-end}
+@media(max-width:700px){.bg-top{grid-template-columns:1fr}}
 .syncstate{margin-top:8px;font-size:12.5px;font-weight:700;color:var(--muted)}.syncstate.ok{color:var(--green)}.syncstate.warn{color:var(--gold)}
 .linkbtn{font:inherit;font-size:12.5px;font-weight:800;color:var(--cy);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
 .lockbox{max-width:520px;margin:30px auto;text-align:center}.lockbox .lk{font-size:44px}.lockbox .btn{margin-top:6px}
@@ -796,7 +800,8 @@ const DEFAULT_ABOUT={
     "Melatih refleksi diri dan komunikasi asertif melalui diskusi kelompok.",
     "Menumbuhkan kerja sama, sportivitas, dan tanggung jawab dalam tim."
   ],
-  catatan:""
+  catatan:"",
+  bagian:[]
 };
 function buildDefault(){
   return {
@@ -856,13 +861,26 @@ function sanitize(c){
   out.setup={dice:int(S.dice,1,2,2),limit:[0,30,45,60].includes(+S.limit)?+S.limit:45,count:int(S.count,MIN_TEAMS,MAX_TEAMS,4),names:(Array.isArray(S.names)?S.names:[]).slice(0,MAX_TEAMS).map(x=>str(x,22)),sound:S.sound!==false};
   return out;
 }
+const BG_TIPE=["teks","poin","nomor"];
+const BG_LS="cq_bagian_"+ABOUT_ID;
+function cleanBg(v){return (Array.isArray(v)?v:[]).slice(0,10).map(x=>x&&typeof x==="object"?{j:str(x.j,60),tipe:BG_TIPE.includes(x.tipe)?x.tipe:"teks",isi:String(x.isi==null?"":x.isi).replace(/\r/g,"").trim().slice(0,1500)}:null).filter(x=>x&&(x.j||x.isi))}
+function localBg(){try{return cleanBg(JSON.parse(localStorage.getItem(BG_LS)||"[]"))}catch(e){return[]}}
+function saveLocalBg(a){try{localStorage.setItem(BG_LS,JSON.stringify(a))}catch(e){}}
+function withBg(i){if(!i.bagian||!i.bagian.length){const l=localBg();if(l.length)i.bagian=l}return i}
+function bgHtml(b){
+  const L=b.isi.split("\n").map(x=>x.trim()).filter(Boolean);
+  if(!L.length)return `<p class="ab-empty">Belum diisi.</p>`;
+  if(b.tipe==="poin")return `<ul>${L.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+  if(b.tipe==="nomor")return `<ol>${L.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>`;
+  return L.map(x=>`<p>${esc(x)}</p>`).join("");
+}
 function cleanAbout(A){
   A=A&&typeof A==="object"?A:{};const DA=DEFAULT_ABOUT;
   const lst=(v,fb)=>(Array.isArray(v)?v:fb).map(x=>str(x,300)).filter(Boolean).slice(0,15);
   return {
     deskripsi:str(A.deskripsi,700),perancang:str(A.perancang,80),jabatan:str(A.jabatan,120),
     sasaran:str(A.sasaran,160),durasi:str(A.durasi,80),media:str(A.media,160),bidang:str(A.bidang,80),
-    capaian:lst(A.capaian,DA.capaian),tujuan:lst(A.tujuan,DA.tujuan),catatan:str(A.catatan,700)
+    capaian:lst(A.capaian,DA.capaian),tujuan:lst(A.tujuan,DA.tujuan),catatan:str(A.catatan,700),bagian:cleanBg(A.bagian)
   };
 }
 const isFresh=c=>!!c&&typeof c==="object"&&int(c.rev,0,999,0)>=CONF_REV;
@@ -894,9 +912,9 @@ rebuildMaps();
 
 /* ---------------- KREDIT & TENTANG GAME ---------------- */
 const GK=window.GameKit||{info:{cached:(i,d)=>d,load:async(i,d)=>({info:d}),save:async()=>{throw new Error("gamekit.js belum termuat")}},auth:{token:()=>null,ensure:async()=>null,drop(){}}};
-let INFO=cleanAbout(GK.info.cached(ABOUT_ID,DEFAULT_ABOUT));
+let INFO=withBg(cleanAbout(GK.info.cached(ABOUT_ID,DEFAULT_ABOUT)));
 function refreshInfo(){
-  return GK.info.load(ABOUT_ID,DEFAULT_ABOUT).then(r=>{INFO=cleanAbout(r.info);applyCredit();return r}).catch(()=>null);
+  return GK.info.load(ABOUT_ID,DEFAULT_ABOUT).then(r=>{INFO=withBg(cleanAbout(r.info));applyCredit();return r}).catch(()=>null);
 }
 function creditLine(){
   const A=INFO;if(!A.perancang)return "";
@@ -917,6 +935,7 @@ function aboutHtml(){
     ${A.deskripsi?`<div class="ab-sec"><h3>Deskripsi</h3><p>${esc(A.deskripsi)}</p></div>`:""}
     <div class="ab-sec"><h3>Capaian layanan BK</h3>${list(A.capaian,"ul")}</div>
     <div class="ab-sec"><h3>Tujuan khusus</h3>${list(A.tujuan,"ol")}</div>
+    ${A.bagian.map(b=>`<div class="ab-sec">${b.j?`<h3>${esc(b.j)}</h3>`:""}${bgHtml(b)}</div>`).join("")}
     ${A.catatan?`<div class="ab-sec"><h3>Catatan</h3><p>${esc(A.catatan)}</p></div>`:""}
     ${A.perancang?`<div class="ab-by">Dirancang oleh<b>${esc(A.perancang)}</b>${esc(A.jabatan)}</div>`:""}
     <div class="mact"><button class="btn ghost" data-v="edit">✎ Edit info</button><button class="btn ghost" data-v="print">🖨 Cetak</button><button class="btn primary" data-v="ok">Tutup</button></div>`;
@@ -1678,6 +1697,15 @@ function aboutList(k,label,help){
     ${arr.map((t,i)=>`<div class="list-row"><div class="fl"><textarea data-g="al" data-k="${k}" data-i="${i}" maxlength="300" aria-label="${esc(label)} ${i+1}" style="min-height:52px">${esc(t)}</textarea></div><button class="btn danger sm" data-act="delAL" data-k="${k}" data-i="${i}" aria-label="Hapus">🗑</button></div>`).join("")||'<p class="ed-help">Belum ada isi.</p>'}
     <button class="btn ghost sm" data-act="addAL" data-k="${k}">+ Tambah</button></div>`;
 }
+function aboutBagian(){
+  const arr=ED.about.bagian||(ED.about.bagian=[]);
+  const row=(b,i)=>`<div class="bg-item"><div class="bg-top"><div class="fl"><input data-g="bg" data-i="${i}" data-f="j" value="${esc(b.j||"")}" maxlength="60" placeholder="Nama bagian, mis. Rujukan, Saran fasilitasi, Langkah bermain" aria-label="Nama bagian ${i+1}"></div><div class="fl"><select data-g="bg" data-i="${i}" data-f="tipe" aria-label="Bentuk isi"><option value="teks"${b.tipe==="teks"?" selected":""}>Paragraf</option><option value="poin"${b.tipe==="poin"?" selected":""}>Daftar poin ✔</option><option value="nomor"${b.tipe==="nomor"?" selected":""}>Daftar bernomor</option></select></div></div>
+    <div class="fl"><textarea data-g="bg" data-i="${i}" data-f="isi" maxlength="1500" style="min-height:80px" placeholder="Isi bagian. Untuk daftar, tulis satu butir per baris." aria-label="Isi bagian ${i+1}">${esc(b.isi||"")}</textarea></div>
+    <div class="bg-act"><button class="btn ghost sm" data-act="upBG" data-i="${i}" ${i===0?"disabled":""} aria-label="Naikkan">↑</button><button class="btn ghost sm" data-act="dnBG" data-i="${i}" ${i===arr.length-1?"disabled":""} aria-label="Turunkan">↓</button><button class="btn danger sm" data-act="delBG" data-i="${i}" aria-label="Hapus bagian">🗑 Hapus</button></div></div>`;
+  return `<div class="panel" style="grid-column:1/-1"><h3>➕ Bagian tambahan</h3><p class="ed-help" style="margin:0 0 10px">Buat bagian baru dengan nama sendiri (maksimal 10). Tampil di Tentang game setelah Tujuan khusus, sesuai urutan di sini.</p>
+    ${arr.map(row).join("")||'<p class="ed-help">Belum ada bagian tambahan.</p>'}
+    ${arr.length<10?'<button class="btn ghost sm" data-act="addBG">+ Tambah bagian</button>':""}</div>`;
+}
 function edTentang(){
   if(!GK.auth.token())return `<div class="ed-wrap"><div class="panel lockbox"><div class="lk">🔒</div><h3>Info game dikunci</h3>
     <p class="ed-help">Kredit perancang, capaian layanan BK, dan tujuan khusus hanya bisa diubah dengan <b>password admin Speganam</b>. Perubahan tersimpan di server, sehingga semua perangkat dan pengunjung melihat info yang sama.</p>
@@ -1691,6 +1719,7 @@ function edTentang(){
       <div class="panel" style="grid-column:1/-1"><h3>📝 Deskripsi</h3><div class="fl"><textarea data-g="ab" data-f="deskripsi" maxlength="700" style="min-height:90px">${esc(A.deskripsi)}</textarea></div></div>
       ${aboutList("capaian","🎯 Capaian layanan BK","Capaian yang ingin dicapai peserta didik lewat layanan ini. Satu butir per baris.")}
       ${aboutList("tujuan","✅ Tujuan khusus","Tujuan khusus permainan. Satu butir per baris.")}
+      ${aboutBagian()}
       <div class="panel" style="grid-column:1/-1"><h3>🗒 Catatan (opsional)</h3><div class="fl"><textarea data-g="ab" data-f="catatan" maxlength="700" style="min-height:70px" placeholder="mis. rujukan program, saran fasilitasi, atau refleksi akhir bagi guru">${esc(A.catatan)}</textarea></div></div>
     </div></div>`;
 }
@@ -1780,7 +1809,13 @@ async function edSave(publish){
   const newInfo=cleanAbout(ED.about);
   if(JSON.stringify(newInfo)!==JSON.stringify(INFO)){
     const b=$("#edSave");b.disabled=true;
-    try{INFO=cleanAbout(await GK.info.save(ABOUT_ID,newInfo));applyCredit()}
+    try{
+      saveLocalBg(newInfo.bagian);
+      const back=cleanAbout(await GK.info.save(ABOUT_ID,newInfo));
+      const lost=newInfo.bagian.length&&!back.bagian.length;
+      INFO=withBg(back);applyCredit();
+      if(lost)toast("Bagian tambahan tersimpan di perangkat ini saja: server belum menyimpan bagian baru (perlu pembaruan skrip server).",true);
+    }
     catch(e){
       b.disabled=false;
       if(e&&e.code==="CANCEL"){edTab="tentang";renderEd();toast("Info game belum tersimpan (password dibatalkan)",true);return}
@@ -1885,6 +1920,7 @@ $("#edBody").addEventListener("input",e=>{
     }else f2.o[f]=val;
   }else if(g==="ab"){ED.about[f]=val}
   else if(g==="al"){ED.about[t.dataset.k][i]=val}
+  else if(g==="bg"){const b=(ED.about.bagian||[])[i];if(b)b[f]=val}
   else if(g==="rule"){
     if(f==="pesan")ED.rules.pesan=val;
     else ED.rules[f]=Math.max(0,Math.min(f==="timer"?600:100,Math.round(Number(val))||0));
@@ -1916,6 +1952,10 @@ $("#edBody").addEventListener("click",async e=>{
   else if(a==="unlock"){GK.auth.ensure().then(t=>{if(t&&ED)renderEd()})}
   else if(a==="addAL"){ED.about[b.dataset.k].push("");renderEd();const ts=$("#edBody").querySelectorAll(`textarea[data-k="${b.dataset.k}"]`);if(ts.length){ts[ts.length-1].focus();ts[ts.length-1].scrollIntoView({block:"center"})}}
   else if(a==="delAL"){ED.about[b.dataset.k].splice(i,1);renderEd()}
+  else if(a==="addBG"){(ED.about.bagian||(ED.about.bagian=[])).push({j:"",tipe:"teks",isi:""});renderEd();const ts=$("#edBody").querySelectorAll('input[data-g="bg"][data-f="j"]');if(ts.length){ts[ts.length-1].focus();ts[ts.length-1].scrollIntoView({block:"center"})}}
+  else if(a==="delBG"){ED.about.bagian.splice(i,1);renderEd()}
+  else if(a==="upBG"&&i>0){const A=ED.about.bagian;[A[i-1],A[i]]=[A[i],A[i-1]];renderEd()}
+  else if(a==="dnBG"&&i<ED.about.bagian.length-1){const A=ED.about.bagian;[A[i+1],A[i]]=[A[i],A[i+1]];renderEd()}
   else if(a==="export")edExport();
   else if(a==="import")$("#importFile").click();
   else if(a==="reset"){
