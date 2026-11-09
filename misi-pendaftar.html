@@ -82,6 +82,7 @@ label.f{display:block;font-weight:700;margin:10px 0 4px;font-size:14px;color:var
 .setup h1 span{color:var(--ac)}
 .alur{padding-left:1.2em;line-height:1.8}
 .alur span{color:var(--muted);margin-left:8px;font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.chip{border:1px solid var(--line);border-radius:12px;padding:6px 12px;font-weight:700}.chip small{display:block;color:var(--muted);font-weight:500;font-size:11px}
 .rank{display:grid;gap:8px}
 .rank div{display:flex;justify-content:space-between;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:rgba(255,255,255,.05)}
 @media(max-width:760px){.row{grid-template-columns:90px repeat(5,1fr)}.slot{font-size:10px}}
@@ -103,7 +104,7 @@ label.f{display:block;font-weight:700;margin:10px 0 4px;font-size:14px;color:var
 <body>
 <div id="app">
   <div class="top">
-    <div class="ttl">MISI PENDAFTAR<small id="subttl">Pemantapan Kelanjutan Studi ke SMA/MA/SMK</small></div>
+    <div class="ttl" id="ttl"></div>
     <div class="sp"></div>
     <button class="btn sm hidden" id="bObs">📋 Observasi</button>
     <button class="btn sm" id="bInfo">ℹ Info game</button>
@@ -114,11 +115,18 @@ label.f{display:block;font-weight:700;margin:10px 0 4px;font-size:14px;color:var
 </div>
 <div id="mod" class="mod hidden"><div class="box" id="mbox"></div></div>
 
+<script src="gamekit.js"></script>
 <script>
 "use strict";
-/* ============================ DATA RPL ============================ */
+const ID="studi",ABOUT_ID="misi-pendaftar",NAMA="MISI PENDAFTAR",NAMA_A="Misi",NAMA_B="Pendaftar";
+const SUB="Kelompok menjadi pendaftar yang mengurus misi di lima loket: mengenali diri, mengenali jalur, menimbang, bersiap, lalu memutuskan. Dimainkan bergantian, layar dikendalikan guru.";
+const DEFAULT_ABOUT={deskripsi:"Game simulasi loket pendaftaran untuk Bimbingan Klasikal topik “Pemantapan Kelanjutan Studi ke SMA/MA/SMK”. Dijalankan guru dalam sesi 4 JP sesuai RPL: pemantik, pengenalan jalur, refleksi, konsep, permainan lima loket, Rencana Kelanjutan Studi, dan laporan asesmen.",perancang:"Agung Fahri Husaeni, S.Pd.",jabatan:"Guru BK SMP Negeri 36 Semarang",sasaran:"Kelas 9",durasi:"4 JP (4 x 40 menit)",media:"Laptop dengan proyektor/IFP, dikendalikan guru, dimainkan berkelompok",bidang:"Wawasan dan Kesiapan Karier",capaian:["Murid mampu mengenali minat, bakat, dan cita-cita serta kaitannya dengan pilihan sekolah lanjutan.","Murid mampu menyusun rencana kelanjutan studi yang matang beserta langkah persiapannya."],tujuan:["Murid mampu mengenali minat, bakat, dan cita-cita serta kaitannya dengan pilihan sekolah lanjutan (C).","Murid mampu menunjukkan sikap terbuka dan mantap terhadap pilihan kelanjutan studi yang sesuai dengan dirinya (A).","Murid mampu menyusun Rencana Kelanjutan Studi beserta langkah persiapannya (P)."],catatan:"Aturan, kuota, dan jadwal pendaftaran berbeda tiap daerah dan tahun. Game tidak memuatnya; selalu rujuk juknis resmi.",bagian:[]};
+const GAME_COLS=["Kelompok","Stempel (maks 5)","Tepat","Dibahas"];
 const RPL={
  id:"studi",
+ rencanaJ:"Susun Rencana Kelanjutan Studi",
+ tally:["SMA","MA","SMK","Belum tahu"],
+ akhirPrompts:["Pilihan sekolah lanjutan yang paling sesuai dengan potensi diriku.","Informasi baru yang kudapat selama layanan.","Komitmenku mempersiapkan diri secara akademik dan nonakademik agar sesuai cita-cita dan rencana kariernya."],
  judul:"Pemantapan Kelanjutan Studi ke SMA/MA/SMK",
  meta:{"Topik":"Pemantapan Kelanjutan Studi ke SMA/MA/SMK","Komponen":"Perencanaan Individual","Strategi":"Bimbingan Klasikal","Bidang":"Wawasan dan Kesiapan Karier","Sasaran":"Kelas 9","Alokasi waktu":"4 JP (4 x 40 menit)"},
  profil:"Kolaborasi, Penalaran Kritis, Komunikasi",
@@ -131,21 +139,179 @@ const RPL={
  indProses:["Aktif bertanya/menjawab","Mau berbagi pengalaman","Antusias","Dukungan pada teman"],
  indHasil:["Pemahaman terhadap materi/topik layanan","Perasaan/sikap positif setelah layanan","Komitmen/rencana tindakan setelah layanan"]
 };
-const FASE=[
- {id:"awal",judul:"Pembukaan & Pertanyaan Pemantik",tahap:"Tahap Awal · Asesmen awal",menit:15,tipe:"pemantik"},
- {id:"konkret",judul:"Mengenal Jalur: SMA, MA, SMK",tahap:"Tahap Inti · Pengalaman Konkret",menit:20,tipe:"konkret"},
- {id:"refleksi",judul:"Mengenali Diri",tahap:"Tahap Inti · Mengamati & Merefleksikan",menit:15,tipe:"refleksi"},
- {id:"konsep",judul:"Membentuk Konsep",tahap:"Tahap Inti · Pembentukan Konsep",menit:20,tipe:"konsep"},
- {id:"game",judul:"Game: Misi Pendaftar",tahap:"Tahap Inti · Eksperimen Aktif (1)",menit:50,tipe:"game"},
- {id:"rencana",judul:"Rencana Kelanjutan Studi",tahap:"Tahap Inti · Eksperimen Aktif (2)",menit:25,tipe:"rencana"},
- {id:"akhir",judul:"Refleksi & Penutup",tahap:"Tahap Penutup · Asesmen hasil",menit:15,tipe:"akhir"},
- {id:"laporan",judul:"Laporan Asesmen",tahap:"Hasil sesi",menit:0,tipe:"laporan"}
-];
 const JALUR=[
  {n:"SMA",e:"🎓",k:"Pendidikan umum; mata pelajaran dasar ditambah mata pelajaran pilihan sesuai minat.",b:"Kegiatan belajar dominan akademik: diskusi, proyek, praktikum IPA/IPS, ekstrakurikuler.",u:"Menyiapkan lulusan melanjutkan ke perguruan tinggi.",w:"Bisa langsung bekerja atau ikut pelatihan keterampilan, umumnya dengan bekal tambahan."},
  {n:"MA",e:"🕌",k:"Pendidikan umum berciri khas agama Islam, berada di bawah Kementerian Agama; mata pelajaran umum plus keagamaan.",b:"Belajar akademik disertai pendalaman agama, pembiasaan ibadah, dan kegiatan keagamaan.",u:"Dapat melanjutkan ke perguruan tinggi umum maupun keagamaan.",w:"Bisa bekerja atau ikut pelatihan; bekal agama jadi nilai tambah."},
  {n:"SMK",e:"🛠️",k:"Pendidikan kejuruan; ada konsentrasi keahlian (misalnya teknik, bisnis, pariwisata, teknologi informasi).",b:"Banyak praktik, bengkel/laboratorium, dan magang atau praktik kerja di dunia usaha.",u:"Tetap bisa melanjutkan ke perguruan tinggi atau pendidikan vokasi.",w:"Disiapkan untuk siap kerja sesuai bidang keahlian."}
 ];
+
+const FASE=[
+ {id:"awal",judul:"Pembukaan & Pertanyaan Pemantik",tahap:"Tahap Awal · Asesmen awal",menit:15,tipe:"pemantik",noteJ:"📝 Alasan yang disampaikan murid (catatan asesmen awal)",noteP:"Contoh: beberapa murid memilih SMK karena ingin cepat kerja…",
+  cards:[{h:"Sapaan & tujuan",p:"Sapa murid dengan hangat, cek kehadiran, lalu sampaikan tujuan, manfaat, dan alur layanan.",ol:RPL.tujuan},{h:"Amati infografis",p:"Lulusan SMP dapat melanjutkan ke…",big:"🏫 SMP → 🎓 SMA &nbsp; 🕌 MA &nbsp; 🛠️ SMK → 🏛️ Kuliah · 💼 Dunia kerja · 🚀 Wirausaha"}]},
+ {id:"konkret",judul:"Mengenal Jalur: SMA, MA, SMK",tahap:"Tahap Inti · Pengalaman Konkret",menit:20,tipe:"cards",turn:true,turnJ:"Giliran kelompok menyampaikan temuan",turnP:"Apa perbedaan dan keunggulan yang kalian temukan?",
+  cards:[{h:"Studi kasus / infografis profil jalur",p:"Murid mengamati profil tiga jalur, lalu menyampaikan perbedaan dan keunggulannya (individu atau kelompok).",grid:JALUR.map(j=>({h:j.e+" "+j.n,rows:[["Kurikulum",j.k],["Kegiatan belajar",j.b],["Perguruan tinggi",j.u],["Dunia kerja",j.w]]})),foot:"Catatan: aturan, jalur, dan jadwal pendaftaran berbeda tiap daerah dan tahun. Selalu rujuk juknis resmi."}]},
+ {id:"refleksi",judul:"Mengenali Diri",tahap:"Tahap Inti · Mengamati & Merefleksikan",menit:15,tipe:"cards",turn:true,turnJ:"Giliran kelompok menyampaikan",turnP:"Diskusi berpasangan atau kelompok kecil, lalu setiap kelompok menyampaikan hasilnya.",
+  cards:[{h:"Pertanyaan reflektif",big:RPL.refleksi.join("<br>")}]},
+ {id:"konsep",judul:"Membentuk Konsep",tahap:"Tahap Inti · Pembentukan Konsep",menit:20,tipe:"cards",noteJ:"📝 Kesimpulan murid",
+  cards:[{h:"Pembentukan konsep",ol:["Karakteristik SMA, MA, SMK: jalur umum, umum berciri keagamaan, dan kejuruan.","Faktor pertimbangan memilih sekolah: minat, bakat, cita-cita, kemampuan akademik, biaya dan jarak, dukungan keluarga, informasi resmi.","Pentingnya mengenali potensi diri: pilihan yang sesuai membuat belajar lebih bermakna dan bertahan.","Pilihan pendidikan dan karier masa depan: setiap jalur punya peluang kuliah, kerja, atau wirausaha."]},{h:"Hubungkan dengan pengalaman",p:"Ajak murid mengaitkan konsep dengan temuan pada tahap sebelumnya, lalu menyimpulkan poin-poin penting bersama."}]},
+ {id:"game",judul:"Game: Misi Pendaftar",tahap:"Tahap Inti · Eksperimen Aktif (1)",menit:50,tipe:"game"},
+ {id:"rencana",judul:"Rencana Kelanjutan Studi",tahap:"Tahap Inti · Eksperimen Aktif (2)",menit:25,tipe:"rencana"},
+ {id:"akhir",judul:"Refleksi & Penutup",tahap:"Tahap Penutup · Asesmen hasil",menit:15,tipe:"akhir"},
+ {id:"laporan",judul:"Laporan Asesmen",tahap:"Hasil sesi",menit:0,tipe:"laporan"}
+];
+const OBS=["–","Tampak","Perlu didorong"];
+const FIELDS=[
+ {k:"sekolah",l:"Pilihan sekolah lanjutan (SMA/MA/SMK)"},
+ {k:"alasan",l:"Alasan memilih"},
+ {k:"cocok",l:"Kesesuaian dengan minat dan bakat"},
+ {k:"jurusan",l:"Pilihan jurusan / konsentrasi keahlian (bila perlu)"},
+ {k:"langkah",l:"Langkah persiapan yang akan dilakukan"}
+];
+
+const CRC_T=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC_T[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+function zipStore(files){
+  const enc=new TextEncoder(),parts=[],cen=[];let off=0;
+  const u16=n=>[n&255,(n>>8)&255],u32=n=>[n&255,(n>>8)&255,(n>>16)&255,(n>>>24)&255];
+  files.forEach(f=>{
+    const nm=enc.encode(f.name),d=enc.encode(f.data),crc=crc32(d);
+    const lh=new Uint8Array([0x50,0x4b,3,4,20,0,0,8,0,0,0,0,0x21,0,...u32(crc),...u32(d.length),...u32(d.length),...u16(nm.length),0,0]);
+    parts.push(lh,nm,d);
+    cen.push({nm,crc,len:d.length,off});
+    off+=lh.length+nm.length+d.length;
+  });
+  let cs=0;const cparts=[];
+  cen.forEach(c=>{
+    const h=new Uint8Array([0x50,0x4b,1,2,20,0,20,0,0,8,0,0,0,0,0x21,0,...u32(c.crc),...u32(c.len),...u32(c.len),...u16(c.nm.length),0,0,0,0,0,0,0,0,0,0,0,0,...u32(c.off)]);
+    cparts.push(h,c.nm);cs+=h.length+c.nm.length;
+  });
+  const end=new Uint8Array([0x50,0x4b,5,6,0,0,0,0,...u16(cen.length),...u16(cen.length),...u32(cs),...u32(off),0,0]);
+  return new Blob([...parts,...cparts,end],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+}
+const xe=v=>String(v==null?"":v).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const colL=i=>{let s="";i++;while(i>0){const m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26)}return s};
+function sheetXml(rows,widths,headRow){
+  const cols=`<cols>${widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("")}</cols>`;
+  const body=rows.map((r,ri)=>`<row r="${ri+1}">${r.map((v,ci)=>{
+    const st=(ri===headRow)?1:0;
+    if(typeof v==="number")return `<c r="${colL(ci)}${ri+1}" s="${st}"><v>${v}</v></c>`;
+    return `<c r="${colL(ci)}${ri+1}" s="${st}" t="inlineStr"><is><t xml:space="preserve">${xe(v)}</t></is></c>`}).join("")}</row>`).join("");
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"/></sheetViews>${cols}<sheetData>${body}</sheetData></worksheet>`;
+}
+function buildXlsx(sheets){
+  const f=[];
+  f.push({name:"[Content_Types].xml",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((_,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join("")}</Types>`});
+  f.push({name:"_rels/.rels",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`});
+  f.push({name:"xl/workbook.xml",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((s,i)=>`<sheet name="${xe(s.name).slice(0,31)}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join("")}</sheets></workbook>`});
+  f.push({name:"xl/_rels/workbook.xml.rels",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((_,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join("")}<Relationship Id="rId${sheets.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`});
+  f.push({name:"xl/styles.xml",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFDCE9FF"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`});
+  sheets.forEach((s,i)=>f.push({name:`xl/worksheets/sheet${i+1}.xml`,data:sheetXml(s.rows,s.w,s.head)}));
+  return zipStore(f);
+}
+/* ============================ STATE ============================ */
+const KEY="rpl_"+ID+"_v1";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+let S=load();
+function newS(){return {setup:false,kelas:"",names:["Kelompok A","Kelompok B","Kelompok C","Kelompok D"],i:0,visited:{},tally:{},obs:{},hasil:{},notes:{},plans:{},g:null,turn:0,jalur:0,start:Date.now()}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&s.names)return Object.assign(newS(),s)}catch(e){}return null}
+function save(){try{if(S)localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
+function modal(html){return new Promise(res=>{$("#mbox").innerHTML=html;$("#mod").classList.remove("hidden");$("#mbox").onclick=e=>{const b=e.target.closest("[data-v]");if(b){$("#mod").classList.add("hidden");res(b.dataset.v)}}})}
+/* ---------- timer ---------- */
+const TM={left:0,run:false,iv:null,id:null};
+function tmReset(f){clearInterval(TM.iv);TM.run=false;TM.id=f.id;TM.left=f.menit*60;if(S.tm&&S.tm[f.id]!=null)TM.left=S.tm[f.id]}
+function tmPaint(){const e=$("#tm");if(e){e.textContent=fmt(Math.max(0,TM.left));e.classList.toggle("low",TM.left<=60&&TM.left>0)}const b=$("#tmb");if(b)b.textContent=TM.run?"⏸":"▶"}
+function tmToggle(){
+  if(TM.run){clearInterval(TM.iv);TM.run=false}
+  else{TM.run=true;TM.iv=setInterval(()=>{TM.left--;S.tm=S.tm||{};S.tm[TM.id]=TM.left;if(TM.left<=0){clearInterval(TM.iv);TM.run=false;toast("⏰ Waktu fase habis")}tmPaint();if(TM.left%10===0)save()},1000)}
+  tmPaint();
+}
+/* ---------- setup ---------- */
+function renderSetupScreen(){
+  $("#steps").classList.add("hidden");$("#bObs").classList.add("hidden");$("#bExit").classList.add("hidden");
+  const tot=FASE.reduce((a,f)=>a+f.menit,0);
+  const old=S&&S.setup;
+  const st=S||newS();
+  $("#main").innerHTML=`<div class="setup">
+   <div class="head"><div class="tahap">RPL Bimbingan Klasikal · Kelas 9 · ${tot} menit (${tot/40} JP)</div></div>
+   <h1>${esc(NAMA_A)} <span>${esc(NAMA_B)}</span></h1>
+   <p class="txt"><b>${esc(RPL.judul)}</b>. ${esc(SUB)}</p>
+   <div class="card"><h3>Pengaturan sesi</h3>
+     <label class="f">Kelas</label><input type="text" id="kelas" maxlength="20" placeholder="contoh: 9A" value="${esc(st.kelas)}">
+     <label class="f">Jumlah kelompok</label><select id="jml">${[2,3,4,5,6].map(n=>`<option ${n===st.names.length?"selected":""}>${n}</option>`).join("")}</select>
+     <div id="nms"></div>
+   </div>
+   <div class="card"><h3>Alur sesi</h3><ol class="alur">${FASE.filter(f=>f.menit).map(f=>`<li>${esc(f.judul)}<span>${f.menit} mnt</span></li>`).join("")}<li>Laporan asesmen (PDF / Excel)<span>setelah sesi</span></li></ol></div>
+   <div class="mact" style="justify-content:flex-start"><button class="btn pri" id="go">▶ Mulai Sesi Layanan</button>${old?`<button class="btn" id="resume">↩ Lanjutkan sesi tersimpan</button>`:""}</div>
+   <p class="txt" style="color:var(--muted);font-size:14px">Data hanya tersimpan di perangkat guru (tidak ada data murid yang dikirim ke server).</p>
+  </div>`;
+  const paintN=()=>{const n=+$("#jml").value;$("#nms").innerHTML=Array.from({length:n},(_,i)=>`<label class="f">Nama kelompok ${i+1}</label><input type="text" class="nm" maxlength="22" value="${esc(st.names[i]||"Kelompok "+String.fromCharCode(65+i))}">`).join("")};
+  paintN();$("#jml").onchange=paintN;
+  $("#go").onclick=async()=>{
+    if(old){const v=await modal(`<h2>Mulai sesi baru?</h2><p>Sesi yang tersimpan (observasi, rencana, catatan) akan diganti.</p><div class="mact"><button class="btn" data-v="no">Batal</button><button class="btn pri" data-v="yes">Ya, mulai baru</button></div>`);if(v!=="yes")return}
+    const n=newS();n.kelas=$("#kelas").value.trim();n.names=[...document.querySelectorAll(".nm")].map((e,i)=>e.value.trim()||"Kelompok "+String.fromCharCode(65+i));n.setup=true;S=n;save();enterSesi();
+  };
+  if(old)$("#resume").onclick=()=>{S=Object.assign(newS(),S);enterSesi()};
+}
+/* ---------- sesi ---------- */
+function enterSesi(){$("#steps").classList.remove("hidden");$("#bObs").classList.remove("hidden");$("#bExit").classList.remove("hidden");tmReset(FASE[S.i]);renderSesi()}
+function goFase(i){S.i=i;S.visited[FASE[i].id]=1;save();tmReset(FASE[i]);renderSesi()}
+function renderSteps(){$("#steps").innerHTML=FASE.map((f,i)=>`<button data-i="${i}" class="${i===S.i?"on":S.visited[f.id]?"done":""}">${i+1}. ${esc(f.judul)}</button>`).join("");$("#steps").onclick=e=>{const b=e.target.closest("button");if(b)goFase(+b.dataset.i)}}
+const noteBox=(id,j,p)=>`<div class="card"><h3>${j||"📝 Catatan guru"}</h3><textarea data-note="${id}" placeholder="${esc(p||"Catat hal penting yang Anda amati…")}">${esc(S.notes[id]||"")}</textarea></div>`;
+const li=a=>a.map(x=>`<li>${esc(x)}</li>`).join("");
+function bodyFase(f){
+  switch(f.tipe){
+  case"pemantik":return cardsHtml(f.cards)+`<div class="card"><h3>❓ Pertanyaan pemantik (asesmen awal)</h3><div class="big">“${esc(RPL.pemantik)}”</div>
+    <p class="txt">${RPL.tally?"Catat sebaran jawaban murid (ketuk tombol), lalu dengarkan alasan mereka.":"Dengarkan jawaban murid secara lisan atau tertulis, lalu catat poin pentingnya."}</p>
+    ${RPL.tally?`<div class="tally">${RPL.tally.map((k,i)=>`<div><b id="t_${i}">${S.tally[k]||0}</b>${esc(k)}<br><button class="btn sm" data-t="${i}" data-d="1">＋</button><button class="btn sm" data-t="${i}" data-d="-1">－</button></div>`).join("")}</div>`:""}</div>
+   ${noteBox("awal",f.noteJ||"📝 Jawaban murid (catatan asesmen awal)",f.noteP)}`;
+  case"cards":return cardsHtml(f.cards)+(f.turn?`<div class="card"><h3>${esc(f.turnJ||"Giliran kelompok menyampaikan")}</h3>${turnHtml()}<p class="txt">${esc(f.turnP||"")}</p></div>`:"")+noteBox(f.id,f.noteJ,f.noteP);
+  case"game":return gameHtml();
+  case"rencana":return rencanaHtml();
+  case"akhir":return `<div class="card"><h3>Refleksi tertulis (murid)</h3><ol class="pts">${li(RPL.akhirPrompts)}</ol><p class="txt">Beberapa murid menyampaikan pemahaman, perasaan, dan rencana tindak lanjut.</p></div>
+   <div class="card"><h3>Asesmen hasil (observasi guru)</h3><p class="txt" style="color:var(--muted);font-size:15px">Ketuk sel untuk mengganti: – / Tampak / Perlu didorong.</p>${obsTable("hasil",RPL.indHasil)}</div>
+   ${noteBox("akhir","📝 Catatan hasil layanan")}
+   <div class="card"><h3>Penutup</h3><ol class="pts"><li>Menyimpulkan hasil layanan bersama murid.</li><li>Apresiasi atas partisipasi aktif.</li><li>Menyampaikan tindak lanjut atau materi layanan berikutnya.</li><li>Menutup dengan doa dan salam.</li></ol></div>
+   <div class="mact" style="justify-content:flex-start"><button class="btn pri" data-go="${FASE.length-1}">📄 Buka Laporan Asesmen</button></div>`;
+  case"laporan":return `<div class="card"><h3>Laporan asesmen</h3><p class="txt">Laporan memuat ringkasan sesi, asesmen awal, observasi proses, asesmen hasil, rencana kelompok, hasil permainan, dan catatan guru. Tanpa nama murid.</p>
+   <div class="mact" style="justify-content:flex-start"><button class="btn pri" id="bRep">📄 Lihat / Cetak PDF</button><button class="btn pri" id="bXls">📊 Unduh Excel</button></div></div>`;
+  }
+  return "";
+}
+function turnHtml(){return `<div class="turn">${S.names.map((n,i)=>`<span data-turn="${i}" class="${i===S.turn?"on":""}">${esc(n)}</span>`).join("")}<button class="btn sm" data-turnnext="1">Kelompok berikutnya ➜</button></div>`}
+function obsTable(kind,ind){
+  const o=S[kind];
+  return `<div style="overflow:auto"><table class="obs"><tr><th>Kelompok</th>${ind.map(x=>`<th>${esc(x)}</th>`).join("")}</tr>${S.names.map((n,i)=>`<tr><td>${esc(n)}</td>${ind.map((_,j)=>{const v=((o[i]||[])[j])||0;return `<td class="c v${v}" data-obs="${kind}|${i}|${j}">${OBS[v]}</td>`}).join("")}</tr>`).join("")}</table></div>`;
+}
+function renderSesi(){
+  const f=FASE[S.i];S.visited[f.id]=1;renderSteps();
+  $("#main").innerHTML=`<div class="head"><div class="tahap">${esc(f.tahap)}</div><h2>${esc(f.judul)}</h2>${f.menit?`<div class="timer"><span class="tm" id="tm"></span><button class="btn sm" id="tmb">▶</button><button class="btn sm" id="tmr" title="Atur ulang">↺</button></div>`:""}</div>${bodyFase(f)}
+   <div class="mact" style="justify-content:space-between">${S.i>0?`<button class="btn" data-go="${S.i-1}">⬅ ${esc(FASE[S.i-1].judul)}</button>`:"<span></span>"}${S.i<FASE.length-1?`<button class="btn pri" data-go="${S.i+1}">${esc(FASE[S.i+1].judul)} ➡</button>`:""}</div>`;
+  if(f.menit){tmPaint();$("#tmb").onclick=tmToggle;$("#tmr").onclick=()=>{clearInterval(TM.iv);TM.run=false;TM.left=f.menit*60;S.tm=S.tm||{};S.tm[f.id]=TM.left;tmPaint()}}
+  if(f.tipe==="laporan"){$("#bRep").onclick=showReport;$("#bXls").onclick=unduhXlsx}
+  if(f.tipe==="game")gameBind();
+  save();
+}
+$("#main").addEventListener("click",e=>{
+  const t=e.target.closest("[data-t]");if(t){const i=t.dataset.t,k=RPL.tally[i];S.tally[k]=Math.max(0,(S.tally[k]||0)+ +t.dataset.d);$("#t_"+i).textContent=S.tally[k];save();return}
+  const g=e.target.closest("[data-go]");if(g){goFase(+g.dataset.go);return}
+  const tn=e.target.closest("[data-turn]");if(tn){S.turn=+tn.dataset.turn;save();renderSesi();return}
+  if(e.target.closest("[data-turnnext]")){S.turn=(S.turn+1)%S.names.length;save();renderSesi();return}
+  const o=e.target.closest("[data-obs]");if(o){const[k,i,j]=o.dataset.obs.split("|");S[k][i]=S[k][i]||[];S[k][i][j]=((S[k][i][j]||0)+1)%3;save();o.className="c v"+S[k][i][j];o.textContent=OBS[S[k][i][j]];return}
+  const pl=e.target.closest("[data-plan]");if(pl){S.planG=+pl.dataset.plan;save();renderSesi();return}
+});
+$("#main").addEventListener("input",e=>{
+  const n=e.target.closest("[data-note]");if(n){S.notes[n.dataset.note]=n.value;save();return}
+  const p=e.target.closest("[data-pf]");if(p){const i=S.planG||0;S.plans[i]=S.plans[i]||{};S.plans[i][p.dataset.pf]=p.value;save()}
+});
+function rencanaHtml(){
+  const i=S.planG||0,p=S.plans[i]||{};
+  return `<div class="card"><h3>${esc(RPL.rencanaJ)} (per kelompok)</h3><p class="txt">Murid menyusun, mendiskusikan, saling memberi masukan, lalu mempresentasikan. Guru mengetik poin utama dari presentasi kelompok.</p>
+   <div class="turn">${S.names.map((n,k)=>`<span data-plan="${k}" class="${k===i?"on":""}" style="cursor:pointer">${esc(n)}</span>`).join("")}</div>
+   ${FIELDS.map(fl=>`<label class="f">${esc(fl.l)}</label><textarea data-pf="${fl.k}" style="min-height:64px">${esc(p[fl.k]||"")}</textarea>`).join("")}</div>${noteBox("rencana","📝 Masukan antar kelompok & penguatan guru")}`;
+}
 const LOKET=[
  {n:"Kenali Diri",e:"🔍"},{n:"Kenali Jalur",e:"🛤️"},{n:"Pertimbangan",e:"⚖️"},{n:"Persiapan",e:"📋"},{n:"Keputusan",e:"✅"}
 ];
@@ -192,171 +358,7 @@ const SOAL=[
   {q:"Nilaimu pas-pasan tetapi kamu ingin sekolah yang persaingannya ketat. Yang paling tepat adalah…",o:["Mendaftar tanpa persiapan","Meningkatkan belajar, menyiapkan Rencana A-B-C, dan menimbang peluang secara realistis","Memilih sekolah mana pun tanpa pertimbangan"],a:1,e:"Usaha, kejujuran menilai diri, dan rencana cadangan adalah kunci keputusan yang matang."}
  ]
 ];
-const FIELDS=[
- {k:"sekolah",l:"Pilihan sekolah lanjutan (SMA/MA/SMK)"},
- {k:"alasan",l:"Alasan memilih"},
- {k:"cocok",l:"Kesesuaian dengan minat dan bakat"},
- {k:"jurusan",l:"Pilihan jurusan / konsentrasi keahlian (bila perlu)"},
- {k:"langkah",l:"Langkah persiapan yang akan dilakukan"}
-];
-const OBS=["–","Tampak","Perlu didorong"];
-const CRC_T=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
-function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC_T[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
-function zipStore(files){
-  const enc=new TextEncoder(),parts=[],cen=[];let off=0;
-  const u16=n=>[n&255,(n>>8)&255],u32=n=>[n&255,(n>>8)&255,(n>>16)&255,(n>>>24)&255];
-  files.forEach(f=>{
-    const nm=enc.encode(f.name),d=enc.encode(f.data),crc=crc32(d);
-    const lh=new Uint8Array([0x50,0x4b,3,4,20,0,0,8,0,0,0,0,0x21,0,...u32(crc),...u32(d.length),...u32(d.length),...u16(nm.length),0,0]);
-    parts.push(lh,nm,d);
-    cen.push({nm,crc,len:d.length,off});
-    off+=lh.length+nm.length+d.length;
-  });
-  let cs=0;const cparts=[];
-  cen.forEach(c=>{
-    const h=new Uint8Array([0x50,0x4b,1,2,20,0,20,0,0,8,0,0,0,0,0x21,0,...u32(c.crc),...u32(c.len),...u32(c.len),...u16(c.nm.length),0,0,0,0,0,0,0,0,0,0,0,0,...u32(c.off)]);
-    cparts.push(h,c.nm);cs+=h.length+c.nm.length;
-  });
-  const end=new Uint8Array([0x50,0x4b,5,6,0,0,0,0,...u16(cen.length),...u16(cen.length),...u32(cs),...u32(off),0,0]);
-  return new Blob([...parts,...cparts,end],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
-}
-const xe=v=>String(v==null?"":v).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-const colL=i=>{let s="";i++;while(i>0){const m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26)}return s};
-function sheetXml(rows,widths,headRow){
-  const cols=`<cols>${widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("")}</cols>`;
-  const body=rows.map((r,ri)=>`<row r="${ri+1}">${r.map((v,ci)=>{
-    const st=(ri===headRow)?1:0;
-    if(typeof v==="number")return `<c r="${colL(ci)}${ri+1}" s="${st}"><v>${v}</v></c>`;
-    return `<c r="${colL(ci)}${ri+1}" s="${st}" t="inlineStr"><is><t xml:space="preserve">${xe(v)}</t></is></c>`}).join("")}</row>`).join("");
-  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"/></sheetViews>${cols}<sheetData>${body}</sheetData></worksheet>`;
-}
-function buildXlsx(sheets){
-  const f=[];
-  f.push({name:"[Content_Types].xml",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((_,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join("")}</Types>`});
-  f.push({name:"_rels/.rels",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`});
-  f.push({name:"xl/workbook.xml",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((s,i)=>`<sheet name="${xe(s.name).slice(0,31)}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join("")}</sheets></workbook>`});
-  f.push({name:"xl/_rels/workbook.xml.rels",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((_,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join("")}<Relationship Id="rId${sheets.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`});
-  f.push({name:"xl/styles.xml",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFDCE9FF"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`});
-  sheets.forEach((s,i)=>f.push({name:`xl/worksheets/sheet${i+1}.xml`,data:sheetXml(s.rows,s.w,s.head)}));
-  return zipStore(f);
-}
-/* ============================ STATE ============================ */
-const KEY="rpl_studi_misi_v1";
-const $=s=>document.querySelector(s);
-const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const fmt=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
-let S=load();
-function newS(){return {setup:false,kelas:"",names:["Kelompok A","Kelompok B","Kelompok C","Kelompok D"],i:0,visited:{},tally:{SMA:0,MA:0,SMK:0,Belum:0},obs:{},hasil:{},notes:{},plans:{},g:null,turn:0,jalur:0,start:Date.now()}}
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&s.names)return Object.assign(newS(),s)}catch(e){}return null}
-function save(){try{if(S)localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
-function modal(html){return new Promise(res=>{$("#mbox").innerHTML=html;$("#mod").classList.remove("hidden");$("#mbox").onclick=e=>{const b=e.target.closest("[data-v]");if(b){$("#mod").classList.add("hidden");res(b.dataset.v)}}})}
-/* ---------- timer ---------- */
-const TM={left:0,run:false,iv:null,id:null};
-function tmReset(f){clearInterval(TM.iv);TM.run=false;TM.id=f.id;TM.left=f.menit*60;if(S.tm&&S.tm[f.id]!=null)TM.left=S.tm[f.id]}
-function tmPaint(){const e=$("#tm");if(e){e.textContent=fmt(Math.max(0,TM.left));e.classList.toggle("low",TM.left<=60&&TM.left>0)}const b=$("#tmb");if(b)b.textContent=TM.run?"⏸":"▶"}
-function tmToggle(){
-  if(TM.run){clearInterval(TM.iv);TM.run=false}
-  else{TM.run=true;TM.iv=setInterval(()=>{TM.left--;S.tm=S.tm||{};S.tm[TM.id]=TM.left;if(TM.left<=0){clearInterval(TM.iv);TM.run=false;toast("⏰ Waktu fase habis")}tmPaint();if(TM.left%10===0)save()},1000)}
-  tmPaint();
-}
-/* ---------- setup ---------- */
-function renderSetupScreen(){
-  $("#steps").classList.add("hidden");$("#bObs").classList.add("hidden");$("#bExit").classList.add("hidden");
-  const tot=FASE.reduce((a,f)=>a+f.menit,0);
-  const old=S&&S.setup;
-  const st=S||newS();
-  $("#main").innerHTML=`<div class="setup">
-   <div class="head"><div class="tahap">RPL Bimbingan Klasikal · Kelas 9 · ${tot} menit (${tot/40} JP)</div></div>
-   <h1>Misi <span>Pendaftar</span></h1>
-   <p class="txt"><b>${esc(RPL.judul)}</b>. Kelompok menjadi pendaftar yang mengurus misi di lima loket: mengenali diri, mengenali jalur, menimbang, bersiap, lalu memutuskan. Dimainkan bergantian, layar dikendalikan guru.</p>
-   <div class="card"><h3>Pengaturan sesi</h3>
-     <label class="f">Kelas</label><input type="text" id="kelas" maxlength="20" placeholder="contoh: 9A" value="${esc(st.kelas)}">
-     <label class="f">Jumlah kelompok</label><select id="jml">${[2,3,4,5,6].map(n=>`<option ${n===st.names.length?"selected":""}>${n}</option>`).join("")}</select>
-     <div id="nms"></div>
-   </div>
-   <div class="card"><h3>Alur sesi</h3><ol class="alur">${FASE.filter(f=>f.menit).map(f=>`<li>${esc(f.judul)}<span>${f.menit} mnt</span></li>`).join("")}<li>Laporan asesmen (PDF / Excel)<span>setelah sesi</span></li></ol></div>
-   <div class="mact" style="justify-content:flex-start"><button class="btn pri" id="go">▶ Mulai Sesi Layanan</button>${old?`<button class="btn" id="resume">↩ Lanjutkan sesi tersimpan</button>`:""}</div>
-   <p class="txt" style="color:var(--muted);font-size:14px">Data hanya tersimpan di perangkat guru (tidak ada data murid yang dikirim ke server).</p>
-  </div>`;
-  const paintN=()=>{const n=+$("#jml").value;$("#nms").innerHTML=Array.from({length:n},(_,i)=>`<label class="f">Nama kelompok ${i+1}</label><input type="text" class="nm" maxlength="22" value="${esc(st.names[i]||"Kelompok "+String.fromCharCode(65+i))}">`).join("")};
-  paintN();$("#jml").onchange=paintN;
-  $("#go").onclick=async()=>{
-    if(old){const v=await modal(`<h2>Mulai sesi baru?</h2><p>Sesi yang tersimpan (observasi, rencana, catatan) akan diganti.</p><div class="mact"><button class="btn" data-v="no">Batal</button><button class="btn pri" data-v="yes">Ya, mulai baru</button></div>`);if(v!=="yes")return}
-    const n=newS();n.kelas=$("#kelas").value.trim();n.names=[...document.querySelectorAll(".nm")].map((e,i)=>e.value.trim()||"Kelompok "+String.fromCharCode(65+i));n.setup=true;S=n;save();enterSesi();
-  };
-  if(old)$("#resume").onclick=()=>{S=Object.assign(newS(),S);enterSesi()};
-}
-/* ---------- sesi ---------- */
-function enterSesi(){$("#steps").classList.remove("hidden");$("#bObs").classList.remove("hidden");$("#bExit").classList.remove("hidden");tmReset(FASE[S.i]);renderSesi()}
-function goFase(i){S.i=i;S.visited[FASE[i].id]=1;save();tmReset(FASE[i]);renderSesi()}
-function renderSteps(){$("#steps").innerHTML=FASE.map((f,i)=>`<button data-i="${i}" class="${i===S.i?"on":S.visited[f.id]?"done":""}">${i+1}. ${esc(f.judul)}</button>`).join("");$("#steps").onclick=e=>{const b=e.target.closest("button");if(b)goFase(+b.dataset.i)}}
-const noteBox=(id,j,p)=>`<div class="card"><h3>${j||"📝 Catatan guru"}</h3><textarea data-note="${id}" placeholder="${esc(p||"Catat hal penting yang Anda amati…")}">${esc(S.notes[id]||"")}</textarea></div>`;
-const li=a=>a.map(x=>`<li>${esc(x)}</li>`).join("");
-function bodyFase(f){
-  switch(f.tipe){
-  case"pemantik":return `<div class="card"><h3>Sapaan & tujuan</h3><p class="txt">Sapa murid dengan hangat, cek kehadiran, lalu sampaikan tujuan, manfaat, dan alur layanan.</p><ol class="pts">${li(RPL.tujuan)}</ol></div>
-   <div class="card"><h3>Amati infografis</h3><p class="txt">Lulusan SMP dapat melanjutkan ke…</p><div class="big">🏫 SMP → 🎓 SMA &nbsp; 🕌 MA &nbsp; 🛠️ SMK → 🏛️ Kuliah · 💼 Dunia kerja · 🚀 Wirausaha</div></div>
-   <div class="card"><h3>❓ Pertanyaan pemantik (asesmen awal)</h3><div class="big">“${esc(RPL.pemantik)}”</div>
-    <p class="txt">Catat sebaran jawaban murid (ketuk tombol), lalu dengarkan alasan mereka.</p>
-    <div class="tally">${["SMA","MA","SMK","Belum"].map(k=>`<div><b id="t_${k}">${S.tally[k]}</b>${k==="Belum"?"Belum tahu":k}<br><button class="btn sm" data-t="${k}" data-d="1">＋</button><button class="btn sm" data-t="${k}" data-d="-1">－</button></div>`).join("")}</div></div>
-   ${noteBox("awal","📝 Alasan yang disampaikan murid (catatan asesmen awal)","Contoh: beberapa murid memilih SMK karena ingin cepat kerja…")}`;
-  case"konkret":return `<div class="card"><h3>Studi kasus / infografis profil jalur</h3><p class="txt">Murid mengamati profil tiga jalur, lalu menyampaikan perbedaan dan keunggulannya (individu atau kelompok).</p>
-   <div class="grid">${JALUR.map(j=>`<div class="prof"><h4>${j.e} ${j.n}</h4><div class="k">Kurikulum</div><p>${esc(j.k)}</p><div class="k">Kegiatan belajar</div><p>${esc(j.b)}</p><div class="k">Perguruan tinggi</div><p>${esc(j.u)}</p><div class="k">Dunia kerja</div><p>${esc(j.w)}</p></div>`).join("")}</div>
-   <p class="txt" style="margin-top:10px;color:var(--muted);font-size:15px">Catatan: aturan, jalur, dan jadwal pendaftaran berbeda tiap daerah dan tahun. Selalu rujuk juknis resmi.</p></div>
-   <div class="card"><h3>Giliran kelompok menyampaikan temuan</h3>${turnHtml()}<p class="txt">Apa perbedaan dan keunggulan yang kalian temukan?</p></div>
-   ${noteBox("konkret")}`;
-  case"refleksi":return `<div class="card"><h3>Pertanyaan reflektif</h3><div class="big">${RPL.refleksi.map(esc).join("<br>")}</div><p class="txt">Diskusi berpasangan atau kelompok kecil, lalu setiap kelompok menyampaikan hasilnya.</p>${turnHtml()}</div>${noteBox("refleksi")}`;
-  case"konsep":return `<div class="card"><h3>Pembentukan konsep</h3><ol class="pts">
-    <li><b>Karakteristik SMA, MA, SMK</b>: jalur umum, umum berciri keagamaan, dan kejuruan.</li>
-    <li><b>Faktor pertimbangan memilih sekolah</b>: minat, bakat, cita-cita, kemampuan akademik, biaya dan jarak, dukungan keluarga, informasi resmi.</li>
-    <li><b>Pentingnya mengenali potensi diri</b>: pilihan yang sesuai membuat belajar lebih bermakna dan bertahan.</li>
-    <li><b>Pilihan pendidikan dan karier masa depan</b>: setiap jalur punya peluang kuliah, kerja, atau wirausaha.</li></ol></div>
-    <div class="card"><h3>Hubungkan dengan pengalaman</h3><p class="txt">Ajak murid mengaitkan konsep dengan temuan pada tahap sebelumnya, lalu menyimpulkan poin-poin penting bersama.</p></div>${noteBox("konsep","📝 Kesimpulan murid")}`;
-  case"game":return gameHtml();
-  case"rencana":return rencanaHtml();
-  case"akhir":return `<div class="card"><h3>Refleksi tertulis (murid)</h3><ol class="pts"><li>Pilihan sekolah lanjutan yang paling sesuai dengan potensi diriku.</li><li>Informasi baru yang kudapat selama layanan.</li><li>Komitmenku mempersiapkan diri secara akademik dan nonakademik agar sesuai cita-cita dan rencana kariernya.</li></ol><p class="txt">Beberapa murid menyampaikan pemahaman, perasaan, dan rencana tindak lanjut.</p></div>
-   <div class="card"><h3>Asesmen hasil (observasi guru)</h3><p class="txt" style="color:var(--muted);font-size:15px">Ketuk sel untuk mengganti: – / Tampak / Perlu didorong.</p>${obsTable("hasil",RPL.indHasil)}</div>
-   ${noteBox("akhir","📝 Catatan hasil layanan")}
-   <div class="card"><h3>Penutup</h3><ol class="pts"><li>Menyimpulkan hasil layanan bersama murid.</li><li>Apresiasi atas partisipasi aktif.</li><li>Menyampaikan tindak lanjut atau materi layanan berikutnya.</li><li>Menutup dengan doa dan salam.</li></ol></div>
-   <div class="mact" style="justify-content:flex-start"><button class="btn pri" data-go="${FASE.length-1}">📄 Buka Laporan Asesmen</button></div>`;
-  case"laporan":return `<div class="card"><h3>Laporan asesmen</h3><p class="txt">Laporan memuat ringkasan sesi, asesmen awal, observasi proses, asesmen hasil, rencana kelompok, hasil permainan, dan catatan guru. Tanpa nama murid.</p>
-   <div class="mact" style="justify-content:flex-start"><button class="btn pri" id="bRep">📄 Lihat / Cetak PDF</button><button class="btn pri" id="bXls">📊 Unduh Excel</button></div></div>`;
-  }
-  return "";
-}
-function turnHtml(){return `<div class="turn">${S.names.map((n,i)=>`<span data-turn="${i}" class="${i===S.turn?"on":""}">${esc(n)}</span>`).join("")}<button class="btn sm" data-turnnext="1">Kelompok berikutnya ➜</button></div>`}
-function obsTable(kind,ind){
-  const o=S[kind];
-  return `<div style="overflow:auto"><table class="obs"><tr><th>Kelompok</th>${ind.map(x=>`<th>${esc(x)}</th>`).join("")}</tr>${S.names.map((n,i)=>`<tr><td>${esc(n)}</td>${ind.map((_,j)=>{const v=((o[i]||[])[j])||0;return `<td class="c v${v}" data-obs="${kind}|${i}|${j}">${OBS[v]}</td>`}).join("")}</tr>`).join("")}</table></div>`;
-}
-function renderSesi(){
-  const f=FASE[S.i];S.visited[f.id]=1;renderSteps();
-  $("#main").innerHTML=`<div class="head"><div class="tahap">${esc(f.tahap)}</div><h2>${esc(f.judul)}</h2>${f.menit?`<div class="timer"><span class="tm" id="tm"></span><button class="btn sm" id="tmb">▶</button><button class="btn sm" id="tmr" title="Atur ulang">↺</button></div>`:""}</div>${bodyFase(f)}
-   <div class="mact" style="justify-content:space-between">${S.i>0?`<button class="btn" data-go="${S.i-1}">⬅ ${esc(FASE[S.i-1].judul)}</button>`:"<span></span>"}${S.i<FASE.length-1?`<button class="btn pri" data-go="${S.i+1}">${esc(FASE[S.i+1].judul)} ➡</button>`:""}</div>`;
-  if(f.menit){tmPaint();$("#tmb").onclick=tmToggle;$("#tmr").onclick=()=>{clearInterval(TM.iv);TM.run=false;TM.left=f.menit*60;S.tm=S.tm||{};S.tm[f.id]=TM.left;tmPaint()}}
-  if(f.tipe==="laporan"){$("#bRep").onclick=showReport;$("#bXls").onclick=unduhXlsx}
-  if(f.tipe==="game")gameBind();
-  save();
-}
-$("#main").addEventListener("click",e=>{
-  const t=e.target.closest("[data-t]");if(t){const k=t.dataset.t;S.tally[k]=Math.max(0,S.tally[k]+ +t.dataset.d);$("#t_"+k).textContent=S.tally[k];save();return}
-  const g=e.target.closest("[data-go]");if(g){goFase(+g.dataset.go);return}
-  const tn=e.target.closest("[data-turn]");if(tn){S.turn=+tn.dataset.turn;save();renderSesi();return}
-  if(e.target.closest("[data-turnnext]")){S.turn=(S.turn+1)%S.names.length;save();renderSesi();return}
-  const o=e.target.closest("[data-obs]");if(o){const[k,i,j]=o.dataset.obs.split("|");S[k][i]=S[k][i]||[];S[k][i][j]=((S[k][i][j]||0)+1)%3;save();o.className="c v"+S[k][i][j];o.textContent=OBS[S[k][i][j]];return}
-  const pl=e.target.closest("[data-plan]");if(pl){S.planG=+pl.dataset.plan;save();renderSesi();return}
-});
-$("#main").addEventListener("input",e=>{
-  const n=e.target.closest("[data-note]");if(n){S.notes[n.dataset.note]=n.value;save();return}
-  const p=e.target.closest("[data-pf]");if(p){const i=S.planG||0;S.plans[i]=S.plans[i]||{};S.plans[i][p.dataset.pf]=p.value;save()}
-});
-function rencanaHtml(){
-  const i=S.planG||0,p=S.plans[i]||{};
-  return `<div class="card"><h3>Susun Rencana Kelanjutan Studi (per kelompok)</h3><p class="txt">Murid menyusun, mendiskusikan, saling memberi masukan, lalu mempresentasikan. Guru mengetik poin utama dari presentasi kelompok.</p>
-   <div class="turn">${S.names.map((n,k)=>`<span data-plan="${k}" class="${k===i?"on":""}" style="cursor:pointer">${esc(n)}</span>`).join("")}</div>
-   ${FIELDS.map(fl=>`<label class="f">${esc(fl.l)}</label><textarea data-pf="${fl.k}" style="min-height:64px">${esc(p[fl.k]||"")}</textarea>`).join("")}</div>${noteBox("rencana","📝 Masukan antar kelompok & penguatan guru")}`;
-}
+
 /* ============================ GAME ============================ */
 function gameInit(){
   S.g={rows:S.names.map(()=>({s:0,att:0,ok:0,bad:0,done:null})),t:0,att:0,q:null,ans:null,ord:0,end:false};
@@ -406,35 +408,123 @@ function gameBind(){
     rerender();
   };
 }
+
+function gameRows(){const g=S&&S.g;return g?S.names.map((n,i)=>[n,g.rows[i].s+"/5",g.rows[i].ok,g.rows[i].bad]):[]}
+
 /* ============================ INFO / LAPORAN ============================ */
+/* ---------- Info game (bisa diedit guru, tersimpan di server lewat GameKit) ---------- */
+const GK=window.GameKit||{info:{cached:(i,d)=>d,load:async(i,d)=>({info:d}),save:async()=>{throw new Error("gamekit.js belum termuat")}},auth:{token:()=>null,ensure:async()=>null,drop(){}}};
+const strc=(v,n)=>String(v==null?"":v).replace(/\s+/g," ").trim().slice(0,n);
+const BG_TIPE=["teks","poin","nomor"];
+const BG_LS="rpl_bagian_"+ABOUT_ID;
+function cleanBg(v){return (Array.isArray(v)?v:[]).slice(0,10).map(x=>x&&typeof x==="object"?{j:strc(x.j,60),tipe:BG_TIPE.includes(x.tipe)?x.tipe:"teks",isi:String(x.isi==null?"":x.isi).replace(/\r/g,"").trim().slice(0,1500)}:null).filter(x=>x&&(x.j||x.isi))}
+function localBg(){try{return cleanBg(JSON.parse(localStorage.getItem(BG_LS)||"[]"))}catch(e){return[]}}
+function cleanAbout(A){
+  A=A&&typeof A==="object"?A:{};const DA=DEFAULT_ABOUT;
+  const lst=(v,fb)=>(Array.isArray(v)?v:fb).map(x=>strc(x,300)).filter(Boolean).slice(0,15);
+  return {deskripsi:strc(A.deskripsi,700),perancang:strc(A.perancang,80),jabatan:strc(A.jabatan,120),sasaran:strc(A.sasaran,160),durasi:strc(A.durasi,80),media:strc(A.media,160),bidang:strc(A.bidang,80),capaian:lst(A.capaian,DA.capaian),tujuan:lst(A.tujuan,DA.tujuan),catatan:strc(A.catatan,700),bagian:cleanBg(A.bagian)};
+}
+function withBg(i){if(!i.bagian||!i.bagian.length){const l=localBg();if(l.length)i.bagian=l}return i}
+let INFO=withBg(cleanAbout(GK.info.cached(ABOUT_ID,DEFAULT_ABOUT)));
+function refreshInfo(){return GK.info.load(ABOUT_ID,DEFAULT_ABOUT).then(r=>{INFO=withBg(cleanAbout(r.info));return r}).catch(()=>null)}
+function bgHtml(b){
+  const L=b.isi.split("\n").map(x=>x.trim()).filter(Boolean);
+  if(!L.length)return `<p class="txt" style="color:var(--muted)">Belum diisi.</p>`;
+  if(b.tipe==="poin")return `<ul class="pts">${li(L)}</ul>`;
+  if(b.tipe==="nomor")return `<ol class="pts">${li(L)}</ol>`;
+  return L.map(x=>`<p class="txt">${esc(x)}</p>`).join("");
+}
 function infoHtml(){
-  return `<h2>ℹ Info game · Misi Pendaftar</h2><p class="txt"><b>${esc(RPL.judul)}</b></p>
-  <h3>Spesifikasi layanan (RPL)</h3><table class="obs" style="text-align:left">${Object.keys(RPL.meta).map(k=>`<tr><td style="width:34%"><b>${esc(k)}</b></td><td style="text-align:left">${esc(RPL.meta[k])}</td></tr>`).join("")}<tr><td><b>Dimensi profil lulusan</b></td><td style="text-align:left">${esc(RPL.profil)}</td></tr></table>
-  <h3>Tujuan layanan</h3><ol class="pts">${li(RPL.tujuan)}</ol>
+  const A=INFO;
+  const chips=[["Bidang layanan",A.bidang],["Sasaran",A.sasaran],["Durasi",A.durasi],["Media",A.media]].filter(x=>x[1]).map(x=>`<span class="chip"><small>${x[0]}</small>${esc(x[1])}</span>`).join("");
+  return `<h2>ℹ Info game · ${esc(NAMA_A)} ${esc(NAMA_B)}</h2><p class="txt"><b>${esc(RPL.judul)}</b></p>
+  ${chips?`<div class="chips">${chips}</div>`:""}
+  ${A.deskripsi?`<h3>Deskripsi</h3><p class="txt">${esc(A.deskripsi)}</p>`:""}
+  <h3>Capaian layanan BK</h3><ul class="pts">${li(A.capaian)}</ul>
+  <h3>Tujuan khusus</h3><ol class="pts">${li(A.tujuan)}</ol>
+  <h3>Isi RPL</h3>
+  <table class="obs" style="text-align:left">${Object.keys(RPL.meta).map(k=>`<tr><td style="width:34%"><b>${esc(k)}</b></td><td style="text-align:left">${esc(RPL.meta[k])}</td></tr>`).join("")}<tr><td><b>Dimensi profil lulusan</b></td><td style="text-align:left">${esc(RPL.profil)}</td></tr></table>
   <h3>Praktik pedagogis</h3><ul class="pts">${li(RPL.praktik)}</ul>
   <h3>Alur sesi</h3><ol class="pts">${FASE.filter(f=>f.menit).map(f=>`<li>${esc(f.judul)} (${f.menit} menit)</li>`).join("")}</ol>
   <h3>Asesmen</h3><ul class="pts">${li(RPL.asesmen)}</ul>
-  <h3>Cara kerja game</h3><p class="txt">Guru mengendalikan layar. Kelompok bergiliran mengumpulkan stempel di lima loket pendaftaran. Aturan, kuota, dan jadwal pendaftaran berbeda tiap daerah, jadi game tidak memuatnya; rujuk juknis resmi.</p>
+  ${A.bagian.map(b=>`${b.j?`<h3>${esc(b.j)}</h3>`:""}${bgHtml(b)}`).join("")}
+  ${A.catatan?`<h3>Catatan</h3><p class="txt">${esc(A.catatan)}</p>`:""}
   <h3>Sumber</h3><ul class="pts">${li(RPL.sumber)}</ul>
-  <p class="txt" style="color:var(--muted);font-size:14px">Dirancang oleh Agung Fahri Husaeni, S.Pd., Guru BK SMP Negeri 36 Semarang.</p>
-  <div class="mact"><button class="btn pri" data-v="x">Tutup</button></div>`;
+  ${A.perancang?`<p class="txt" style="color:var(--muted);font-size:14px">Dirancang oleh <b>${esc(A.perancang)}</b>${A.jabatan?" · "+esc(A.jabatan):""}</p>`:""}
+  <div class="mact"><button class="btn" data-v="edit">✎ Edit info</button><button class="btn pri" data-v="x">Tutup</button></div>`;
 }
-$("#bInfo").onclick=()=>modal(infoHtml());
+let ED=null;
+function edHtml(){
+  const A=ED;
+  const inp=(k,l,m)=>`<label class="f">${l}</label><input type="text" data-e="${k}" maxlength="${m}" value="${esc(A[k])}">`;
+  const area=(k,l,h)=>`<label class="f">${l}</label><textarea data-e="${k}" style="min-height:${h||70}px">${esc(Array.isArray(A[k])?A[k].join("\n"):A[k])}</textarea>`;
+  return `<h2>✎ Edit info game</h2><p class="txt" style="color:var(--muted);font-size:14px">Perubahan disimpan ke server dengan password admin Speganam, lalu terlihat di semua perangkat.</p>
+  ${area("deskripsi","Deskripsi",80)}${inp("bidang","Bidang layanan",80)}${inp("sasaran","Sasaran",160)}${inp("durasi","Durasi",80)}${inp("media","Media",160)}
+  ${area("capaian","Capaian layanan BK (satu butir per baris)",100)}${area("tujuan","Tujuan khusus (satu butir per baris)",100)}${area("catatan","Catatan",60)}
+  ${inp("perancang","Perancang",80)}${inp("jabatan","Jabatan",120)}
+  <h3 style="margin-top:16px">➕ Bagian tambahan (maks. 10)</h3>
+  ${A.bagian.map((b,i)=>`<div class="card" style="padding:12px"><label class="f">Nama bagian</label><input type="text" data-bg="${i}|j" maxlength="60" value="${esc(b.j)}" placeholder="mis. Rujukan, Saran fasilitasi, Langkah bermain">
+   <label class="f">Bentuk</label><select data-bg="${i}|tipe">${[["teks","Paragraf"],["poin","Daftar poin"],["nomor","Daftar nomor"]].map(o=>`<option value="${o[0]}" ${b.tipe===o[0]?"selected":""}>${o[1]}</option>`).join("")}</select>
+   <label class="f">Isi (satu butir per baris untuk daftar)</label><textarea data-bg="${i}|isi" maxlength="1500">${esc(b.isi)}</textarea>
+   <div class="mact" style="margin-top:6px"><button class="btn sm" data-bga="up|${i}" ${i===0?"disabled":""}>↑</button><button class="btn sm" data-bga="dn|${i}" ${i===A.bagian.length-1?"disabled":""}>↓</button><button class="btn sm" data-bga="del|${i}">Hapus</button></div></div>`).join("")||'<p class="txt" style="color:var(--muted);font-size:14px">Belum ada bagian tambahan.</p>'}
+  ${A.bagian.length<10?'<button class="btn sm" data-bga="add|0">+ Tambah bagian</button>':""}
+  <div class="mact"><button class="btn" data-v="cancel">Batal</button><button class="btn pri" id="edSave">💾 Simpan</button></div>`;
+}
+function edRender(){const y=$("#mbox").scrollTop;$("#mbox").innerHTML=edHtml();$("#mbox").scrollTop=y}
+async function openInfo(){
+  refreshInfo();
+  const v=await modal(infoHtml());
+  if(v==="edit")openEditor();
+}
+function openEditor(){
+  ED=JSON.parse(JSON.stringify(INFO));
+  $("#mbox").innerHTML=edHtml();$("#mod").classList.remove("hidden");
+  $("#mbox").onclick=async e=>{
+    const ba=e.target.closest("[data-bga]");
+    if(ba){const[a,i]=ba.dataset.bga.split("|"),n=+i,B=ED.bagian;
+      if(a==="add")B.push({j:"",tipe:"teks",isi:""});else if(a==="del")B.splice(n,1);else if(a==="up"&&n>0)[B[n-1],B[n]]=[B[n],B[n-1]];else if(a==="dn"&&n<B.length-1)[B[n+1],B[n]]=[B[n],B[n+1]];
+      edRender();return}
+    if(e.target.id==="edSave"){await edSave();return}
+    if(e.target.closest('[data-v="cancel"]')){$("#mod").classList.add("hidden");openInfo()}
+  };
+  $("#mbox").oninput=e=>{
+    const k=e.target.dataset.e;
+    if(k){ED[k]=(k==="capaian"||k==="tujuan")?e.target.value.split("\n"):e.target.value;return}
+    const g=e.target.dataset.bg;if(g){const[i,f]=g.split("|");ED.bagian[+i][f]=e.target.value}
+  };
+  $("#mbox").onchange=$("#mbox").oninput;
+}
+async function edSave(){
+  const info=cleanAbout(ED),b=$("#edSave");b.disabled=true;
+  try{
+    try{localStorage.setItem(BG_LS,JSON.stringify(info.bagian))}catch(e){}
+    const back=cleanAbout(await GK.info.save(ABOUT_ID,info));
+    const lost=info.bagian.length&&!back.bagian.length;
+    INFO=withBg(back);
+    toast(lost?"Bagian tambahan baru tersimpan di perangkat ini saja (server belum diperbarui)":"Info game tersimpan");
+    $("#mod").classList.add("hidden");openInfo();
+  }catch(e){
+    b.disabled=false;
+    toast(e&&e.code==="CANCEL"?"Belum tersimpan (password dibatalkan)":"Gagal menyimpan: "+(e&&e.message||"galat"));
+  }
+}
+$("#bInfo").onclick=openInfo;
+function cardsHtml(cs){return (cs||[]).map(c=>`<div class="card">${c.h?`<h3>${esc(c.h)}</h3>`:""}${c.p?`<p class="txt">${esc(c.p)}</p>`:""}${c.big?`<div class="big">${c.big}</div>`:""}${c.ol?`<ol class="pts">${li(c.ol)}</ol>`:""}${c.ul?`<ul class="pts">${li(c.ul)}</ul>`:""}${c.grid?`<div class="grid">${c.grid.map(g=>`<div class="prof"><h4>${esc(g.h)}</h4>${g.rows.map(r=>`<div class="k">${esc(r[0])}</div><p>${esc(r[1])}</p>`).join("")}</div>`).join("")}</div>`:""}${c.foot?`<p class="txt" style="margin-top:10px;color:var(--muted);font-size:15px">${esc(c.foot)}</p>`:""}</div>`).join("")}
+function $ttl(){const e=document.getElementById("ttl");if(e)e.innerHTML=esc(NAMA)+"<small>"+esc(RPL.judul)+"</small>"}
 $("#bObs").onclick=()=>modal(`<h2>📋 Observasi proses layanan</h2><p class="txt" style="color:var(--muted);font-size:15px">Ketuk sel untuk mengganti: – / Tampak / Perlu didorong.</p>${obsTable("obs",RPL.indProses)}<div class="mact"><button class="btn pri" data-v="x">Selesai</button></div>`);
 $("#mbox").addEventListener("click",e=>{const o=e.target.closest("[data-obs]");if(o){const[k,i,j]=o.dataset.obs.split("|");S[k][i]=S[k][i]||[];S[k][i][j]=((S[k][i][j]||0)+1)%3;save();o.className="c v"+S[k][i][j];o.textContent=OBS[S[k][i][j]]}});
 $("#bExit").onclick=()=>{clearInterval(TM.iv);TM.run=false;save();renderSetupScreen()};
-function gameRows(){const g=S&&S.g;return g?S.names.map((n,i)=>[n,g.rows[i].s,g.rows[i].ok,g.rows[i].bad]):[]}
 function tglIni(){return new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})}
 function showReport(){
   const M=(kind,ind)=>`<table><tr><th>Kelompok</th>${ind.map(x=>`<th>${esc(x)}</th>`).join("")}</tr>${S.names.map((n,i)=>`<tr><td>${esc(n)}</td>${ind.map((_,j)=>`<td>${OBS[((S[kind][i]||[])[j])||0]}</td>`).join("")}</tr>`).join("")}</table>`;
   const gr=gameRows();
   modal(`<div class="rep"><h1>Laporan Layanan Bimbingan Klasikal</h1><div>${esc(RPL.judul)} · Kelas ${esc(S.kelas||"-")} · ${tglIni()}</div>
   <h3>Ringkasan</h3><table>${Object.keys(RPL.meta).map(k=>`<tr><td style="width:30%">${esc(k)}</td><td>${esc(RPL.meta[k])}</td></tr>`).join("")}<tr><td>Kelompok</td><td>${esc(S.names.join(", "))}</td></tr></table>
-  <h3>Asesmen awal (pertanyaan pemantik)</h3><div><i>${esc(RPL.pemantik)}</i></div><div>Sebaran pilihan: SMA ${S.tally.SMA} · MA ${S.tally.MA} · SMK ${S.tally.SMK} · Belum tahu ${S.tally.Belum}</div><div class="pre">${esc(S.notes.awal||"")}</div>
+  <h3>Asesmen awal (pertanyaan pemantik)</h3><div><i>${esc(RPL.pemantik)}</i></div>${RPL.tally?`<div>Sebaran pilihan: ${RPL.tally.map(k=>esc(k)+" "+(S.tally[k]||0)).join(" · ")}</div>`:""}<div class="pre">${esc(S.notes.awal||"")}</div>
   <h3>Observasi proses</h3>${M("obs",RPL.indProses)}
   <h3>Asesmen hasil</h3>${M("hasil",RPL.indHasil)}<div class="pre">${esc(S.notes.akhir||"")}</div>
-  <h3>Rencana Kelanjutan Studi per kelompok</h3><table><tr><th>Kelompok</th>${FIELDS.map(f=>`<th>${esc(f.l)}</th>`).join("")}</tr>${S.names.map((n,i)=>`<tr><td>${esc(n)}</td>${FIELDS.map(f=>`<td class="pre">${esc((S.plans[i]||{})[f.k]||"")}</td>`).join("")}</tr>`).join("")}</table>
-  <h3>Hasil permainan</h3>${gr.length?`<table><tr><th>Kelompok</th><th>Stempel</th><th>Tepat</th><th>Dibahas</th></tr>${gr.map(r=>`<tr><td>${esc(r[0])}</td><td>${r[1]}/5</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join("")}</table>`:"<div>Permainan belum dimainkan.</div>"}
+  <h3>${esc(RPL.rencanaJ)} per kelompok</h3><table><tr><th>Kelompok</th>${FIELDS.map(f=>`<th>${esc(f.l)}</th>`).join("")}</tr>${S.names.map((n,i)=>`<tr><td>${esc(n)}</td>${FIELDS.map(f=>`<td class="pre">${esc((S.plans[i]||{})[f.k]||"")}</td>`).join("")}</tr>`).join("")}</table>
+  <h3>Hasil permainan</h3>${gr.length?`<table><tr>${GAME_COLS.map(c=>`<th>${esc(c)}</th>`).join("")}</tr>${gr.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join("")}</tr>`).join("")}</table>`:"<div>Permainan belum dimainkan.</div>"}
   <h3>Catatan guru</h3>${FASE.filter(f=>S.notes[f.id]).map(f=>`<div><b>${esc(f.judul)}</b><div class="pre">${esc(S.notes[f.id])}</div></div>`).join("")||"<div>-</div>"}
   <p style="margin-top:14px;font-size:12px;color:#555">Dibuat oleh Guru BK SMP Negeri 36 Semarang. Data tersimpan di perangkat guru dan tidak memuat nama murid.</p></div>
   <div class="mact noprint"><button class="btn" data-v="x">Tutup</button><button class="btn pri" id="bPrint">🖨 Cetak / Simpan PDF</button></div>`);
@@ -445,17 +535,18 @@ function unduhXlsx(){
   const Mx=(kind,ind)=>[["Kelompok",...ind],...S.names.map((n,i)=>[n,...ind.map((_,j)=>OBS[((S[kind][i]||[])[j])||0])])];
   const sheets=[
    {name:"Ringkasan",w:[28,70],head:-1,rows:[["RPL Bimbingan Klasikal",RPL.judul],...Object.keys(RPL.meta).map(k=>[k,RPL.meta[k]]),["Kelas",S.kelas||""],["Tanggal",tgl],["Kelompok",S.names.join(", ")],["Catatan","Data hanya tersimpan di perangkat guru. Tidak memuat nama murid."]]},
-   {name:"Asesmen Awal",w:[40,80],head:0,rows:[["Pertanyaan pemantik","Catatan guru"],[RPL.pemantik,"Sebaran: SMA "+S.tally.SMA+", MA "+S.tally.MA+", SMK "+S.tally.SMK+", Belum tahu "+S.tally.Belum+"\n"+(S.notes.awal||"")]]},
+   {name:"Asesmen Awal",w:[40,80],head:0,rows:[["Pertanyaan pemantik","Catatan guru"],[RPL.pemantik,(RPL.tally?"Sebaran: "+RPL.tally.map(k=>k+" "+(S.tally[k]||0)).join(", ")+"\n":"")+(S.notes.awal||"")]]},
    {name:"Observasi Proses",w:[22,24,24,24,24],head:0,rows:Mx("obs",RPL.indProses)},
    {name:"Asesmen Akhir",w:[22,40,40,40],head:0,rows:[...Mx("hasil",RPL.indHasil),[],["Catatan observasi",S.notes.akhir||""]]},
    {name:"Rencana Kelompok",w:[22,...FIELDS.map(()=>38)],head:0,rows:[["Kelompok",...FIELDS.map(f=>f.l)],...S.names.map((n,i)=>[n,...FIELDS.map(f=>(S.plans[i]||{})[f.k]||"")])]},
-   {name:"Hasil Permainan",w:[24,10,10,10],head:0,rows:gr.length?[["Kelompok","Stempel (maks 5)","Tepat","Dibahas"],...gr]:[["Permainan belum dimainkan"]]},
+   {name:"Hasil Permainan",w:GAME_COLS.map((_,i)=>i?16:24),head:0,rows:gr.length?[GAME_COLS,...gr]:[["Permainan belum dimainkan"]]},
    {name:"Catatan Guru",w:[40,90],head:0,rows:[["Fase","Catatan"],...FASE.filter(f=>S.notes[f.id]).map(f=>[f.judul,S.notes[f.id]])]}
   ];
   const blob=buildXlsx(sheets),a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);a.download=`RPL-studi${S.kelas?"-"+S.kelas.replace(/[^\w-]+/g,""):""}-${new Date().toISOString().slice(0,10)}.xlsx`;
+  a.href=URL.createObjectURL(blob);a.download=`RPL-${ID}${S.kelas?"-"+S.kelas.replace(/[^\w-]+/g,""):""}-${new Date().toISOString().slice(0,10)}.xlsx`;
   document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);toast("Berkas Excel diunduh");
 }
+$ttl();
 renderSetupScreen();
 </script>
 </body>
