@@ -94,6 +94,16 @@
     .gbk-dlg .gbk-tags span{border:2px solid var(--ol);border-radius:99px;padding:.1rem .6rem;font-weight:800;font-size:.78rem}
     .gbk-credit{color:var(--sm)!important;font-weight:700}
     @media(max-width:520px){.gbk-head{grid-template-columns:1fr}.gbk-head h1,.gbk-head .rich{grid-column:1}.gbk-head .gbk-cat{grid-column:1;grid-row:auto;justify-self:center}}
+
+    /* ===== Rata tengah & lebar seragam ===== */
+    main.wrap{width:100%!important;max-width:860px!important;margin-left:auto!important;margin-right:auto!important;padding-left:16px!important;padding-right:16px!important;box-sizing:border-box}
+    .topbar,.gbk-head,ul.gbk-list,.gbk-credit{width:100%!important;max-width:none!important;box-sizing:border-box;margin-left:0!important;margin-right:0!important}
+    .gbk-head{display:flex!important;flex-direction:column;align-items:center;text-align:center;gap:.3rem;padding:1rem 1.2rem 1.3rem}
+    .gbk-head::before,.gbk-head::after,.gbk-head h1::before,.gbk-head h1::after,.gbk-head .rich::before{display:none!important;content:none!important}
+    .gbk-head .gbk-cat{margin-bottom:.2rem}
+    .gbk-head h1,.gbk-head .rich{grid-column:auto;align-self:auto;text-align:center;max-width:36rem}
+    .gbk-credit{text-align:center}
+    @media(max-width:520px){.gbk-head .gbk-cat{height:150px!important;width:auto!important}main.wrap{padding-left:12px!important;padding-right:12px!important}.gbk-row{padding:.7rem .75rem}.gbk-play,button.gbk-about{padding:.4rem .7rem!important}}
   </style>
 </head>
 <body>
