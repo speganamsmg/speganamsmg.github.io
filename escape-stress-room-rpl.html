@@ -416,6 +416,25 @@ html,body,#app{height:100dvh}
 .ldr .nm{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}.ldr .nm small{font-weight:700;color:var(--muted);font-size:12px}
 .ldr .vl{font-weight:900;white-space:nowrap}
 
+/* warna langit tiap game agar ilustrasi tidak seragam */
+html[data-g="literasi"][data-theme="light"]{--sk1:#FFB877;--sk2:#FFEBCF;--g1:#C8E066;--g2:#8FC24C}
+html[data-g="selflove"][data-theme="light"]{--sk1:#FFA9C6;--sk2:#FFE6EE;--g1:#B6E49A;--g2:#7BC96F}
+html[data-g="medsos"][data-theme="light"]{--sk1:#7FB6F5;--sk2:#E2EEFF;--g1:#9ED8E6;--g2:#5FB8CE}
+html[data-g="literasi"][data-theme="dark"]{--sk1:#2A1B14;--sk2:#8A5A3A}
+html[data-g="selflove"][data-theme="dark"]{--sk1:#2A1230;--sk2:#8A4A7A}
+html[data-g="medsos"][data-theme="dark"]{--sk1:#0B1F3A;--sk2:#2F6FB0}
+html[data-g="mental"][data-theme="light"]{--sk1:#8EDCD2;--sk2:#DFF6F2}
+html[data-g="teman"][data-theme="light"]{--sk1:#98B6FF;--sk2:#E3ECFF}
+html[data-g="studi"][data-theme="light"]{--sk1:#C2AEFF;--sk2:#EEE8FF}
+html[data-g="mental"][data-theme="dark"]{--sk1:#0A2A2E;--sk2:#2C8A85}
+html[data-g="teman"][data-theme="dark"]{--sk1:#0E1B45;--sk2:#3B5CC0}
+html[data-g="studi"][data-theme="dark"]{--sk1:#1C1245;--sk2:#6A4FD0}
+
+html[data-g="prestasi"][data-theme="light"]{--sk1:#FFD76A;--sk2:#FFF6D8;--g1:#D5E57A;--g2:#9FCB55}
+html[data-g="prestasi"][data-theme="dark"]{--sk1:#2A210A;--sk2:#8A6A1E}
+html[data-g="branding"][data-theme="light"]{--sk1:#C9A8FF;--sk2:#F3EAFF;--g1:#BFE7B0;--g2:#86CC8E}
+html[data-g="branding"][data-theme="dark"]{--sk1:#1E1236;--sk2:#6A3FA8}
+
 
 </style>
 </head>
@@ -545,6 +564,32 @@ function isl(cx,cy,w,h,o){ // pulau melayang bergaya stiker
   g+=`<path d="M${cx-rx*.62} ${cy-ry*.35}q${rx*.3} -${ry*.45} ${rx*.7} -${ry*.2}" stroke="#fff" stroke-opacity=".55" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
   return g+(o.deco||"")+"</g>";
 }
+
+const OL2=OL.replace('stroke-width="3"','stroke-width="2.2"');
+function bkst(x,y,s){s=s||1;return ["var(--c1)","var(--c2)","#E5604D"].map((c,i)=>`<rect x="${x-9*s+(i%2)*2}" y="${y-(i+1)*6*s}" width="${18*s}" height="${6*s}" rx="1.5" fill="${c}" ${OL2}/>`).join("")}
+function lamp(x,y,s){s=s||1;return `<path d="M${x} ${y}v${-34*s}" stroke="var(--ol)" stroke-width="3.4" stroke-linecap="round"/><circle cx="${x}" cy="${y-38*s}" r="${6*s}" fill="var(--c2)" ${OL2}/>`}
+function sunfl(x,y,s,c){s=s||1;c=c||"#FFD23F";const pet=Array.from({length:8},(_,i)=>{const a=i*Math.PI/4;return `<circle cx="${(x+Math.cos(a)*7*s).toFixed(1)}" cy="${(y-26*s+Math.sin(a)*7*s).toFixed(1)}" r="${4.4*s}" fill="${c}" ${OL2}/>`}).join("");return `<path d="M${x} ${y}v${-24*s}" stroke="var(--ol)" stroke-width="3" stroke-linecap="round"/><path d="M${x} ${y-8*s}q${6*s} -8 ${12*s} -4q-6 ${8*s} -${12*s} ${4*s}z" fill="var(--tr2)" ${OL2}/>${pet}<circle cx="${x}" cy="${y-26*s}" r="${5*s}" fill="#8A5A3C" ${OL2}/>`}
+function heart(x,y,s,c){s=s||1;return `<path transform="translate(${x} ${y}) scale(${s})" d="M0 8C-14 -2 -12 -14 -5 -14C-2 -14 0 -11 0 -9C0 -11 2 -14 5 -14C12 -14 14 -2 0 8Z" fill="${c||"#FF6F91"}" ${OL2}/>`}
+function bubble(x,y,s,c,ic){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-18 -14h36a8 8 0 0 1 8 8v12a8 8 0 0 1 -8 8h-18l-9 9v-9h-9a8 8 0 0 1 -8 -8v-12a8 8 0 0 1 8 -8z" fill="${c||"#fff"}" ${OL2}/>${ic||""}</g>`}
+function crate(x,y,s){s=s||1;return `<rect x="${x-12*s}" y="${y-12*s}" width="${24*s}" height="${12*s}" rx="2" fill="#D9A56E" ${OL2}/><circle cx="${x-6*s}" cy="${y-14*s}" r="${5*s}" fill="#E5604D" ${OL2}/><circle cx="${x+5*s}" cy="${y-15*s}" r="${5*s}" fill="#FF8A5C" ${OL2}/>`}
+function coins(x,y,s){s=s||1;return [0,1,2].map(i=>`<ellipse cx="${x}" cy="${y-i*5*s-3*s}" rx="${9*s}" ry="${3.6*s}" fill="#FFD23F" ${OL2}/>`).join("")}
+function tulip(x,y,c){return `<path d="M${x} ${y}v-14" stroke="var(--ol)" stroke-width="2.6" stroke-linecap="round"/><path d="M${x-5} ${y-14}q0 -9 5 -9q5 0 5 9q-5 4 -10 0z" fill="${c}" ${OL2}/>`}
+function butter(x,y,c){return `<g transform="translate(${x} ${y})"><ellipse cx="-4" cy="-2" rx="5" ry="3.6" fill="${c}" ${OL2}/><ellipse cx="4" cy="-2" rx="5" ry="3.6" fill="${c}" ${OL2}/><path d="M0 -4v7" stroke="var(--ol)" stroke-width="2"/></g>`}
+function wifi(x,y,s){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})" fill="none" stroke="var(--ol)" stroke-width="3.2" stroke-linecap="round"><path d="M-16 -12a22 22 0 0 1 32 0"/><path d="M-10 -5a13 13 0 0 1 20 0"/><circle cy="2" r="2.4" fill="var(--ol)"/></g>`}
+function clock(x,y,s){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><circle r="14" fill="#fff" ${OL2}/><path d="M0 -8V0l6 4" fill="none" stroke="var(--ol)" stroke-width="2.8" stroke-linecap="round"/><path d="M-12 -12l-4 -4M12 -12l4 -4" stroke="var(--ol)" stroke-width="3" stroke-linecap="round"/></g>`}
+function star5(x,y,s,c){s=s||1;return `<path transform="translate(${x} ${y}) scale(${s})" d="M0 -12l3.5 7.5 8.2 1 -6 5.7 1.6 8.1 -7.3 -4 -7.3 4 1.6 -8.1 -6 -5.7 8.2 -1z" fill="${c||"#FFD23F"}" ${OL2}/>`}
+function pencil(x,y,s){s=s||1;return `<g transform="translate(${x} ${y}) rotate(-35) scale(${s})"><rect x="-4" y="-22" width="8" height="30" rx="2" fill="#FFD23F" ${OL2}/><path d="M-4 8h8l-4 8z" fill="#F3C9A0" ${OL2}/><rect x="-4" y="-26" width="8" height="5" fill="#FF8FA3" ${OL2}/></g>`}
+function frame(x,y,s,c){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-14" y="-20" width="28" height="22" rx="3" fill="${c||"#fff"}" ${OL2}/><circle cy="-13" r="4.4" fill="var(--c1)" ${OL2}/><path d="M-8 -3q8 -9 16 0z" fill="var(--c1)" ${OL2}/></g>`}
+function camera(x,y,s){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-16" y="-16" width="32" height="20" rx="5" fill="#fff" ${OL2}/><rect x="-8" y="-20" width="10" height="5" rx="2" fill="var(--c2)" ${OL2}/><circle cy="-6" r="6.5" fill="var(--c1)" ${OL2}/><circle cy="-6" r="2.4" fill="#fff"/></g>`}
+function spot(x,y,s){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-4 0l-8 -26h20l-8 26z" fill="#FFF3B0" opacity=".7"/><rect x="-10" y="-34" width="20" height="10" rx="4" fill="var(--c1d)" ${OL2}/></g>`}
+function vcheck(x,y,s){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><circle r="12" fill="#3BA7F0" ${OL2}/><path d="M-5 0l4 4l7 -8" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/></g>`}
+const SIDE={
+ literasi:o=>[bkst(70,228,1.1)+lamp(124,230,1)+flower(100,232,"#FF8A5C"),crate(690,262,1)+bkst(738,262,1),bkst(600,378,1)+lamp(626,380,.7),coins(200,380,1)],
+ selflove:o=>[sunfl(66,228,1,"#FFD23F")+sunfl(112,230,.8,"#FF8FB1")+heart(92,222,.7),tulip(690,262,"#FF6F91")+tulip(710,264,"#FFD23F")+tulip(730,262,"#B58CF0")+butter(712,236,"#FF8FB1"),heart(600,372,1.3,"#FF6F91"),tulip(196,380,"#FF8FB1")+tulip(212,382,"#fff")],
+ medsos:o=>[wifi(70,214,1)+bubble(118,208,.8,"#fff",heart(0,-1,.55)),bubble(692,236,.9,"var(--c2)",`<circle cx="-7" cy="-1" r="2.4" fill="var(--ol)"/><circle cx="0" cy="-1" r="2.4" fill="var(--ol)"/><circle cx="7" cy="-1" r="2.4" fill="var(--ol)"/>`)+heart(738,250,.8,"#FF6F91"),heart(598,368,1,"#FF6F91")+wifi(626,370,.6),bubble(200,366,.7,"#fff",`<path d="M-8 -1l5 5l11 -10" fill="none" stroke="#43A65B" stroke-width="3" stroke-linecap="round"/>`)],
+ prestasi:o=>[clock(70,222,1.1)+star5(118,206,.8),pencil(690,262,1)+bkst(738,262,1),star5(600,368,1.1)+clock(634,372,.7),pencil(200,380,.9)+star5(238,372,.6,"#fff")],
+ branding:o=>[frame(70,222,1.2)+star5(116,206,.7),camera(692,262,1.1)+spot(736,262,.9),vcheck(600,372,1.1)+frame(636,374,.8),spot(200,380,.9)+star5(240,372,.6,"#fff")],
+};
 function scene(g){
   g=g||GID;
   const W=(x,y,w,h,r)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r||0}"`;
@@ -579,8 +624,60 @@ function scene(g){
      ${W(-10,-36,20,36,10)} fill="var(--c1d)" ${OL}/>
      <g transform="translate(-60 0)"><path d="M0 0L-8 -80M24 0L16 -80" stroke="var(--ol)" stroke-width="7" stroke-linecap="round"/><path d="M0 0L-8 -80M24 0L16 -80" stroke="#C9965F" stroke-width="3.4" stroke-linecap="round"/>${[-16,-32,-48,-64].map(y=>`<path d="M${(-y)*0.1-2} ${y}h${24-(-y)*0.0}" stroke="var(--ol)" stroke-width="6" stroke-linecap="round"/><path d="M${(-y)*0.1-2} ${y}h24" stroke="#C9965F" stroke-width="2.6" stroke-linecap="round"/>`).join("")}</g>
      <path d="M70 0q-24 -10 -2 -26t-2 -30q-12 -12 8 -24" fill="none" stroke="var(--ol)" stroke-width="13" stroke-linecap="round"/><path d="M70 0q-24 -10 -2 -26t-2 -30q-12 -12 8 -24" fill="none" stroke="#E5604D" stroke-width="7" stroke-linecap="round"/>
-     <g transform="translate(76 -83)"><circle r="9" fill="#E5604D" ${OL}/><circle cx="-3" cy="-2" r="2" fill="#fff"/><circle cx="3" cy="-2" r="2" fill="#fff"/><path d="M-3 4l3 5 3-5" fill="none" stroke="#fff" stroke-width="1.8"/></g></g>`
+     <g transform="translate(76 -83)"><circle r="9" fill="#E5604D" ${OL}/><circle cx="-3" cy="-2" r="2" fill="#fff"/><circle cx="3" cy="-2" r="2" fill="#fff"/><path d="M-3 4l3 5 3-5" fill="none" stroke="#fff" stroke-width="1.8"/></g></g>`,
+   literasi:`<g transform="translate(30 0) scale(1.28)">
+     <path d="M-92 -78Q0 -62 92 -78" fill="none" stroke="var(--ol)" stroke-width="2.6"/>
+     ${[-70,-35,0,35,70].map((x,i)=>`<path d="M${x-5} ${-74+Math.round(8*Math.sin((x+92)/184*Math.PI))}l10 0l-5 12z" fill="${["#E5604D","var(--c2)","#fff","var(--c1)","#43A65B"][i]}" ${OL2}/>`).join("")}
+     ${[[-66,"#E5604D",0],[0,"var(--c1)",1],[66,"#43A65B",2]].map(([x,c,k])=>`<g transform="translate(${x} 0)">
+      <path d="M-24 0v-30M24 0v-30" stroke="var(--ol)" stroke-width="3.4" stroke-linecap="round"/>
+      ${W(-26,-18,52,18,3)} fill="#D9A56E" ${OL}/>
+      ${[0,1,2,3].map(i=>`<rect x="${-26+i*13}" y="-52" width="13" height="22" fill="${i%2?"#fff":c}" ${OL2}/>`).join("")}
+      ${[0,1,2,3].map(i=>`<circle cx="${-19.5+i*13}" cy="-30" r="6.5" fill="${i%2?"#fff":c}" ${OL2}/>`).join("")}
+      ${k===0?crate(0,-18,1):k===1?bkst(-8,-18,1)+bkst(10,-18,.9):coins(0,-18,1.1)}</g>`).join("")}
+   </g>`,
+   selflove:`<g transform="translate(30 0) scale(1.28)">
+     ${[-92,-80,-68,-56,56,68,80,92].map(x=>`<path d="M${x-4} 0v-22l4 -6l4 6v22z" fill="#fff" ${OL2}/>`).join("")}
+     <path d="M-96 -12h44M52 -12h44" stroke="var(--ol)" stroke-width="3" stroke-linecap="round"/>
+     <path d="M0 0V-72" stroke="var(--ol)" stroke-width="7" stroke-linecap="round"/><path d="M0 0V-72" stroke="#43A65B" stroke-width="3.4" stroke-linecap="round"/>
+     <path d="M0 -24q-22 -4 -26 -22q20 -2 26 22z" fill="var(--tr2)" ${OL}/><path d="M0 -36q22 -4 26 -22q-20 -2 -26 22z" fill="var(--tr2)" ${OL}/>
+     ${Array.from({length:8},(_,i)=>{const a=i*Math.PI/4;return `<circle cx="${(Math.cos(a)*21).toFixed(1)}" cy="${(-92+Math.sin(a)*21).toFixed(1)}" r="14" fill="#FF8FB1" ${OL}/>`}).join("")}
+     <circle cy="-92" r="16" fill="#FFD23F" ${OL}/>${heart(0,-92,.9,"#E5668B")}
+     ${tulip(-40,0,"#FF6F91")}${tulip(-28,0,"#B58CF0")}
+     <g transform="translate(42 0)"><path d="M0 0h20l-2 -16h-16z" fill="#6AA8D8" ${OL}/><path d="M18 -12l14 -10" stroke="var(--ol)" stroke-width="4" stroke-linecap="round"/><path d="M-2 -14q-10 -2 -8 6" fill="none" stroke="var(--ol)" stroke-width="3" stroke-linecap="round"/></g>
+   </g>`,
+   branding:`<g transform="translate(30 0) scale(1.25)">
+     ${spot(-50,-138,1.4)}${spot(50,-138,1.4)}
+     <path d="M-36 -44L-64 0M36 -44L64 0M0 -44V0" stroke="var(--ol)" stroke-width="6" stroke-linecap="round"/>
+     <rect x="-52" y="-128" width="104" height="88" rx="8" fill="#C9A15B" ${OL}/>
+     <rect x="-42" y="-118" width="84" height="68" rx="4" fill="var(--win)" ${OL2}/>
+     <circle cx="0" cy="-94" r="14" fill="var(--c2)" ${OL2}/><path d="M-26 -52q26 -34 52 0z" fill="var(--c1)" ${OL2}/>
+     ${vcheck(40,-126,1.2)}${star5(-48,-132,.8)}
+     ${camera(-78,-18,1.2)}
+     <g transform="translate(78 -4)"><rect x="-16" y="-52" width="32" height="52" rx="5" fill="#fff" ${OL}/><rect x="-10" y="-46" width="20" height="9" rx="2" fill="var(--c2)" ${OL2}/><rect x="-10" y="-33" width="20" height="5" rx="2" fill="var(--c3)" ${OL2}/><rect x="-10" y="-25" width="14" height="5" rx="2" fill="var(--c3)" ${OL2}/></g>
+   </g>`,
+   prestasi:`<g transform="translate(30 0) scale(1.25)">
+     ${star5(0,-150,1.6)}
+     <path d="M-60 0v-34h40v34z" fill="#C0C7D1" ${OL}/><path d="M-20 0v-70h40v70z" fill="#FFD23F" ${OL}/><path d="M20 0v-22h40v22z" fill="#E0A66A" ${OL}/>
+     <text x="0" y="-40" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="800" font-size="26" fill="var(--ol)">1</text>
+     <text x="-40" y="-10" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="800" font-size="18" fill="var(--ol)">2</text>
+     <text x="40" y="-4" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="800" font-size="16" fill="var(--ol)">3</text>
+     <path d="M-14 -72h28v-6a14 14 0 0 0 -28 0z" fill="#FFD23F" ${OL2}/><path d="M-14 -88l-8 -6M14 -88l8 -6" stroke="var(--ol)" stroke-width="3" stroke-linecap="round"/>
+     <rect x="-14" y="-120" width="28" height="22" rx="4" fill="#FFE98A" ${OL}/><path d="M-6 -113v8M6 -113v8" stroke="var(--ol)" stroke-width="3" stroke-linecap="round"/>
+     ${clock(-72,-100,1.4)}${pencil(78,-70,1.2)}${bkst(-50,0,.9)}
+   </g>`,
+   medsos:`<g transform="translate(30 0) scale(1.28)">
+     ${wifi(0,-134,1.5)}
+     ${W(-36,-122,72,122,15)} fill="var(--c1d)" ${OL}/>
+     ${W(-29,-112,58,100,8)} fill="var(--win)" ${OL2}/>
+     <rect x="-8" y="-118" width="16" height="4" rx="2" fill="var(--ol)"/>
+     ${[[-22,-100,44,12],[-22,-84,30,8],[-22,-72,38,8]].map(([x,y,w,h])=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="#fff" ${OL2}/>`).join("")}
+     ${heart(-10,-44,1.2,"#FF6F91")}<circle cx="14" cy="-46" r="11" fill="var(--c2)" ${OL2}/><path d="M9 -46l4 4l7 -8" fill="none" stroke="var(--ol)" stroke-width="3" stroke-linecap="round"/>
+     ${bubble(-66,-96,1,"#fff",heart(0,-1,.6))}
+     ${bubble(68,-78,.9,"var(--c2)",`<circle cx="-7" cy="-1" r="2.4" fill="var(--ol)"/><circle cx="0" cy="-1" r="2.4" fill="var(--ol)"/><circle cx="7" cy="-1" r="2.4" fill="var(--ol)"/>`)}
+     ${bubble(76,-30,.7,"#fff",`<path d="M-8 -1l5 5l11 -10" fill="none" stroke="#43A65B" stroke-width="3" stroke-linecap="round"/>`)}
+   </g>`
   }[g]||"";
+  const SD=SIDE[g]?SIDE[g]():[tree(70,228,.9)+bush(120,229,1)+flower(100,232,"#FFD23F"),pine(690,260,.9)+flower(735,264,"#FF8FA3"),bush(600,378,1),flower(200,380,"#fff")];
   const stars=[[60,50],[150,90],[240,40],[330,80],[560,40],[640,100],[740,60],[470,24],[100,150],[700,170]].map(([x,y],i)=>`<path d="M${x} ${y-5}l1.6 3.4 3.4 1.6-3.4 1.6-1.6 3.4-1.6-3.4-3.4-1.6 3.4-1.6z" fill="#FFE9A0" opacity="${.5+.5*rnd(i)}"/>`).join("");
   const moon=`<g class="s-night"><circle cx="650" cy="72" r="34" fill="#FFF3C4" ${OL}/><circle cx="640" cy="64" r="6" fill="#E8DDA8" opacity=".8"/><circle cx="662" cy="84" r="8" fill="#E8DDA8" opacity=".8"/></g>`;
   const sunD=`<g class="s-day"><g class="rays" stroke="var(--ol)" stroke-width="3" stroke-linecap="round">${Array.from({length:12},(_,i)=>{const a=i*Math.PI/6;return `<path d="M${650+Math.cos(a)*44} ${72+Math.sin(a)*44}L${650+Math.cos(a)*56} ${72+Math.sin(a)*56}"/>`}).join("")}</g><circle cx="650" cy="72" r="34" fill="var(--sunc)" ${OL}/><path d="M634 62q8 -10 20 -8" stroke="#fff" stroke-opacity=".7" stroke-width="4" fill="none" stroke-linecap="round"/></g>`;
@@ -592,10 +689,10 @@ function scene(g){
   <path d="M0 330Q120 290 240 330T480 330T800 320V440H0Z" fill="var(--sk2)" opacity=".55"/>
   <g class="stars" opacity="var(--stars)">${stars}</g>${sunD}${moon}${birds}
   ${cloud(110,150,1.1,0)}${cloud(620,210,.9,-9)}${cloud(300,70,.7,-4,.9)}${cloud(720,320,.8,-14,.9)}
-  ${isl(95,230,150,100,{sd:2,dl:-2,deco:tree(70,228,.9)+bush(120,229,1)+flower(100,232,"#FFD23F")})}
-  ${isl(715,262,138,92,{sd:4,dl:-4,deco:pine(690,260,.9)+flower(735,264,"#FF8FA3")})}
-  ${isl(600,380,86,52,{sd:7,dl:-1,deco:bush(600,378,1)})}
-  ${isl(200,382,70,44,{sd:8,dl:-5,deco:flower(200,380,"#fff")})}
+  ${isl(95,230,150,100,{sd:2,dl:-2,deco:SD[0]})}
+  ${isl(715,262,138,92,{sd:4,dl:-4,deco:SD[1]})}
+  ${isl(600,380,86,52,{sd:7,dl:-1,deco:SD[2]})}
+  ${isl(200,382,70,44,{sd:8,dl:-5,deco:SD[3]})}
   ${isl(400,312,360,170,{sd:1,cls:"flt2",deco:`${pine(262,316,1.1)}${tree(560,312,1.15)}${bush(530,316,1)}${flower(300,322,"#FFD23F")}${flower(336,324,"#FF8FA3")}${flower(480,324,"#fff")}<g transform="translate(442 318)">${LM}</g>`})}
   ${ff}
   </svg>`;
@@ -662,7 +759,8 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
 let S=load();
-function newS(){return {setup:false,kelas:"",names:["Kelompok A","Kelompok B","Kelompok C","Kelompok D"],i:0,visited:{},tally:{},obs:{},hasil:{},notes:{},plans:{},g:null,turn:0,jalur:0,start:Date.now()}}
+function glJml(){try{const n=Math.round(+(JSON.parse(localStorage.getItem("bk_global")||"{}").jml));return n>=2&&n<=6?n:4}catch(e){return 4}}
+function newS(){return {setup:false,kelas:"",names:Array.from({length:glJml()},(_,i)=>"Kelompok "+"ABCDEF"[i]),i:0,visited:{},tally:{},obs:{},hasil:{},notes:{},plans:{},g:null,turn:0,jalur:0,start:Date.now()}}
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&s.names)return Object.assign(newS(),s)}catch(e){}return null}
 function save(){try{if(S)localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
@@ -670,7 +768,7 @@ function modal(html){return new Promise(res=>{$("#mbox").innerHTML=html;$("#mod"
 
 /* ---------- papan peringkat (umum untuk semua game) ---------- */
 const poinKuis=()=>{try{const v=+RULES.poinKuis;return isNaN(v)?10:Math.max(0,v)}catch(e){return 10}};
-const skorOf=r=>(r&&r.ok||0)*poinKuis();
+const skorOf=r=>(r&&r.ok||0)*poinKuis()+((r&&r.bonus)||0);
 function leadBoard(title,icon,list){ // list: [{n,v,t,sub}] sudah terurut
   const mx=Math.max(1,...list.map(x=>x.v));
   return `<div class="ldb"><h4>${icon} ${esc(title)}</h4>${list.map((x,k)=>`<div class="ldr k${k}"><span class="md">${x.v>0&&["🥇","🥈","🥉"][k]||(k+1)}</span><span class="nm"><b>${esc(x.n)}</b>${x.sub?`<small>${esc(x.sub)}</small>`:""}</span><span class="vl">${esc(x.t)}</span><i style="--w:${Math.round(x.v/mx*100)}%"></i></div>`).join("")}</div>`;
@@ -1016,6 +1114,14 @@ function openInfo(){refreshInfo();modal(infoHtml()).then(v=>{if(v==="edit")openE
 /* ---------- pengaturan isi (RPL, tahapan, soal) ---------- */
 const CONF_LS="rpl_conf_"+ID;
 const DEF=JSON.parse(JSON.stringify({RPL,FASE,FIELDS,DATA:typeof GAMEDATA==="object"?GAMEDATA:{}}));
+/* ---------- Aturan Global (dibagi semua game di perangkat ini; aturan per game menimpa) ---------- */
+const GLOBAL_LS="bk_global",GLOBAL_KEYS=["poinKuis","detikJawab","putaran"];let GLK=new Set();
+function readGlobal(){try{const g=JSON.parse(localStorage.getItem(GLOBAL_LS)||"null");return g&&typeof g==="object"?g:{}}catch(e){return {}}}
+function applyGlobal(){
+  GLK=new Set();if(typeof RULES!=="object"||!RULES)return;
+  const g=readGlobal(),d=(DEF.DATA&&DEF.DATA.RULES)||{};
+  GLOBAL_KEYS.forEach(k=>{const v=g[k];if(k in d&&v!=null&&v!==""&&isFinite(+v)&&RULES[k]===d[k]){RULES[k]=+v;GLK.add(k)}});
+}
 function repl(dst,src){
   if(Array.isArray(dst)&&Array.isArray(src)){dst.splice(0,dst.length,...JSON.parse(JSON.stringify(src)));return true}
   if(dst&&src&&typeof dst==="object"&&typeof src==="object"&&!Array.isArray(dst)){Object.keys(dst).forEach(k=>delete dst[k]);Object.assign(dst,JSON.parse(JSON.stringify(src)));return true}
@@ -1029,6 +1135,7 @@ function applyConf(c){
     if(Array.isArray(c.FIELDS)&&c.FIELDS.length===DEF.FIELDS.length)repl(FIELDS,c.FIELDS);
     if(c.DATA&&typeof GAMEDATA==="object")Object.keys(GAMEDATA).forEach(k=>{if(c.DATA[k]===undefined)return;const d=GAMEDATA[k];if(d&&!Array.isArray(d)&&typeof c.DATA[k]==="object"&&!Array.isArray(c.DATA[k]))repl(d,Object.assign({},DEF.DATA[k],c.DATA[k]));else repl(d,c.DATA[k])});
   }catch(e){console.warn("conf",e)}
+  applyGlobal();
 }
 function currentConf(){return JSON.parse(JSON.stringify({v:1,akses:AKSES,RPL,FASE,FIELDS,DATA:typeof GAMEDATA==="object"?GAMEDATA:{}}))}
 async function loadConf(){
@@ -1038,6 +1145,7 @@ async function loadConf(){
     if(srv.akses==="publik"||srv.akses==="admin"){AKSES=srv.akses;try{localStorage.setItem("rpl_akses_"+ID,AKSES)}catch(e){}}
     applyConf(srv);if(loc&&loc._lokal)applyConf(loc);
   }else if(loc)applyConf(loc);
+  applyGlobal();
 }
 /* ---------- editor ---------- */
 let ED=null;
@@ -1105,7 +1213,7 @@ function edHtml(){
     const gi=FASE.findIndex(f=>f.tipe==="game"),R=ED.conf.DATA.RULES||{},LB=typeof RULE_LBL==="object"?RULE_LBL:{};
     body=`<p class="txt" style="font-size:15px;color:var(--muted)">Atur jalannya permainan. Nilai 0 pada batas waktu berarti tanpa batas.</p>
      ${gi>=0?`<div class="rl"><label>Durasi tahap permainan (menit)</label><input type="number" data-ep="FASE.${gi}.menit" data-num="1" min="1" value="${ED.conf.FASE[gi].menit}"></div>`:""}
-     ${Object.keys(R).map(k=>`<div class="rl"><label>${esc((LB[k]&&LB[k].l)||k)}</label><input type="number" data-ep="DATA.RULES.${k}" data-num="1" min="0" value="${R[k]}"></div>`).join("")||'<p class="txt">Game ini tidak punya aturan tambahan.</p>'}`;
+     ${Object.keys(R).map(k=>`<div class="rl"><label>${esc((LB[k]&&LB[k].l)||k)}${GLK.has(k)?' <small style="color:var(--muted)">(mengikuti Aturan Global; ubah di sini untuk menimpa khusus game ini)</small>':""}</label><input type="number" data-ep="DATA.RULES.${k}" data-num="1" min="0" value="${R[k]}"></div>`).join("")||'<p class="txt">Game ini tidak punya aturan tambahan.</p>'}`;
   }else{
     const v=t==="DATA"?ED.conf.DATA:ED.conf[t];
     body=(t==="FASE"?`<p class="txt" style="font-size:15px;color:var(--muted)">Urutan dan jenis tahap tetap. Isi kartu, judul, dan durasi bisa diubah. Kartu bisa ditambah atau dihapus.</p>`:"")+
@@ -1157,6 +1265,7 @@ function openEditor(){
   $("#mbox").oninput=inp;$("#mbox").onchange=inp;
 }
 async function edSave(){
+  try{const R=ED.conf.DATA&&ED.conf.DATA.RULES,d=DEF.DATA.RULES;if(R&&d)GLK.forEach(k=>{if(R[k]===RULES[k])R[k]=d[k]})}catch(e){}
   const info=cleanAbout(ED.info),b=$("#edSave");b.disabled=true;
   try{
     if(!ED.adm){ // pengguna publik: simpan lokal saja, perancang/jabatan tidak berubah
