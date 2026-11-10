@@ -123,6 +123,38 @@
     .gbk-toast.bad{background:#D9453D}
     .gbk-toast.show{opacity:1;transform:translate(-50%,0)}
     @media(max-width:520px){.gbk-row .gbk-ctl{grid-column:1/3}}
+    /* Akun, pemilih tampilan, ikon folder berwarna */
+    #acctBtn{margin-left:auto;position:relative}
+    .topbar .home-btn+#acctBtn,.topbar #acctBtn+#themeBtn{margin-left:.15rem}
+    #acctBtn.on::after{content:"";position:absolute;right:.35rem;top:.35rem;width:.55rem;height:.55rem;border-radius:50%;background:#3BA776;border:2px solid var(--surface,#fff)}
+    .gbk-views{display:flex;gap:.4rem;justify-content:flex-end;margin:0 0 .8rem}
+    .gbk-views[hidden]{display:none}
+    .gbk-vb{display:inline-flex;align-items:center;gap:.35rem;height:2.3rem;padding:0 .8rem;border:3px solid var(--ol);border-radius:12px;background:var(--sc);color:var(--si);font:inherit;font-size:.82rem;font-weight:900;cursor:pointer;box-shadow:0 3px 0 var(--ol)}
+    .gbk-vb svg{width:1.05rem;height:1.05rem}
+    .gbk-vb[aria-pressed=true]{background:var(--sy);color:#2b2200}
+    .gbk-vb:active{transform:translateY(3px);box-shadow:none}
+    @media(max-width:420px){.gbk-vb span{display:none}.gbk-vb{padding:0 .7rem}}
+    .gbk-folder .no svg{width:58%;height:58%}
+    ul.v-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(13.5rem,1fr));gap:.9rem}
+    ul.v-grid .gbk-row{grid-template-columns:1fr!important;align-content:start;gap:.55rem}
+    ul.v-grid .gbk-row .no{width:3.2rem;height:3.2rem;border-radius:16px;font-size:1.25rem}
+    ul.v-grid .gbk-row .ac{justify-content:flex-start}
+    ul.v-compact{gap:.45rem!important}
+    ul.v-compact .gbk-row{padding:.35rem .7rem!important;border-radius:14px!important;box-shadow:0 3px 0 var(--ol)!important;grid-template-columns:2rem minmax(0,1fr) auto!important}
+    ul.v-compact .gbk-row .no{width:1.9rem;height:1.9rem;font-size:.85rem}
+    ul.v-compact .gbk-row .tt b{font-size:.95rem}
+    ul.v-compact .gbk-row .tt small{display:none}
+    ul.v-compact .gbk-row .gbk-about{display:none}
+    .gbk-pick{display:grid;gap:.5rem}
+    .gbk-prev{width:3.4rem;height:3.4rem;border:3px solid var(--ol);border-radius:16px;display:grid;place-items:center;color:#fff;box-shadow:0 3px 0 var(--ol)}
+    .gbk-prev svg{width:60%;height:60%}
+    .gbk-lb2{font-weight:900;font-size:.85rem;color:var(--sm)}
+    .gbk-sws,.gbk-ics{display:flex;flex-wrap:wrap;gap:.4rem}
+    .gbk-sw{width:2.1rem;height:2.1rem;border-radius:50%;border:3px solid var(--ol);cursor:pointer}
+    .gbk-sw[aria-pressed=true]{outline:4px solid var(--sy);outline-offset:1px}
+    .gbk-ic{width:2.3rem;height:2.3rem;border:3px solid var(--ol);border-radius:10px;background:var(--sc);color:var(--si);display:grid;place-items:center;cursor:pointer;padding:0}
+    .gbk-ic svg{width:1.15rem;height:1.15rem}
+    .gbk-ic[aria-pressed=true]{background:var(--sy);color:#2b2200}
   </style>
   <style>
     /* Latar gradasi lembut seperti situs Speganam */
@@ -237,7 +269,18 @@
       var LID = 'gamebk-menu', LKC = 'gbk_layout', MAXD = 3;
       var home = $('home'), homeOrig = { html: home.innerHTML, href: home.getAttribute('href'), cls: home.className }, homeBtn0 = document.querySelector('.topbar .home-btn'), homeBtnMade = null;
       var head1 = dh ? dh.querySelector('h1') : null, headTxt = dh ? dh.querySelector('.rich') : null, h1Orig = head1 ? head1.textContent : '', txtOrig = headTxt ? headTxt.textContent : '';
-      var st = { edit: false, work: null, canEdit: false };
+      var st = { edit: false, work: null };
+      var VIEWS = [['list', 'Daftar'], ['grid', 'Kartu'], ['compact', 'Ringkas']];
+      var COLORS = ['#F2A93B', '#E5504D', '#E5668B', '#8B6CF0', '#4C7DF0', '#2E9BD6', '#2BA6A0', '#3BA776', '#6BA81E', '#8A6D4B', '#546E7A', '#1E2A5C'];
+      var ICONS = (App.ICON_CHOICES || ['folder', 'book', 'star', 'heart', 'award', 'bulb', 'graduation', 'users', 'chat', 'shield', 'flag', 'gift']).filter(function (n) { return /^[a-z]+$/.test(n); });
+      if (ICONS.indexOf('folder') < 0) ICONS.unshift('folder');
+      function getView() { try { var v = localStorage.getItem('gbk_view'); if (v) return v; } catch (e) {} return (layout && layout.vw) || 'list'; }
+      function setView(v) { try { localStorage.setItem('gbk_view', v); } catch (e) {} render(); }
+      function icoSvg(name) {
+        var t = document.createElement('template');
+        t.innerHTML = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + name + '</svg>';
+        return t.content.firstElementChild;
+      }
 
       /* ---- Susunan (folder) ---- */
       var ORDER = []; /* semua game dalam urutan bawaan */
@@ -252,7 +295,7 @@
       function norm(o) {
         var f = [], seen = {}, a = [], used = {};
         ((o && o.f) || []).forEach(function (x) {
-          if (x && /^f[a-z0-9]{3,10}$/.test(x.id) && !seen[x.id]) { seen[x.id] = 1; f.push({ id: x.id, j: String(x.j || 'Folder').slice(0, 60) }); }
+          if (x && /^f[a-z0-9]{3,10}$/.test(x.id) && !seen[x.id]) { seen[x.id] = 1; f.push({ id: x.id, j: String(x.j || 'Folder').slice(0, 60), c: /^#[0-9a-fA-F]{6}$/.test(x.c) ? x.c : '', i: /^[a-z]{2,20}$/.test(x.i) ? x.i : '' }); }
         });
         ((o && o.a) || []).forEach(function (x) {
           var k = x && x[0], p = x && x[1] || '';
@@ -264,7 +307,7 @@
         });
         f.forEach(function (x) { if (!used['f:' + x.id]) { used['f:' + x.id] = 1; a.push(['f:' + x.id, '']); } });
         ORDER.forEach(function (g) { var k = 'g:' + g.href; if (!used[k]) { used[k] = 1; a.push([k, '']); } });
-        var L = { v: 1, f: f, a: a };
+        var L = { v: 1, f: f, a: a, vw: (o && (o.vw === 'grid' || o.vw === 'compact' || o.vw === 'list')) ? o.vw : 'list' };
         L.a.forEach(function (x) { if (x[0].indexOf('f:') === 0 && (cyc(L, x[0].slice(2)) || depth(L, x[0].slice(2)) > MAXD)) x[1] = ''; });
         return L;
       }
@@ -285,15 +328,34 @@
           var ov2 = el('div', 'gbk-ov'), box = el('div', 'gbk-dlg'), inp = null;
           function done(v) { ov2.remove(); res(v); }
           box.append(el('h3', '', o.title)); if (o.text) box.append(el('p', '', o.text));
+          if (o.build) box.append(o.build());
           if (o.input) { inp = el('input', 'gbk-in'); inp.type = o.input; inp.value = o.value || ''; inp.maxLength = o.max || 60; inp.placeholder = o.ph || ''; inp.autocomplete = 'off'; box.append(inp); }
           var msg = el('p', 'gbk-msg'); box.append(msg);
           var act = el('div', 'gbk-act'), ok = el('button', 'gbk-play', o.ok || 'OK'), no = el('button', 'gbk-about', 'Batal');
           ok.type = no.type = 'button'; ok.style.setProperty('--ac', o.danger ? '#D9453D' : '#3BA776');
-          ok.onclick = function () { if (inp && !inp.value.trim()) { msg.textContent = 'Isi dulu.'; return; } done(inp ? inp.value.trim() : true); };
+          ok.onclick = function () { if (inp && !inp.value.trim()) { msg.textContent = 'Isi dulu.'; return; } done(inp ? (o.collect ? o.collect(inp.value.trim()) : inp.value.trim()) : true); };
           no.onclick = function () { done(null); };
           if (inp) inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') ok.click(); });
           ov2.addEventListener('mousedown', function (e) { if (e.target === ov2) done(null); });
           act.append(ok, no); box.append(act); ov2.append(box); document.body.append(ov2); (inp || ok).focus();
+        });
+      }
+      function folderDialog(title, f) {
+        var pick = { c: (f && f.c) || COLORS[0], i: (f && f.i) || 'folder' };
+        return dialog({
+          title: title, input: 'text', value: f ? f.j : '', ph: 'Nama folder', ok: 'Simpan',
+          build: function () {
+            var w = el('div', 'gbk-pick'), pv = el('div', 'gbk-prev'), sw = el('div', 'gbk-sws'), ic = el('div', 'gbk-ics');
+            function paint() {
+              pv.style.background = pick.c; pv.textContent = ''; pv.append(App.svg(pick.i));
+              sw.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === pick.c ? 'true' : 'false'); });
+              ic.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === pick.i ? 'true' : 'false'); });
+            }
+            COLORS.forEach(function (c) { var b = el('button', 'gbk-sw'); b.type = 'button'; b.dataset.v = c; b.style.background = c; b.setAttribute('aria-label', 'Warna ' + c); b.onclick = function () { pick.c = c; paint(); }; sw.append(b); });
+            ICONS.forEach(function (n) { var b = el('button', 'gbk-ic'); b.type = 'button'; b.dataset.v = n; b.setAttribute('aria-label', 'Ikon ' + n); b.append(App.svg(n)); b.onclick = function () { pick.i = n; paint(); }; ic.append(b); });
+            w.append(pv, el('div', 'gbk-lb2', 'Warna'), sw, el('div', 'gbk-lb2', 'Ikon'), ic); paint(); return w;
+          },
+          collect: function (name) { return { j: name, c: pick.c, i: pick.i }; }
         });
       }
       function toast(t, bad) {
@@ -316,12 +378,12 @@
         li.append(el('span', 'no', String(no)), t, ac); if (ctl) li.append(ctl); return li;
       }
       function folderRow(f, L, ctl) {
-        var li = el('li', 'gbk-row gbk-folder'); li.style.setProperty('--ac', '#F2A93B');
+        var li = el('li', 'gbk-row gbk-folder'); li.style.setProperty('--ac', f.c || '#F2A93B');
         var t = el('div', 'tt'); t.append(el('b', '', f.j));
         var n = countGames(L, f.id), sm = el('small'); sm.append(el('em', '', 'Folder'), document.createTextNode(' · ' + n + ' game')); t.append(sm);
         var ac = el('div', 'ac');
-        if (!st.edit) { var op = el('a', 'gbk-play', '📂 Buka'); op.href = '#/f/' + f.id; ac.append(op); }
-        li.append(el('span', 'no', '📁'), t, ac); if (ctl) li.append(ctl); return li;
+        if (!st.edit) { var op = el('a', 'gbk-play', 'Buka'); op.href = '#/f/' + f.id; ac.append(op); }
+        var no = el('span', 'no'); no.append(App.svg(f.i && App.ICON_CHOICES && App.ICON_CHOICES.indexOf(f.i) >= 0 ? f.i : 'folder')); li.append(no, t, ac); if (ctl) li.append(ctl); return li;
       }
       function btn(txt, label, fn, dis) { var b = el('button', 'gbk-mini', txt); b.type = 'button'; b.setAttribute('aria-label', label); b.title = label; b.disabled = !!dis; b.addEventListener('click', fn); return b; }
       function moveSel(L, key) {
@@ -348,8 +410,8 @@
         c.append(btn('↑', 'Naikkan', function () { swap(-1); }, idx === 0), btn('↓', 'Turunkan', function () { swap(1); }, idx === sib.length - 1));
         if (key.indexOf('f:') === 0) {
           var id = key.slice(2);
-          c.append(btn('✏️', 'Ubah nama folder', async function () {
-            var v = await dialog({ title: 'Ubah nama folder', input: 'text', value: folderOf(L, id).j, ok: 'Simpan nama' }); if (v) { folderOf(L, id).j = v; render(); }
+          c.append(btn('✏️', 'Ubah nama, warna, dan ikon folder', async function () {
+            var f0 = folderOf(L, id), v = await folderDialog('Ubah folder', f0); if (v) { f0.j = v.j; f0.c = v.c; f0.i = v.i; render(); }
           }), btn('🗑', 'Hapus folder', async function () {
             var f = folderOf(L, id), ok = await dialog({ title: 'Hapus folder?', text: 'Folder "' + f.j + '" dihapus. Isinya dipindahkan ke tingkat di atasnya, tidak ikut terhapus.', ok: 'Hapus folder', danger: true }); if (!ok) return;
             var par = parentOf(L, id); L.a.forEach(function (x) { if (x[1] === id) x[1] = par; });
@@ -362,7 +424,7 @@
       function render() {
         var L = cur() || norm(null), id = curId();
         if (id && !folderOf(L, id)) { location.hash = '#/'; return; }
-        ul.textContent = '';
+        ul.textContent = ''; var vw = st.edit ? 'list' : getView(); ul.className = 'gbk-list v-' + vw;
         var f = id ? folderOf(L, id) : null;
         if (head1) head1.textContent = f ? f.j : h1Orig;
         if (headTxt) headTxt.textContent = f ? 'Folder · ' + countGames(L, id) + ' game' : txtOrig;
@@ -382,7 +444,7 @@
           });
           if (!sib.length) { var e = el('li', 'gbk-empty', st.edit ? 'Folder ini kosong. Pindahkan game ke sini lewat menu "Pindahkan ke folder".' : 'Folder ini masih kosong.'); ul.append(e); }
         }
-        bar(); nav(f);
+        bar(); views(); nav(f);
       }
 
       /* ---- Bilah navigasi (kembali ke folder induk, seperti situs utama) ---- */
@@ -395,7 +457,7 @@
         var tt = el('span', 'bf-t', pf ? pf.j : 'Game BK'); home.replaceChildren(App.svg('back'), tt);
         if (!homeBtn0) {
           var h = el('a', 'icon-btn home-btn'); h.href = './'; h.setAttribute('aria-label', 'Beranda'); h.title = 'Beranda'; h.append(App.svg('home'));
-          home.parentNode.insertBefore(h, $('themeBtn')); homeBtnMade = h;
+          home.parentNode.insertBefore(h, acct); homeBtnMade = h;
         }
       }
 
@@ -411,26 +473,30 @@
         }
       }
       var tools = el('div', 'gbk-tools'); tools.hidden = true; ul.parentNode.insertBefore(tools, ul);
-      var edBtn = null;
       function bar() {
         tools.textContent = '';
-        if (edBtn) edBtn.hidden = !(st.canEdit && !st.edit);
+        acct.classList.toggle('on', !!tok()); acct.title = st.edit ? 'Mode atur folder aktif' : tok() ? 'Atur folder (admin)' : 'Masuk admin untuk mengatur folder';
         if (!st.edit) { tools.hidden = true; return; }
         tools.hidden = false;
         var id = curId(), L = st.work;
         var add = el('button', 'gbk-about', '➕ Folder baru'); add.type = 'button';
         add.onclick = async function () {
           if (id && depth(L, id) >= MAXD) { toast('Folder bersarang maksimal ' + MAXD + ' tingkat.', true); return; }
-          var v = await dialog({ title: 'Folder baru', text: id ? 'Dibuat di dalam folder ini.' : 'Dibuat di halaman utama Game BK.', input: 'text', ph: 'Nama folder', ok: 'Buat folder' }); if (!v) return;
+          var v = await folderDialog(id ? 'Folder baru di dalam folder ini' : 'Folder baru di halaman utama', null); if (!v) return;
           var nid = 'f' + Math.random().toString(36).slice(2, 8).replace(/[^a-z0-9]/g, 'x');
-          L.f.push({ id: nid, j: v }); L.a.push(['f:' + nid, id]); render();
+          L.f.push({ id: nid, j: v.j, c: v.c, i: v.i }); L.a.push(['f:' + nid, id]); render();
         };
         var sv = el('button', 'gbk-play', '✔ Simpan susunan'); sv.type = 'button'; sv.style.setProperty('--ac', '#3BA776'); sv.onclick = simpan;
         var bt = el('button', 'gbk-about', '✕ Batal'); bt.type = 'button'; bt.onclick = function () { st.edit = false; st.work = null; render(); };
-        tools.append(el('span', 'gbk-tl', 'Mode atur folder'), add, sv, bt);
+        var vs = el('select', 'gbk-sel'); vs.setAttribute('aria-label', 'Tampilan bawaan untuk pengunjung');
+        VIEWS.forEach(function (v) { var o = el('option', '', 'Tampilan bawaan: ' + v[1]); o.value = v[0]; if ((L.vw || 'list') === v[0]) o.selected = true; vs.append(o); });
+        vs.onchange = function () { L.vw = vs.value; };
+        var lo = el('button', 'gbk-about', 'Keluar admin'); lo.type = 'button';
+        lo.onclick = function () { setTok(''); try { sessionStorage.removeItem('admin_token'); } catch (e) {} st.edit = false; st.work = null; render(); toast('Keluar dari mode admin.'); };
+        tools.append(el('span', 'gbk-tl', 'Mode atur folder'), add, vs, sv, bt, lo);
       }
       async function simpan() {
-        var conf = { v: 1, f: st.work.f, a: st.work.a };
+        var conf = { v: 1, f: st.work.f, a: st.work.a, vw: st.work.vw || 'list' };
         for (var n = 0; n < 2; n++) {
           var t = await ensureTok(); if (!t) return;
           try {
@@ -443,11 +509,17 @@
         var t = await ensureTok(); if (!t) return;
         st.edit = true; st.work = JSON.parse(JSON.stringify(layout || norm(null))); render();
       }
-      /* Tombol atur folder: hanya muncul bagi admin (membuka gamebk.html#atur, atau sudah masuk sebagai admin di sesi ini). */
-      st.canEdit = /#atur\b/.test(location.hash) || !!tok();
-      var gb = $('glBtn');
-      if (gb) { edBtn = el('button', 'gbk-about', '📁 Atur Folder'); edBtn.type = 'button'; edBtn.style.marginLeft = '.5rem'; edBtn.hidden = !st.canEdit; edBtn.addEventListener('click', mulaiEdit); gb.parentNode.append(edBtn); }
-      window.addEventListener('hashchange', function () { if (/#atur\b/.test(location.hash)) { st.canEdit = true; } render(); });
+      /* Tombol akun di bilah atas (seperti situs utama): masuk sebagai admin lalu atur folder. */
+      var acct = el('button', 'icon-btn', ''); acct.id = 'acctBtn'; acct.type = 'button'; acct.setAttribute('aria-label', 'Akun admin'); acct.append(App.svg('user'));
+      home.parentNode.insertBefore(acct, $('themeBtn'));
+      acct.addEventListener('click', function () { if (!st.edit) mulaiEdit(); });
+      /* Pemilih tampilan: daftar, kartu, ringkas (pilihan tersimpan di perangkat ini) */
+      var IC = { list: '<path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>', grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>', compact: '<path d="M4 6h16M4 10h16M4 14h16M4 18h16"/>' };
+      var vbar = el('div', 'gbk-views'); vbar.setAttribute('role', 'group'); vbar.setAttribute('aria-label', 'Tampilan daftar');
+      VIEWS.forEach(function (v) { var b = el('button', 'gbk-vb'); b.type = 'button'; b.dataset.v = v[0]; b.title = v[1]; b.setAttribute('aria-label', 'Tampilan ' + v[1]); b.append(icoSvg(IC[v[0]]), el('span', '', v[1])); b.addEventListener('click', function () { setView(v[0]); }); vbar.append(b); });
+      ul.parentNode.insertBefore(vbar, tools);
+      function views() { vbar.hidden = st.edit; vbar.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === getView() ? 'true' : 'false'); }); }
+      window.addEventListener('hashchange', render);
 
       render();
       /* Ambil susunan terbaru dari server (tanpa login). Gagal = pakai salinan terakhir atau urutan bawaan. */
