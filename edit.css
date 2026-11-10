@@ -14,7 +14,11 @@ body.editing { padding-top: 3.6rem; }
 .list > li.ed-li > .tile { flex: none; min-width: 0; }
 .ed-li.is-off .tile { opacity: 0.55; }
 .ed-li .tile { cursor: pointer; }
-.ed-ghost { opacity: 0.4; }
+.ed-dragging { position: relative; z-index: 70; opacity: 0.92; transition: none !important; box-shadow: 0 18px 40px -12px rgba(0,0,0,0.45); cursor: grabbing; }
+.ed-dragging * { pointer-events: none; }
+body.ed-sorting { user-select: none; -webkit-user-select: none; cursor: grabbing; }
+.ed-li .tile, #audience .aud-btn { -webkit-user-drag: none; }
+body.editing #audience .aud-btn[data-id]:not([data-id="semua"]) { cursor: grab; touch-action: none; }
 .ed-bar { display: flex; align-items: center; gap: 0.2rem; padding: 0.15rem 0.2rem; }
 .ed-gap { flex: 1; }
 .ed-btn { width: 2.1rem; height: 2.1rem; display: inline-grid; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 0.7rem;

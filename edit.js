@@ -180,23 +180,95 @@
     applyOrder(item.parent_id, ids);
   }
 
-  let sortable = null;
-  function loadSortable() {
-    if (window.Sortable) return Promise.resolve();
-    return new Promise(function (ok, no) {
-      const s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js';
-      s.onload = function () { ok(); }; s.onerror = function () { no(new Error('x')); };
-      document.head.append(s);
+  // Seret-dan-lepas tanpa pustaka luar: kartu bisa diseret langsung (mouse) atau lewat pegangan (layar sentuh); tab juga bisa diseret.
+  function makeDrag(container, o) {
+    let d = null;
+    container.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    container.addEventListener('pointerdown', function (e) {
+      if (e.button > 0) return;
+      const t = e.target.closest(o.sel);
+      if (!t || !container.contains(t) || !o.canStart(e, t)) return;
+      d = { el: t, sx: e.clientX, sy: e.clientY, on: false, id: e.pointerId };
+    });
+    function place(e) {
+      const el = d.el;
+      el.style.transform = 'none';
+      const r = el.getBoundingClientRect();
+      el.style.transform = 'translate(' + (e.clientX - d.gx - r.left) + 'px,' + (e.clientY - d.gy - r.top) + 'px)';
+    }
+    window.addEventListener('pointermove', function (e) {
+      if (!d || e.pointerId !== d.id) return;
+      if (!d.on) {
+        if (Math.hypot(e.clientX - d.sx, e.clientY - d.sy) < 6) return;
+        d.on = true;
+        const r = d.el.getBoundingClientRect();
+        d.gx = d.sx - r.left; d.gy = d.sy - r.top;
+        d.el.classList.add('ed-dragging');
+        document.body.classList.add('ed-sorting');
+      }
+      e.preventDefault();
+      place(e);
+      const els = o.items();
+      for (let i = 0; i < els.length; i++) {
+        const x = els[i];
+        if (x === d.el) continue;
+        const r = x.getBoundingClientRect();
+        if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) {
+          const from = els.indexOf(d.el);
+          x.parentNode.insertBefore(d.el, from < i ? x.nextSibling : x);
+          place(e);
+          break;
+        }
+      }
+    }, { passive: false });
+    function end(e) {
+      if (!d || e.pointerId !== d.id) return;
+      const was = d.on, el = d.el;
+      d = null;
+      el.style.transform = '';
+      el.classList.remove('ed-dragging');
+      document.body.classList.remove('ed-sorting');
+      if (was) {
+        const stop = function (ev) { ev.preventDefault(); ev.stopPropagation(); };
+        window.addEventListener('click', stop, { capture: true, once: true });
+        setTimeout(function () { window.removeEventListener('click', stop, true); }, 0);
+        o.done();
+      }
+    }
+    window.addEventListener('pointerup', end);
+    window.addEventListener('pointercancel', end);
+  }
+  function setupDrag() {
+    makeDrag(document.getElementById('list'), {
+      sel: '.ed-li',
+      items: function () { return Array.prototype.slice.call(document.querySelectorAll('#list > li.ed-li')); },
+      canStart: function (e) {
+        if (e.target.closest('.ed-btn:not(.ed-grip)')) return false;
+        return e.pointerType === 'mouse' || !!e.target.closest('.ed-grip');
+      },
+      done: function () { applyOrder(Pub.folderId(), visibleIds()); }
+    });
+    makeDrag(document.getElementById('audience'), {
+      sel: '.aud-btn[data-id]',
+      items: function () { return Array.prototype.slice.call(document.querySelectorAll('#audience .aud-btn[data-id]')); },
+      canStart: function (e, t) { return t.dataset.id !== 'semua' && !t.classList.contains('ed-tabedit'); },
+      done: saveTabOrder
     });
   }
-  function initSortable(ctx) {
-    if (sortable) { sortable.destroy(); sortable = null; }
-    if (!window.Sortable) return;
-    sortable = window.Sortable.create(document.getElementById('list'), {
-      draggable: '.ed-li', handle: '.ed-grip', animation: 160, ghostClass: 'ed-ghost',
-      onEnd: function () { applyOrder(ctx.folderId, visibleIds()); }
-    });
+  async function saveTabOrder() {
+    const ids = Array.prototype.map.call(document.querySelectorAll('#audience .aud-btn[data-id]'), function (b) { return b.dataset.id; })
+      .filter(function (id) { return id !== 'semua'; });
+    const cur = st.settings.grup || [];
+    const grup = ids.map(function (id) { return cur.filter(function (g) { return g.id === id; })[0]; }).filter(Boolean);
+    // tab yang tersaring tidak mungkin; bila jumlah beda, batalkan
+    if (grup.length !== cur.length || grup.map(function (g) { return g.id; }).join() === cur.map(function (g) { return g.id; }).join()) { Pub.render(); return; }
+    const s = st.settings;
+    try {
+      const r = await call('admin.saveSettings', { settings: { judul: s.judul, subjudul: s.subjudul, deskripsi: s.deskripsi, tema: s.tema,
+        grup: grup.map(function (g) { return { id: g.id, nama: g.nama, qr: g.qr === true }; }) } });
+      apply({ settings: r.settings });
+      toast('Urutan tab disimpan');
+    } catch (err) { if (!err || err.code !== 'AUTH') { toast((err && err.message) || 'Gagal menyimpan tab.', true); Pub.render(); } }
   }
 
   // ── Aksi ──
@@ -455,11 +527,10 @@
     Pub.setEditing(true);
     document.body.classList.add('editing');
     try { sessionStorage.setItem('edit_on', '1'); } catch (e) { /* abaikan */ }
-    try { await loadSortable(); } catch (e) { toast('Seret-dan-lepas tidak tersedia; pakai tombol panah.', true); }
     banner();
     Pub.editTile = editTile;
     Pub.addTile = addTile;
-    Pub.afterRender = initSortable;
+    setupDrag();
     Pub.onTabs = function (box) {
       const b = el('button', 'aud-btn ed-tabedit', ''); b.type = 'button';
       b.title = 'Atur tab'; b.setAttribute('aria-label', 'Atur tab');

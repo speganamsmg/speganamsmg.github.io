@@ -103,6 +103,7 @@
     box.replaceChildren.apply(box, visible.map(function (t) {
       const b = el('button', 'aud-btn', t.nama); b.type = 'button';
       b.setAttribute('role', 'tab');
+      b.dataset.id = t.id;
       b.setAttribute('aria-selected', String(t.id === tab));
       b.addEventListener('click', function () {
         tab = t.id;
