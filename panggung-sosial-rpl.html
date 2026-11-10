@@ -234,8 +234,14 @@ html[data-theme=dark] .f1{fill:color-mix(in srgb,var(--c1) 12%,#154A38)}html[dat
  --sk1:#7FCDF5;--sk2:#D6F1FC;--rk:#C9C4D8;--rk2:#A59FBF;--rk0:#E6E2F0;--g1:#ABE264;--g2:#6DC150;--tr:#43A65B;--tr2:#80D06C;--cl:#fff;--cl2:#CFE6F3;--win:#A5DEFF;--wall:#FFF6E2;--sunc:#FFD23F;--w1:#8FD6F2;--w2:#6BC3E6;--sand:#FFF4DE;--ok:#14804F;--okbg:#D6F4E2;--badbg:#FFE0DC;--bad:#D63B33;--warn:#9A6200;--ff:0;--stars:0}
 :root[data-theme=dark]{--ol:#070A22;--line:#070A22;--bg:#1A1F4D;--bg2:#222863;--card:#2A3170;--ink:#F6F2FF;--muted:#B9BFEA;--tint:rgba(255,255,255,.07);--shadow:0 5px 0 #070A22;
  --sk1:#10163F;--sk2:#383E8C;--rk:#6F6CA3;--rk2:#4C4A7E;--rk0:#9794C8;--g1:#5CAB78;--g2:#3F8B5E;--tr:#2D7653;--tr2:#46966B;--cl:#8E95D8;--cl2:#6C73BC;--win:#FFD27A;--wall:#D8CDB5;--sunc:#FFF3C4;--w1:#2C4C96;--w2:#223C80;--sand:#1A1F4D;--ff:1;--stars:1}
-body{background:radial-gradient(circle at 2px 2px,rgba(30,42,92,.11) 1.6px,transparent 1.8px) 0 0/24px 24px,var(--bg)}
-:root[data-theme=dark] body{background:radial-gradient(circle at 2px 2px,rgba(255,255,255,.06) 1.6px,transparent 1.8px) 0 0/24px 24px,var(--bg)}
+:root{--bgm:#f3f6fd;--mesh:radial-gradient(52rem 40rem at 6% 28%,rgba(112,156,255,.46),transparent 62%),radial-gradient(44rem 34rem at 96% 8%,rgba(96,214,205,.34),transparent 62%),radial-gradient(48rem 36rem at 92% 92%,rgba(255,184,112,.46),transparent 62%),radial-gradient(40rem 26rem at 38% 104%,rgba(255,220,120,.28),transparent 62%)}
+:root[data-theme=dark]{--bgm:#080e1d;--mesh:radial-gradient(52rem 40rem at 6% 28%,rgba(52,96,232,.42),transparent 62%),radial-gradient(44rem 34rem at 96% 8%,rgba(24,170,168,.26),transparent 62%),radial-gradient(48rem 36rem at 92% 92%,rgba(255,160,56,.2),transparent 62%),radial-gradient(40rem 26rem at 38% 104%,rgba(255,200,80,.12),transparent 62%)}
+/* Latar gradasi lembut seperti situs Speganam (terang dan gelap) */
+html body{background:var(--bgm)!important;isolation:isolate}
+body::before{content:"";position:fixed;inset:-10%;z-index:-1;pointer-events:none;background:var(--mesh);animation:gdrift 28s ease-in-out infinite alternate}
+@keyframes gdrift{from{transform:translate3d(-2%,-1%,0) scale(1)}to{transform:translate3d(2%,2%,0) scale(1.06)}}
+@media(prefers-reduced-motion:reduce){body::before{animation:none}}
+@media print{body::before{display:none}}
 .btn,.ib,.opt,.chip,.turn span,.tally div,.prof,.rank div,.slot,.rl,.ebox,.etabs button,textarea,input[type=text],input[type=number],select,.obs td.c{border-width:3px;border-color:var(--ol)}
 .card,.mod .box,.hero,.path{border:3px solid var(--ol)}
 .card{border-radius:24px;box-shadow:0 5px 0 var(--ol)}
@@ -438,6 +444,21 @@ html[data-g="ujian"][data-theme="light"]{--sk1:#FFA89A;--sk2:#FFE9E3;--g1:#D5E57
 html[data-g="ujian"][data-theme="dark"]{--sk1:#2E1210;--sk2:#9A3B32}
 html[data-g="social"][data-theme="light"]{--sk1:#B8E27A;--sk2:#F2FBDC;--g1:#BFE7B0;--g2:#86CC8E}
 html[data-g="social"][data-theme="dark"]{--sk1:#14260B;--sk2:#4C7F2A}
+html[data-g="korupsi"][data-theme="light"]{--sk1:#E6A8C2;--sk2:#FCEAF1;--g1:#C8E066;--g2:#8FC24C}
+html[data-g="korupsi"][data-theme="dark"]{--sk1:#2A0F1B;--sk2:#8A3560}
+html[data-g="wirausaha"][data-theme="light"]{--sk1:#F2A6DC;--sk2:#FFEAF8;--g1:#D5E57A;--g2:#9FCB55}
+html[data-g="wirausaha"][data-theme="dark"]{--sk1:#2A0F25;--sk2:#90307A}
+
+html[data-g="growth"][data-theme="light"]{--sk1:#9DB4F2;--sk2:#E6EEFF;--g1:#BFE0A0;--g2:#8FC86A}
+html[data-g="growth"][data-theme="dark"]{--sk1:#0F1536;--sk2:#2E3C9C}
+html[data-g="reproduksi"][data-theme="light"]{--sk1:#F2C9A0;--sk2:#FFF1E2;--g1:#CFE08A;--g2:#9CC85A}
+html[data-g="reproduksi"][data-theme="dark"]{--sk1:#2A170C;--sk2:#8A5530}
+html[data-g="keberagaman"][data-theme="light"]{--sk1:#B7C9D4;--sk2:#EEF3F6;--g1:#C3E08F;--g2:#93C95F}
+html[data-g="keberagaman"][data-theme="dark"]{--sk1:#10191E;--sk2:#34505E}
+
+/* latar mengikuti gradasi Speganam: lapisan langit dihapus dari ilustrasi, peredam warna ditipiskan */
+#bg::after{background:transparent!important}
+:root[data-theme=dark] #bg::after{background:rgba(8,14,29,.10)!important}
 
 
 </style>
@@ -590,6 +611,14 @@ function vcheck(x,y,s){s=s||1;return `<g transform="translate(${x} ${y}) scale($
 function cal(x,y,s,n){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-16" y="-22" width="32" height="26" rx="4" fill="#fff" ${OL2}/><rect x="-16" y="-22" width="32" height="8" rx="4" fill="#E5504D" ${OL2}/><path d="M-8 -26v6M8 -26v6" stroke="var(--ol)" stroke-width="3" stroke-linecap="round"/><text x="0" y="0" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="800" font-size="14" fill="var(--ol)">${n||"H"}</text></g>`}
 function chk(x,y,s){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><circle r="11" fill="#43A65B" ${OL2}/><path d="M-5 0l4 4l7 -8" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/></g>`}
 function bfly(x,y,s,c1,c2){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -4C-8 -30 -40 -34 -40 -12C-40 6 -16 6 0 0z" fill="${c1||"var(--c1)"}" ${OL2}/><path d="M0 -4C8 -30 40 -34 40 -12C40 6 16 6 0 0z" fill="${c1||"var(--c1)"}" ${OL2}/><path d="M0 2C-10 8 -30 12 -24 28C-18 38 -4 20 0 6z" fill="${c2||"var(--c2)"}" ${OL2}/><path d="M0 2C10 8 30 12 24 28C18 38 4 20 0 6z" fill="${c2||"var(--c2)"}" ${OL2}/><circle cx="-22" cy="-14" r="5" fill="#fff" ${OL2}/><circle cx="22" cy="-14" r="5" fill="#fff" ${OL2}/><rect x="-3" y="-8" width="6" height="30" rx="3" fill="var(--ol)"/><path d="M-1 -8q-6 -12 -12 -12M1 -8q6 -12 12 -12" fill="none" stroke="var(--ol)" stroke-width="2.4" stroke-linecap="round"/></g>`}
+function shield(x,y,s,c){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -20C-10 -17 -16 -17 -18 -18V-4C-18 8 -8 16 0 20C8 16 18 8 18 -4V-18C16 -17 10 -17 0 -20z" fill="${c||"var(--c1)"}" ${OL2}/><path d="M-7 -2l5 5l9 -10" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></g>`}
+function scales(x,y,s){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0V-44M-30 -40H30" stroke="var(--ol)" stroke-width="5" stroke-linecap="round"/><path d="M-30 -40l-14 26h28zM30 -40l-14 26h28z" fill="var(--c2)" ${OL2}/><path d="M-12 0h24" stroke="var(--ol)" stroke-width="6" stroke-linecap="round"/></g>`}
+function bulb(x,y,s){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -20a12 12 0 0 1 7 22c-2 2 -2 5 -2 7h-10c0 -2 0 -5 -2 -7a12 12 0 0 1 7 -22z" fill="var(--c2)" ${OL2}/><rect x="-5" y="9" width="10" height="5" rx="2" fill="#fff" ${OL2}/><path d="M-12 -26l-4 -4M12 -26l4 -4M0 -34v-5" stroke="var(--ol)" stroke-width="2.6" stroke-linecap="round"/></g>`}
+function flag(x,y,s,c){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0v-34" stroke="var(--ol)" stroke-width="3" stroke-linecap="round"/><path d="M1 -34h18l-5 7l5 7h-18z" fill="${c||"var(--c2)"}" ${OL2}/></g>`}
+function peak(x,y,s,c){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-26 0l26 -34l26 34z" fill="${c||"#8FA0D8"}" ${OL2}/><path d="M-8 -20l8 -14l8 14l-5 -3l-3 4l-3 -4z" fill="#fff" ${OL2}/></g>`}
+function mag(x,y,s){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><circle cx="-3" cy="-3" r="11" fill="#CFE9F7" ${OL2}/><path d="M5 5l10 10" stroke="var(--ol)" stroke-width="5" stroke-linecap="round"/></g>`}
+function stmp(x,y,s,t,c){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s}) rotate(-8)"><rect x="-26" y="-11" width="52" height="22" rx="5" fill="#fff" stroke="${c||"#43A65B"}" stroke-width="3"/><text x="0" y="5" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="800" font-size="13" fill="${c||"#43A65B"}">${t}</text></g>`}
+function coin2(x,y,s){s=s||1;return `<g transform="translate(${x} ${y}) scale(${s})"><circle r="11" fill="#FFD23F" ${OL2}/><text x="0" y="5" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="800" font-size="13" fill="var(--ol)">Rp</text></g>`}
 const SIDE={
  literasi:o=>[bkst(70,228,1.1)+lamp(124,230,1)+flower(100,232,"#FF8A5C"),crate(690,262,1)+bkst(738,262,1),bkst(600,378,1)+lamp(626,380,.7),coins(200,380,1)],
  selflove:o=>[sunfl(66,228,1,"#FFD23F")+sunfl(112,230,.8,"#FF8FB1")+heart(92,222,.7),tulip(690,262,"#FF6F91")+tulip(710,264,"#FFD23F")+tulip(730,262,"#B58CF0")+butter(712,236,"#FF8FB1"),heart(600,372,1.3,"#FF6F91"),tulip(196,380,"#FF8FB1")+tulip(212,382,"#fff")],
@@ -598,6 +627,11 @@ const SIDE={
  branding:o=>[frame(70,222,1.2)+star5(116,206,.7),camera(692,262,1.1)+spot(736,262,.9),vcheck(600,372,1.1)+frame(636,374,.8),spot(200,380,.9)+star5(240,372,.6,"#fff")],
  ujian:o=>[cal(70,226,1.1,"H-3")+pencil(118,226,.9),clock(690,246,1.1)+chk(736,250,.8),chk(600,372,1.1)+cal(636,376,.8,"H-1"),pencil(200,382,.9)+bkst(238,382,.8)],
  social:o=>[bfly(76,214,.5)+bubble(126,208,.8,"#fff",heart(0,-1,.55)),bubble(692,240,.9,"var(--c2)",`<circle cx="-7" cy="-1" r="2.4" fill="var(--ol)"/><circle cx="0" cy="-1" r="2.4" fill="var(--ol)"/><circle cx="7" cy="-1" r="2.4" fill="var(--ol)"/>`)+bfly(740,236,.4,"#FF8FB1","#fff"),bfly(606,366,.5,"#8FD3F4","#fff")+star5(640,374,.7),flower(200,382,"#FF8FB1")+bfly(232,364,.4)],
+ korupsi:o=>[shield(76,222,1.2)+coins(124,232,.9),scales(704,262,.9)+star5(742,236,.7),shield(604,372,1.1,"#43A65B")+star5(640,376,.6,"#fff"),coins(200,382,1)+shield(238,370,.7)],
+ growth:o=>[peak(76,226,1.2)+flag(122,230,.9),flag(692,262,1.1)+peak(738,262,.9,"#A8B6E8"),star5(600,368,1.1)+flag(634,374,.8),peak(200,382,.9)+star5(240,372,.6,"#fff")],
+ reproduksi:o=>[mag(76,226,1.2)+stmp(126,230,.9,"FAKTA"),stmp(692,262,1,"MITOS","#E5504D")+mag(738,250,.9),mag(604,372,1.1)+stmp(640,376,.8,"FAKTA"),stmp(200,382,.9,"MITOS","#E5504D")+star5(250,372,.6,"#fff")],
+ keberagaman:o=>[heart(76,226,1.1,"#E5668B")+star5(122,214,.8),flag(692,262,1.1,"#43A65B")+heart(738,250,.8,"#FFD23F"),star5(600,368,1.1)+heart(638,374,.8,"#8FD3F4"),heart(200,380,.9,"#B58CF0")+flag(246,386,.7,"#E5504D")],
+ wirausaha:o=>[bulb(76,226,1.2)+coin2(124,232,.9),crate(690,262,1)+coin2(738,250,.8),coin2(604,372,1)+bulb(640,376,.8),coins(200,382,1)+coin2(238,370,.7)],
 };
 function scene(g){
   g=g||GID;
@@ -653,6 +687,48 @@ function scene(g){
      <circle cy="-92" r="16" fill="#FFD23F" ${OL}/>${heart(0,-92,.9,"#E5668B")}
      ${tulip(-40,0,"#FF6F91")}${tulip(-28,0,"#B58CF0")}
      <g transform="translate(42 0)"><path d="M0 0h20l-2 -16h-16z" fill="#6AA8D8" ${OL}/><path d="M18 -12l14 -10" stroke="var(--ol)" stroke-width="4" stroke-linecap="round"/><path d="M-2 -14q-10 -2 -8 6" fill="none" stroke="var(--ol)" stroke-width="3" stroke-linecap="round"/></g>
+   </g>`,
+   growth:`<g transform="translate(30 0) scale(1.25)">
+     <path d="M-110 0l70 -96l32 40l26 -62l92 118z" fill="#8FA0D8" ${OL}/>
+     <path d="M-8 -118l-16 30l12 -8l8 10l8 -10l14 8z" fill="#fff" ${OL2}/>
+     <path d="M-40 -96l-14 18l14 -6l12 8z" fill="#fff" ${OL2}/>
+     <path d="M-84 -2q40 -40 74 -62q30 -24 20 -54" fill="none" stroke="var(--c2)" stroke-width="5" stroke-dasharray="2 9" stroke-linecap="round"/>
+     ${flag(-8,-118,1.5)}${star5(-8,-170,1.1)}${flag(-74,-8,.9,"#E5504D")}
+   </g>`,
+   reproduksi:`<g transform="translate(30 0) scale(1.25)">
+     <rect x="-70" y="-16" width="140" height="16" rx="6" fill="#C9A15B" ${OL}/>
+     <rect x="-58" y="-96" width="116" height="84" rx="8" fill="var(--c3)" ${OL}/>
+     <rect x="-48" y="-86" width="96" height="30" rx="6" fill="#fff" ${OL2}/>
+     <text x="0" y="-65" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="800" font-size="16" fill="#2E8A47">FAKTA</text>
+     <rect x="-48" y="-50" width="96" height="30" rx="6" fill="#fff" ${OL2}/>
+     <text x="0" y="-29" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="800" font-size="16" fill="#C73B38">MITOS</text>
+     ${mag(66,-110,2)}${stmp(-70,-120,1.3,"FAKTA")}${star5(0,-134,1.1)}
+   </g>`,
+   keberagaman:`<g transform="translate(30 0) scale(1.25)">
+     <path d="M-100 0h200" stroke="#5FA9D8" stroke-width="10" stroke-linecap="round"/>
+     <path d="M-90 -30q90 -50 180 0" fill="none" stroke="var(--ol)" stroke-width="12" stroke-linecap="round"/>
+     <path d="M-90 -30q90 -50 180 0" fill="none" stroke="#C9A15B" stroke-width="7" stroke-linecap="round"/>
+     ${[-70,-46,-22,0,22,46,70].map((x,i)=>`<rect x="${x-8}" y="${-44+Math.abs(x)*Math.abs(x)/160}" width="16" height="9" rx="3" fill="${["#E5504D","#F5A23C","#FFD23F","#43A65B","#4C8DF0","#8B6CF0","#E5668B"][i]}" ${OL2}/>`).join("")}
+     <path d="M-90 -30v30M90 -30v30" stroke="var(--ol)" stroke-width="6" stroke-linecap="round"/>
+     ${heart(0,-80,1.8,"#E5668B")}${flag(-90,-30,1,"#43A65B")}${flag(90,-30,1,"#4C8DF0")}${star5(0,-120,1)}
+   </g>`,
+   wirausaha:`<g transform="translate(30 0) scale(1.25)">
+     <rect x="-62" y="-50" width="124" height="50" rx="6" fill="#C9A15B" ${OL}/>
+     <rect x="-66" y="-62" width="132" height="16" rx="4" fill="var(--c3)" ${OL2}/>
+     <path d="M-70 -64v-26h140v26z" fill="#fff" ${OL}/>
+     ${Array.from({length:7},(_,i)=>`<path d="M${-70+i*20} -90h20v26q-10 12 -20 0z" fill="${i%2?"#fff":"var(--c1)"}" ${OL2}/>`).join("")}
+     <path d="M-62 -50v-62M62 -50v-62" stroke="var(--ol)" stroke-width="6" stroke-linecap="round"/>
+     <rect x="-34" y="-112" width="68" height="20" rx="5" fill="var(--c2)" ${OL2}/>
+     <text x="0" y="-97" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="800" font-size="15" fill="var(--ol)">LAPAK</text>
+     ${crate(-28,-52,1.4)}${coins(30,-52,1.5)}
+     ${bulb(0,-142,1.5)}${coin2(-86,-70,1.3)}${coin2(88,-40,1.1)}
+   </g>`,
+   korupsi:`<g transform="translate(30 0) scale(1.25)">
+     ${scales(0,-92,1.9)}
+     <rect x="-52" y="-62" width="104" height="62" rx="8" fill="var(--c3)" ${OL}/>
+     ${[0,1,2].map(r=>[0,1,2].map(c=>`<rect x="${-46+c*31}" y="${-56+r*18}" width="27" height="14" rx="3" fill="${(r*3+c)%2?"var(--c2)":"#fff"}" ${OL2}/>`).join("")).join("")}
+     ${shield(-70,-18,1.3)}${shield(70,-18,1.3,"#43A65B")}
+     ${star5(0,-150,1.2)}
    </g>`,
    social:`<g transform="translate(30 0) scale(1.25)">
      <rect x="-74" y="-30" width="148" height="30" rx="6" fill="#C9A15B" ${OL}/>
@@ -714,8 +790,6 @@ function scene(g){
   const ff=`<g class="ff">${[[300,250],[520,236],[380,200],[470,270],[250,215],[560,200]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3"/>`).join("")}</g>`;
   return `<svg class="scene" viewBox="0 0 800 440" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
   <defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--sk1)"/><stop offset="1" stop-color="var(--sk2)"/></linearGradient></defs>
-  <rect width="800" height="440" fill="url(#sk)"/>
-  <path d="M0 330Q120 290 240 330T480 330T800 320V440H0Z" fill="var(--sk2)" opacity=".55"/>
   <g class="stars" opacity="var(--stars)">${stars}</g>${sunD}${moon}${birds}
   ${cloud(110,150,1.1,0)}${cloud(620,210,.9,-9)}${cloud(300,70,.7,-4,.9)}${cloud(720,320,.8,-14,.9)}
   ${isl(95,230,150,100,{sd:2,dl:-2,deco:SD[0]})}

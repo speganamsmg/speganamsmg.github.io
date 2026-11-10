@@ -234,8 +234,14 @@ html[data-theme=dark] .f1{fill:color-mix(in srgb,var(--c1) 12%,#154A38)}html[dat
  --sk1:#7FCDF5;--sk2:#D6F1FC;--rk:#C9C4D8;--rk2:#A59FBF;--rk0:#E6E2F0;--g1:#ABE264;--g2:#6DC150;--tr:#43A65B;--tr2:#80D06C;--cl:#fff;--cl2:#CFE6F3;--win:#A5DEFF;--wall:#FFF6E2;--sunc:#FFD23F;--w1:#8FD6F2;--w2:#6BC3E6;--sand:#FFF4DE;--ok:#14804F;--okbg:#D6F4E2;--badbg:#FFE0DC;--bad:#D63B33;--warn:#9A6200;--ff:0;--stars:0}
 :root[data-theme=dark]{--ol:#070A22;--line:#070A22;--bg:#1A1F4D;--bg2:#222863;--card:#2A3170;--ink:#F6F2FF;--muted:#B9BFEA;--tint:rgba(255,255,255,.07);--shadow:0 5px 0 #070A22;
  --sk1:#10163F;--sk2:#383E8C;--rk:#6F6CA3;--rk2:#4C4A7E;--rk0:#9794C8;--g1:#5CAB78;--g2:#3F8B5E;--tr:#2D7653;--tr2:#46966B;--cl:#8E95D8;--cl2:#6C73BC;--win:#FFD27A;--wall:#D8CDB5;--sunc:#FFF3C4;--w1:#2C4C96;--w2:#223C80;--sand:#1A1F4D;--ff:1;--stars:1}
-body{background:radial-gradient(circle at 2px 2px,rgba(30,42,92,.11) 1.6px,transparent 1.8px) 0 0/24px 24px,var(--bg)}
-:root[data-theme=dark] body{background:radial-gradient(circle at 2px 2px,rgba(255,255,255,.06) 1.6px,transparent 1.8px) 0 0/24px 24px,var(--bg)}
+:root{--bgm:#f3f6fd;--mesh:radial-gradient(52rem 40rem at 6% 28%,rgba(112,156,255,.46),transparent 62%),radial-gradient(44rem 34rem at 96% 8%,rgba(96,214,205,.34),transparent 62%),radial-gradient(48rem 36rem at 92% 92%,rgba(255,184,112,.46),transparent 62%),radial-gradient(40rem 26rem at 38% 104%,rgba(255,220,120,.28),transparent 62%)}
+:root[data-theme=dark]{--bgm:#080e1d;--mesh:radial-gradient(52rem 40rem at 6% 28%,rgba(52,96,232,.42),transparent 62%),radial-gradient(44rem 34rem at 96% 8%,rgba(24,170,168,.26),transparent 62%),radial-gradient(48rem 36rem at 92% 92%,rgba(255,160,56,.2),transparent 62%),radial-gradient(40rem 26rem at 38% 104%,rgba(255,200,80,.12),transparent 62%)}
+/* Latar gradasi lembut seperti situs Speganam (terang dan gelap) */
+html body{background:var(--bgm)!important;isolation:isolate}
+body::before{content:"";position:fixed;inset:-10%;z-index:-1;pointer-events:none;background:var(--mesh);animation:gdrift 28s ease-in-out infinite alternate}
+@keyframes gdrift{from{transform:translate3d(-2%,-1%,0) scale(1)}to{transform:translate3d(2%,2%,0) scale(1.06)}}
+@media(prefers-reduced-motion:reduce){body::before{animation:none}}
+@media print{body::before{display:none}}
 .btn,.ib,.opt,.chip,.turn span,.tally div,.prof,.rank div,.slot,.rl,.ebox,.etabs button,textarea,input[type=text],input[type=number],select,.obs td.c{border-width:3px;border-color:var(--ol)}
 .card,.mod .box,.hero,.path{border:3px solid var(--ol)}
 .card{border-radius:24px;box-shadow:0 5px 0 var(--ol)}
@@ -449,6 +455,10 @@ html[data-g="reproduksi"][data-theme="light"]{--sk1:#F2C9A0;--sk2:#FFF1E2;--g1:#
 html[data-g="reproduksi"][data-theme="dark"]{--sk1:#2A170C;--sk2:#8A5530}
 html[data-g="keberagaman"][data-theme="light"]{--sk1:#B7C9D4;--sk2:#EEF3F6;--g1:#C3E08F;--g2:#93C95F}
 html[data-g="keberagaman"][data-theme="dark"]{--sk1:#10191E;--sk2:#34505E}
+
+/* latar mengikuti gradasi Speganam: lapisan langit dihapus dari ilustrasi, peredam warna ditipiskan */
+#bg::after{background:transparent!important}
+:root[data-theme=dark] #bg::after{background:rgba(8,14,29,.10)!important}
 
 
 </style>
@@ -780,8 +790,6 @@ function scene(g){
   const ff=`<g class="ff">${[[300,250],[520,236],[380,200],[470,270],[250,215],[560,200]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3"/>`).join("")}</g>`;
   return `<svg class="scene" viewBox="0 0 800 440" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
   <defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--sk1)"/><stop offset="1" stop-color="var(--sk2)"/></linearGradient></defs>
-  <rect width="800" height="440" fill="url(#sk)"/>
-  <path d="M0 330Q120 290 240 330T480 330T800 320V440H0Z" fill="var(--sk2)" opacity=".55"/>
   <g class="stars" opacity="var(--stars)">${stars}</g>${sunD}${moon}${birds}
   ${cloud(110,150,1.1,0)}${cloud(620,210,.9,-9)}${cloud(300,70,.7,-4,.9)}${cloud(720,320,.8,-14,.9)}
   ${isl(95,230,150,100,{sd:2,dl:-2,deco:SD[0]})}
