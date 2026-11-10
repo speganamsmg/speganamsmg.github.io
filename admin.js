@@ -589,7 +589,7 @@
     $('fVisible').checked = item ? item.tampil : true;
     fillUntuk(item ? (item.untuk || '') : '');
     $('fSoon').checked = item ? item.segera === true : false;
-    const bisaSandi = tipe === 'link' || tipe === 'folder';
+    const bisaSandi = true;   // semua jenis item boleh dikunci
     $('fLockWrap').hidden = !bisaSandi;
     $('fLock').checked = bisaSandi && !!item && item.pakai_sandi === true;
     $('fSandi').value = '';
@@ -626,10 +626,8 @@
       segera: $('fSoon').checked,
       untuk: tipe === 'folder' ? [] : readUntuk()
     };
-    if (tipe === 'link' || tipe === 'folder') {
-      item.pakai_sandi = $('fLock').checked;
-      if (item.pakai_sandi && $('fSandi').value) item.sandi = $('fSandi').value;
-    }
+    item.pakai_sandi = $('fLock').checked;
+    if (item.pakai_sandi && $('fSandi').value) item.sandi = $('fSandi').value;
     if (state.editingId) item.id = state.editingId;
 
     setBusy(btn, true);

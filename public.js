@@ -80,14 +80,20 @@
   }
   // "untuk" item = id tab dipisah koma ("bk,guru"); kosong = semua.
   function untukOf(i) { return i.untuk ? String(i.untuk).split(',').filter(Boolean) : []; }
-  function isLeafMarked(i) { return i.tipe !== 'folder' && untukOf(i).length > 0; }
+  // Folder terkunci isinya tidak dikirim ke publik; kategorinya diambil dari "untuk_isi" yang dihitung server.
+  function folderTerkunci(i) { return i.tipe === 'folder' && i.terkunci && !unlocked[i.id]; }
+  function untukDaun(i) {
+    if (folderTerkunci(i)) return i.untuk_isi ? String(i.untuk_isi).split(',').filter(Boolean) : [];
+    return i.tipe === 'folder' ? [] : untukOf(i);
+  }
+  function isLeafMarked(i) { return untukDaun(i).length > 0; }
 
   function drawTabs(items, folder, onQr) {
     const box = $('audience');
     const marked = items.some(isLeafMarked);
     const visible = tabList().filter(function (t) {
       if (!t.ada) return true;
-      return items.some(function (i) { return i.tipe !== 'folder' && untukOf(i).some(function (u) { return t.ada.indexOf(u) >= 0; }); });
+      return items.some(function (i) { return untukDaun(i).some(function (u) { return t.ada.indexOf(u) >= 0; }); });
     });
     if (visible.length && !visible.some(function (t) { return t.id === tab; })) tab = visible[0].id;
     if (!marked || !visible.length) tab = 'semua'; // tidak ada item berlabel audiens: tanpa tab, semua item tampil
@@ -169,6 +175,7 @@
   }
 
   function tile(item, count) {
+    if (item.terkunci && unlocked[item.id] && unlocked[item.id].form) item = Object.assign({}, item, { form: unlocked[item.id].form });
     const a = el('a', 'tile tile-' + item.tipe + (item.segera ? ' is-soon' : ''));
     let closed = false, appTag = false;
     if (item.segera) {
@@ -233,16 +240,20 @@
     return li;
   }
 
-  // Dialog password untuk link/folder terkunci.
+  // Dialog password untuk item terkunci (link, folder, form, dashboard).
   function askPassword(item) {
     App.askPassword({
       title: item.judul,
       text: 'Item ini dikunci. Masukkan password yang diberikan kepada Anda.',
       submit: async function (pw) {
         const r = await App.post({ action: 'unlock', id: item.id, sandi: pw });
-        unlocked[item.id] = r.items ? { items: r.items } : { url: r.url };
+        unlocked[item.id] = r.items ? { items: r.items } : r.form ? { form: r.form } : { url: r.url };
         if (item.tipe === 'folder') {
           location.hash = '#/f/' + item.id; render();
+        } else if (r.form) { // form / dashboard: langsung dibuka setelah password benar
+          App.ping(item.id);
+          rememberFolder(r.form.slug);
+          location.href = (item.tipe === 'dashboard' ? 'dashboard.html?f=' : 'form.html?f=') + encodeURIComponent(r.form.slug);
         } else {
           App.ping(item.id);
           const u = App.safeUrl(r.url);
@@ -355,10 +366,14 @@
     const leafCache = {};
     const leaves = function (id) { return leafCache[id] || (leafCache[id] = leavesOf(items, id, [])); };
     const okLeaf = function (i) { const u = untukOf(i); return !cur.ok || !u.length || u.some(function (x) { return cur.ok.indexOf(x) >= 0; }); };
-    const okItem = function (i) { return i.tipe === 'folder' ? (!cur.ok || leaves(i.id).some(okLeaf)) : okLeaf(i); };
+    const okItem = function (i) {
+      if (folderTerkunci(i)) return okLeaf({ untuk: i.untuk_isi || '' });   // isinya tidak dikirim: pakai kategori dari server
+      return i.tipe === 'folder' ? (!cur.ok || leaves(i.id).some(okLeaf)) : okLeaf(i);
+    };
     // Kelompok di tab Semua: item dengan satu kategori, atau folder yang seluruh isinya satu kategori, ditaruh di bawah judulnya; selain itu tanpa judul.
     const groupOf = function (i) {
       if (i.tipe !== 'folder') { const u = untukOf(i); return u.length === 1 ? u[0] : ''; }
+      if (folderTerkunci(i)) { const u = untukDaun(i); return u.length === 1 ? u[0] : ''; }
       const set = {};
       leaves(i.id).forEach(function (l) { untukOf(l).forEach(function (u) { set[u] = true; }); });
       const keys = Object.keys(set);
