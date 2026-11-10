@@ -430,6 +430,7 @@ html,body,#app{height:100dvh}
   <div class="main" id="main"></div>
 </div>
 <div id="mod" class="mod hidden"><div class="box" id="mbox"></div></div>
+<script src="config.js"></script>
 <script src="gamekit.js"></script>
 <script>
 "use strict";
@@ -790,8 +791,8 @@ const CHA=[{"i": "⏰", "t": "Pengingat menyala", "d": "Alarm pengingatmu berbun
 const TILES={"quiz": [1, 3, 6, 8, 9, 10, 14, 15, 17, 21, 22, 23, 28, 29, 31, 34, 37, 38, 41, 42, 44, 46, 50, 51, 52, 56, 57, 59, 63, 64, 65, 70, 71, 74, 79, 80, 83, 90, 94, 97], "ref": [4, 11, 18, 25, 32, 39, 45, 53, 60, 66, 76, 87, 96], "cha": [2, 7, 12, 16, 20, 26, 30, 35, 40, 48, 54, 58, 62, 67, 73, 78, 81, 85, 91, 95, 99]};
 const REF=["Apa yang membuatmu semangat beribadah? Ceritakan satu pengalaman.", "Apa yang membuatmu kurang semangat beribadah, dan bagaimana kamu menghadapinya?", "Bagaimana perasaanmu setelah beribadah dengan sungguh-sungguh dibanding beribadah terburu-buru?", "Ceritakan satu kebiasaan baik yang sudah kamu jaga. Apa rahasia konsistensimu?", "Siapa orang di sekitarmu yang bisa saling mengingatkan denganmu dalam kebaikan?", "Apa satu hal kecil yang bisa kamu mulai besok agar ibadahmu lebih sadar dan teratur?", "Bagaimana ibadah membantumu bersikap lebih sabar saat sedang kesal?", "Apa hambatan terbesar dalam membiasakan ibadah, dan bagaimana kamu mengatasinya?", "Bagaimana caramu menyeimbangkan jadwal belajar, bermain, dan ibadah?", "Apa yang kamu rasakan ketika bisa menepati rencana kebiasaanmu?", "Bagaimana caramu menghargai teman yang beribadah dengan cara berbeda darimu?", "Apa perbedaan antara beribadah karena disuruh dan karena kesadaran sendiri?", "Karakter baik apa yang ingin kamu tumbuhkan lewat ibadah?", "Apa yang akan kamu katakan pada diri sendiri saat merasa malas beribadah?", "Apa dukungan yang kamu harapkan dari orang tua atau guru agar kebiasaanmu terjaga?", "Pesan apa yang ingin kamu sampaikan kepada teman agar semangat beribadah bersama?"];
 const MISC={"pesan": "Beribadah dengan sadar membentuk karakter yang disiplin, bertanggung jawab, dan tenang. Mulailah dari langkah kecil, jalankan rencanamu, dan jangan ragu meminta dukungan orang tua, teman, serta guru.", "tantangan": ["Setiap anggota menyebut satu alasan beribadah dengan sadar, lalu kelompok memilih alasan yang paling kuat.", "Susun 3 langkah kecil membiasakan ibadah dalam 1 menit.", "Ciptakan yel-yel 20 detik bertema \"Kebiasaan Baik, Karakter Baik\".", "Peragakan percakapan singkat: menolak ajakan bermain dengan sopan saat waktu ibadah tiba.", "Sebutkan 3 hambatan beribadah dan 1 solusi untuk masing-masing.", "Berikan 2 apresiasi yang tulus kepada tim juara.", "Tuliskan satu pesan penyemangat untuk teman yang sedang kurang semangat.", "Jelaskan dengan kalimat sendiri perbedaan ibadah karena disuruh dan karena kesadaran.", "Sebutkan 3 cara menenangkan diri saat marah atau cemas.", "Peragakan bagaimana mengingatkan teman dengan ramah.", "Sebutkan 3 contoh disiplin dan tanggung jawab yang berkaitan dengan ibadah.", "Sebutkan satu hal yang akan kamu terapkan mulai hari ini."]};
-const RULES={"dadu":1,"kembar":1,"mundurLebih":1,"detikJawab":0};
-const RULE_LBL={dadu:{l:"Jumlah dadu (1 atau 2)"},kembar:{l:"Dadu kembar main lagi (1 = ya, 0 = tidak; hanya berlaku bila 2 dadu)"},mundurLebih:{l:"Pion mundur bila melewati kotak 100 (1 = ya, 0 = harus pas, tetap di tempat)"},detikJawab:{l:"Batas waktu menjawab kuis (detik, 0 = tanpa batas)"}};
+const RULES={"dadu":1,"kembar":1,"mundurLebih":1,"tabrak":0,"detikJawab":0};
+const RULE_LBL={dadu:{l:"Jumlah dadu (1 sampai 3)"},kembar:{l:"Semua dadu kembar, main lagi (1 = ya, 0 = tidak; berlaku bila dadu 2 atau lebih)"},tabrak:{l:"Bila berhenti di kotak yang sama dengan pion lain (0 = tidak ada efek, 1 = pion yang sudah di kotak itu kembali ke Start, 2 = pion yang baru tiba kembali ke Start)"},mundurLebih:{l:"Pion mundur bila melewati kotak 100 (1 = ya, 0 = harus pas, tetap di tempat)"},detikJawab:{l:"Batas waktu menjawab kuis (detik, 0 = tanpa batas)"}};
 const GAMEDATA={ZONA,QUIZ,LAD,SNK,REF,CHA,TILES,MISC,RULES};
 /* ============================ GAME: TANGGA KARAKTER (ular tangga) ============================ */
 (function(){const st=document.createElement("style");st.textContent=`
@@ -802,7 +803,12 @@ const GAMEDATA={ZONA,QUIZ,LAD,SNK,REF,CHA,TILES,MISC,RULES};
 .ut-c:nth-child(odd){background:color-mix(in srgb,var(--zc) 30%,var(--card))}
 .ut-c i{position:absolute;left:3px;top:1px;font-style:normal;font-size:clamp(7px,1.05vw,12px);font-weight:900;color:var(--muted)}
 .ut-c.end{background:var(--c2)}
-.ut-tk{position:absolute;inset:2px 2px auto auto;display:flex;justify-content:flex-end;flex-wrap:wrap;gap:1px;max-width:90%}
+.ut-tk{position:absolute;inset:0;pointer-events:none;z-index:3}
+.pw{position:absolute;height:auto;filter:drop-shadow(0 3px 2px rgba(20,25,60,.45));transform:translateX(-50%);animation:pwin .3s}
+.pw.act{animation:pwb 1s ease-in-out infinite}
+@keyframes pwin{from{transform:translate(-50%,-14px) scale(.7);opacity:0}to{transform:translateX(-50%);opacity:1}}
+@keyframes pwb{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-7%)}}
+.pwm{width:26px;height:36px;flex:none;margin:-4px 0}
 .ut-c em{position:absolute;bottom:1px;left:50%;transform:translateX(-50%);font-style:normal;font-weight:900;font-size:clamp(8px,1.25vw,14px);padding:0 4px;border-radius:99px;color:#fff;white-space:nowrap}
 .ut-c em.up{background:#2E9A5B}.ut-c em.dn{background:#D9503E}
 .ut-c.k-l{box-shadow:inset 0 0 0 2px #2E9A5B}.ut-c.k-s{box-shadow:inset 0 0 0 2px #D9503E}
@@ -811,10 +817,12 @@ const GAMEDATA={ZONA,QUIZ,LAD,SNK,REF,CHA,TILES,MISC,RULES};
 .ut-team{display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:16px;padding:8px 12px;background:var(--card);font-weight:800}
 .ut-team.me{border-color:var(--c1);background:var(--soft)}
 .ut-team b.d{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;border:2px solid #fff;box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.ut-start{display:flex;align-items:flex-end;gap:6px;margin:8px 2px 0;font-weight:900;color:var(--muted)}.ut-start b{font-size:12px;letter-spacing:.1em;align-self:center;margin-right:6px}.ut-start small{align-self:center}
+.ut-start .pw{position:static;width:34px}
 .ut-team .p{margin-left:auto;color:var(--muted);font-size:14px}
 .ut-die{width:84px;height:84px;border-radius:20px;background:#fff;border:3px solid var(--line);box-shadow:0 5px 0 var(--line);display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:11px;gap:2px;flex:0 0 auto}
 .ut-die span{border-radius:50%}.ut-die span.on{background:#2D2A3A}
-.ut-die.roll{animation:shake .25s infinite}
+.ut-die.sm{width:52px;height:52px;padding:8px;border-radius:15px}.ut-die.roll{animation:shake .25s infinite}
 @keyframes shake{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
 .ut-log{font-size:14px;color:var(--muted);line-height:1.5;font-weight:700}
 .ut-leg{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;color:var(--muted);font-weight:800;margin-top:6px}
@@ -823,6 +831,27 @@ const GAMEDATA={ZONA,QUIZ,LAD,SNK,REF,CHA,TILES,MISC,RULES};
 `;document.head.appendChild(st)})();
 const ZCOL=["#4FB3D9","#5CC48F","#F5C451","#EE8FB0","#9B86E8"];
 const TIC=["🚀","🌟","🦅","🎯","💡","🧭"],TCOL=["#E5604D","#F0A030","#3FA774","#4C7DF0","#9B6BE0","#DB5A9B"];
+function shade(h,a){const n=parseInt(h.slice(1),16);let r=n>>16,g=(n>>8)&255,b=n&255;const f=a<0?0:255,t=Math.abs(a);r=Math.round(r+(f-r)*t);g=Math.round(g+(f-g)*t);b=Math.round(b+(f-b)*t);return "#"+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1)}
+function pawn(i,cls,st){ // pion 3D: kepala bola, badan kerucut berkilau, alas, bayangan
+  const c=TCOL[i%6],id="pw"+(i%6),L=String.fromCharCode(65+(i%26));
+  return `<svg class="pw ${cls||""}" style="${st||""}" viewBox="0 0 44 62" aria-hidden="true"><defs>
+   <linearGradient id="${id}b" x1="0" x2="1"><stop offset="0" stop-color="${shade(c,.45)}"/><stop offset=".45" stop-color="${c}"/><stop offset="1" stop-color="${shade(c,-.38)}"/></linearGradient>
+   <radialGradient id="${id}h" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff"/><stop offset=".25" stop-color="${shade(c,.6)}"/><stop offset=".7" stop-color="${c}"/><stop offset="1" stop-color="${shade(c,-.45)}"/></radialGradient></defs>
+   <ellipse cx="22" cy="57" rx="17" ry="4.2" fill="#14183c" opacity=".28"/>
+   <path d="M5 55c0-3 3-5 8-5.500h18c5 .5 8 2.500 8 5.500 0 2-4 3.200-17 3.200S5 57 5 55z" fill="url(#${id}b)" stroke="#1E2A5C" stroke-width="1.600"/>
+   <path d="M13 50.500c1-9 3-17 6-22h6c3 5 5 13 6 22z" fill="url(#${id}b)" stroke="#1E2A5C" stroke-width="1.600" stroke-linejoin="round"/>
+   <ellipse cx="22" cy="28.500" rx="8" ry="2.800" fill="url(#${id}b)" stroke="#1E2A5C" stroke-width="1.500"/>
+   <circle cx="22" cy="16" r="12.500" fill="url(#${id}h)" stroke="#1E2A5C" stroke-width="1.800"/>
+   <ellipse cx="17.500" cy="10.500" rx="4.200" ry="2.600" fill="#fff" opacity=".7" transform="rotate(-30 17.500 10.500)"/>
+   <text x="22" y="46.500" text-anchor="middle" font-size="11" font-weight="900" font-family="Nunito,system-ui,sans-serif" fill="#fff" stroke="#1E2A5C" stroke-width=".7" paint-order="stroke">${L}</text></svg>`;
+}
+function pawnsAt(n){ // semua pion di satu kotak, tersusun rapi
+  const g=S.g,ids=g.pos.map((p,i)=>p===n?i:-1).filter(i=>i>=0);if(!ids.length)return"";
+  const k=ids.length,cols=k<=1?1:k<=4?2:3,rows=Math.ceil(k/cols),w=k===1?72:k<=2?56:k<=4?50:42;
+  return `<span class="ut-tk">${ids.map((i,j)=>{const c=j%cols,r=Math.floor(j/cols);
+    const x=cols===1?50:22+c*(56/(cols-1)),bb=rows===1?(k===1?-2:4):(2+(rows-1-r)*38);
+    return pawn(i,i===g.t&&!g.end?"act":"",`left:${x}%;bottom:${bb}%;width:${w}%;z-index:${10-r}`)}).join("")}</span>`;
+}
 const zoneOf=n=>Math.max(0,Math.min(4,Math.floor((n-1)/20)));
 const sleep2=ms=>new Promise(r=>setTimeout(r,ms));
 const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
@@ -841,10 +870,12 @@ function gameInit(){
   S.g={lastv:[],pos:S.names.map(()=>0),t:0,rows:S.names.map(()=>({ok:0,bad:0,rf:0,fin:null})),ord:0,extra:false,last:0,log:[],end:false,started:false,decks:{}};
 }
 const addLog=t=>{const g=S.g;g.log.unshift(t);g.log=g.log.slice(0,4)};
+const nDadu=()=>Math.max(1,Math.min(3,Math.round(+RULES.dadu)||1));
 function dieHtml(v,roll){
   const on={0:[4],1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]}[v]||[];
-  return `<div class="ut-die ${roll?"roll":""}" id="gDie">${Array.from({length:9},(_,i)=>`<span class="${on.includes(i)?"on":""}"></span>`).join("")}</div>`;
+  return `<div class="ut-die ${nDadu()>2?"sm":""} ${roll?"roll":""}" id="gDie">${Array.from({length:9},(_,i)=>`<span class="${on.includes(i)?"on":""}"></span>`).join("")}</div>`;
 }
+function startHtml(){const g=S.g,ids=g.pos.map((p,i)=>p===0?i:-1).filter(i=>i>=0);return `<div class="ut-start"><b>START</b>${ids.length?ids.map(i=>pawn(i,i===g.t&&!g.end?"act":"","position:static;transform:none;width:34px")).join(""):"<small>(semua pion sudah berjalan)</small>"}</div>`}
 function boardHtml(){
   const g=S.g,L=byA(LAD),Sn=byA(SNK);
   let cells="";
@@ -852,8 +883,8 @@ function boardHtml(){
     const n=(r%2===0)?r*10+c+1:r*10+(9-c)+1,k=kind(n);
     const ic={end:"🏁",q:"❓",r:"💭",c:"🎁",l:"🪜",s:"🐍"}[k]||"";
     const lb=k==="l"?`<em class="up">↑${L[n].to}</em>`:k==="s"?`<em class="dn">↓${Sn[n].to}</em>`:"";
-    const tk=g.pos.map((p,i)=>p===n?`<b style="background:${TCOL[i%6]}">${TIC[i%6]}</b>`:"").join("");
-    cells+=`<div class="ut-c k-${k}" style="--zc:${ZCOL[zoneOf(n)]}"><i>${n}</i>${ic}${lb}${tk?`<span class="ut-tk">${tk}</span>`:""}</div>`;
+    const tk=pawnsAt(n);
+    cells+=`<div class="ut-c k-${k}" style="--zc:${ZCOL[zoneOf(n)]}"><i>${n}</i>${ic}${lb}${tk}</div>`;
   }
   return `<div class="ut-b"><div class="ut-g">${cells}</div></div>`;
 }
@@ -865,10 +896,10 @@ function gameHtml(){
   if(g.end)return `<div id="gw">${resultHtml()}</div>`;
   const me=g.t;
   return `<div id="gw"><div class="ut">${boardHtml()}<div class="ut-s">
-    <div class="card" style="margin:0"><h3>Giliran ${esc(S.names[me])}</h3><div style="display:flex;gap:10px;align-items:center">${Array.from({length:RULES.dadu===2?2:1},(_,k)=>dieHtml((g.lastv||[])[k]||1)).join("")}<div style="flex:1"><button class="btn pri lg" id="gRoll" ${BUSY?"disabled":""}>🎲 Lempar dadu</button></div></div>
+    <div class="card" style="margin:0"><h3>Giliran ${esc(S.names[me])}</h3><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${Array.from({length:nDadu()},(_,k)=>dieHtml((g.lastv||[])[k]||1)).join("")}<div style="flex:1 1 ${nDadu()>1?"100%":"0"};min-width:0"><button class="btn pri lg" id="gRoll" style="width:100%" ${BUSY?"disabled":""}>🎲 Lempar dadu</button></div></div>
       <div class="ut-log" style="margin-top:10px">${g.log.map(esc).join("<br>")||"Tekan tombol untuk melempar dadu."}</div></div>
-    <div class="card" style="margin:0;padding:10px">${S.names.map((n,i)=>`<div class="ut-team ${i===me?"me":""}" style="margin:4px 0"><b class="d" style="background:${TCOL[i%6]}">${TIC[i%6]}</b>${esc(n)}<span class="p">${g.rows[i].fin?"🏁 urutan "+g.rows[i].fin:(g.pos[i]?"kotak "+g.pos[i]:"Start")}</span></div>`).join("")}
-      <div class="ut-leg"><span>❓ kuis</span><span>💭 refleksi</span><span>🎁 kejutan</span><span>🪜↑ tangga naik ke kotak…</span><span>🐍↓ ular turun ke kotak…</span></div>
+    <div class="card" style="margin:0;padding:10px">${S.names.map((n,i)=>`<div class="ut-team ${i===me?"me":""}" style="margin:4px 0">${pawn(i,"pwm","position:static;transform:none;animation:none")}${esc(n)}<span class="p">${g.rows[i].fin?"🏁 urutan "+g.rows[i].fin:(g.pos[i]?"kotak "+g.pos[i]:"Start")}</span></div>`).join("")}
+      ${startHtml()}<div class="ut-leg"><span>❓ kuis</span><span>💭 refleksi</span><span>🎁 kejutan</span><span>🪜↑ tangga naik ke kotak…</span><span>🐍↓ ular turun ke kotak…</span></div>
       <div class="mact" style="justify-content:flex-start;margin-top:8px"><button class="btn sm" id="gEnd">🏁 Akhiri permainan</button></div></div></div></div></div>`;
 }
 function resultHtml(){
@@ -941,19 +972,30 @@ async function win(i){
   addLog(`🏁 ${S.names[i]} selesai urutan ${g.ord}`);
   if(g.rows.every(r=>r.fin))g.end=true;
 }
+async function tabrak(i){ // aturan: berhenti di kotak yang sama dengan pion lain
+  const g=S.g,n=g.pos[i],mode=Math.round(+RULES.tabrak)||0;
+  if(!mode||n<1||n>99)return;
+  const others=g.pos.map((p,j)=>j!==i&&p===n&&!g.rows[j].fin?j:-1).filter(j=>j>=0);
+  if(!others.length)return;
+  const vic=mode===1?others:[i];
+  await modal(`<div class="ico-big">💥</div><h2 style="text-align:center">Bertemu di kotak ${n}!</h2><p class="txt" style="text-align:center"><b>${esc(S.names[i])}</b> berhenti di kotak yang sama dengan <b>${others.map(j=>esc(S.names[j])).join(", ")}</b>.</p><p class="txt" style="text-align:center">${vic.map(j=>`<b>${esc(S.names[j])}</b>`).join(", ")} kembali ke Start.</p><div class="mact" style="justify-content:center"><button class="btn pri" data-v="x">Lanjut</button></div>`);
+  vic.forEach(j=>{g.pos[j]=0;addLog(`💥 ${S.names[j]} kembali ke Start (bertemu pion lain di kotak ${n})`)});
+  paint();await sleep2(500);
+}
 async function roll(){
   if(BUSY)return;BUSY=true;
-  const g=S.g,i=g.t,nd=RULES.dadu===2?2:1;paint();
+  const g=S.g,i=g.t,nd=nDadu();paint();
   for(let k=0;k<8;k++){document.querySelectorAll(".ut-die").forEach(e=>e.outerHTML=dieHtml(1+Math.floor(Math.random()*6),true));await sleep2(80)}
   const v=Array.from({length:nd},()=>1+Math.floor(Math.random()*6)),d=v.reduce((a,b)=>a+b,0);
   g.lastv=v;g.last=d;addLog(`🎲 ${S.names[i]} melempar dadu: ${v.join(" + ")}${nd>1?" = "+d:""}`);paint();await sleep2(350);
-  if(nd===2&&RULES.kembar&&v[0]===v[1]){g.extra=true;addLog("🎲🎲 Dadu kembar! Main lagi")}
+  if(nd>=2&&RULES.kembar&&v.every(x=>x===v[0])){g.extra=true;addLog("🎲🎲 Dadu kembar! Main lagi")}
   const raw=g.pos[i]+d;
   if(raw>100){
     if(RULES.mundurLebih){const back=200-raw;await walkTo(i,100);addLog(`↩️ Kelebihan ${raw-100} langkah, kembali ke kotak ${back}`);paint();await sleep2(500);await walkTo(i,back)}
     else{addLog(`⛔ Harus pas di kotak 100. ${S.names[i]} tetap di kotak ${g.pos[i]}`);g.extra=false}
   }else await walkTo(i,raw);
   await resolve(i,0);
+  await tabrak(i);
   if(g.rows[i].fin)g.extra=false;
   if(!g.end){
     if(g.extra){g.extra=false;addLog(`🔁 ${S.names[i]} mendapat giliran tambahan`)}
@@ -982,8 +1024,12 @@ function cleanAbout(A){
   return {deskripsi:strc(A.deskripsi,700),perancang:strc(A.perancang,80),jabatan:strc(A.jabatan,120),sasaran:strc(A.sasaran,160),durasi:strc(A.durasi,80),media:strc(A.media,160),bidang:strc(A.bidang,80),capaian:lst(A.capaian,DA.capaian),tujuan:lst(A.tujuan,DA.tujuan),catatan:strc(A.catatan,700),bagian:cleanBg(A.bagian)};
 }
 function withBg(i){if(!i.bagian||!i.bagian.length){const l=localBg();if(l.length)i.bagian=l}return i}
-let INFO=withBg(cleanAbout(GK.info.cached(ABOUT_ID,DEFAULT_ABOUT)));
-function refreshInfo(){return GK.info.load(ABOUT_ID,DEFAULT_ABOUT).then(r=>{INFO=withBg(cleanAbout(r.info));return r}).catch(()=>null)}
+const INFO_LS="rpl_infolokal_"+ABOUT_ID,AUTHOR=["perancang","jabatan"];
+let AKSES=(()=>{try{return localStorage.getItem("rpl_akses_"+ID)==="publik"?"publik":"admin"}catch(e){return"admin"}})();
+const isAdm=()=>!!(GK.auth&&GK.auth.token&&GK.auth.token());
+function withLocal(i){try{const l=JSON.parse(localStorage.getItem(INFO_LS)||"null");if(l&&l._lokal){const c=cleanAbout(Object.assign({},i,l));AUTHOR.forEach(k=>c[k]=i[k]);return c}}catch(e){}return i}
+let INFO=withBg(withLocal(cleanAbout(GK.info.cached(ABOUT_ID,DEFAULT_ABOUT))));
+function refreshInfo(){return GK.info.load(ABOUT_ID,DEFAULT_ABOUT).then(r=>{INFO=withBg(withLocal(cleanAbout(r.info)));return r}).catch(()=>null)}
 function bgHtml(b){
   const L=b.isi.split("\n").map(x=>x.trim()).filter(Boolean);
   if(!L.length)return `<p class="txt" style="color:var(--muted)">Belum diisi.</p>`;
@@ -1008,7 +1054,7 @@ function infoHtml(){
   ${A.catatan?`<h3>Catatan</h3><p class="txt">${esc(A.catatan)}</p>`:""}
   <h3>Sumber</h3><ul class="pts">${li(RPL.sumber)}</ul>
   ${A.perancang?`<p class="txt" style="color:var(--muted);font-size:14px">Dirancang oleh <b>${esc(A.perancang)}</b>${A.jabatan?" · "+esc(A.jabatan):""}</p>`:""}
-  <div class="mact"><button class="btn sm" data-v="edit" title="Khusus admin">${IC("lock")} Edit (admin)</button><button class="btn pri" data-v="x">Tutup</button></div>`;
+  <div class="mact"><button class="btn sm" data-v="edit" title="${AKSES==="admin"&&!isAdm()?"Khusus admin":"Ubah isi game"}">${IC(AKSES==="admin"&&!isAdm()?"lock":"pencil")} Edit</button><button class="btn pri" data-v="x">Tutup</button></div>`;
 }
 
 /* ---------- Info game ---------- */
@@ -1030,11 +1076,14 @@ function applyConf(c){
     if(c.DATA&&typeof GAMEDATA==="object")Object.keys(GAMEDATA).forEach(k=>{if(c.DATA[k]===undefined)return;const d=GAMEDATA[k];if(d&&!Array.isArray(d)&&typeof c.DATA[k]==="object"&&!Array.isArray(c.DATA[k]))repl(d,Object.assign({},DEF.DATA[k],c.DATA[k]));else repl(d,c.DATA[k])});
   }catch(e){console.warn("conf",e)}
 }
-function currentConf(){return JSON.parse(JSON.stringify({v:1,RPL,FASE,FIELDS,DATA:typeof GAMEDATA==="object"?GAMEDATA:{}}))}
+function currentConf(){return JSON.parse(JSON.stringify({v:1,akses:AKSES,RPL,FASE,FIELDS,DATA:typeof GAMEDATA==="object"?GAMEDATA:{}}))}
 async function loadConf(){
-  let c=null;try{c=JSON.parse(localStorage.getItem(CONF_LS)||"null")}catch(e){}
-  try{const r=await GK.conf.load(ID);if(r&&r.conf)c=r.conf}catch(e){}
-  if(c)applyConf(c);
+  let loc=null,srv=null;try{loc=JSON.parse(localStorage.getItem(CONF_LS)||"null")}catch(e){}
+  try{const r=await GK.conf.load(ID);if(r&&r.conf)srv=r.conf}catch(e){}
+  if(srv){ // isi bersama (admin) lebih dulu; perubahan lokal perangkat ini ditimpa di atasnya
+    if(srv.akses==="publik"||srv.akses==="admin"){AKSES=srv.akses;try{localStorage.setItem("rpl_akses_"+ID,AKSES)}catch(e){}}
+    applyConf(srv);if(loc&&loc._lokal)applyConf(loc);
+  }else if(loc)applyConf(loc);
 }
 /* ---------- editor ---------- */
 let ED=null;
@@ -1079,12 +1128,12 @@ function edNode(p,v,k,ctx){
   }
   return"";
 }
-const ETABS=[["info","Info game"],["RULES","Aturan permainan"],["RPL","Spesifikasi RPL"],["FASE","Tahapan & kartu"],["FIELDS","Kolom rencana"],["DATA","Soal & isi game"]];
+const ETABS=[["info","Info game"],["RULES","Aturan permainan"],["RPL","Spesifikasi RPL"],["FASE","Tahapan & kartu"],["FIELDS","Kolom rencana"],["DATA","Soal & isi game"],["akses","Akses edit"]];
 function edHtml(){
   const t=ED.tab,A=ED.info;
   let body="";
   if(t==="info"){
-    const inp=(k,l,m)=>`<label class="f">${l}</label><input type="text" data-e="${k}" maxlength="${m}" value="${esc(A[k])}">`;
+    const inp=(k,l,m)=>{const lock=AUTHOR.includes(k)&&!ED.adm;return `<label class="f">${l}${lock?" 🔒 (hanya admin)":""}</label><input type="text" data-e="${k}" maxlength="${m}" value="${esc(A[k])}" ${lock?"readonly disabled":""}>`};
     const area=(k,l,h)=>`<label class="f">${l}</label><textarea data-e="${k}" style="min-height:${h||70}px">${esc(Array.isArray(A[k])?A[k].join("\n"):A[k])}</textarea>`;
     body=`${area("deskripsi","Deskripsi",80)}${inp("bidang","Bidang layanan",80)}${inp("sasaran","Sasaran",160)}${inp("durasi","Durasi",80)}${inp("media","Media",160)}
   ${area("capaian","Capaian layanan BK (satu butir per baris)",100)}${area("tujuan","Tujuan khusus (satu butir per baris)",100)}${area("catatan","Catatan",60)}
@@ -1095,6 +1144,9 @@ function edHtml(){
    <label class="f">Isi (satu butir per baris untuk daftar)</label><textarea data-bg="${i}|isi" maxlength="1500">${esc(b.isi)}</textarea>
    <div class="eact"><button class="btn sm" data-bga="up|${i}" ${i===0?"disabled":""}>↑</button><button class="btn sm" data-bga="dn|${i}" ${i===A.bagian.length-1?"disabled":""}>↓</button><button class="btn sm" data-bga="del|${i}">Hapus</button></div></div>`).join("")}
   ${A.bagian.length<10?'<button class="btn sm" data-bga="add|0">+ Tambah bagian</button>':""}`;
+  }else if(t==="akses"){
+    body=`<p class="txt" style="font-size:15px;color:var(--muted)">Tentukan siapa yang boleh membuka editor game ini. Perubahan oleh pengguna non-admin hanya tersimpan di perangkat masing-masing (tidak mengubah isi untuk orang lain). Nama perancang dan jabatan hanya bisa diubah admin.</p>
+     <div class="rl"><label>Siapa boleh mengedit?</label><select data-ep="akses"><option value="admin" ${ED.conf.akses!=="publik"?"selected":""}>Hanya admin</option><option value="publik" ${ED.conf.akses==="publik"?"selected":""}>Publik (tersimpan di perangkat sendiri)</option></select></div>`;
   }else if(t==="RULES"){
     const gi=FASE.findIndex(f=>f.tipe==="game"),R=ED.conf.DATA.RULES||{},LB=typeof RULE_LBL==="object"?RULE_LBL:{};
     body=`<p class="txt" style="font-size:15px;color:var(--muted)">Atur jalannya permainan. Nilai 0 pada batas waktu berarti tanpa batas.</p>
@@ -1106,21 +1158,25 @@ function edHtml(){
       (t==="DATA"&&!Object.keys(v).filter(k=>k!=="RULES").length?`<p class="txt">Game ini tidak memiliki data tambahan.</p>`:"")+
       (t==="DATA"?Object.keys(v).filter(k=>k!=="RULES").map(k=>edNode("DATA."+k,v[k],k,v)).join(""):edNode(t,v,"",null));
   }
-  return `<h2>✎ Edit isi game</h2><p class="txt" style="color:var(--muted);font-size:14px">Perubahan disimpan ke server dengan password admin Speganam, lalu dipakai di semua perangkat. Sesi yang sedang berjalan sebaiknya dimulai ulang setelah mengubah soal.</p>
-  <div class="etabs">${ETABS.map(x=>`<button data-et="${x[0]}" class="${t===x[0]?"on":""}">${x[1]}</button>`).join("")}</div>${body}
-  <div class="mact"><button class="btn" id="edReset">↺ Kembalikan bawaan</button><button class="btn" data-v="cancel">Batal</button><button class="btn pri" id="edSave">💾 Simpan</button></div>`;
+  const tabs=ETABS.filter(x=>x[0]!=="akses"||ED.adm);
+  const note=ED.adm?"Anda masuk sebagai admin: perubahan disimpan ke server dan dipakai di semua perangkat.":"Perubahan hanya tersimpan di perangkat ini. Nama perancang dan jabatan dikunci.";
+  return `<h2>${IC("pencil")} Edit isi game</h2><p class="txt" style="color:var(--muted);font-size:14px">${note} Sesi yang sedang berjalan sebaiknya dimulai ulang setelah mengubah soal.</p>
+  <div class="etabs">${tabs.map(x=>`<button data-et="${x[0]}" class="${t===x[0]?"on":""}">${x[1]}</button>`).join("")}</div>${body}
+  <div class="mact">${ED.adm?`<button class="btn" id="edReset">↺ Kembalikan bawaan</button>`:`<button class="btn" id="edLocalReset">↺ Hapus perubahan di perangkat ini</button><button class="btn" id="edAdmin">${IC("lock")} Masuk admin</button>`}<button class="btn" data-v="cancel">Batal</button><button class="btn pri" id="edSave">${ED.adm?"💾 Simpan ke server":"💾 Simpan di perangkat ini"}</button></div>`;
 }
 function edRender(){const y=$("#mbox").scrollTop,o=[...document.querySelectorAll("#mbox details")].map(d=>d.open);$("#mbox").innerHTML=edHtml();[...document.querySelectorAll("#mbox details")].forEach((d,i)=>{if(o[i]!=null)d.open=o[i]});$("#mbox").scrollTop=y}
+function lockPanel(){
+  $("#mbox").innerHTML=`<h2>${IC("lock")} Edit isi game dikunci</h2><p class="txt" style="color:var(--muted)">Game ini hanya dapat diubah oleh admin (password admin Speganam). Murid dan pengguna lain tetap dapat memainkannya.</p><div class="mact"><button class="btn" data-v="cancel">Tutup</button><button class="btn pri" id="edUnlock">${IC("lock")} Buka kunci</button></div>`;
+  $("#mod").classList.remove("hidden");
+  $("#mbox").onclick=async e=>{
+    if(e.target.closest("#edUnlock")){let t=null;try{t=await GK.auth.ensure()}catch(x){}
+      if(t&&isAdm())openEditor();else toast("Kunci belum terbuka")}
+    else if(e.target.closest('[data-v="cancel"]'))$("#mod").classList.add("hidden");
+  };
+}
 function openEditor(){
-  if(!(GK.auth&&GK.auth.token&&GK.auth.token())){
-    $("#mbox").innerHTML=`<h2>${IC("lock")} Edit isi game dikunci</h2><p class="txt" style="color:var(--muted)">Hanya admin (password admin Speganam) yang boleh mengubah isi, aturan, dan soal game ini. Murid dan pengguna lain hanya dapat memainkannya.</p><div class="mact"><button class="btn" data-v="cancel">Tutup</button><button class="btn pri" id="edUnlock">${IC("lock")} Buka kunci</button></div>`;
-    $("#mod").classList.remove("hidden");
-    $("#mbox").onclick=async e=>{
-      if(e.target.closest("#edUnlock")){let t=null;try{t=await GK.auth.ensure()}catch(x){}
-        if(t&&GK.auth.token&&GK.auth.token())openEditor();else toast("Kunci belum terbuka")}
-      else if(e.target.closest('[data-v="cancel"]')){$("#mod").classList.add("hidden")}
-    };return}
-  ED={tab:"info",info:JSON.parse(JSON.stringify(INFO)),conf:currentConf()};
+  if(!isAdm()&&AKSES!=="publik"){lockPanel();return}
+  ED={tab:"info",adm:isAdm(),info:JSON.parse(JSON.stringify(INFO)),conf:currentConf()};
   $("#mbox").innerHTML=edHtml();$("#mod").classList.remove("hidden");
   $("#mbox").onclick=async e=>{
     const et=e.target.closest("[data-et]");if(et){ED.tab=et.dataset.et;edRender();return}
@@ -1132,7 +1188,9 @@ function openEditor(){
     if(ea){const[a,p,i]=ea.dataset.ea.split("|"),n=+i;const root=p.startsWith("DATA")?ED.conf:ED.conf;const arr=getp(root,p);
       if(a==="add"){arr.push(blank(arr.length?arr[arr.length-1]:""))}else if(a==="del"){if(arr.length>1||!p.startsWith("RPL.")||true)arr.splice(n,1)}else if(a==="up"&&n>0)[arr[n-1],arr[n]]=[arr[n],arr[n-1]];else if(a==="dn"&&n<arr.length-1)[arr[n+1],arr[n]]=[arr[n],arr[n+1]];
       edRender();return}
-    if(e.target.id==="edReset"){if(confirm("Kembalikan semua isi ke bawaan? (belum disimpan sampai Anda menekan Simpan)")){ED.conf=JSON.parse(JSON.stringify(Object.assign({v:1},DEF)));edRender()}return}
+    if(e.target.id==="edReset"){if(confirm("Kembalikan semua isi ke bawaan? (belum disimpan sampai Anda menekan Simpan)")){ED.conf=JSON.parse(JSON.stringify(Object.assign({v:1,akses:AKSES},DEF)));edRender()}return}
+    if(e.target.closest("#edLocalReset")){if(confirm("Hapus semua perubahan di perangkat ini dan kembali ke isi bawaan/server?")){try{localStorage.removeItem(CONF_LS);localStorage.removeItem(INFO_LS);localStorage.removeItem(BG_LS)}catch(x){}location.reload()}return}
+    if(e.target.closest("#edAdmin")){let t=null;try{t=await GK.auth.ensure()}catch(x){}if(t&&isAdm())openEditor();else toast("Kunci belum terbuka");return}
     if(e.target.id==="edSave"){await edSave();return}
     if(e.target.closest('[data-v="cancel"]')){$("#mod").classList.add("hidden");openInfo()}
   };
@@ -1147,14 +1205,25 @@ function openEditor(){
 async function edSave(){
   const info=cleanAbout(ED.info),b=$("#edSave");b.disabled=true;
   try{
-    try{localStorage.setItem(BG_LS,JSON.stringify(info.bagian))}catch(e){}
-    const back=cleanAbout(await GK.info.save(ABOUT_ID,info));
-    INFO=withBg(back);
-    const c=ED.conf;
-    try{localStorage.setItem(CONF_LS,JSON.stringify(c))}catch(e){}
-    let ok=true;try{await GK.conf.save(ID,c)}catch(e){ok=false;if(e&&e.code==="CANCEL")throw e;toast("Isi game tersimpan di perangkat ini saja: "+(e&&e.message||"server belum siap"))}
-    applyConf(c);if(S){S.g=null;save()}
-    if(ok)toast("Tersimpan");
+    if(!ED.adm){ // pengguna publik: simpan lokal saja, perancang/jabatan tidak berubah
+      AUTHOR.forEach(k=>info[k]=INFO[k]);
+      const c=ED.conf;delete c.akses;c._lokal=1;
+      const li=Object.assign({},info,{_lokal:1});AUTHOR.forEach(k=>delete li[k]);
+      try{localStorage.setItem(CONF_LS,JSON.stringify(c));localStorage.setItem(INFO_LS,JSON.stringify(li));localStorage.setItem(BG_LS,JSON.stringify(info.bagian))}catch(e){}
+      INFO=withBg(Object.assign(info,{perancang:INFO.perancang,jabatan:INFO.jabatan}));
+      applyConf(c);if(S){S.g=null;save()}
+      toast("Tersimpan di perangkat ini");
+    }else{
+      try{localStorage.setItem(BG_LS,JSON.stringify(info.bagian));localStorage.removeItem(INFO_LS)}catch(e){}
+      const back=cleanAbout(await GK.info.save(ABOUT_ID,info));
+      INFO=withBg(back);
+      const c=ED.conf;c.akses=c.akses==="publik"?"publik":"admin";delete c._lokal;
+      try{localStorage.setItem(CONF_LS,JSON.stringify(c))}catch(e){}
+      let ok=true;try{await GK.conf.save(ID,c)}catch(e){ok=false;if(e&&e.code==="CANCEL")throw e;toast("Isi game tersimpan di perangkat ini saja: "+(e&&e.message||"server belum siap"))}
+      AKSES=c.akses;try{localStorage.setItem("rpl_akses_"+ID,AKSES)}catch(e){}
+      applyConf(c);if(S){S.g=null;save()}
+      if(ok)toast("Tersimpan");
+    }
     $("#mod").classList.add("hidden");
     if($("#ttl"))$("#ttl").innerHTML=esc(NAMA)+"<small>"+esc(RPL.judul)+"</small>";
     if(S&&S.setup&&!$("#bar").classList.contains("hidden")){tmReset(FASE[S.i]);renderSesi()}else renderMenu();
