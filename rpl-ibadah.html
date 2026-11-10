@@ -804,8 +804,8 @@ const GAMEDATA={ZONA,QUIZ,LAD,SNK,REF,CHA,TILES,MISC,RULES};
 .ut-c i{position:absolute;left:3px;top:1px;font-style:normal;font-size:clamp(7px,1.05vw,12px);font-weight:900;color:var(--muted)}
 .ut-c.end{background:var(--c2)}
 .ut-tk{position:absolute;inset:0;pointer-events:none;z-index:3}
-.pw{position:absolute;height:auto;filter:drop-shadow(0 3px 2px rgba(20,25,60,.45));transform:translateX(-50%);animation:pwin .3s}
-.pw.act{animation:pwb 1s ease-in-out infinite}
+.pw{position:absolute;height:auto;filter:drop-shadow(0 3px 2px rgba(20,25,60,.45));transform:translateX(-50%)}
+.pw.act{filter:drop-shadow(0 0 5px #FFD23F) drop-shadow(0 3px 2px rgba(20,25,60,.45))}
 @keyframes pwin{from{transform:translate(-50%,-14px) scale(.7);opacity:0}to{transform:translateX(-50%);opacity:1}}
 @keyframes pwb{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-7%)}}
 .pwm{width:26px;height:36px;flex:none;margin:-4px 0}
@@ -834,7 +834,7 @@ const TIC=["🚀","🌟","🦅","🎯","💡","🧭"],TCOL=["#E5604D","#F0A030",
 function shade(h,a){const n=parseInt(h.slice(1),16);let r=n>>16,g=(n>>8)&255,b=n&255;const f=a<0?0:255,t=Math.abs(a);r=Math.round(r+(f-r)*t);g=Math.round(g+(f-g)*t);b=Math.round(b+(f-b)*t);return "#"+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1)}
 function pawn(i,cls,st){ // pion 3D: kepala bola, badan kerucut berkilau, alas, bayangan
   const c=TCOL[i%6],id="pw"+(i%6),L=String.fromCharCode(65+(i%26));
-  return `<svg class="pw ${cls||""}" style="${st||""}" viewBox="0 0 44 62" aria-hidden="true"><defs>
+  return `<svg class="pw ${cls||""}" data-pi="${i}" style="${st||""}" viewBox="0 0 44 62" aria-hidden="true"><defs>
    <linearGradient id="${id}b" x1="0" x2="1"><stop offset="0" stop-color="${shade(c,.45)}"/><stop offset=".45" stop-color="${c}"/><stop offset="1" stop-color="${shade(c,-.38)}"/></linearGradient>
    <radialGradient id="${id}h" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff"/><stop offset=".25" stop-color="${shade(c,.6)}"/><stop offset=".7" stop-color="${c}"/><stop offset="1" stop-color="${shade(c,-.45)}"/></radialGradient></defs>
    <ellipse cx="22" cy="57" rx="17" ry="4.2" fill="#14183c" opacity=".28"/>
@@ -911,7 +911,15 @@ function resultHtml(){
   ${ch?`<div class="expl"><b>Tantangan penutup:</b> ${esc(ch)}</div>`:""}
   <div class="mact" style="justify-content:flex-start"><button class="btn" id="gAgain">🔁 Main ulang</button><button class="btn pri" data-go="${S.i+1}">➡ Lanjut ke Rencana</button></div></div>`;
 }
-const paint=()=>{const w=$("#gw");if(w){w.outerHTML=gameHtml();gameBind()}};
+const paint=()=>{const w=$("#gw");if(!w)return;
+  const old={};w.querySelectorAll(".ut-g .pw").forEach(e=>{old[e.dataset.pi]=e.getBoundingClientRect()});
+  w.outerHTML=gameHtml();gameBind();
+  document.querySelectorAll("#gw .ut-g .pw").forEach(e=>{const o=old[e.dataset.pi];if(!o||!e.animate)return;
+    const n=e.getBoundingClientRect(),dx=o.left-n.left,dy=o.top-n.top;
+    if(Math.abs(dx)<1&&Math.abs(dy)<1)return;
+    e.style.zIndex=50;
+    e.animate([{translate:dx+"px "+dy+"px"},{translate:"0 0"}],{duration:170,easing:"ease-in-out"}).onfinish=()=>{e.style.zIndex=""};
+  })};
 function draw(key,len){
   const g=S.g;if(!len)return-1;
   g.decks[key]=(g.decks[key]||[]).filter(k=>k<len);
