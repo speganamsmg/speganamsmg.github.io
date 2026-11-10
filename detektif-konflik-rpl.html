@@ -2,6 +2,7 @@
 <html lang="id" data-theme="light">
 <head>
 <meta charset="utf-8">
+<link rel="icon" href="assets/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png"><link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Detektif Konflik — Membangun Hubungan Pertemanan yang Sehat | Game BK</title>
 <meta name="description" content="Game BK sesuai RPL Bimbingan Klasikal: Membangun Hubungan Pertemanan yang Sehat. Game detektif lima kasus pertemanan, dikendalikan guru, dimainkan berkelompok bergantian.">
@@ -334,30 +335,99 @@ html,body,#app{height:100dvh}
 .path{position:relative}
 @media(max-width:700px){.pn:not(:last-child)::after{top:17px;left:calc(50% + 24px);right:calc(-50% + 24px)}}
 
+/* =================== v4: BILAH SATU BARIS, LATAR PULAU, PAPAN LEBIH BESAR =================== */
+#bg{position:fixed;inset:0;z-index:0;overflow:hidden}
+#bg svg{width:100%;height:100%;display:block}
+#bg::after{content:"";position:absolute;inset:0;background:rgba(255,244,222,.5)}
+:root[data-theme=dark] #bg::after{background:rgba(20,24,66,.42)}
+#app{position:relative;z-index:1;background:transparent!important}
+.top{display:flex;align-items:center;gap:8px;padding:8px var(--pad);background:var(--card);border-bottom:3px solid var(--ol);flex-wrap:nowrap;position:relative;z-index:3;box-shadow:0 4px 0 rgba(30,42,92,.12)}
+.top .ttl{font-size:15px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;min-width:0;max-width:210px}
+.top .ttl small{display:none}
+.top .sp{flex:0 0 0}.top:has(.bar.hidden) .sp{flex:1}
+.bar{display:flex;align-items:center;gap:8px;flex:1;min-width:0;padding:0!important;border:0!important;background:none!important;box-shadow:none!important}
+.bar.hidden{display:none}
+.nv{width:40px;height:40px;flex:none;display:grid;place-items:center;border:3px solid var(--ol);border-radius:14px;background:var(--card);color:var(--ink);box-shadow:0 3px 0 var(--ol);padding:0}
+.nv svg.i{width:22px;height:22px}
+.nv.pri{background:var(--c1);color:#fff}
+.nv:active{transform:translateY(3px);box-shadow:none}
+.nv[disabled]{opacity:.35;cursor:default}
+.nv.hidden{display:none}
+.path{display:flex!important;flex:1;min-width:0;align-items:center;justify-content:center;gap:12px;margin:0!important;padding:5px 12px!important;border:3px solid var(--ol);border-radius:20px;background:var(--w1) repeating-linear-gradient(0deg,transparent 0 9px,rgba(255,255,255,.22) 9px 11px);box-shadow:0 3px 0 var(--ol);overflow-x:auto;scrollbar-width:none}
+.path.hidden{display:none!important}
+.path::-webkit-scrollbar{display:none}
+.pn{min-width:0!important;flex:0 0 auto;padding:0;gap:0}
+.pn span{display:none!important}
+.pn b{width:34px!important;height:28px!important;border-width:3px!important;box-shadow:0 3px 0 var(--ol)!important;animation:none!important;transform:none}
+.pn b svg.i{width:17px!important;height:17px!important;stroke-width:2.8}
+.pn.on b{transform:scale(1.22)!important;box-shadow:0 3px 0 var(--ol),0 0 0 3px rgba(255,255,255,.7)!important}
+.pn::before,.pn.on::before{content:none!important;display:none!important}
+.pn:not(:last-child)::after{content:"";position:absolute;top:50%!important;left:100%!important;right:auto!important;width:12px;height:0;margin-top:-2px;border-top:3px dotted #fff;opacity:.95}
+.pn.done:not(:last-child)::after{border-top-style:solid}
+.tmw{flex:none;padding:2px 6px 2px 12px!important;gap:4px!important;border-radius:16px!important}
+.tm{font-size:20px!important;min-width:64px!important}
+.bar .ib,.top .ib{width:38px;height:38px}
+.bar .tmw .ib{width:30px;height:30px;border-width:2px!important;border-radius:10px;box-shadow:0 2px 0 var(--ol)}
+.bar .tmw .ib svg.i{width:16px;height:16px}
+.main{padding:14px var(--pad) 24px!important}
+.head{background:var(--card);border:3px solid var(--ol);border-radius:20px;padding:10px 16px;box-shadow:0 4px 0 var(--ol);margin:0 0 14px!important}
+.head h2{font-size:clamp(22px,2.8vw,32px)!important}
+.head .tahap{font-size:11.5px}
+.menu{background:none}
+/* papan ular tangga lebih besar daripada panel samping */
+.ut{gap:14px;flex-wrap:nowrap}
+.ut-b{flex:3 1 0!important;min-width:0}
+.ut-s{flex:1.1 1 0!important;min-width:230px}
+@media(max-width:700px){
+  .ut{flex-wrap:wrap}.ut-b{flex:1 1 100%!important}.ut-s{flex:1 1 100%!important}
+  .top{flex-wrap:wrap;gap:8px 6px;padding:8px var(--pad)}
+  .top .ttl{flex:1;max-width:none;font-size:13.5px}
+  .bar{display:contents}.bar.hidden{display:none}
+  .top:has(.bar:not(.hidden))::after{content:"";flex-basis:100%;order:6;height:0}
+  .top .sp{display:none}
+  #bHome{order:1}.ttl{order:2}.tmw{order:3}#bTools{order:4}#bTheme{order:5}#bFs{display:none}
+  #bPrev{order:7}.path{order:8}#bNext{order:9}
+  .tmw{padding:2px 4px 2px 8px!important}.tm{font-size:18px!important;min-width:52px!important}
+  .top .ib{width:36px;height:36px}.nv{width:38px;height:38px}
+  .path{gap:9px;padding:4px 10px!important;justify-content:flex-start}.pn b{width:30px!important;height:26px!important}.pn:not(:last-child)::after{width:9px}
+  .pn b svg.i{width:15px!important;height:15px!important}
+  .main{padding-bottom:calc(20px + env(safe-area-inset-bottom))!important}
+}
+.bar .nx,.nv.nx{min-width:0!important;width:40px!important;flex:none!important}
+#bg::after{background:rgba(255,244,222,.26)}
+:root[data-theme=dark] #bg::after{background:rgba(20,24,66,.3)}
+@media(min-width:701px) and (max-width:1150px){
+  .top .ttl{max-width:118px;font-size:13px;white-space:normal;line-height:1.05}
+  .path{gap:8px;padding:5px 10px!important}.pn b{width:30px!important;height:26px!important}.pn b svg.i{width:15px!important;height:15px!important}
+  .pn:not(:last-child)::after{width:8px}
+  .tm{font-size:18px!important;min-width:56px!important}
+}
+.path{justify-content:safe center}
+#main .door:not(.cur):not(.done):not(.on),#main .cs:not(.cur):not(.done),#main .bukti:not(.open):not(.lock){background-color:var(--card)}#main .door,#main .cs{border:2px solid var(--ol)}
+
 
 </style>
 </head>
 <body>
 <div id="load"></div>
 <div id="splash" class="out"></div>
+<div id="bg" aria-hidden="true"></div>
 <div id="app">
   <div class="top">
     <button class="ib hidden" id="bHome" title="Menu" aria-label="Menu"></button>
     <div class="ttl" id="ttl"></div>
+    <div class="bar hidden" id="bar">
+      <button class="nv" id="bPrev" title="Kembali" aria-label="Kembali"></button>
+      <div class="path hidden" id="path"></div>
+      <button class="nv pri nx" id="bNext" title="Lanjut" aria-label="Lanjut"></button>
+      <div class="tmw"><span class="tm" id="tm">00:00</span><button class="ib" id="tmb" title="Mulai / jeda" aria-label="Mulai atau jeda"></button><button class="ib" id="tmr" title="Ulang" aria-label="Ulang"></button></div>
+      <button class="ib" id="bTools" title="Alat guru" aria-label="Alat guru"></button>
+    </div>
     <div class="sp"></div>
     <button class="ib" id="bTheme" title="Tema terang / gelap" aria-label="Tema"></button>
     <button class="ib" id="bFs" title="Layar penuh" aria-label="Layar penuh"></button>
   </div>
-  <div class="path hidden" id="path"></div>
   <div class="main" id="main"></div>
-  <div class="bar hidden" id="bar">
-    <button class="btn" id="bPrev" aria-label="Kembali"></button>
-    <div class="sp"></div>
-    <div class="tmw"><span class="tm" id="tm">00:00</span><button class="ib" id="tmb" title="Mulai / jeda" aria-label="Mulai atau jeda"></button><button class="ib" id="tmr" title="Ulang" aria-label="Ulang"></button></div>
-    <button class="btn" id="bTools" aria-label="Alat guru"></button>
-    <div class="sp"></div>
-    <button class="btn pri nx" id="bNext"></button>
-  </div>
 </div>
 <div id="mod" class="mod hidden"><div class="box" id="mbox"></div></div>
 <script src="gamekit.js"></script>
@@ -529,7 +599,7 @@ const IP={bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.
  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',
  expand:'<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',kit:'<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V5h6v3M3 13h18"/>',
  play:'<path d="M8 5l11 7-11 7z" fill="currentColor"/>',pause:'<rect x="7" y="5" width="3.5" height="14" rx="1" fill="currentColor"/><rect x="13.5" y="5" width="3.5" height="14" rx="1" fill="currentColor"/>',
- redo:'<path d="M4 12a8 8 0 1 0 3-6.2M4 4v5h5"/>',prev:'<path d="M15 5l-7 7 7 7"/>',next:'<path d="M9 5l7 7-7 7"/>'};
+ lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',redo:'<path d="M4 12a8 8 0 1 0 3-6.2M4 4v5h5"/>',prev:'<path d="M15 5l-7 7 7 7"/>',next:'<path d="M9 5l7 7-7 7"/>'};
 const IC=n=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IP[n]||IP.star}</svg>`;
 const FIKON=new Proxy({awal:IC("bulb"),konkret:IC("search"),kasus:IC("search"),refleksi:IC("chat"),konsep:IC("book"),game:IC("pad"),rencana:IC("pencil"),akhir:IC("star"),penutup:IC("flag"),laporan:IC("doc")},{get:(t,k)=>t[k]});
 
@@ -586,7 +656,7 @@ function modal(html){return new Promise(res=>{$("#mbox").innerHTML=html;$("#mod"
 
 /* ---------- tema ---------- */
 function applyTheme(){document.documentElement.setAttribute("data-g",GID);let p="auto";try{p=localStorage.getItem("tema")||localStorage.getItem("tema_def")||"auto"}catch(e){}const dark=p==="dark"||(p==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",dark?"dark":"light")}
-function chromeIcons(){$("#bHome").innerHTML=IC("home");$("#bTheme").innerHTML=`<span class="ti-d">${IC("sun")}</span><span class="ti-l">${IC("moon")}</span>`;$("#bFs").innerHTML=IC("expand");$("#bPrev").innerHTML=`${IC("prev")}<span class="lb">Kembali</span>`;$("#tmr").innerHTML=IC("redo");$("#bTools").innerHTML=`${IC("kit")}<span class="lb">Alat</span>`;tmPaint()}
+function chromeIcons(){$("#bHome").innerHTML=IC("home");$("#bTheme").innerHTML=`<span class="ti-d">${IC("sun")}</span><span class="ti-l">${IC("moon")}</span>`;$("#bFs").innerHTML=IC("expand");$("#bPrev").innerHTML=IC("prev");$("#tmr").innerHTML=IC("redo");$("#bTools").innerHTML=IC("kit");tmPaint()}
 function toggleTheme(){const d=document.documentElement.getAttribute("data-theme")==="dark";try{localStorage.setItem("tema",d?"light":"dark")}catch(e){}applyTheme();}
 /* ---------- batas waktu menjawab ---------- */
 let AT=null;
@@ -626,7 +696,9 @@ async function boot(){
   renderMenu();
 }
 /* ---------- menu ---------- */
-function setChrome(mode){ // mode: menu | sesi
+function setChrome(mode){
+  const bg=$("#bg");if(bg){if(!bg.dataset.on){bg.innerHTML=scene();bg.dataset.on=1}bg.classList.toggle("hidden",mode==="menu")}
+  document.body.classList.toggle("in-sesi",mode==="sesi"); // mode: menu | sesi
   $("#path").classList.toggle("hidden",mode!=="sesi");$("#bar").classList.toggle("hidden",mode!=="sesi");
   $("#bHome").classList.toggle("hidden",mode==="menu");
 }
@@ -673,7 +745,7 @@ function showSplash(i){
 }
 $("#splash").onclick=()=>{clearTimeout(SPT);$("#splash").classList.add("out")};
 function renderPath(){
-  $("#path").innerHTML=FASE.map((f,i)=>`<button class="pn ${i===S.i?"on":i<S.i||S.visited[f.id]&&i!==S.i?"done":""}" data-i="${i}"><b>${i<S.i?IC("check"):(FIKON[f.id]||FIKON[f.tipe]||IC("star"))}</b><span>${esc(f.judul)}</span></button>`).join("");
+  $("#path").innerHTML=FASE.map((f,i)=>`<button class="pn ${i===S.i?"on":i<S.i||S.visited[f.id]&&i!==S.i?"done":""}" data-i="${i}" title="${esc(f.judul)}" aria-label="${esc(f.judul)}"><b>${i<S.i?IC("check"):(FIKON[f.id]||FIKON[f.tipe]||IC("star"))}</b></button>`).join("");
   $("#path").onclick=e=>{const b=e.target.closest(".pn");if(b)goFase(+b.dataset.i)};
   const on=$("#path .on"),pp=$("#path");if(on)pp.scrollLeft=on.offsetLeft-(pp.clientWidth-on.offsetWidth)/2;
 }
@@ -709,7 +781,7 @@ function renderSesi(){
   $("#main").innerHTML=`<div class="page"><div class="head"><div class="tahap">${esc(f.tahap)}</div><h2>${esc(f.judul)}</h2></div>${bodyFase(f)}</div>`;
   $("#main").scrollTop=0;$(".tmw").classList.toggle("hidden",!f.menit);
   $("#bPrev").disabled=S.i<=0;$("#bNext").classList.toggle("hidden",S.i>=FASE.length-1);
-  $("#bNext").innerHTML=`<span class="lb">${S.i>=FASE.length-2?"Selesai":"Lanjut"}</span>${IC("next")}`;
+  $("#bNext").innerHTML=IC("next");$("#bNext").title=S.i>=FASE.length-2?"Selesai":"Lanjut";
   tmPaint();
   if(f.tipe==="laporan"){$("#bRep").onclick=showReport;$("#bXls").onclick=unduhXlsx}
   if(f.tipe==="game")gameBind();
@@ -881,7 +953,7 @@ function infoHtml(){
   ${A.catatan?`<h3>Catatan</h3><p class="txt">${esc(A.catatan)}</p>`:""}
   <h3>Sumber</h3><ul class="pts">${li(RPL.sumber)}</ul>
   ${A.perancang?`<p class="txt" style="color:var(--muted);font-size:14px">Dirancang oleh <b>${esc(A.perancang)}</b>${A.jabatan?" · "+esc(A.jabatan):""}</p>`:""}
-  <div class="mact"><button class="btn" data-v="edit">✎ Edit info</button><button class="btn pri" data-v="x">Tutup</button></div>`;
+  <div class="mact"><button class="btn sm" data-v="edit" title="Khusus admin">${IC("lock")} Edit (admin)</button><button class="btn pri" data-v="x">Tutup</button></div>`;
 }
 
 /* ---------- Info game ---------- */
@@ -985,6 +1057,14 @@ function edHtml(){
 }
 function edRender(){const y=$("#mbox").scrollTop,o=[...document.querySelectorAll("#mbox details")].map(d=>d.open);$("#mbox").innerHTML=edHtml();[...document.querySelectorAll("#mbox details")].forEach((d,i)=>{if(o[i]!=null)d.open=o[i]});$("#mbox").scrollTop=y}
 function openEditor(){
+  if(!(GK.auth&&GK.auth.token&&GK.auth.token())){
+    $("#mbox").innerHTML=`<h2>${IC("lock")} Edit isi game dikunci</h2><p class="txt" style="color:var(--muted)">Hanya admin (password admin Speganam) yang boleh mengubah isi, aturan, dan soal game ini. Murid dan pengguna lain hanya dapat memainkannya.</p><div class="mact"><button class="btn" data-v="cancel">Tutup</button><button class="btn pri" id="edUnlock">${IC("lock")} Buka kunci</button></div>`;
+    $("#mod").classList.remove("hidden");
+    $("#mbox").onclick=async e=>{
+      if(e.target.closest("#edUnlock")){let t=null;try{t=await GK.auth.ensure()}catch(x){}
+        if(t&&GK.auth.token&&GK.auth.token())openEditor();else toast("Kunci belum terbuka")}
+      else if(e.target.closest('[data-v="cancel"]')){$("#mod").classList.add("hidden")}
+    };return}
   ED={tab:"info",info:JSON.parse(JSON.stringify(INFO)),conf:currentConf()};
   $("#mbox").innerHTML=edHtml();$("#mod").classList.remove("hidden");
   $("#mbox").onclick=async e=>{
