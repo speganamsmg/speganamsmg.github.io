@@ -876,6 +876,7 @@
   // ── Pemasangan ──
   document.querySelectorAll('.tic').forEach(function (n) { n.replaceWith(App.svg(n.dataset.i)); });
   $('viewBtn').append(App.svg('external'));
+  $('editSiteBtn').append(App.svg('edit'));
   $('logoutBtn').append(App.svg('logout'));
   document.querySelectorAll('input[type="password"]').forEach(App.passwordEye);
   const themeBtn = $('themeBtn');

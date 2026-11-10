@@ -6,6 +6,7 @@
   const el = App.el;
   const CACHE_KEY = 'pub_cache_v1';
   let data = null;
+  let editing = false; // mode edit langsung (edit.js): data = daftar lengkap milik admin
 
   // Tombol tema: ikon bulan dan matahari, CSS memilih yang tampil.
   const themeBtn = $('themeBtn');
@@ -92,12 +93,12 @@
     const box = $('audience');
     const marked = items.some(isLeafMarked);
     const visible = tabList().filter(function (t) {
-      if (!t.ada) return true;
+      if (!t.ada || editing) return true;
       return items.some(function (i) { return untukDaun(i).some(function (u) { return t.ada.indexOf(u) >= 0; }); });
     });
     if (visible.length && !visible.some(function (t) { return t.id === tab; })) tab = visible[0].id;
-    if (!marked || !visible.length) tab = 'semua'; // tidak ada item berlabel audiens: tanpa tab, semua item tampil
-    box.hidden = !marked || !visible.length || !!folder || onQr;
+    if (!editing && (!marked || !visible.length)) tab = 'semua'; // tidak ada item berlabel audiens: tanpa tab, semua item tampil
+    box.hidden = (!marked && !editing) || !visible.length || !!folder || onQr;
     if (box.hidden) return;
     box.replaceChildren.apply(box, visible.map(function (t) {
       const b = el('button', 'aud-btn', t.nama); b.type = 'button';
@@ -110,6 +111,7 @@
       });
       return b;
     }));
+    if (editing && Pub.onTabs) Pub.onTabs(box);
   }
 
   function qrTile() {
@@ -358,7 +360,7 @@
     if (onQr) { clearState(); return; }
 
     const tabs = tabList();
-    const marked = items.some(isLeafMarked);
+    const marked = items.some(isLeafMarked) || editing;
     // Tanpa tab "Semua" dan tanpa item berlabel: semua item tampil tanpa tab; QR mengikuti tab Semua.
     const cur = (marked && tabs.filter(function (t) { return t.id === tab; })[0]) ||
       (marked ? tabs[0] : { id: 'semua', ok: null, qr: true });
@@ -379,16 +381,17 @@
       const keys = Object.keys(set);
       return keys.length === 1 ? keys[0] : '';
     };
+    const mk = editing && Pub.editTile ? Pub.editTile : tile;
     const counts = {}; // jumlah isi folder = yang cocok dengan tab yang sedang dibuka
     items.forEach(function (i) { if (okItem(i)) counts[i.parent_id] = (counts[i.parent_id] || 0) + 1; });
     const here = items.filter(function (i) { return i.parent_id === folderId && okItem(i); });
     const grouped = cur.id === 'semua' && here.some(function (i) { return groupOf(i); });
     let nodes = [];
     if (!grouped) {
-      nodes = here.map(function (i) { return tile(i, counts[i.id] || 0); }).filter(Boolean);
+      nodes = here.map(function (i) { return mk(i, counts[i.id] || 0); }).filter(Boolean);
     } else {
       const add = function (list, nama) {
-        const ts = list.map(function (i) { return tile(i, counts[i.id] || 0); }).filter(Boolean);
+        const ts = list.map(function (i) { return mk(i, counts[i.id] || 0); }).filter(Boolean);
         if (!ts.length) return;
         if (nama) { const h = el('li', 'grp-head'); h.append(el('h3', '', nama)); nodes.push(h); }
         nodes = nodes.concat(ts);
@@ -401,8 +404,12 @@
       nodes.push(qrTile());
     }
 
+    if (editing && Pub.addTile) nodes.push(Pub.addTile(folderId));
     $('list').replaceChildren.apply($('list'), nodes);
-    if (nodes.length) {
+    if (editing && Pub.afterRender) Pub.afterRender({ folderId: folderId, here: here });
+    if (nodes.length && !(editing && nodes.length === 1)) {
+      clearState();
+    } else if (editing) {
       clearState();
     } else if (folder) {
       showState('Folder ini masih kosong.', 'Belum ada isi yang ditampilkan di sini.');
@@ -426,6 +433,7 @@
     try {
       const fresh = await App.get({ action: 'public' }, { silent: !!cached });
       writeCache(fresh);
+      if (editing) { App.splash.hide(400); return; }
       if (!cached || JSON.stringify(cached) !== JSON.stringify(fresh)) {
         data = fresh;
         applySettings(fresh.settings);
@@ -446,7 +454,7 @@
 
   // Perubahan di Sheets tampil tanpa muat ulang: cek diam-diam saat tab dibuka kembali dan tiap menit.
   async function refreshQuiet() {
-    if (document.hidden || !data) return;
+    if (document.hidden || !data || editing) return;
     try {
       const fresh = await App.get({ action: 'public' }, { silent: true });
       writeCache(fresh);
@@ -465,6 +473,19 @@
     render();
     window.scrollTo(0, 0);
   });
+
+  // Pintu untuk edit.js (mode edit langsung di halaman utama).
+  const Pub = window.Pub = {
+    getData: function () { return data; },
+    setData: function (d) { data = d; applySettings(d.settings); },
+    setEditing: function (v) { editing = !!v; },
+    render: render,
+    tabList: tabList,
+    grupList: grupList,
+    folderId: currentFolderId,
+    curTab: function () { return tab; },
+    el: el
+  };
 
   load();
 })();
