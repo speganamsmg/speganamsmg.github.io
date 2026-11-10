@@ -422,6 +422,7 @@ button.ev:disabled:not(.open){opacity:.45;cursor:not-allowed}
 .rnote{font-size:13px;color:var(--dim);margin:0 0 8px}
 @media (max-width:640px){.tinputs{grid-template-columns:1fr}.tchip{font-size:13px;padding:5px 11px 5px 8px}}
 </style>
+<meta name="gbk-accent" content="#4C7DF0">
 </head>
 <body>
 <div id="vignette"></div>
@@ -1467,6 +1468,166 @@ applyCredit();
 renderSetup();
 refreshInfo();
 if(location.hash==="#tentang")setTimeout(showAbout,250);
+</script>
+
+
+
+
+<style id="gbk-skin">
+/* ===== GBK-SKIN: tampilan senada game RPL Game BK ===== */
+html:root[data-theme]{--f-head:"Nunito","Plus Jakarta Sans",system-ui,"Segoe UI",sans-serif;--f-body:"Nunito","Plus Jakarta Sans",system-ui,"Segoe UI",sans-serif;
+--bgm:#f3f6fd;--mesh:radial-gradient(52rem 40rem at 6% 28%,rgba(112,156,255,.46),transparent 62%),radial-gradient(44rem 34rem at 96% 8%,rgba(96,214,205,.34),transparent 62%),radial-gradient(48rem 36rem at 92% 92%,rgba(255,184,112,.46),transparent 62%),radial-gradient(40rem 26rem at 38% 104%,rgba(255,220,120,.28),transparent 62%);
+--ink:#2D2A3A;--muted:#5F5A74;--dim:#8A859A;--panel:#fff;--panel2:rgba(255,255,255,.78);--field:#fff;--mbg:rgba(40,50,90,.5);--glass:rgba(255,255,255,.86);--glass2:#fff;--line:#C9D2EA;--card:rgba(255,255,255,.9);--mcard:#fff;
+--cy:var(--ac,#2E9BD6);--mg:var(--ac,#2E9BD6);--gold:#B77A0A;--green:#188A55;--red:#D6453D;--vio:#6a54d6;--okbg:#DDF5E8;--nobg:#FDE3E0;--hintbg:#FFF1CC;--shadow:0 4px 0 rgba(45,42,58,.07),0 14px 26px rgba(45,42,58,.1)}
+html:root[data-theme=dark]{--bgm:#080e1d;--mesh:radial-gradient(52rem 40rem at 6% 28%,rgba(52,96,232,.42),transparent 62%),radial-gradient(44rem 34rem at 96% 8%,rgba(24,170,168,.26),transparent 62%),radial-gradient(48rem 36rem at 92% 92%,rgba(255,160,56,.2),transparent 62%),radial-gradient(40rem 26rem at 38% 104%,rgba(255,200,80,.12),transparent 62%);
+--ink:#F5F1FF;--muted:#B5AECD;--dim:#8f89aa;--panel:#2A2641;--panel2:rgba(42,38,65,.78);--field:#1f1c33;--mbg:rgba(4,6,18,.7);--glass:rgba(42,38,65,.82);--glass2:#352f55;--line:#4A4570;--card:rgba(36,32,58,.9);--mcard:#2A2641;
+--gold:#F5C451;--green:#62E2A9;--red:#FF918A;--vio:#b7a6ff;--okbg:rgba(52,211,153,.17);--nobg:rgba(248,113,113,.17);--hintbg:rgba(245,196,81,.15);--shadow:0 4px 0 rgba(0,0,0,.25),0 14px 26px rgba(0,0,0,.3)}
+html body{font-family:var(--f-body);font-weight:600;background:var(--bgm)!important;isolation:isolate}
+html body::before{content:"";position:fixed;inset:-10%;z-index:-1;pointer-events:none;background:var(--mesh)!important;animation:gbkdrift 28s ease-in-out infinite alternate;-webkit-mask-image:none!important;mask-image:none!important;opacity:1!important}
+@keyframes gbkdrift{from{transform:translate3d(-1.5%,-1%,0) scale(1)}to{transform:translate3d(1.5%,1.5%,0) scale(1.06)}}
+@media(prefers-reduced-motion:reduce){html body::before{animation:none}}
+h1,h2,h3,h4,.btn,.tb,.chipline,.pill{font-family:var(--f-head)!important;letter-spacing:0!important}
+h1,h2,h3{font-weight:900}
+.btn{border:2px solid var(--line)!important;border-radius:16px!important;background:var(--card);color:var(--ink);font-weight:900;box-shadow:0 3px 0 var(--line)!important;filter:none!important;transition:transform .08s,box-shadow .08s}
+.btn:active:not(:disabled){transform:translateY(3px)!important;box-shadow:0 0 0 var(--line)!important}
+.btn.primary,.btn.p,.btn.s{background:var(--ac)!important;color:var(--acx)!important;border-color:var(--acd)!important;box-shadow:0 4px 0 var(--acd)!important}
+.btn.good,.btn.g{background:#2FA96B!important;color:#fff!important;border-color:#1E7A4C!important;box-shadow:0 4px 0 #1E7A4C!important}
+.btn.r,.btn.bad,.btn.danger{background:#D6453D!important;color:#fff!important;border-color:#9E2E28!important;box-shadow:0 4px 0 #9E2E28!important}
+.btn.ghost{background:var(--card)!important;color:var(--ink)!important;border-color:var(--line)!important;box-shadow:0 3px 0 var(--line)!important}
+.btn.primary:active:not(:disabled),.btn.p:active:not(:disabled),.btn.s:active:not(:disabled),.btn.good:active:not(:disabled),.btn.g:active:not(:disabled){box-shadow:0 0 0 transparent!important}
+a.back,button.back,.tb,.stepper .sbtn,.pill,.seg,.chipline{border:2px solid var(--line)!important;box-shadow:0 2px 0 var(--line);background:var(--card)}
+.setup-card,.qcard,.end-card,.side .box,.panel,.hbox,.stat,.meter,.dice-box,.cellbox,.champ,.card,.judge,.lesson,.mode,.opt,.person,details.qi{border:2px solid var(--line)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.setup-card,.qcard,.end-card,.side .box,.card{border-radius:24px!important;box-shadow:0 4px 0 var(--line),var(--shadow)!important;background:var(--card)}
+.panel,.hbox,.stat,.meter,.dice-box,.cellbox,.mode,.opt,.person{box-shadow:0 3px 0 var(--line)}
+.opt:hover:not(:disabled),.mode:hover{box-shadow:0 3px 0 var(--ac)!important;border-color:var(--ac)!important;transform:translateY(-1px)}
+.mode.on,.mode.sel,.mode.active,.mode[aria-pressed=true]{border-color:var(--ac)!important;background:color-mix(in srgb,var(--ac) 16%,transparent)!important}
+.chipline{color:var(--ac)!important}
+.hero .cover{border:2px solid var(--line)!important;box-shadow:0 4px 0 var(--line),var(--shadow)!important}
+.setup-top{border-bottom:2px dashed var(--line)!important}
+#mcard{border:2px solid var(--line)!important;box-shadow:0 5px 0 var(--line),0 24px 60px rgba(0,0,0,.3)!important}
+::selection{background:var(--ac);color:var(--acx)}
+:focus-visible{outline:3px solid var(--ac)!important}
+input,select,textarea{font-weight:600}
+/* editor teks */
+#gbkFab{position:fixed;right:10px;bottom:10px;z-index:150;width:38px;height:38px;border-radius:13px;font-size:17px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-size:20px;box-shadow:0 2px 0 var(--line);cursor:pointer;display:grid;place-items:center;opacity:.55}
+#gbkFab:hover{opacity:1;border-color:var(--ac)}
+#gbkTx{position:fixed;inset:0;z-index:2000;background:var(--mbg);display:none;place-items:center;padding:12px}
+#gbkTx.on{display:grid}
+#gbkTx .bx{width:min(720px,100%);max-height:92vh;overflow:auto;background:var(--mcard,var(--panel));color:var(--ink);border:2px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 5px 0 var(--line),0 24px 60px rgba(0,0,0,.35)}
+#gbkTx h3{margin:0 0 4px;font-size:20px}#gbkTx p{margin:.3rem 0;color:var(--muted);font-size:13.5px}
+#gbkTx .r{margin:.5rem 0;padding:.5rem;border:2px solid var(--line);border-radius:12px}
+#gbkTx .r small{display:block;color:var(--muted);font-size:12px;margin-bottom:3px;word-break:break-word}
+#gbkTx input,#gbkTx textarea,#gbkTx select{width:100%;padding:8px 10px;border-radius:10px;border:2px solid var(--line);background:var(--field);color:var(--ink);font:inherit}
+#gbkTx .ac{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem;position:sticky;bottom:-18px;background:var(--mcard,var(--panel));padding:.6rem 0}
+#gbkTx .ch{border-color:var(--ac)!important;background:color-mix(in srgb,var(--ac) 12%,transparent)}
+@media print{#gbkFab,#gbkTx{display:none!important}}
+</style>
+<script id="gbk-skin-js">
+/* ===== GBK-SKIN: aksen warna + editor teks (nama game, deskripsi, semua teks tampilan) ===== */
+(function(){
+  var SLUG=(location.pathname.split("/").pop()||"game").replace(/\.html?$/,"")||"game";
+  var ID=(SLUG.replace(/[^a-z0-9-]/g,"-").slice(0,34)+"-teks").replace(/^-+/,"g");
+  var LS="bkteks_"+SLUG,ACC=(document.querySelector('meta[name="gbk-accent"]')||{}).content||"#2E9BD6";
+  var TXT={},AKSES="admin",DEF_ATTR=["placeholder","title","aria-label"];
+  function hex(h){h=h.replace("#","");return[0,2,4].map(function(i){return parseInt(h.substr(i,2),16)})}
+  function toHex(a){return"#"+a.map(function(v){return Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,"0")}).join("")}
+  (function(){var c=hex(ACC),lum=(0.299*c[0]+0.587*c[1]+0.114*c[2])/255,d=toHex(c.map(function(v){return v*.68})),s=document.documentElement.style;s.setProperty("--ac",ACC);s.setProperty("--acd",d);s.setProperty("--acx",lum>.62?"#2b1c00":"#fff")})();
+  var GKX=function(){return window.GameKit||null};
+  var isAdm=function(){try{return !!(GKX()&&GKX().auth&&GKX().auth.token())}catch(e){return false}};
+  var skip=function(n){var p=n.parentNode;return !p||/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA)$/.test(p.nodeName)||(p.closest&&p.closest("#gbkTx,#gbkFab"))};
+  var busy=false,mo=null;
+  function applyNode(n){
+    if(skip(n))return;var raw=n.nodeValue,t=raw.trim();if(!t)return;
+    var o=n.__o!==undefined?n.__o:t;
+    if(Object.prototype.hasOwnProperty.call(TXT,o)&&TXT[o]!==""){var m=raw.match(/^(\s*)[\s\S]*?(\s*)$/);var nv=m[1]+TXT[o]+m[2];if(raw!==nv){n.__o=o;n.nodeValue=nv}}
+    else if(n.__o!==undefined&&n.__o!==t&&!Object.prototype.hasOwnProperty.call(TXT,n.__o)){}
+  }
+  function applyAll(root){
+    busy=true;
+    try{
+      var w=document.createTreeWalker(root||document.body,NodeFilter.SHOW_TEXT,null),n,L=[];while(n=w.nextNode())L.push(n);L.forEach(applyNode);
+      (root||document).querySelectorAll&&(root||document).querySelectorAll("[placeholder],[title],[aria-label]").forEach(function(e){DEF_ATTR.forEach(function(a){if(!e.hasAttribute(a))return;var k="a:"+a,o=e["__o_"+a]!==undefined?e["__o_"+a]:e.getAttribute(a);if(Object.prototype.hasOwnProperty.call(TXT,o)&&TXT[o]!==""){e["__o_"+a]=o;e.setAttribute(a,TXT[o])}})});
+      var dt=TXT["@judul"];if(dt)document.title=dt;
+    }finally{busy=false}
+  }
+  function watch(){
+    if(mo)mo.disconnect();
+    mo=new MutationObserver(function(ms){if(busy)return;busy=true;try{ms.forEach(function(m){if(m.type==="characterData")applyNode(m.target);else m.addedNodes.forEach(function(a){if(a.nodeType===3)applyNode(a);else if(a.nodeType===1&&a.id!=="gbkTx")applyAll(a)})})}finally{busy=false}});
+    mo.observe(document.body,{childList:true,subtree:true,characterData:true});
+  }
+  function readLocal(){try{var l=JSON.parse(localStorage.getItem(LS)||"null");return l&&l.txt?l.txt:null}catch(e){return null}}
+  async function init(){
+    var srv=null;try{var G=GKX();if(G&&G.conf){var r=await G.conf.load(ID);if(r&&r.conf)srv=r.conf}}catch(e){}
+    if(srv){if(srv.akses==="publik"||srv.akses==="admin")AKSES=srv.akses;if(srv.txt&&typeof srv.txt==="object")TXT=Object.assign({},srv.txt)}
+    var l=readLocal();if(l)TXT=Object.assign(TXT,l);
+    applyAll();watch();
+  }
+  /* ----- editor ----- */
+  function collect(){
+    var seen={},out=[];
+    var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null),n;
+    while(n=w.nextNode()){if(skip(n))continue;var t=n.nodeValue.trim();if(!t||t.length>600)continue;if(/^[\d\s.,:%+\-–/×x]+$/.test(t))continue;
+      var o=n.__o!==undefined?n.__o:t;if(!seen[o]){seen[o]=1;out.push(o)}}
+    document.querySelectorAll("[placeholder]").forEach(function(e){var o=e.__o_placeholder!==undefined?e.__o_placeholder:e.getAttribute("placeholder");if(o&&!seen[o]){seen[o]=1;out.push(o)}});
+    return out;
+  }
+  function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+  var box=null,work=null,orig=null;
+  function toast(t){var d=document.createElement("div");d.textContent=t;d.style.cssText="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:3000;background:var(--panel);color:var(--ink);border:2px solid var(--line);border-radius:14px;padding:9px 16px;font-weight:800;box-shadow:0 3px 0 var(--line)";document.body.appendChild(d);setTimeout(function(){d.remove()},2600)}
+  async function openEd(){
+    if(!isAdm()&&AKSES!=="publik"){
+      var ok=null;try{ok=await GKX().auth.ensure()}catch(e){}
+      if(!ok||!isAdm()){toast("Mode ubah teks dikunci untuk admin");return}
+    }
+    work=Object.assign({},TXT);orig=collect();
+    var t0=(function(){var m=document.querySelector('meta[name="description"]');return{j:work["@judul"]||(document.title),d:work["@deskripsi"]||(m?m.content:"")}})();
+    work["@judul"]=work["@judul"]||"";
+    if(!box){box=document.createElement("div");box.id="gbkTx";document.body.appendChild(box)}
+    var adm=isAdm();
+    function render(q){q=(q||"").toLowerCase();
+      box.innerHTML='<div class="bx"><h3>✏️ Ubah teks game</h3><p>Ubah nama game, deskripsi, dan semua tulisan yang tampil di layar ini. Untuk teks di layar lain (hasil, soal, dsb.), tutup panel ini, buka layar tersebut, lalu tekan ✏️ lagi. Kosongkan kolom untuk kembali ke teks bawaan.</p>'
+      +'<div class="r ch"><small>Nama game (judul tab dan menu)</small><input data-k="@judul" value="'+esc(work["@judul"]||"")+'" placeholder="'+esc(document.title)+'"></div>'
+      +'<div class="r ch"><small>Deskripsi game</small><textarea rows="3" data-k="@deskripsi" placeholder="'+esc(t0.d)+'">'+esc(work["@deskripsi"]||"")+'</textarea></div>'
+      +(adm?'<div class="r"><small>Siapa boleh mengubah teks</small><select id="gbkAk"><option value="admin" '+(AKSES==="admin"?"selected":"")+'>Hanya admin (disimpan di server)</option><option value="publik" '+(AKSES==="publik"?"selected":"")+'>Semua pengguna (disimpan di perangkat masing-masing)</option></select></div>':"")
+      +'<input id="gbkQ" placeholder="🔍 Cari teks…" value="'+esc(q)+'" style="margin:.5rem 0">'
+      +orig.filter(function(o){return!q||o.toLowerCase().indexOf(q)>=0||String(work[o]||"").toLowerCase().indexOf(q)>=0}).map(function(o){var long=o.length>70||(work[o]||o).length>70;return'<div class="r"><small>'+esc(o)+'</small>'+(long?'<textarea rows="3" data-k="'+esc(o)+'" placeholder="'+esc(o)+'">'+esc(work[o]||"")+'</textarea>':'<input data-k="'+esc(o)+'" placeholder="'+esc(o)+'" value="'+esc(work[o]||"")+'">')+'</div>'}).join("")
+      +'<div class="ac"><button class="btn p" id="gbkSv">💾 Simpan</button><button class="btn" id="gbkRs">Kembalikan bawaan</button><button class="btn" id="gbkCn">Tutup</button></div></div>';
+      box.classList.add("on");
+      var q2=box.querySelector("#gbkQ");q2.oninput=function(){var p=q2.selectionStart;render(q2.value);var n=box.querySelector("#gbkQ");n.focus();n.setSelectionRange(p,p)};
+      box.querySelectorAll("[data-k]").forEach(function(e){e.oninput=function(){var v=e.value;if(v.trim()==="")delete work[e.dataset.k];else work[e.dataset.k]=v}});
+      box.querySelector("#gbkCn").onclick=function(){box.classList.remove("on")};
+      box.querySelector("#gbkRs").onclick=function(){if(confirm("Kembalikan semua teks ke bawaan?")){work={};save(true)}};
+      box.querySelector("#gbkSv").onclick=function(){save(false)};
+    }
+    async function save(reset){
+      var b=box.querySelector("#gbkSv");if(b)b.disabled=true;
+      var clean={};Object.keys(work).forEach(function(k){if(String(work[k]).trim()!=="")clean[k]=work[k]});
+      try{
+        var ak=box.querySelector("#gbkAk");var newAk=ak?ak.value:AKSES;
+        if(isAdm()){
+          var conf={v:1,akses:newAk,txt:clean};
+          try{await GKX().conf.save(ID,conf)}catch(e){if(e&&e.code==="CANCEL")throw e;toast("Server belum menerima, disimpan di perangkat ini: "+(e&&e.message||"galat"));localStorage.setItem(LS,JSON.stringify({_lokal:1,txt:clean}))}
+          if(newAk==="admin"||true){try{localStorage.removeItem(LS)}catch(e){}}
+          AKSES=newAk;
+        }else{try{localStorage.setItem(LS,JSON.stringify({_lokal:1,txt:clean}))}catch(e){}}
+        // kembalikan teks bawaan dahulu agar penggantian baru dihitung dari teks asli
+        revert();TXT=clean;applyAll();
+        box.classList.remove("on");toast(reset?"Teks dikembalikan ke bawaan":(isAdm()?"Tersimpan":"Tersimpan di perangkat ini"));
+      }catch(e){if(b)b.disabled=false;toast(e&&e.code==="CANCEL"?"Belum tersimpan (password dibatalkan)":"Gagal menyimpan: "+(e&&e.message||"galat"))}
+    }
+    render("");
+  }
+  function revert(){
+    busy=true;try{var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null),n;while(n=w.nextNode()){if(n.__o!==undefined&&!skip(n)){var m=n.nodeValue.match(/^(\s*)[\s\S]*?(\s*)$/);n.nodeValue=m[1]+n.__o+m[2];delete n.__o}}
+      document.querySelectorAll("[placeholder],[title],[aria-label]").forEach(function(e){DEF_ATTR.forEach(function(a){if(e["__o_"+a]!==undefined){e.setAttribute(a,e["__o_"+a]);delete e["__o_"+a]}})})}finally{busy=false}
+  }
+  function boot(){
+    var f=document.createElement("button");f.id="gbkFab";f.type="button";f.title="Ubah teks game";f.setAttribute("aria-label","Ubah teks game");f.textContent="✏️";f.onclick=openEd;document.body.appendChild(f);
+    var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap";document.head.appendChild(l);
+    init();
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
+})();
 </script>
 </body>
 </html>

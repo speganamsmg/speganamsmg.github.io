@@ -246,7 +246,7 @@
           tag: ['Permainan umum', 'Berkelompok', 'Proyektor / IFP'] },
         { href: 'bk-millionaire.html', judul: 'BK Millionaire', label: 'Kuis tangga hadiah · berkelompok, tanpa HP',
           isi: 'Kuis BK ala Millionaire yang dimainkan per kelompok bergantian di satu layar yang dikendalikan guru, tanpa HP dan tanpa server. Mendaki 8 anak tangga dengan titik aman, tiga bantuan (50:50, ganti soal, tanya kelompok lain), papan peringkat, serta soal dan aturan yang bisa diatur.',
-          tag: ['Permainan umum', 'Kuis', 'HP murid'] },
+          tag: ['Permainan umum', 'Kuis', 'Berkelompok', 'Tanpa HP'] },
         { href: 'detektif-konflik.html', judul: 'Detektif Konflik (rancangan siswa)', label: 'Detektif · rancangan Kelas 9B',
           isi: 'Kumpulkan bukti dari dua sisi cerita, pecahkan kasus pertemanan, jaga meteran kepercayaan, dan pimpin Sidang Damai. Rancangan siswa Kelas 9B.',
           tag: ['Permainan umum', 'Rancangan siswa', 'Berkelompok'] },
@@ -326,7 +326,13 @@
         });
         f.forEach(function (x) { if (!used['f:' + x.id]) { used['f:' + x.id] = 1; a.push(['f:' + x.id, '']); } });
         ORDER.forEach(function (g) { var k = 'g:' + g.href; if (!used[k]) { used[k] = 1; a.push([k, '']); } });
-        var L = { v: 1, f: f, a: a, vw: (o && (o.vw === 'grid' || o.vw === 'compact' || o.vw === 'list')) ? o.vw : 'list' };
+        var m = {};
+        if (o && o.m && typeof o.m === 'object') Object.keys(o.m).forEach(function (h) {
+          if (!BYKEY['g:' + h] || !o.m[h] || typeof o.m[h] !== 'object') return;
+          var r = {}; ['layanan', 'judul', 'label', 'isi'].forEach(function (k) { var v = o.m[h][k]; if (typeof v === 'string' && v.trim()) r[k] = v.trim().slice(0, k === 'isi' ? 700 : 120); });
+          if (Object.keys(r).length) m[h] = r;
+        });
+        var L = { v: 1, f: f, a: a, m: m, vw: (o && (o.vw === 'grid' || o.vw === 'compact' || o.vw === 'list')) ? o.vw : 'list' };
         L.a.forEach(function (x) { if (x[0].indexOf('f:') === 0 && (cyc(L, x[0].slice(2)) || depth(L, x[0].slice(2)) > MAXD)) x[1] = ''; });
         return L;
       }
@@ -384,7 +390,9 @@
 
       /* ---- Gambar daftar ---- */
       function cur() { return st.edit ? st.work : layout; }
+      function merged(g) { var L = cur(), m = L && L.m && L.m[g.href]; return m ? Object.assign({}, g, m) : g; }
       function gameRow(g, no, ctl) {
+        g = merged(g);
         var li = el('li', 'gbk-row'); if (WARNA[g.href]) li.style.setProperty('--ac', WARNA[g.href]);
         var t = el('div', 'tt'); t.append(el('b', '', g.layanan || g.judul));
         var sm = el('small'), em = el('em', '', g.judul); if (g.layanan) sm.append(em, document.createTextNode(' · ' + g.label)); else sm.append(el('em', '', 'Umum'), document.createTextNode(' · ' + g.label)); t.append(sm);
@@ -436,6 +444,30 @@
             var par = parentOf(L, id); L.a.forEach(function (x) { if (x[1] === id) x[1] = par; });
             L.a = L.a.filter(function (x) { return x[0] !== key; }); L.f = L.f.filter(function (x) { return x.id !== id; });
             if (curId() === id) location.hash = par ? '#/f/' + par : '#/'; else render();
+          }));
+        }
+        if (key.indexOf('g:') === 0) {
+          var href = key.slice(2), g0 = BYKEY[key];
+          c.append(btn('✏️', 'Ubah nama dan deskripsi game', async function () {
+            var cur0 = Object.assign({}, g0, (L.m || {})[href] || {}), fld = {};
+            var ok = await dialog({
+              title: 'Ubah nama & deskripsi game', ok: 'Simpan', text: 'Kosongkan kolom untuk kembali ke teks bawaan.',
+              build: function () {
+                var w = el('div', 'gbk-pick');
+                [['layanan', g0.layanan ? 'Judul utama (nama layanan)' : null], ['judul', 'Nama game'], ['label', 'Keterangan singkat'], ['isi', 'Deskripsi (jendela Info)']].forEach(function (d) {
+                  if (!d[1]) return;
+                  w.append(el('div', 'gbk-lb2', d[1]));
+                  var i = d[0] === 'isi' ? el('textarea', 'gbk-in') : el('input', 'gbk-in');
+                  if (d[0] === 'isi') i.rows = 4; i.maxLength = d[0] === 'isi' ? 700 : 120; i.value = cur0[d[0]] || ''; i.placeholder = g0[d[0]] || ''; fld[d[0]] = i; w.append(i);
+                });
+                return w;
+              }
+            });
+            if (!ok) return;
+            L.m = L.m || {}; var r = {};
+            Object.keys(fld).forEach(function (k) { var v = fld[k].value.trim(); if (v && v !== g0[k]) r[k] = v; });
+            if (Object.keys(r).length) L.m[href] = r; else delete L.m[href];
+            render();
           }));
         }
         c.append(moveSel(L, key)); return c;
@@ -516,7 +548,7 @@
         tools.append(el('span', 'gbk-tl', 'Mode atur folder'), add, vs, sv, bt, lo);
       }
       async function simpan() {
-        var conf = { v: 1, f: st.work.f, a: st.work.a, vw: st.work.vw || 'list' };
+        var conf = { v: 1, f: st.work.f, a: st.work.a, m: st.work.m || {}, vw: st.work.vw || 'list' };
         for (var n = 0; n < 2; n++) {
           var t = await ensureTok(); if (!t) return;
           try {
