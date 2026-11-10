@@ -460,6 +460,71 @@ html[data-g="keberagaman"][data-theme="dark"]{--sk1:#10191E;--sk2:#34505E}
 #bg::after{background:transparent!important}
 :root[data-theme=dark] #bg::after{background:rgba(8,14,29,.10)!important}
 
+/* ===== v15: bentuk tetap berwarna (tidak melebur ke latar), kelompok per kasus, materi bergaya slide ===== */
+:root{--cb:var(--ol)}
+:root[data-theme=dark]{--cb:#6A76E6}
+:root[data-theme=dark] .card,:root[data-theme=dark] .mod .box,:root[data-theme=dark] .head,:root[data-theme=dark] .hero{border-color:var(--cb)}
+:root[data-theme=dark] .btn:not(.pri):not(.sec),:root[data-theme=dark] .ib,:root[data-theme=dark] .turn span,:root[data-theme=dark] textarea,:root[data-theme=dark] input[type=text],:root[data-theme=dark] input[type=number],:root[data-theme=dark] select{border-color:var(--cb)}
+:root[data-theme=dark] .card{background:linear-gradient(180deg,color-mix(in srgb,var(--c1) 14%,var(--card)),var(--card) 46%)}
+:root[data-theme=dark] .card::before{content:"";display:block;height:0}
+.card h3{color:var(--c1)}
+:root[data-theme=dark] .card h3{color:color-mix(in srgb,var(--c1) 70%,#fff)}
+.gate .btn.lg{margin-top:12px}
+/* studi kasus per kelompok */
+.kmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:10px}
+.kg{position:relative;text-align:left;border:3px solid var(--ol);border-radius:16px;background:var(--card);color:var(--ink);padding:10px 14px;box-shadow:0 4px 0 var(--ol);font:inherit;cursor:pointer}
+.kg b{display:block;font-size:17px;font-weight:900}.kg small{display:block;margin-top:2px;font-size:13px;font-weight:700;opacity:.8}
+.kg.on{background:var(--c1);color:#fff;border-color:var(--ol)}
+.kg.done i{position:absolute;right:10px;top:8px;font-style:normal;font-weight:900}
+.kg:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ol)}
+.kh{display:flex;gap:10px 14px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.kgn{background:var(--c2);color:#1E2A5C;border:3px solid var(--ol);border-radius:99px;padding:4px 16px;font-weight:900;box-shadow:0 3px 0 var(--ol)}
+.kh h3{margin:0;flex:1;min-width:220px;font-size:clamp(22px,2.8vw,34px);color:var(--ink)!important}
+.ksw{font-size:13px;font-weight:800;color:var(--muted);display:flex;align-items:center;gap:6px}.ksw select{width:auto;padding:5px 8px;font-size:14px}
+.ksteps{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.kstp{border:3px solid var(--ol);border-radius:99px;background:var(--card);color:var(--ink);padding:6px 16px;font:inherit;font-weight:900;box-shadow:0 3px 0 var(--ol);cursor:pointer}
+.kstp.on{background:var(--c1);color:#fff}.kstp.guru{border-style:dashed}
+.kbody{font-size:clamp(22px,2.7vw,36px);line-height:1.45;font-weight:800;padding:8px 4px 16px;min-height:200px}
+.kbody.guru{background:var(--tint);border:3px dashed var(--cb);border-radius:18px;padding:16px 20px;font-size:clamp(18px,2.1vw,28px)}
+.kguru{font-size:13px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.kul{margin:0;padding-left:1.1em}.kul li{margin:12px 0}.kul li::marker{color:var(--c1)}
+.kp{margin:0}
+/* materi bergaya slide */
+.page.slides{max-width:1240px}
+.deck{display:flex;flex-direction:column;gap:14px;min-height:calc(100vh - 190px)}
+.sld{flex:1;position:relative;background:var(--card);border:3px solid var(--cb);border-radius:30px;box-shadow:0 7px 0 var(--ol);padding:clamp(26px,4.4vw,64px) clamp(22px,4.4vw,64px) clamp(26px,4vw,56px);display:flex;flex-direction:column;justify-content:center;overflow:hidden;animation:slide .3s ease}
+.sld::before{content:"";position:absolute;left:0;right:0;top:0;height:16px;background:var(--c1);border-bottom:3px solid var(--ol)}
+.sk{font-weight:900;font-size:clamp(13px,1.35vw,18px);letter-spacing:.12em;text-transform:uppercase;color:var(--c1);margin-top:10px}
+:root[data-theme=dark] .sk{color:color-mix(in srgb,var(--c1) 70%,#fff)}
+.st{margin:10px 0 clamp(16px,2.4vw,30px);font-size:clamp(34px,5vw,66px);line-height:1.08;font-weight:900}
+.sb{padding-right:clamp(0px,15vw,200px)}
+.sl{list-style:none;margin:0;padding:0}
+.sl li{display:flex;gap:clamp(12px,1.6vw,22px);align-items:flex-start;margin:clamp(10px,1.5vw,20px) 0;font-size:clamp(22px,2.9vw,42px);line-height:1.32;font-weight:800}
+.sl li i{flex:none;width:1.55em;height:1.55em;border-radius:50%;background:var(--c1);color:#fff;border:3px solid var(--ol);display:grid;place-items:center;font-style:normal;font-size:.62em;font-weight:900;box-shadow:0 3px 0 var(--ol);margin-top:.18em}
+.sp{font-size:clamp(24px,3.2vw,46px);line-height:1.4;font-weight:800;margin:0}
+.sbig{font-size:clamp(28px,4vw,56px);line-height:1.2;font-weight:900}
+.sfoot{margin-top:18px;font-size:clamp(15px,1.7vw,22px);color:var(--muted);font-weight:700}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.sg{border:3px solid var(--ol);border-radius:18px;padding:12px 16px;background:var(--tint)}.sg h4{margin:0 0 6px;font-size:20px}.sg .k{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--c1)}.sg p{margin:2px 0 8px;font-size:17px;line-height:1.45}
+.smas{position:absolute;right:clamp(10px,2.4vw,34px);bottom:6px;pointer-events:none}.smas img{height:clamp(90px,14vw,190px);width:auto;filter:drop-shadow(0 4px 0 rgba(30,42,92,.22))}
+.sld.title{align-items:center;text-align:center}
+.sti .stm img{height:clamp(120px,22vw,230px);width:auto;animation:bob 2.4s ease-in-out infinite;filter:drop-shadow(0 5px 0 rgba(30,42,92,.22))}
+.sti .st{font-size:clamp(38px,6.2vw,84px)}.ssub{font-size:clamp(18px,2.2vw,28px);color:var(--muted);font-weight:800;margin:0 auto;max-width:780px}
+.sgo{display:inline-block;margin-top:22px;border:3px dashed var(--cb);border-radius:99px;padding:6px 20px;font-weight:800;color:var(--muted);font-size:15px}
+.dnav{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ddots{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;flex:1}
+.dd{width:15px;height:15px;border-radius:50%;border:3px solid var(--ol);background:var(--card);padding:0;cursor:pointer}
+.dd.past{background:var(--c1)}.dd.on{background:var(--c2);transform:scale(1.3)}
+:root[data-theme=dark] .dd{border-color:var(--cb)}
+@media(max-width:760px){.sb{padding-right:0}.smas{display:none}.dnav .btn{padding:9px 12px;font-size:14px}}
+.kh h3{text-transform:none!important;letter-spacing:0!important}
+
+/* kolom isi: latar belakang tidak jelas di dalam garis; sisi kiri-kanan tetap terlihat */
+#app{background:color-mix(in srgb,var(--bg) 93%,transparent)!important}
+:root[data-theme=dark] #app{background:color-mix(in srgb,var(--bg) 94%,transparent)!important}
+select option{background:var(--card);color:var(--ink)}
+:root[data-theme=dark] select{color-scheme:dark}
+
 
 </style>
 </head>
@@ -593,6 +658,10 @@ const SIDE={
  reproduksi:o=>[mag(76,226,1.2)+stmp(126,230,.9,"FAKTA"),stmp(692,262,1,"MITOS","#E5504D")+mag(738,250,.9),mag(604,372,1.1)+stmp(640,376,.8,"FAKTA"),stmp(200,382,.9,"MITOS","#E5504D")+star5(250,372,.6,"#fff")],
  keberagaman:o=>[heart(76,226,1.1,"#E5668B")+star5(122,214,.8),flag(692,262,1.1,"#43A65B")+heart(738,250,.8,"#FFD23F"),star5(600,368,1.1)+heart(638,374,.8,"#8FD3F4"),heart(200,380,.9,"#B58CF0")+flag(246,386,.7,"#E5504D")],
  wirausaha:o=>[bulb(76,226,1.2)+coin2(124,232,.9),crate(690,262,1)+coin2(738,250,.8),coin2(604,372,1)+bulb(640,376,.8),coins(200,382,1)+coin2(238,370,.7)],
+ karier:o=>[flag(76,226,1.2)+star5(122,214,.7),star5(692,250,1)+flag(738,262,.8,"#43A65B"),flag(604,372,.9,"#E5504D")+star5(640,372,.7),star5(200,380,.9)+flag(240,382,.6,"#FFD23F")],
+ millioner:o=>[coins(70,228,1.2)+coin2(120,232,.9),coin2(692,250,1)+star5(738,246,.8),coins(600,378,1)+star5(634,372,.7),coin2(200,380,1)+star5(240,372,.6,"#fff")],
+ detektif:o=>[mag(76,226,1.2)+stmp(126,230,.9,"BUKTI","#E5504D"),frame(692,262,1.1)+mag(738,250,.9),stmp(600,374,.9,"KASUS")+star5(646,372,.6),mag(200,382,.9)+star5(240,372,.6,"#fff")],
+ escape:o=>[clock(70,222,1.1)+chk(118,230,.8),shield(692,256,1.1)+star5(740,246,.7),chk(600,372,1.1)+clock(636,374,.7),star5(200,382,.9)+clock(240,380,.6)],
 };
 function scene(g){
   g=g||GID;
@@ -741,6 +810,36 @@ function scene(g){
      ${bubble(-66,-96,1,"#fff",heart(0,-1,.6))}
      ${bubble(68,-78,.9,"var(--c2)",`<circle cx="-7" cy="-1" r="2.4" fill="var(--ol)"/><circle cx="0" cy="-1" r="2.4" fill="var(--ol)"/><circle cx="7" cy="-1" r="2.4" fill="var(--ol)"/>`)}
      ${bubble(76,-30,.7,"#fff",`<path d="M-8 -1l5 5l11 -10" fill="none" stroke="#43A65B" stroke-width="3" stroke-linecap="round"/>`)}
+   </g>`,
+   karier:`<g transform="translate(62 0) scale(.92)">
+     <rect x="-100" y="-22" width="52" height="22" rx="5" fill="var(--c2)" ${OL}/>
+     <rect x="-50" y="-48" width="52" height="48" rx="5" fill="#fff" ${OL}/>
+     <rect x="0" y="-76" width="52" height="76" rx="5" fill="var(--c1)" ${OL}/>
+     ${flag(26,-76,1.5,"#E5504D")}
+     <g transform="translate(78 0)"><path d="M0 0V-96M26 0V-96" stroke="var(--ol)" stroke-width="5" stroke-linecap="round"/><path d="M0 0V-96M26 0V-96" stroke="#E8B25A" stroke-width="2.2" stroke-linecap="round"/>${[-14,-34,-54,-74].map(y=>`<path d="M0 ${y}H26" stroke="var(--ol)" stroke-width="4.5" stroke-linecap="round"/>`).join("")}</g>
+     <path d="M-96 -26c14 -26 30 14 44 -12s30 -6 36 -26" fill="none" stroke="var(--ol)" stroke-width="12" stroke-linecap="round"/><path d="M-96 -26c14 -26 30 14 44 -12s30 -6 36 -26" fill="none" stroke="#6BC85A" stroke-width="7" stroke-linecap="round"/>
+     <circle cx="-14" cy="-66" r="9" fill="#6BC85A" ${OL2}/><circle cx="-17" cy="-68" r="1.8" fill="var(--ol)"/><circle cx="-11" cy="-68" r="1.8" fill="var(--ol)"/>
+     ${star5(-70,-70,1.2)}${star5(112,-112,.9)}
+   </g>`,
+   millioner:`<g transform="translate(62 0) scale(.92)">
+     <rect x="-96" y="-30" width="64" height="30" rx="5" fill="#fff" ${OL}/><rect x="-32" y="-58" width="64" height="58" rx="5" fill="var(--c2)" ${OL}/><rect x="32" y="-20" width="64" height="20" rx="5" fill="var(--c1)" ${OL}/>
+     <text x="-64" y="-9" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="18" fill="var(--ol)">2</text><text x="0" y="-26" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="26" fill="var(--ol)">1</text><text x="64" y="-5" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="16" fill="#fff">3</text>
+     <path d="M-20 -62h40v14a20 20 0 0 1 -40 0z" fill="#FFD23F" ${OL}/><path d="M-20 -58h-10a10 10 0 0 0 10 16M20 -58h10a10 10 0 0 1 -10 16" fill="none" stroke="var(--ol)" stroke-width="3" stroke-linecap="round"/><path d="M0 -36v10M-10 -26h20" stroke="var(--ol)" stroke-width="4" stroke-linecap="round"/>
+     ${star5(0,-96,1.4)}${coins(-86,-30,1.1)}${coin2(84,-60,1.1)}${coin2(-60,-86,.9)}
+   </g>`,
+   detektif:`<g transform="translate(62 0) scale(.92)">
+     <rect x="-96" y="-70" width="70" height="70" rx="6" fill="#fff" ${OL}/><rect x="-96" y="-70" width="70" height="16" rx="6" fill="var(--c1)" ${OL}/>
+     <path d="M-84 -42h46M-84 -30h36M-84 -18h42" stroke="var(--ol)" stroke-width="3.4" stroke-linecap="round"/>
+     <circle cx="12" cy="-72" r="34" fill="#CFE9F7" ${OL}/><circle cx="12" cy="-72" r="26" fill="#EAF7FD" stroke="var(--ol)" stroke-width="2" opacity=".9"/><path d="M-1 -84q8 -10 22 -6" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none"/>
+     <path d="M38 -48l36 46" stroke="var(--ol)" stroke-width="15" stroke-linecap="round"/><path d="M38 -48l36 46" stroke="var(--c2)" stroke-width="8" stroke-linecap="round"/>
+     <text x="12" y="-62" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="32" fill="var(--ol)">?</text>
+     ${stmp(60,-100,1.1,"BUKTI","#E5504D")}
+   </g>`,
+   escape:`<g transform="translate(62 0) scale(.92)">
+     <rect x="-40" y="-130" width="80" height="130" rx="12" fill="var(--c1d)" ${OL}/><rect x="-30" y="-120" width="60" height="110" rx="8" fill="var(--c1)" ${OL2}/>
+     <rect x="-22" y="-110" width="44" height="92" rx="5" fill="#FFE98A" ${OL2}/><circle cx="14" cy="-60" r="5" fill="var(--ol)"/><rect x="-18" y="-100" width="36" height="12" rx="3" fill="#fff" opacity=".6"/>
+     <path d="M-86 -22h38" stroke="var(--ol)" stroke-width="12" stroke-linecap="round"/><path d="M-86 -22h38" stroke="#FFD23F" stroke-width="6" stroke-linecap="round"/><circle cx="-92" cy="-22" r="13" fill="#FFD23F" ${OL}/><circle cx="-92" cy="-22" r="5" fill="var(--ol)"/><path d="M-62 -22v10M-52 -22v8" stroke="var(--ol)" stroke-width="5" stroke-linecap="round"/>
+     ${clock(78,-96,1.7)}${chk(80,-34,1.3)}
    </g>`
   }[g]||"";
   const SD=SIDE[g]?SIDE[g]():[tree(70,228,.9)+bush(120,229,1)+flower(100,232,"#FFD23F"),pine(690,260,.9)+flower(735,264,"#FF8FA3"),bush(600,378,1),flower(200,380,"#fff")];
@@ -824,7 +923,7 @@ const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;"
 const fmt=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
 let S=load();
 function glJml(){try{const n=Math.round(+(JSON.parse(localStorage.getItem("bk_global")||"{}").jml));return n>=2&&n<=6?n:4}catch(e){return 4}}
-function newS(){return {setup:false,kelas:"",names:Array.from({length:glJml()},(_,i)=>"Kelompok "+"ABCDEF"[i]),i:0,visited:{},tally:{},obs:{},hasil:{},notes:{},plans:{},g:null,turn:0,jalur:0,start:Date.now()}}
+function newS(){return {setup:false,kelas:"",names:Array.from({length:glJml()},(_,i)=>"Kelompok "+"ABCDEF"[i]),grouped:false,kg:0,ks:0,km:{},kdone:{},sl:{},i:0,visited:{},tally:{},obs:{},hasil:{},notes:{},plans:{},g:null,turn:0,jalur:0,start:Date.now()}}
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&s.names)return Object.assign(newS(),s)}catch(e){}return null}
 function save(){try{if(S)localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
@@ -907,20 +1006,16 @@ function renderSetup(){
   setChrome("setup");
   const tot=FASE.reduce((a,f)=>a+f.menit,0),old=S&&S.setup,st=S||newS();
   $("#main").innerHTML=`<div class="setup"><div class="head"><div class="tahap">Persiapan · ${tot} menit (${Math.round(tot/40)} JP)</div></div>
-   <h1>Siapkan Tim Detektif Kelas</h1>
-   <div class="card" style="display:flex;gap:14px;align-items:center">${mascot("happy",90)}<p class="txt" style="margin:0">Isi kelas dan jumlah kelompok. Kelompok akan bergiliran bermain, dan layar dipegang guru.</p></div>
+   <h1>Siapkan Sesi</h1>
+   <div class="card" style="display:flex;gap:14px;align-items:center">${mascot("happy",90)}<p class="txt" style="margin:0">Cukup isi kelas. Kelompok dibentuk nanti, tepat pada tahap yang membutuhkannya sesuai alur RPL. Layar dipegang guru.</p></div>
    <div class="card"><h3>Pengaturan sesi</h3>
-     <label class="f">Kelas</label><input type="text" id="kelas" maxlength="20" placeholder="contoh: 9A" value="${esc(st.kelas)}">
-     <label class="f">Jumlah kelompok</label><select id="jml">${[2,3,4,5,6].map(n=>`<option ${n===st.names.length?"selected":""}>${n}</option>`).join("")}</select>
-     <div id="nms"></div></div>
+     <label class="f">Kelas</label><input type="text" id="kelas" maxlength="20" placeholder="contoh: 9A" value="${esc(st.kelas)}"></div>
    <div class="card"><h3>Alur sesi</h3><ol class="alur">${FASE.filter(f=>f.menit).map(f=>`<li>${esc(f.judul)}<span>${f.menit} mnt</span></li>`).join("")}<li>Laporan asesmen (PDF / Excel)<span>setelah sesi</span></li></ol></div>
    <div class="mact" style="justify-content:space-between"><button class="btn" id="sBack">← Kembali</button><button class="btn pri lg" id="go">▶ Mulai!</button></div></div>`;
-  $("#main").querySelector("h1").textContent="Siapkan Kelompok";
-  const paintN=()=>{const n=+$("#jml").value;$("#nms").innerHTML=Array.from({length:n},(_,i)=>`<label class="f">Nama kelompok ${i+1}</label><input type="text" class="nm" maxlength="22" value="${esc(st.names[i]||"Kelompok "+String.fromCharCode(65+i))}">`).join("")};
-  paintN();$("#jml").onchange=paintN;$("#sBack").onclick=renderMenu;
+  $("#sBack").onclick=renderMenu;
   $("#go").onclick=async()=>{
     if(old){const v=await modal(`<h2>Mulai sesi baru?</h2><p class="txt">Sesi yang tersimpan (observasi, rencana, catatan) akan diganti.</p><div class="mact"><button class="btn" data-v="no">Batal</button><button class="btn pri" data-v="yes">Ya, mulai baru</button></div>`);if(v!=="yes")return}
-    const n=newS();n.kelas=$("#kelas").value.trim();n.names=[...document.querySelectorAll(".nm")].map((e,i)=>e.value.trim()||"Kelompok "+String.fromCharCode(65+i));n.setup=true;S=n;save();enterSesi();
+    const n=newS();n.kelas=$("#kelas").value.trim();n.setup=true;S=n;save();enterSesi();
   };
 }
 /* ---------- sesi ---------- */
@@ -942,7 +1037,13 @@ function renderPath(){
 const noteBox=(id,j,p)=>`<div class="card"><h3>${j||"📝 Catatan guru"}</h3><textarea data-note="${id}" placeholder="${esc(p||"Catat hal penting yang Anda amati…")}">${esc(S.notes[id]||"")}</textarea></div>`;
 const li=a=>a.map(x=>`<li>${esc(x)}</li>`).join("");
 const safeBig=s=>esc(s).replace(/&lt;br\s*\/?&gt;/g,"<br>").replace(/&amp;nbsp;/g,"&nbsp;");
+const isKasus=f=>!!(f.kasus||f.id==="kasus")&&(f.cards||[]).some(c=>c.grid&&c.grid.length);
+const isSlide=f=>!!(f.slide||f.id==="konsep")&&(f.cards||[]).length>0;
+const needGroups=f=>f.tipe==="game"||f.tipe==="rencana"||f.tipe==="akhir"||!!f.turn||isKasus(f);
 function bodyFase(f){
+  if(needGroups(f)&&!S.grouped)return groupGate(f);
+  if(isKasus(f))return kasusHtml(f);
+  if(isSlide(f))return slideHtml(f);
   switch(f.tipe){
   case"pemantik":return cardsHtml(f.cards)+`<div class="card"><h3>❓ Pertanyaan pemantik (asesmen awal)</h3><div class="big">“${esc(RPL.pemantik)}”</div>
     <p class="txt">${RPL.tally?"Catat sebaran jawaban murid (ketuk tombol), lalu dengarkan alasan mereka.":"Dengarkan jawaban murid secara lisan atau tertulis, lalu catat poin pentingnya."}</p>
@@ -968,21 +1069,26 @@ function obsTable(kind,ind){
 }
 function renderSesi(){
   const f=FASE[S.i];S.visited[f.id]=1;renderPath();
-  $("#main").innerHTML=`<div class="page"><div class="head"><div class="tahap">${esc(f.tahap)}</div><h2>${esc(f.judul)}</h2></div>${bodyFase(f)}</div>`;
+  const sl=isSlide(f)&&(!needGroups(f)||S.grouped);
+  $("#main").innerHTML=`<div class="page${sl?" slides":""}">${sl?"":`<div class="head"><div class="tahap">${esc(f.tahap)}</div><h2>${esc(f.judul)}</h2></div>`}${bodyFase(f)}</div>`;
   $("#main").scrollTop=0;$(".tmw").classList.toggle("hidden",!f.menit);
   $("#bPrev").disabled=S.i<=0;$("#bNext").classList.toggle("hidden",S.i>=FASE.length-1);
   $("#bNext").innerHTML=IC("next");$("#bNext").title=S.i>=FASE.length-2?"Selesai":"Lanjut";
   tmPaint();
   if(f.tipe==="laporan"){$("#bRep").onclick=showReport;$("#bXls").onclick=unduhXlsx}
-  if(f.tipe==="game")gameBind();
+  if(f.tipe==="game"&&S.grouped)gameBind();
+  if($("#deck"))slideBind(f);
+  if(!S.grouped&&needGroups(f))groupBind();
   save();
 }
 $("#bPrev").onclick=()=>goFase(S.i-1);$("#bNext").onclick=()=>goFase(S.i+1);
 $("#tmb").onclick=tmToggle;
 $("#tmr").onclick=()=>{const f=FASE[S.i];tmStop();TM.left=f.menit*60;S.tm=S.tm||{};S.tm[f.id]=TM.left;tmPaint()};
 $("#bTools").onclick=async()=>{
-  const v=await modal(`<h2>🧰 Alat guru</h2><div class="tools"><button class="btn" data-v="obs">📋 Observasi proses layanan</button><button class="btn" data-v="rep">📄 Laporan asesmen (PDF / Excel)</button><button class="btn" data-v="info">ℹ Info game & isi RPL</button><button class="btn" data-v="menu">🏠 Kembali ke menu (sesi tersimpan)</button></div><div class="mact"><button class="btn" data-v="x">Tutup</button></div>`);
-  if(v==="obs")modal(`<h2>📋 Observasi proses layanan</h2><p class="txt" style="color:var(--muted);font-size:15px">Ketuk sel untuk mengganti: – / Tampak / Perlu didorong.</p>${obsTable("obs",RPL.indProses)}<div class="mact"><button class="btn pri" data-v="x">Selesai</button></div>`);
+  const v=await modal(`<h2>🧰 Alat guru</h2><div class="tools"><button class="btn" data-v="grp">👥 ${S.grouped?"Ubah kelompok":"Bentuk kelompok"}</button><button class="btn" data-v="obs">📋 Observasi proses layanan</button><button class="btn" data-v="rep">📄 Laporan asesmen (PDF / Excel)</button><button class="btn" data-v="info">ℹ Info game & isi RPL</button><button class="btn" data-v="menu">🏠 Kembali ke menu (sesi tersimpan)</button></div><div class="mact"><button class="btn" data-v="x">Tutup</button></div>`);
+  if(v==="grp")openGroups();
+  else if(v==="obs"&&!S.grouped)modal(`<h2>📋 Observasi proses layanan</h2><p class="txt">Kelompok belum dibentuk. Observasi dicatat per kelompok, jadi bentuk kelompok dulu pada tahap Studi Kasus (atau lewat tombol Bentuk kelompok).</p><div class="mact"><button class="btn pri" data-v="x">Mengerti</button></div>`);
+  else if(v==="obs")modal(`<h2>📋 Observasi proses layanan</h2><p class="txt" style="color:var(--muted);font-size:15px">Ketuk sel untuk mengganti: – / Tampak / Perlu didorong.</p>${obsTable("obs",RPL.indProses)}<div class="mact"><button class="btn pri" data-v="x">Selesai</button></div>`);
   else if(v==="rep")goFase(FASE.length-1);
   else if(v==="info")openInfo();
   else if(v==="menu")renderMenu();
@@ -1011,6 +1117,104 @@ function rencanaHtml(){
    <div class="turn">${S.names.map((n,k)=>`<span data-plan="${k}" class="${k===i?"on":""}" style="cursor:pointer">${esc(n)}</span>`).join("")}</div>
    ${FIELDS.map(fl=>`<label class="f">${esc(fl.l)}</label><textarea data-pf="${fl.k}" style="min-height:64px">${esc(p[fl.k]||"")}</textarea>`).join("")}</div>${noteBox("rencana","📝 Masukan antar kelompok & penguatan guru")}`;
 }
+
+/* ======== KELOMPOK: dibentuk pada tahap yang membutuhkannya (bukan saat persiapan) ======== */
+function groupFormHtml(n0){return `<label class="f">Jumlah kelompok</label><select id="gJml">${[2,3,4,5,6].map(n=>`<option ${n===n0?"selected":""}>${n}</option>`).join("")}</select><div id="gNms"></div>`}
+function groupFormBind(){
+  const paint=()=>{const n=+$("#gJml").value,old=[...document.querySelectorAll("#gNms .gnm")].map(e=>e.value);$("#gNms").innerHTML=Array.from({length:n},(_,i)=>`<label class="f">Nama kelompok ${i+1}</label><input type="text" class="gnm" maxlength="22" value="${esc(old[i]!=null&&old[i]!==""?old[i]:(S.names[i]||"Kelompok "+String.fromCharCode(65+i)))}">`).join("")};
+  paint();$("#gJml").onchange=paint;
+}
+const groupRead=()=>[...document.querySelectorAll("#gNms .gnm")].map((e,i)=>e.value.trim()||"Kelompok "+String.fromCharCode(65+i));
+function groupApply(names){
+  const resize=names.length!==S.names.length;
+  S.names=names;S.grouped=true;S.turn=0;S.kg=0;S.ks=0;S.planG=0;
+  if(resize){S.obs={};S.hasil={};S.plans={};S.g=null;S.km={};S.kdone={}}
+  save();
+}
+function groupGate(f){
+  return `<div class="card gate"><h3>👥 Bentuk kelompok</h3><p class="txt">Tahap ini dikerjakan berkelompok. Bagi murid ke dalam kelompok, lalu isi jumlah dan nama kelompok di sini. Kelompok yang sama dipakai untuk tahap-tahap berikutnya.</p>${groupFormHtml(S.names.length)}<div class="mact" style="justify-content:flex-start"><button class="btn pri lg" id="gMake">✔ Bentuk kelompok &amp; lanjut</button></div></div>`;
+}
+function groupBind(){
+  if(!$("#gMake"))return;groupFormBind();
+  $("#gMake").onclick=()=>{groupApply(groupRead());renderSesi()};
+}
+async function openGroups(){
+  const had=S.grouped;
+  const p=modal(`<h2>👥 ${had?"Ubah kelompok":"Bentuk kelompok"}</h2>${had?`<p class="txt" style="color:var(--muted);font-size:15px">Mengubah jumlah kelompok akan menghapus observasi, rencana, dan hasil permainan per kelompok. Mengganti nama saja aman.</p>`:""}${groupFormHtml(S.names.length)}<div class="mact"><button class="btn" data-v="x">Batal</button><button class="btn pri" data-v="ok">Simpan</button></div>`);
+  groupFormBind();
+  const v=await p;if(v!=="ok")return;
+  const nm=groupRead();
+  if(had&&nm.length!==S.names.length){const c=await modal(`<h2>Ubah jumlah kelompok?</h2><p class="txt">Data per kelompok yang sudah terisi akan dihapus.</p><div class="mact"><button class="btn" data-v="no">Batal</button><button class="btn pri" data-v="yes">Ya, ubah</button></div>`);if(c!=="yes")return}
+  groupApply(nm);renderSesi();
+}
+
+/* ======== STUDI KASUS: satu kasus per kelompok, tampil per kelompok ======== */
+function kBullets(t){const p=String(t||"").split("•").map(x=>x.trim()).filter(Boolean);return p.length>1?`<ul class="kul">${li(p)}</ul>`:`<p class="kp">${esc(t)}</p>`}
+function kasusHtml(f){
+  const cc=f.cards.find(c=>c.grid&&c.grid.length),G=cc.grid,n=S.names.length;S.km=S.km||{};S.kdone=S.kdone||{};
+  const km=i=>{const v=S.km[i];return Number.isInteger(v)&&v>=0&&v<G.length?v:i%G.length};
+  const gi=Math.min(S.kg||0,n-1),ci=km(gi),cs=G[ci],rows=cs.rows,si=Math.min(S.ks||0,rows.length-1),last=si===rows.length-1;
+  const gr=/guru/i.test(rows[si][0]);
+  const rest=f.cards.filter(c=>c!==cc);
+  return `<div class="card"><h3>${esc(cc.h)}</h3>${cc.p?`<p class="txt">${esc(cc.p)}</p>`:""}
+   <div class="kmap">${S.names.map((nm,i)=>`<button class="kg ${i===gi?"on":""} ${S.kdone[i]?"done":""}" data-kg="${i}"><b>${esc(nm)}</b><small>${esc(G[km(i)].h)}</small>${S.kdone[i]?"<i>✔</i>":""}</button>`).join("")}</div></div>
+   <div class="card kst"><div class="kh"><span class="kgn">${esc(S.names[gi])}</span><h3>${esc(cs.h)}</h3><label class="ksw">Ganti kasus <select data-kcase="${gi}">${G.map((g,k)=>`<option value="${k}" ${k===ci?"selected":""}>${esc(g.h)}</option>`).join("")}</select></label></div>
+    <div class="ksteps">${rows.map((r,k)=>`<button class="kstp ${k===si?"on":""} ${/guru/i.test(r[0])?"guru":""}" data-ks="${k}">${k+1}. ${esc(r[0])}</button>`).join("")}</div>
+    <div class="kbody ${gr?"guru":""}">${gr?`<div class="kguru">🔒 Hanya untuk guru</div>`:""}${kBullets(rows[si][1])}</div>
+    <div class="mact" style="justify-content:space-between"><button class="btn" data-kact="prev" ${si===0?"disabled":""}>← Sebelumnya</button>${last?`<button class="btn pri" data-kact="done">✔ Selesai${gi<n-1?", kelompok berikutnya":""} ➜</button>`:`<button class="btn pri" data-kact="next">Berikutnya →</button>`}</div></div>
+   ${rest.length?cardsHtml(rest):""}${noteBox(f.id,f.noteJ,f.noteP)}`;
+}
+$("#main").addEventListener("click",e=>{
+  const g=e.target.closest("[data-kg]");if(g){S.kg=+g.dataset.kg;S.ks=0;save();renderSesi();return}
+  const s=e.target.closest("[data-ks]");if(s){S.ks=+s.dataset.ks;save();renderSesi();return}
+  const a=e.target.closest("[data-kact]");
+  if(a){const f=FASE[S.i],G=f.cards.find(c=>c.grid&&c.grid.length).grid,gi=S.kg||0,ci=Number.isInteger(S.km[gi])?S.km[gi]:gi%G.length,max=G[ci].rows.length-1;
+    if(a.dataset.kact==="prev")S.ks=Math.max(0,(S.ks||0)-1);
+    else if(a.dataset.kact==="next")S.ks=Math.min(max,(S.ks||0)+1);
+    else{S.kdone[gi]=true;S.ks=0;if(gi<S.names.length-1)S.kg=gi+1}
+    save();renderSesi();$("#main").scrollTop=0}
+});
+$("#main").addEventListener("change",e=>{const c=e.target.closest("[data-kcase]");if(c){S.km[+c.dataset.kcase]=+c.value;S.ks=0;save();renderSesi()}});
+
+/* ======== MATERI: tampilan slide siap presentasi ======== */
+function slideList(f){return [{t:"title"}].concat((f.cards||[]).map(c=>({t:"card",c})))}
+const SLM=["book","idea","think","happy","wink","star","cheer"];
+function slideBody(c){
+  let h="";
+  if(c.p)h+=`<p class="sp">${esc(c.p)}</p>`;
+  if(c.big)h+=`<div class="sbig">${safeBig(c.big)}</div>`;
+  if(c.ul&&c.ul.length)h+=`<ul class="sl">${c.ul.map(x=>`<li><i>✦</i><span>${esc(x)}</span></li>`).join("")}</ul>`;
+  if(c.ol&&c.ol.length)h+=`<ol class="sl">${c.ol.map((x,k)=>`<li><i>${k+1}</i><span>${esc(x)}</span></li>`).join("")}</ol>`;
+  if(c.grid&&c.grid.length)h+=`<div class="sgrid">${c.grid.map(g=>`<div class="sg"><h4>${esc(g.h)}</h4>${g.rows.map(r=>`<div class="k">${esc(r[0])}</div><p>${esc(r[1])}</p>`).join("")}</div>`).join("")}</div>`;
+  if(c.foot)h+=`<p class="sfoot">${esc(c.foot)}</p>`;
+  return h;
+}
+function slideHtml(f){
+  S.sl=S.sl||{};const L=slideList(f),n=L.length,i=Math.min(Math.max(+S.sl[f.id]||0,0),n-1),s=L[i];
+  const inner=s.t==="title"
+   ?`<div class="sti"><div class="stm">${mascot("book",210)}</div><div class="sk">${esc(f.tahap)}</div><h2 class="st">${esc(f.judul)}</h2><p class="ssub">${esc(RPL.judul)}</p><div class="sgo">Tekan ➜ atau tombol Berikutnya untuk mulai</div></div>`
+   :`<div class="sk">${esc(f.judul)} · ${i} / ${n-1}</div><h2 class="st">${esc(s.c.h||"")}</h2><div class="sb">${slideBody(s.c)}</div><div class="smas">${mascot(SLM[i%SLM.length],150)}</div>`;
+  return `<div class="deck" id="deck"><div class="sld ${s.t}">${inner}</div>
+   <div class="dnav"><button class="btn" id="dPrev" ${i===0?"disabled":""}>← Sebelumnya</button><div class="ddots">${L.map((_,k)=>`<button class="dd ${k===i?"on":k<i?"past":""}" data-sl="${k}" aria-label="Slide ${k+1}"></button>`).join("")}</div><button class="btn pri" id="dNext">${i===n-1?"Tahap berikutnya ➜":"Berikutnya →"}</button></div></div>`;
+}
+function slideGo(d,to){
+  const f=FASE[S.i],n=slideList(f).length;S.sl=S.sl||{};
+  let i=to!=null?to:(+S.sl[f.id]||0)+d;
+  if(i>=n){goFase(S.i+1);return}
+  if(i<0)return;
+  S.sl[f.id]=i;save();$("#deck").outerHTML=slideHtml(f);slideBind(f);
+}
+function slideBind(f){
+  const d=$("#deck");if(!d)return;
+  $("#dPrev").onclick=()=>slideGo(-1);$("#dNext").onclick=()=>slideGo(1);
+  d.querySelectorAll("[data-sl]").forEach(b=>b.onclick=()=>slideGo(0,+b.dataset.sl));
+}
+document.addEventListener("keydown",e=>{
+  if(!$("#deck")||!S||!$("#mod").classList.contains("hidden"))return;
+  const t=document.activeElement&&document.activeElement.tagName;if(/INPUT|TEXTAREA|SELECT/.test(t||""))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"||e.key===" "){e.preventDefault();slideGo(1)}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();slideGo(-1)}
+});
 
 const ZONA=[{"n": "Makna Ibadah", "c": "Makna Ibadah"}, {"n": "Manfaat untuk Karakter", "c": "Manfaat Karakter"}, {"n": "Disiplin & Tanggung Jawab", "c": "Disiplin & Tanggung Jawab"}, {"n": "Hambatan", "c": "Hambatan"}, {"n": "Strategi Konsisten", "c": "Strategi Konsisten"}];
 const QUIZ=[{"c": "Makna Ibadah", "q": "Ibadah dalam arti luas adalah…", "o": ["Wujud penghambaan dan ketaatan kepada Tuhan Yang Maha Esa sesuai keyakinan masing-masing", "Kegiatan untuk mendapat pujian orang lain", "Tugas sekolah tambahan", "Kebiasaan yang boleh ditinggalkan saat lelah"], "a": 0, "e": "Ibadah adalah hubungan penghambaan kepada Tuhan YME. Tata caranya mengikuti keyakinan masing-masing."}, {"c": "Makna Ibadah", "q": "Beribadah dengan sadar berarti…", "o": ["Memahami makna dan tujuan dari yang dilakukan", "Melakukannya secepat mungkin", "Melakukannya hanya bila diawasi", "Melakukannya sambil bermain gawai"], "a": 0, "e": "Kesadaran dan penghayatan membuat ibadah lebih bermakna."}, {"c": "Makna Ibadah", "q": "Ibadah sebagai kebutuhan spiritual berarti…", "o": ["Hati terasa lebih tenang dan terarah ketika ibadah dijalankan", "Hanya dilakukan saat ada masalah", "Hanya dilakukan pada hari besar", "Tidak berhubungan dengan diri sendiri"], "a": 0, "e": "Kebutuhan spiritual perlu dipenuhi seperti kebutuhan lainnya."}, {"c": "Makna Ibadah", "q": "Bagi remaja, ibadah dapat membantu…", "o": ["Mengenal diri, menenangkan hati, dan mengarahkan perilaku", "Memenangkan semua lomba", "Menambah uang saku", "Menghindarkan dari semua masalah"], "a": 0, "e": "Ibadah menjadi pegangan saat remaja menghadapi banyak perubahan."}, {"c": "Makna Ibadah", "q": "Dua murid sama-sama rutin beribadah. Yang membedakan kualitasnya adalah…", "o": ["Kesadaran dan penghayatannya", "Lamanya waktu saja", "Banyaknya orang yang melihat", "Pakaian yang dikenakan"], "a": 0, "e": "Rutin itu baik. Rutin disertai kesadaran lebih baik lagi."}, {"c": "Makna Ibadah", "q": "Beribadah sesuai keyakinan masing-masing menunjukkan sikap…", "o": ["Saling menghormati keberagaman", "Merendahkan yang berbeda", "Memaksa teman ikut", "Mengejek tata cara lain"], "a": 0, "e": "Keberagaman adalah kekayaan. Hormati cara beribadah orang lain."}, {"c": "Makna Ibadah", "q": "Beribadah hanya untuk \"menggugurkan kewajiban\" sebenarnya…", "o": ["Kurang bermakna karena minim penghayatan", "Sudah paling sempurna", "Tidak bisa diperbaiki", "Lebih baik daripada yang sadar"], "a": 0, "e": "Kebiasaan bisa ditumbuhkan menjadi kesadaran dengan memahami maknanya."}, {"c": "Makna Ibadah", "q": "Ibadah tidak hanya ritual, tetapi juga tercermin pada…", "o": ["Sikap baik dalam keseharian", "Nilai rapor saja", "Jumlah teman", "Penampilan"], "a": 0, "e": "Ibadah yang bermakna mewujud dalam akhlak sehari-hari."}, {"c": "Makna Ibadah", "q": "Pertanyaan yang tepat untuk menumbuhkan makna ibadah adalah…", "o": ["\"Untuk apa dan mengapa aku melakukan ini?\"", "\"Siapa yang sedang melihatku?\"", "\"Berapa cepat bisa selesai?\"", "\"Apa yang kudapat hari ini?\""], "a": 0, "e": "Bertanya makna membantu ibadah menjadi pilihan sadar."}, {"c": "Manfaat Karakter", "q": "Salah satu manfaat ibadah bagi karakter adalah…", "o": ["Menumbuhkan ketenangan, kejujuran, dan pengendalian diri", "Membuat selalu menang", "Menghilangkan semua tugas", "Membuat tidak pernah salah"], "a": 0, "e": "Ibadah membentuk karakter dari dalam, bukan sekadar hasil luar."}, {"c": "Manfaat Karakter", "q": "Karakter religius tampak dari…", "o": ["Sikap jujur, santun, dan peduli sehari-hari", "Pidato yang panjang", "Hadiah yang diterima", "Suara yang keras"], "a": 0, "e": "Karakter dinilai dari perbuatan sehari-hari."}, {"c": "Manfaat Karakter", "q": "Remaja yang rutin beribadah cenderung terbantu dalam…", "o": ["Membangun disiplin, ketenangan, dan tanggung jawab", "Pintar semua pelajaran tanpa belajar", "Bebas dari masalah", "Tidak perlu berusaha"], "a": 0, "e": "Ibadah mendukung pembentukan karakter, tetapi tetap perlu usaha di bidang lain."}, {"c": "Manfaat Karakter", "q": "Ibadah membantu pengendalian diri karena…", "o": ["Melatih menahan diri dan menaati waktu", "Membuat mudah marah", "Membuat menjauhi teman", "Membuat lupa tugas"], "a": 0, "e": "Menaati waktu dan menahan diri adalah latihan pengendalian diri."}, {"c": "Manfaat Karakter", "q": "Rasa syukur yang tumbuh dari ibadah membuat remaja…", "o": ["Lebih menghargai yang dimiliki dan tidak mudah iri", "Merasa lebih tinggi dari orang lain", "Berhenti berusaha", "Mengabaikan teman"], "a": 0, "e": "Syukur menenangkan hati dan menguatkan semangat."}, {"c": "Manfaat Karakter", "q": "Ibadah bersama, misalnya di sekolah, dapat menumbuhkan…", "o": ["Kebersamaan dan saling mengingatkan dalam kebaikan", "Persaingan", "Rasa malu", "Pertengkaran"], "a": 0, "e": "Kebersamaan membuat kebiasaan baik lebih mudah dijaga."}, {"c": "Manfaat Karakter", "q": "Ketika emosi memuncak, kebiasaan ibadah dapat membantu dengan cara…", "o": ["Memberi jeda untuk menenangkan diri sebelum bertindak", "Melampiaskan kemarahan", "Menyalahkan orang lain", "Menghindari semua orang"], "a": 0, "e": "Jeda menenangkan diri membuat keputusan lebih bijak."}, {"c": "Manfaat Karakter", "q": "Merasa selalu diawasi Tuhan Yang Maha Esa dapat menumbuhkan…", "o": ["Kejujuran meski tidak ada orang yang melihat", "Takut ketahuan guru", "Kepura-puraan", "Keinginan mencari pujian"], "a": 0, "e": "Kejujuran sejati lahir dari kesadaran, bukan dari pengawasan."}, {"c": "Manfaat Karakter", "q": "Remaja berkarakter adalah remaja yang…", "o": ["Ucapan dan perbuatannya selaras dengan nilai baik", "Paling populer", "Paling pandai berdebat", "Paling banyak pengikut"], "a": 0, "e": "Karakter tampak dari keselarasan nilai dan tindakan."}, {"c": "Disiplin & Tanggung Jawab", "q": "Disiplin beribadah berarti…", "o": ["Melakukannya teratur sesuai waktu yang ditetapkan", "Melakukannya hanya saat ingat", "Menunggu disuruh", "Menunda sampai waktu hampir habis"], "a": 0, "e": "Disiplin adalah keteraturan yang dijaga dengan kesadaran."}, {"c": "Disiplin & Tanggung Jawab", "q": "Tanggung jawab dalam beribadah dimulai dari…", "o": ["Kesadaran diri tanpa harus selalu disuruh", "Perintah orang lain", "Ancaman", "Pengawasan terus-menerus"], "a": 0, "e": "Tanggung jawab sejati tumbuh dari dalam diri."}, {"c": "Disiplin & Tanggung Jawab", "q": "Kebiasaan tepat waktu dalam beribadah melatih…", "o": ["Manajemen waktu dan disiplin yang berguna di sekolah", "Keterlambatan", "Kemalasan", "Ketergantungan pada orang lain"], "a": 0, "e": "Disiplin waktu terbawa ke belajar dan kegiatan lain."}, {"c": "Disiplin & Tanggung Jawab", "q": "Murid yang menaati jadwal ibadah dan jadwal belajarnya menunjukkan…", "o": ["Kemampuan mengatur prioritas", "Tidak punya waktu bermain", "Rasa takut", "Sikap ikut-ikutan"], "a": 0, "e": "Mengatur prioritas adalah tanda kematangan."}, {"c": "Disiplin & Tanggung Jawab", "q": "Bila suatu ketika lalai beribadah, sikap yang bertanggung jawab adalah…", "o": ["Mengakui, memperbaiki, dan berusaha lebih baik", "Menyalahkan keadaan", "Menyembunyikannya", "Menyerah"], "a": 0, "e": "Bertanggung jawab berarti berani memperbaiki."}, {"c": "Disiplin & Tanggung Jawab", "q": "Pengendalian diri tampak ketika…", "o": ["Tetap menyempatkan beribadah meski ingin bermain gawai", "Menuruti semua keinginan", "Menunda tanpa batas", "Marah saat diingatkan"], "a": 0, "e": "Pengendalian diri adalah memilih yang penting dulu."}, {"c": "Disiplin & Tanggung Jawab", "q": "Ibadah melatih disiplin karena dilakukan…", "o": ["Berulang dan teratur sehingga menjadi kebiasaan", "Setahun sekali", "Sesuka hati", "Hanya saat sempat"], "a": 0, "e": "Pengulangan yang teratur membentuk kebiasaan."}, {"c": "Disiplin & Tanggung Jawab", "q": "Kemandirian dalam beribadah berarti…", "o": ["Menjalankannya atas kesadaran sendiri", "Menunggu diingatkan terus", "Mengikuti teman", "Menunggu hari libur"], "a": 0, "e": "Mandiri adalah salah satu dimensi Profil Lulusan."}, {"c": "Disiplin & Tanggung Jawab", "q": "Contoh tanggung jawab di rumah terkait ibadah adalah…", "o": ["Menyiapkan diri dan mengatur waktu sendiri", "Menyuruh adik menggantikan", "Menunggu orang tua mengurus semuanya", "Menghindar"], "a": 0, "e": "Tanggung jawab dimulai dari hal yang bisa kita lakukan sendiri."}, {"c": "Hambatan", "q": "Hambatan paling umum remaja dalam beribadah adalah…", "o": ["Rasa malas, gawai, dan kesibukan", "Terlalu banyak waktu luang", "Terlalu mudah", "Tidak ada hambatan"], "a": 0, "e": "Mengenali hambatan adalah langkah awal mengatasinya."}, {"c": "Hambatan", "q": "Kebiasaan begadang dapat menyebabkan…", "o": ["Sulit bangun dan terlewatnya waktu ibadah pagi", "Lebih disiplin", "Lebih segar", "Tidak berpengaruh"], "a": 0, "e": "Tidur cukup menopang disiplin."}, {"c": "Hambatan", "q": "Temanmu mengajak bermain saat waktu ibadahmu tiba. Sikap tepat…", "o": ["Menyampaikan dengan sopan bahwa kamu beribadah dulu", "Ikut bermain", "Berbohong", "Marah"], "a": 0, "e": "Tegas dan santun adalah sikap asertif."}, {"c": "Hambatan", "q": "Ibadah terasa jenuh seperti rutinitas. Solusi yang tepat…", "o": ["Mengingat kembali makna dan tujuannya", "Berhenti sementara", "Menyalahkan orang lain", "Menganggapnya tidak penting"], "a": 0, "e": "Menghidupkan kembali makna mengusir rasa jenuh."}, {"c": "Hambatan", "q": "Jadwalmu padat dengan les dan tugas. Cara yang tepat…", "o": ["Menyusun jadwal yang menyediakan waktu ibadah", "Mengorbankan ibadah", "Mengeluh saja", "Mengabaikan tugas"], "a": 0, "e": "Waktu ibadah termasuk prioritas yang dijadwalkan."}, {"c": "Hambatan", "q": "Gawai menghambat ibadahmu. Langkah paling efektif…", "o": ["Membatasi waktu layar dan menyimpannya saat waktu ibadah", "Memakainya lebih lama", "Memainkannya sambil beribadah", "Menyalahkan gawainya"], "a": 0, "e": "Mengatur gawai adalah wujud pengendalian diri."}, {"c": "Hambatan", "q": "Bila sesekali terlewat, sebaiknya…", "o": ["Segera memperbaiki dan tidak menyerah", "Menganggap semuanya gagal", "Berhenti total", "Menunda lagi"], "a": 0, "e": "Satu kali terlewat bukan akhir. Bangkit dan lanjutkan."}, {"c": "Hambatan", "q": "Merasa ibadah orang lain lebih baik daripada ibadahmu. Sikap sehat…", "o": ["Fokus memperbaiki diri tanpa membandingkan", "Merasa minder", "Menjatuhkan orang itu", "Meniru berlebihan"], "a": 0, "e": "Setiap orang punya proses sendiri."}, {"c": "Hambatan", "q": "Beribadah hanya saat diawasi menunjukkan…", "o": ["Motivasi masih dari luar dan perlu ditumbuhkan dari dalam", "Keberanian", "Disiplin tinggi", "Kemandirian"], "a": 0, "e": "Tujuan kita: dari dorongan luar menjadi kesadaran diri."}, {"c": "Strategi Konsisten", "q": "Strategi paling awal membangun kebiasaan adalah…", "o": ["Mulai dari langkah kecil dan konsisten", "Langsung target besar", "Menunggu semangat datang", "Menunggu liburan"], "a": 0, "e": "Langkah kecil yang konsisten lebih bertahan lama."}, {"c": "Strategi Konsisten", "q": "Rencana pembiasaan yang baik memuat…", "o": ["Tujuan, langkah, hambatan, dan cara menjaga konsistensi", "Hanya tujuan", "Hanya hadiah", "Hanya keinginan"], "a": 0, "e": "Empat unsur ini sama dengan lembar rencana yang akan kamu susun."}, {"c": "Strategi Konsisten", "q": "Pengingat (alarm atau jadwal) berfungsi untuk…", "o": ["Membantu menepati waktu yang sudah direncanakan", "Mengganggu", "Menggantikan niat", "Sekadar hiasan"], "a": 0, "e": "Pengingat membantu niat menjadi tindakan."}, {"c": "Strategi Konsisten", "q": "Dukungan orang tua dan teman berperan…", "o": ["Saling mengingatkan dan menyemangati", "Mengawasi terus-menerus", "Menghukum", "Tidak berperan"], "a": 0, "e": "Dukungan lingkungan menguatkan konsistensi."}, {"c": "Strategi Konsisten", "q": "Mencatat kebiasaan di jurnal atau ceklis berguna untuk…", "o": ["Memantau kemajuan dan menjaga semangat", "Dipamerkan", "Dinilai orang lain", "Tidak ada manfaat"], "a": 0, "e": "Catatan membuat kemajuan terlihat."}, {"c": "Strategi Konsisten", "q": "Apresiasi kecil pada diri sendiri setelah konsisten satu pekan dapat…", "o": ["Menguatkan semangat melanjutkan kebiasaan", "Menggantikan niat beribadah", "Menjadi kewajiban", "Membuat lalai"], "a": 0, "e": "Menghargai usaha sendiri menjaga motivasi."}, {"c": "Strategi Konsisten", "q": "Konsisten berarti…", "o": ["Melakukan terus-menerus walau sedikit", "Sekali tetapi banyak sekali", "Hanya saat suasana hati bagus", "Hanya di hari libur"], "a": 0, "e": "Konsistensi mengalahkan semangat sesaat."}, {"c": "Strategi Konsisten", "q": "Langkah setelah menyusun rencana adalah…", "o": ["Melaksanakan dan mengevaluasinya tiap pekan", "Menyimpannya saja", "Melupakannya", "Menunggu disuruh"], "a": 0, "e": "Rencana berarti bila dijalankan dan dievaluasi."}];
@@ -1270,8 +1474,16 @@ function cleanAbout(A){
 }
 function withBg(i){if(!i.bagian||!i.bagian.length){const l=localBg();if(l.length)i.bagian=l}return i}
 const INFO_LS="rpl_infolokal_"+ABOUT_ID,AUTHOR=["perancang","jabatan"];
-let AKSES=(()=>{try{return localStorage.getItem("rpl_akses_"+ID)==="publik"?"publik":"admin"}catch(e){return"admin"}})();
 const isAdm=()=>!!(GK.auth&&GK.auth.token&&GK.auth.token());
+/* Password guru: SATU password bersama, hanya di perangkat ini (hash berasalkan garam di localStorage), tidak pernah dikirim ke server */
+const GPW_LS="bk_guru_pw",GSES="bk_guru_ok";
+const hasGuruPw=()=>{try{const o=JSON.parse(localStorage.getItem(GPW_LS)||"null");return !!(o&&o.s&&o.h)}catch(e){return false}};
+const isGuru=()=>{try{return sessionStorage.getItem(GSES)==="1"&&hasGuruPw()}catch(e){return false}};
+const canEdit=()=>isAdm()||isGuru();
+async function gHash(p,s){const t=new TextEncoder().encode(s+"|"+p);if(window.crypto&&crypto.subtle){const b=await crypto.subtle.digest("SHA-256",t);return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}let h=5381;for(const c of s+"|"+p)h=((h<<5)+h+c.charCodeAt(0))>>>0;return"f"+h.toString(16)}
+async function guruSet(p){const s=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem(GPW_LS,JSON.stringify({s,h:await gHash(p,s)}))}
+async function guruCheck(p){try{const o=JSON.parse(localStorage.getItem(GPW_LS)||"null");if(!o)return false;return await gHash(p,o.s)===o.h}catch(e){return false}}
+function guruOut(){try{sessionStorage.removeItem(GSES)}catch(e){}}
 function withLocal(i){try{const l=JSON.parse(localStorage.getItem(INFO_LS)||"null");if(l&&l._lokal){const c=cleanAbout(Object.assign({},i,l));AUTHOR.forEach(k=>c[k]=i[k]);return c}}catch(e){}return i}
 let INFO=withBg(withLocal(cleanAbout(GK.info.cached(ABOUT_ID,DEFAULT_ABOUT))));
 function refreshInfo(){return GK.info.load(ABOUT_ID,DEFAULT_ABOUT).then(r=>{INFO=withBg(withLocal(cleanAbout(r.info)));return r}).catch(()=>null)}
@@ -1299,7 +1511,7 @@ function infoHtml(){
   ${A.catatan?`<h3>Catatan</h3><p class="txt">${esc(A.catatan)}</p>`:""}
   <h3>Sumber</h3><ul class="pts">${li(RPL.sumber)}</ul>
   ${A.perancang?`<p class="txt" style="color:var(--muted);font-size:14px">Dirancang oleh <b>${esc(A.perancang)}</b>${A.jabatan?" · "+esc(A.jabatan):""}</p>`:""}
-  <div class="mact"><button class="btn sm" data-v="edit" title="${AKSES==="admin"&&!isAdm()?"Khusus admin":"Ubah isi game"}">${IC(AKSES==="admin"&&!isAdm()?"lock":"pencil")} Edit</button><button class="btn pri" data-v="x">Tutup</button></div>`;
+  <div class="mact"><button class="btn sm" data-v="edit" title="${canEdit()?"Ubah isi game":"Khusus admin / guru dengan password"}">${IC(canEdit()?"pencil":"lock")} Edit</button><button class="btn pri" data-v="x">Tutup</button></div>`;
 }
 
 /* ---------- Info game ---------- */
@@ -1330,12 +1542,11 @@ function applyConf(c){
   }catch(e){console.warn("conf",e)}
   applyGlobal();
 }
-function currentConf(){return JSON.parse(JSON.stringify({v:1,akses:AKSES,RPL,FASE,FIELDS,DATA:typeof GAMEDATA==="object"?GAMEDATA:{}}))}
+function currentConf(){return JSON.parse(JSON.stringify({v:1,RPL,FASE,FIELDS,DATA:typeof GAMEDATA==="object"?GAMEDATA:{}}))}
 async function loadConf(){
   let loc=null,srv=null;try{loc=JSON.parse(localStorage.getItem(CONF_LS)||"null")}catch(e){}
   try{const r=await GK.conf.load(ID);if(r&&r.conf)srv=r.conf}catch(e){}
   if(srv){ // isi bersama (admin) lebih dulu; perubahan lokal perangkat ini ditimpa di atasnya
-    if(srv.akses==="publik"||srv.akses==="admin"){AKSES=srv.akses;try{localStorage.setItem("rpl_akses_"+ID,AKSES)}catch(e){}}
     applyConf(srv);if(loc&&loc._lokal)applyConf(loc);
   }else if(loc)applyConf(loc);
   applyGlobal();
@@ -1383,7 +1594,7 @@ function edNode(p,v,k,ctx){
   }
   return"";
 }
-const ETABS=[["info","Info game"],["RULES","Aturan permainan"],["RPL","Spesifikasi RPL"],["FASE","Tahapan & kartu"],["FIELDS","Kolom rencana"],["DATA","Soal & isi game"],["akses","Akses edit"]];
+const ETABS=[["info","Info game"],["RULES","Aturan permainan"],["RPL","Spesifikasi RPL"],["FASE","Tahapan & kartu"],["FIELDS","Kolom rencana"],["DATA","Soal & isi game"],["akses","Password guru"]];
 function edHtml(){
   const t=ED.tab,A=ED.info;
   let body="";
@@ -1400,8 +1611,9 @@ function edHtml(){
    <div class="eact"><button class="btn sm" data-bga="up|${i}" ${i===0?"disabled":""}>↑</button><button class="btn sm" data-bga="dn|${i}" ${i===A.bagian.length-1?"disabled":""}>↓</button><button class="btn sm" data-bga="del|${i}">Hapus</button></div></div>`).join("")}
   ${A.bagian.length<10?'<button class="btn sm" data-bga="add|0">+ Tambah bagian</button>':""}`;
   }else if(t==="akses"){
-    body=`<p class="txt" style="font-size:15px;color:var(--muted)">Tentukan siapa yang boleh membuka editor game ini. Perubahan oleh pengguna non-admin hanya tersimpan di perangkat masing-masing (tidak mengubah isi untuk orang lain). Nama perancang dan jabatan hanya bisa diubah admin.</p>
-     <div class="rl"><label>Siapa boleh mengedit?</label><select data-ep="akses"><option value="admin" ${ED.conf.akses!=="publik"?"selected":""}>Hanya admin</option><option value="publik" ${ED.conf.akses==="publik"?"selected":""}>Publik (tersimpan di perangkat sendiri)</option></select></div>`;
+    body=`<p class="txt" style="font-size:15px;color:var(--muted)">Game ini hanya bisa diubah oleh admin (disimpan ke server, berlaku untuk semua). Guru lain boleh mengubah isi di perangkatnya sendiri jika memakai <b>satu password guru bersama</b>. Password ini hanya disimpan di perangkat ini (dalam bentuk hash), tidak dikirim ke server — jadi atur di setiap perangkat guru.</p>
+     <div class="rl"><label>Status di perangkat ini: ${hasGuruPw()?"✅ password guru sudah diatur":"⚠️ belum diatur (guru belum bisa masuk)"}</label><input type="text" id="gpwNew" placeholder="Password guru baru" maxlength="60" autocomplete="off"></div>
+     <div class="mact"><button class="btn pri" id="gpwSet">Simpan password guru</button>${hasGuruPw()?'<button class="btn" id="gpwDel">Hapus password guru</button>':""}</div>`;
   }else if(t==="RULES"){
     const gi=FASE.findIndex(f=>f.tipe==="game"),R=ED.conf.DATA.RULES||{},LB=typeof RULE_LBL==="object"?RULE_LBL:{};
     body=`<p class="txt" style="font-size:15px;color:var(--muted)">Atur jalannya permainan. Nilai 0 pada batas waktu berarti tanpa batas.</p>
@@ -1414,23 +1626,28 @@ function edHtml(){
       (t==="DATA"?Object.keys(v).filter(k=>k!=="RULES").map(k=>edNode("DATA."+k,v[k],k,v)).join(""):edNode(t,v,"",null));
   }
   const tabs=ETABS.filter(x=>x[0]!=="akses"||ED.adm);
-  const note=ED.adm?"Anda masuk sebagai admin: perubahan disimpan ke server dan dipakai di semua perangkat.":"Perubahan hanya tersimpan di perangkat ini. Nama perancang dan jabatan dikunci.";
+  const note=ED.adm?"Anda masuk sebagai admin: perubahan disimpan ke server dan dipakai di semua perangkat.":"Mode guru: perubahan hanya tersimpan di perangkat ini. Nama perancang dan jabatan dikunci.";
   return `<h2>${IC("pencil")} Edit isi game</h2><p class="txt" style="color:var(--muted);font-size:14px">${note} Sesi yang sedang berjalan sebaiknya dimulai ulang setelah mengubah soal.</p>
   <div class="etabs">${tabs.map(x=>`<button data-et="${x[0]}" class="${t===x[0]?"on":""}">${x[1]}</button>`).join("")}</div>${body}
-  <div class="mact">${ED.adm?`<button class="btn" id="edReset">↺ Kembalikan bawaan</button>`:`<button class="btn" id="edLocalReset">↺ Hapus perubahan di perangkat ini</button><button class="btn" id="edAdmin">${IC("lock")} Masuk admin</button>`}<button class="btn" data-v="cancel">Batal</button><button class="btn pri" id="edSave">${ED.adm?"💾 Simpan ke server":"💾 Simpan di perangkat ini"}</button></div>`;
+  <div class="mact">${ED.adm?`<button class="btn" id="edReset">↺ Kembalikan bawaan</button>`:`<button class="btn" id="edLocalReset">↺ Hapus perubahan di perangkat ini</button><button class="btn" id="edAdmin">${IC("lock")} Masuk admin</button><button class="btn" id="edGuruOut">Keluar mode guru</button>`}<button class="btn" data-v="cancel">Batal</button><button class="btn pri" id="edSave">${ED.adm?"💾 Simpan ke server":"💾 Simpan di perangkat ini"}</button></div>`;
 }
 function edRender(){const y=$("#mbox").scrollTop,o=[...document.querySelectorAll("#mbox details")].map(d=>d.open);$("#mbox").innerHTML=edHtml();[...document.querySelectorAll("#mbox details")].forEach((d,i)=>{if(o[i]!=null)d.open=o[i]});$("#mbox").scrollTop=y}
 function lockPanel(){
-  $("#mbox").innerHTML=`<h2>${IC("lock")} Edit isi game dikunci</h2><p class="txt" style="color:var(--muted)">Game ini hanya dapat diubah oleh admin (password admin Speganam). Murid dan pengguna lain tetap dapat memainkannya.</p><div class="mact"><button class="btn" data-v="cancel">Tutup</button><button class="btn pri" id="edUnlock">${IC("lock")} Buka kunci</button></div>`;
+  $("#mbox").innerHTML=`<h2>${IC("lock")} Edit isi game dikunci</h2><p class="txt" style="color:var(--muted)">Soal, kasus, dan seluruh isi game hanya dapat diubah oleh admin. Guru lain dapat mengubah di perangkat ini dengan password guru. Murid tetap dapat memainkan game.</p>
+  <label class="f">Password guru</label><input type="password" id="gpwIn" maxlength="60" autocomplete="off" placeholder="${hasGuruPw()?"Masukkan password guru":"Belum diatur di perangkat ini — minta admin mengaturnya"}" ${hasGuruPw()?"":"disabled"}>
+  <div class="mact"><button class="btn" data-v="cancel">Tutup</button><button class="btn" id="edUnlock">${IC("lock")} Masuk admin</button><button class="btn pri" id="edGuru" ${hasGuruPw()?"":"disabled"}>Masuk guru</button></div>`;
   $("#mod").classList.remove("hidden");
+  const goG=async()=>{const p=$("#gpwIn").value;if(await guruCheck(p)){try{sessionStorage.setItem(GSES,"1")}catch(x){}openEditor()}else{toast("Password guru salah");$("#gpwIn").value=""}};
   $("#mbox").onclick=async e=>{
     if(e.target.closest("#edUnlock")){let t=null;try{t=await GK.auth.ensure()}catch(x){}
       if(t&&isAdm())openEditor();else toast("Kunci belum terbuka")}
+    else if(e.target.closest("#edGuru"))goG();
     else if(e.target.closest('[data-v="cancel"]'))$("#mod").classList.add("hidden");
   };
+  const gi=$("#gpwIn");if(gi)gi.onkeydown=e=>{if(e.key==="Enter")goG()};
 }
 function openEditor(){
-  if(!isAdm()&&AKSES!=="publik"){lockPanel();return}
+  if(!canEdit()){lockPanel();return}
   ED={tab:"info",adm:isAdm(),info:JSON.parse(JSON.stringify(INFO)),conf:currentConf()};
   $("#mbox").innerHTML=edHtml();$("#mod").classList.remove("hidden");
   $("#mbox").onclick=async e=>{
@@ -1443,9 +1660,12 @@ function openEditor(){
     if(ea){const[a,p,i]=ea.dataset.ea.split("|"),n=+i;const root=p.startsWith("DATA")?ED.conf:ED.conf;const arr=getp(root,p);
       if(a==="add"){arr.push(blank(arr.length?arr[arr.length-1]:""))}else if(a==="del"){if(arr.length>1||!p.startsWith("RPL.")||true)arr.splice(n,1)}else if(a==="up"&&n>0)[arr[n-1],arr[n]]=[arr[n],arr[n-1]];else if(a==="dn"&&n<arr.length-1)[arr[n+1],arr[n]]=[arr[n],arr[n+1]];
       edRender();return}
-    if(e.target.id==="edReset"){if(confirm("Kembalikan semua isi ke bawaan? (belum disimpan sampai Anda menekan Simpan)")){ED.conf=JSON.parse(JSON.stringify(Object.assign({v:1,akses:AKSES},DEF)));edRender()}return}
+    if(e.target.id==="edReset"){if(confirm("Kembalikan semua isi ke bawaan? (belum disimpan sampai Anda menekan Simpan)")){ED.conf=JSON.parse(JSON.stringify(Object.assign({v:1},DEF)));edRender()}return}
     if(e.target.closest("#edLocalReset")){if(confirm("Hapus semua perubahan di perangkat ini dan kembali ke isi bawaan/server?")){try{localStorage.removeItem(CONF_LS);localStorage.removeItem(INFO_LS);localStorage.removeItem(BG_LS)}catch(x){}location.reload()}return}
     if(e.target.closest("#edAdmin")){let t=null;try{t=await GK.auth.ensure()}catch(x){}if(t&&isAdm())openEditor();else toast("Kunci belum terbuka");return}
+    if(e.target.id==="gpwSet"){const v=($("#gpwNew").value||"").trim();if(v.length<4){toast("Minimal 4 karakter");return}await guruSet(v);toast("Password guru disimpan di perangkat ini");edRender();return}
+    if(e.target.id==="gpwDel"){if(confirm("Hapus password guru di perangkat ini?")){try{localStorage.removeItem(GPW_LS)}catch(x){}guruOut();toast("Dihapus");edRender()}return}
+    if(e.target.id==="edGuruOut"){guruOut();$("#mod").classList.add("hidden");toast("Keluar mode guru");return}
     if(e.target.id==="edSave"){await edSave();return}
     if(e.target.closest('[data-v="cancel"]')){$("#mod").classList.add("hidden");openInfo()}
   };
@@ -1463,7 +1683,7 @@ async function edSave(){
   try{
     if(!ED.adm){ // pengguna publik: simpan lokal saja, perancang/jabatan tidak berubah
       AUTHOR.forEach(k=>info[k]=INFO[k]);
-      const c=ED.conf;delete c.akses;c._lokal=1;
+      const c=ED.conf;c._lokal=1;
       const li=Object.assign({},info,{_lokal:1});AUTHOR.forEach(k=>delete li[k]);
       try{localStorage.setItem(CONF_LS,JSON.stringify(c));localStorage.setItem(INFO_LS,JSON.stringify(li));localStorage.setItem(BG_LS,JSON.stringify(info.bagian))}catch(e){}
       INFO=withBg(Object.assign(info,{perancang:INFO.perancang,jabatan:INFO.jabatan}));
@@ -1473,10 +1693,9 @@ async function edSave(){
       try{localStorage.setItem(BG_LS,JSON.stringify(info.bagian));localStorage.removeItem(INFO_LS)}catch(e){}
       const back=cleanAbout(await GK.info.save(ABOUT_ID,info));
       INFO=withBg(back);
-      const c=ED.conf;c.akses=c.akses==="publik"?"publik":"admin";delete c._lokal;
+      const c=ED.conf;delete c.akses;delete c._lokal;
       try{localStorage.setItem(CONF_LS,JSON.stringify(c))}catch(e){}
       let ok=true;try{await GK.conf.save(ID,c)}catch(e){ok=false;if(e&&e.code==="CANCEL")throw e;toast("Isi game tersimpan di perangkat ini saja: "+(e&&e.message||"server belum siap"))}
-      AKSES=c.akses;try{localStorage.setItem("rpl_akses_"+ID,AKSES)}catch(e){}
       applyConf(c);if(S){S.g=null;save()}
       if(ok)toast("Tersimpan");
     }
