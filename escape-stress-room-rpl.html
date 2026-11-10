@@ -385,7 +385,7 @@ html,body,#app{height:100dvh}
   .bar{display:contents}.bar.hidden{display:none}
   .top:has(.bar:not(.hidden))::after{content:"";flex-basis:100%;order:6;height:0}
   .top .sp{display:none}
-  #bHome{order:1}.ttl{order:2}.tmw{order:3}#bTools{order:4}#bTheme{order:5}#bFs{display:none}
+  #bHome{order:1}.ttl{order:2}.tmw{order:3}#bTools{order:4}#bLead{order:4}#bTheme{order:5}#bFs{display:none}
   #bPrev{order:7}.path{order:8}#bNext{order:9}
   .tmw{padding:2px 4px 2px 8px!important}.tm{font-size:18px!important;min-width:52px!important}
   .top .ib{width:36px;height:36px}.nv{width:38px;height:38px}
@@ -404,6 +404,17 @@ html,body,#app{height:100dvh}
 }
 .path{justify-content:safe center}
 #main .door:not(.cur):not(.done):not(.on),#main .cs:not(.cur):not(.done),#main .bukti:not(.open):not(.lock){background-color:var(--card)}#main .door,#main .cs{border:2px solid var(--ol)}
+
+/* papan peringkat */
+.lead{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:10px 0}
+.ldb{border:3px solid var(--ol);border-radius:18px;padding:10px 12px;background:var(--soft);box-shadow:0 4px 0 var(--ol)}
+.ldb h4{margin:0 0 8px;font-size:16px}
+.ldr{position:relative;display:flex;align-items:center;gap:10px;padding:7px 10px;margin:5px 0;border-radius:12px;border:2px solid var(--line);background:var(--card);overflow:hidden;font-weight:800}
+.ldr i{position:absolute;left:0;bottom:0;height:4px;width:var(--w);background:var(--c1,#3BA776)}
+.ldr.k0{background:color-mix(in srgb,#FFD23F 35%,var(--card))}
+.ldr .md{width:28px;text-align:center;font-size:20px;flex:none}
+.ldr .nm{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}.ldr .nm small{font-weight:700;color:var(--muted);font-size:12px}
+.ldr .vl{font-weight:900;white-space:nowrap}
 
 
 </style>
@@ -424,6 +435,7 @@ html,body,#app{height:100dvh}
       <button class="ib" id="bTools" title="Alat guru" aria-label="Alat guru"></button>
     </div>
     <div class="sp"></div>
+    <button class="ib hidden" id="bLead" title="Papan peringkat" aria-label="Papan peringkat"></button>
     <button class="ib" id="bTheme" title="Tema terang / gelap" aria-label="Tema"></button>
     <button class="ib" id="bFs" title="Layar penuh" aria-label="Layar penuh"></button>
   </div>
@@ -438,7 +450,7 @@ const GID="mental";
 const ID="mental",ABOUT_ID="escape-stress-room-rpl",NAMA="ESCAPE THE STRESS ROOM",NAMA_A="Escape the",NAMA_B="Stress Room";
 const SUB="Seluruh kelas terkunci di Ruang Stres. Kelompok bergantian membuka gembok di lima ruangan: memahami kesehatan mental, memetakan pemicu, membaca tanda, mengelola emosi, dan mencari bantuan. Layar dikendalikan guru.";
 const DEFAULT_ABOUT={deskripsi:"Game escape room digital untuk Bimbingan Klasikal topik “Mencegah Gangguan Mental Ringan”. Dijalankan guru dalam sesi 4 JP sesuai RPL: pemantik, studi kasus, refleksi, konsep, permainan lima ruangan (dengan latihan napas), rencana menjaga kesehatan mental, dan laporan asesmen.",perancang:"Agung Fahri Husaeni, S.Pd.",jabatan:"Guru BK SMP Negeri 36 Semarang",sasaran:"Kelas 9",durasi:"4 JP (4 x 40 menit)",media:"Laptop dengan proyektor/IFP, dikendalikan guru, dimainkan berkelompok",bidang:"Kematangan Emosi",capaian:["Murid mampu mengekspresikan perasaan diri sendiri secara bebas dan terbuka tanpa menimbulkan konflik serta memiliki sikap positif, inisiatif, tangguh, dan disiplin."],tujuan:["Murid mampu menjelaskan pengertian kesehatan mental, ciri-ciri kesehatan mental yang baik, serta faktor yang memengaruhinya (C).","Murid mampu menunjukkan sikap peduli terhadap kesehatan mental diri sendiri dan orang lain serta memahami pentingnya mencari bantuan ketika menghadapi masalah (A).","Murid mampu menerapkan strategi sederhana untuk menjaga kesehatan mental dan mengelola emosi dalam kehidupan sehari-hari (P)."],catatan:"Game ini bersifat edukasi dan pencegahan, bukan alat diagnosis. Murid yang tampak membutuhkan bantuan lebih lanjut ditindaklanjuti guru BK lewat layanan konseling.",bagian:[]};
-const GAME_COLS=["Kelompok","Gembok tepat","Gembok dibahas"];
+const GAME_COLS=["Kelompok","Gembok tepat","Gembok dibahas","Poin"];
 const RPL={
  id:"mental",
  rencanaJ:"Susun Rencana Sederhana Menjaga Kesehatan Mental",
@@ -601,7 +613,7 @@ const IP={bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.
  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',
  expand:'<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',kit:'<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V5h6v3M3 13h18"/>',
  play:'<path d="M8 5l11 7-11 7z" fill="currentColor"/>',pause:'<rect x="7" y="5" width="3.5" height="14" rx="1" fill="currentColor"/><rect x="13.5" y="5" width="3.5" height="14" rx="1" fill="currentColor"/>',
- lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',redo:'<path d="M4 12a8 8 0 1 0 3-6.2M4 4v5h5"/>',prev:'<path d="M15 5l-7 7 7 7"/>',next:'<path d="M9 5l7 7-7 7"/>'};
+ trophy:'<path d="M8 4h8v6a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4"/><path d="M12 14v4M8 20h8"/>',lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',redo:'<path d="M4 12a8 8 0 1 0 3-6.2M4 4v5h5"/>',prev:'<path d="M15 5l-7 7 7 7"/>',next:'<path d="M9 5l7 7-7 7"/>'};
 const IC=n=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IP[n]||IP.star}</svg>`;
 const FIKON=new Proxy({awal:IC("bulb"),konkret:IC("search"),kasus:IC("search"),refleksi:IC("chat"),konsep:IC("book"),game:IC("pad"),rencana:IC("pencil"),akhir:IC("star"),penutup:IC("flag"),laporan:IC("doc")},{get:(t,k)=>t[k]});
 
@@ -656,9 +668,23 @@ function save(){try{if(S)localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
 function modal(html){return new Promise(res=>{$("#mbox").innerHTML=html;$("#mod").classList.remove("hidden");$("#mbox").onclick=e=>{const b=e.target.closest("[data-v]");if(b){$("#mod").classList.add("hidden");res(b.dataset.v)}}})}
 
+/* ---------- papan peringkat (umum untuk semua game) ---------- */
+const poinKuis=()=>{try{const v=+RULES.poinKuis;return isNaN(v)?10:Math.max(0,v)}catch(e){return 10}};
+const skorOf=r=>(r&&r.ok||0)*poinKuis();
+function leadBoard(title,icon,list){ // list: [{n,v,t,sub}] sudah terurut
+  const mx=Math.max(1,...list.map(x=>x.v));
+  return `<div class="ldb"><h4>${icon} ${esc(title)}</h4>${list.map((x,k)=>`<div class="ldr k${k}"><span class="md">${x.v>0&&["🥇","🥈","🥉"][k]||(k+1)}</span><span class="nm"><b>${esc(x.n)}</b>${x.sub?`<small>${esc(x.sub)}</small>`:""}</span><span class="vl">${esc(x.t)}</span><i style="--w:${Math.round(x.v/mx*100)}%"></i></div>`).join("")}</div>`;
+}
+function leadDefault(){
+  const g=S.g,rk=S.names.map((n,i)=>({n,r:g.rows[i]})).sort((a,b)=>skorOf(b.r)-skorOf(a.r)||(a.r.bad||0)-(b.r.bad||0));
+  return leadBoard("Terbanyak menjawab kuis","🏆",rk.map(x=>({n:x.n,v:skorOf(x.r),t:skorOf(x.r)+" poin",sub:(x.r.ok||0)+" benar · "+(x.r.bad||0)+" dibahas"})));
+}
+const leadHtml=()=>{try{return `<div class="lead">${typeof GAME_LEAD==="function"?GAME_LEAD():leadDefault()}</div>`}catch(e){return ""}};
+function leadOpen(){modal(`<h2 style="text-align:center">🏆 Papan Peringkat</h2>${leadHtml()}<p class="txt" style="text-align:center;color:var(--muted);font-size:14px">Tiap jawaban kuis yang tepat bernilai ${poinKuis()} poin.</p><div class="mact" style="justify-content:center"><button class="btn pri" data-v="x">Lanjut bermain</button></div>`)}
+
 /* ---------- tema ---------- */
 function applyTheme(){document.documentElement.setAttribute("data-g",GID);let p="auto";try{p=localStorage.getItem("tema")||localStorage.getItem("tema_def")||"auto"}catch(e){}const dark=p==="dark"||(p==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",dark?"dark":"light")}
-function chromeIcons(){$("#bHome").innerHTML=IC("home");$("#bTheme").innerHTML=`<span class="ti-d">${IC("sun")}</span><span class="ti-l">${IC("moon")}</span>`;$("#bFs").innerHTML=IC("expand");$("#bPrev").innerHTML=IC("prev");$("#tmr").innerHTML=IC("redo");$("#bTools").innerHTML=IC("kit");tmPaint()}
+function chromeIcons(){$("#bHome").innerHTML=IC("home");$("#bTheme").innerHTML=`<span class="ti-d">${IC("sun")}</span><span class="ti-l">${IC("moon")}</span>`;$("#bFs").innerHTML=IC("expand");$("#bLead").innerHTML=IC("trophy");$("#bPrev").innerHTML=IC("prev");$("#tmr").innerHTML=IC("redo");$("#bTools").innerHTML=IC("kit");tmPaint()}
 function toggleTheme(){const d=document.documentElement.getAttribute("data-theme")==="dark";try{localStorage.setItem("tema",d?"light":"dark")}catch(e){}applyTheme();}
 /* ---------- batas waktu menjawab ---------- */
 let AT=null;
@@ -801,6 +827,8 @@ $("#bTools").onclick=async()=>{
 };
 $("#bHome").onclick=()=>{save();renderMenu()};
 $("#bTheme").onclick=toggleTheme;
+$("#bLead").onclick=leadOpen;
+{const m=$("#main")||document.body;new MutationObserver(()=>{const on=!!($("#gw")&&S&&S.g&&(S.g.started||S.g.end));$("#bLead").classList.toggle("hidden",!on)}).observe(document.body,{childList:true,subtree:true})}
 $("#bFs").onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}};
 $("#main").addEventListener("click",e=>{
   const t=e.target.closest("[data-t]");if(t){const i=t.dataset.t,k=RPL.tally[i];S.tally[k]=Math.max(0,(S.tally[k]||0)+ +t.dataset.d);$("#t_"+i).textContent=S.tally[k];save();return}
@@ -833,8 +861,8 @@ function rencanaHtml(){
 .breath{width:180px;height:180px;margin:14px auto;border-radius:50%;display:grid;place-items:center;text-align:center;font-weight:800;font-size:22px;background:radial-gradient(circle,color-mix(in srgb,var(--c1) 55%,transparent),color-mix(in srgb,var(--c2) 35%,transparent));transition:transform 4s ease-in-out}
 .breath.in{transform:scale(1.35)}
 `;document.head.appendChild(st)})();
-const RULES={detikJawab:0,stresMax:5,stresSalah:1,stresBenar:1,salahMaks:2,napasSiklus:3,tarik:4,tahan:2,hembus:6};
-const RULE_LBL={detikJawab:{l:"Batas waktu menjawab tiap soal (detik, 0 = tanpa batas)"},stresMax:{l:"Batas meter stres (penuh = latihan napas)"},stresSalah:{l:"Meter stres naik tiap jawaban salah"},stresBenar:{l:"Meter stres turun tiap jawaban benar"},salahMaks:{l:"Jumlah salah sebelum jawaban dibuka"},napasSiklus:{l:"Jumlah putaran latihan napas"},tarik:{l:"Tarik napas (hitungan)"},tahan:{l:"Tahan napas (hitungan)"},hembus:{l:"Hembuskan napas (hitungan)"}};
+const RULES={poinKuis:10,detikJawab:0,stresMax:5,stresSalah:1,stresBenar:1,salahMaks:2,napasSiklus:3,tarik:4,tahan:2,hembus:6};
+const RULE_LBL={poinKuis:{l:"Poin tiap jawaban kuis yang tepat"},detikJawab:{l:"Batas waktu menjawab tiap soal (detik, 0 = tanpa batas)"},stresMax:{l:"Batas meter stres (penuh = latihan napas)"},stresSalah:{l:"Meter stres naik tiap jawaban salah"},stresBenar:{l:"Meter stres turun tiap jawaban benar"},salahMaks:{l:"Jumlah salah sebelum jawaban dibuka"},napasSiklus:{l:"Jumlah putaran latihan napas"},tarik:{l:"Tarik napas (hitungan)"},tahan:{l:"Tahan napas (hitungan)"},hembus:{l:"Hembuskan napas (hitungan)"}};
 const ROOMS=[
  {n:"Ruang Cermin",e:"🪞",intro:"Dinding penuh cermin. Setiap cermin menanyakan: apa sebenarnya kesehatan mental itu?",refl:"Apa tanda dari tubuh dan pikiranmu saat mulai merasa tertekan?",
   q:[
@@ -882,14 +910,14 @@ function boardHtml(){
   const Q=R.q[g.qi];
   return doors+meter+`<div class="card"><h3>${esc(S.names[g.t])} · ${R.e} ${esc(R.n)} · Gembok ${g.qi+1}/${R.q.length}</h3><div class="big">${esc(Q.q)}</div>${g.ans==null?'<div id="ansT"></div>':""}
    ${Q.o.map((t,k)=>`<button class="opt ${g.ans!=null?(k===Q.a?"ok":k===g.ans?"bad":""):""}" data-opt="${k}" ${(g.ans!=null||g.wrongs.includes(k))?"disabled":""} style="${g.wrongs.includes(k)&&g.ans==null?"opacity:.35;text-decoration:line-through":""}">${String.fromCharCode(65+k)}. ${esc(t)}</button>`).join("")}
-   ${g.ans!=null?`<div class="expl"><b>${g.ans===Q.a?"🔓 Gembok terbuka! ":"💬 Belum tepat. "}</b>${esc(Q.e)}</div><div class="mact" style="justify-content:flex-start"><button class="btn pri" id="gNext">Lanjut ➜</button></div>`:`<p class="txt" style="color:var(--muted);font-size:14px">${g.wrongs.length?"Dioper dari kelompok sebelumnya, pilihan yang salah dicoret. ":""}Kelompok berdiskusi, lalu guru mengetuk jawaban yang disebut.</p>`}</div>`;
+   ${g.ans!=null?`<div class="expl"><b>${g.ans===Q.a?"🔓 Gembok terbuka! +"+poinKuis()+" poin. ":"💬 Belum tepat. "}</b>${esc(Q.e)}</div><div class="mact" style="justify-content:flex-start"><button class="btn pri" id="gNext">Lanjut ➜</button></div>`:`<p class="txt" style="color:var(--muted);font-size:14px">${g.wrongs.length?"Dioper dari kelompok sebelumnya, pilihan yang salah dicoret. ":""}Kelompok berdiskusi, lalu guru mengetuk jawaban yang disebut.</p>`}</div>`;
 }
 function breathCard(j,mode){return `<div class="card" style="text-align:center"><h3>${esc(j)}</h3><div class="breath" id="brt">Siap?</div><p class="txt" id="brtTxt">Duduk nyaman, bahu turun. ${RULES.napasSiklus} putaran: tarik napas ${RULES.tarik} hitungan, tahan ${RULES.tahan}, hembuskan ${RULES.hembus}.</p><button class="btn pri" id="gBrtGo" data-mode="${mode}">▶ Mulai</button></div>`}
 function resultHtml(){
   const g=S.g;
   return `<div class="card"><h3>🎉 Pintu keluar terbuka!</h3><div class="big">${g.keys>=ROOMS.length?"Kelas berhasil keluar dari Ruang Stres bersama-sama.":"Permainan dihentikan."}</div>
   <p class="txt">Kunci terkumpul: <b>${g.keys}/${ROOMS.length}</b> · Meter stres akhir: <b>${g.stress}/${RULES.stresMax}</b></p>
-  <div class="rank">${S.names.map((n,i)=>`<div><span><b>${esc(n)}</b></span><span>${g.rows[i].ok} gembok tepat · ${g.rows[i].bad} dibahas</span></div>`).join("")}</div>
+  ${leadHtml()}
   <p class="txt" style="margin-top:12px">Pesan: menjaga kesehatan mental adalah kerja bersama. Mengenali perasaan, menenangkan diri, dan meminta bantuan bukan tanda lemah.</p>
   <div class="mact" style="justify-content:flex-start"><button class="btn" id="gAgain">🔁 Main ulang</button><button class="btn pri" data-go="${S.i+1}">➡ Lanjut ke Rencana</button></div></div>`;
 }
@@ -936,7 +964,7 @@ function gameBind(){
   };
 }
 const GAMEDATA={ROOMS,RULES};
-function gameRows(){const g=S&&S.g;return g?[...S.names.map((n,i)=>[n,g.rows[i].ok,g.rows[i].bad]),["Kunci kelas",g.keys+"/"+ROOMS.length,"stres akhir "+g.stress+"/"+RULES.stresMax]]:[]}
+function gameRows(){const g=S&&S.g;return g?[...S.names.map((n,i)=>[n,g.rows[i].ok,g.rows[i].bad,skorOf(g.rows[i])]),["Kunci kelas",g.keys+"/"+ROOMS.length,"stres akhir "+g.stress+"/"+RULES.stresMax]]:[]}
 
 const GK=window.GameKit||{info:{cached:(i,d)=>d,load:async(i,d)=>({info:d}),save:async()=>{throw new Error("gamekit.js belum termuat")}},auth:{token:()=>null,ensure:async()=>null,drop(){}}};
 const strc=(v,n)=>String(v==null?"":v).replace(/\s+/g," ").trim().slice(0,n);
